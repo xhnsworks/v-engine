@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="parser" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/parser" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/parser" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-march=core2" />
+			<Add option="-Wall" />
+			<Add option="-std=gnu99" />
+			<Add directory="../../common/include" />
+		</Compiler>
+		<Linker>
+			<Add library="pthread" />
+		</Linker>
+		<Unit filename="../../common/include/array.h" />
+		<Unit filename="../../common/include/common.h" />
+		<Unit filename="../../common/include/comparison_algorithm.h" />
+		<Unit filename="../../common/include/container.h" />
+		<Unit filename="../../common/include/eassert.h" />
+		<Unit filename="../../common/include/elog.h" />
+		<Unit filename="../../common/include/emem.h" />
+		<Unit filename="../../common/include/esignal.h" />
+		<Unit filename="../../common/include/estring.h" />
+		<Unit filename="../../common/include/etypes.h" />
+		<Unit filename="../../common/include/golden_cudgel.h" />
+		<Unit filename="../../common/include/hash.h" />
+		<Unit filename="../../common/include/list.h" />
+		<Unit filename="../../common/include/path.h" />
+		<Unit filename="../../common/include/rwbuffer.h" />
+		<Unit filename="../../common/include/stack.h" />
+		<Unit filename="../../common/include/tree.h" />
+		<Unit filename="../../common/src/eassert.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/elog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/emem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/esignal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/estring.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/golden_cudgel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/hash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/path.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/rwbuffer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/stack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../common/src/tree.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../math/include/math_base.h" />
+		<Unit filename="../math/include/matrix4x4.h" />
+		<Unit filename="../math/include/sfloat3.h" />
+		<Unit filename="../math/include/sfloat4.h" />
+		<Unit filename="float_op_float.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="float_op_float.h" />
+		<Unit filename="float_op_int.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="float_op_int.h" />
+		<Unit filename="function_call.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="function_call.h" />
+		<Unit filename="function_print.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="function_print.h" />
+		<Unit filename="int_op_float.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="int_op_float.h" />
+		<Unit filename="int_op_int.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="int_op_int.h" />
+		<Unit filename="jump.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jump.h" />
+		<Unit filename="lex.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="parser_env.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="parser_env.h" />
+		<Unit filename="print.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="print.h" />
+		<Unit filename="proc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="single_op_single.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="single_op_single.h" />
+		<Unit filename="symbol_stack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="symbol_stack.h" />
+		<Unit filename="test.tab.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test.tab.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger>
+				<search_path add="bin\Debug" />
+			</debugger>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

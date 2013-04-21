@@ -1,0 +1,1592 @@
+test 0
+test 15
+test 1
+test 2
+std time 0.442416
+ecg time 7.219770
+mem time 1.047943
+mem alloc
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\clear_sketchbook_pass.cpp 38
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\clear_sketchbook_pass.cpp 47
+
+0(24) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+########
+CameraPosition
+CameraDirection
+CameraPlaneNear
+CameraPlaneFar
+CameraPlaneWidth
+CameraPlaneHeight
+CameraProjectionMatrix
+CameraWorldMatrix
+InvertCameraProjectionMatrix
+InvertCameraProjectionMatrix
+LightInnerCos
+LightOuterCos
+LightPosition
+LightDirection
+LightColor
+LightAtteCoef
+LightNumEmitters
+LightProjectionMatrix0
+LightProjectionMatrix1
+LightProjectionMatrix2
+LightProjectionMatrix3
+LightProjectionMatrix4
+LightProjectionMatrix5
+LightWorldMatrix0
+LightWorldMatrix1
+LightWorldMatrix2
+LightWorldMatrix3
+LightWorldMatrix4
+LightWorldMatrix5
+ShadowMap0
+ShadowMap1
+ShadowMap2
+ShadowMap3
+ShadowMap4
+ShadowMap5
+ShadowCubeMap
+LightInfluence
+ShadowDirection0
+ShadowDirection1
+ShadowDirection2
+ShadowDirection3
+ShadowDirection4
+ShadowDirection5
+RenderableWorldMatrix
+ColorMap0
+NormalMap0
+Plaster
+ColorSketch
+NormalSketch
+MaterialIDSketch
+LightingSketch
+DiffuseLightingSketch
+SpecularLightingSketch
+ColorSketchPixelSize
+CurrentMaterialID
+########
+param source EmptySrc cant find
+param source VaryWorldPosition cant find
+param source VaryPosition cant find
+param source VaryTexCoord cant find
+param source VaryNormal cant find
+param source VaryTangent cant find
+param source VaryBinormal cant find
+source CameraPosition, proc 1317a1a, type 4
+source CameraDirection, proc 1315af8, type 4
+source CameraPlaneNear, proc 1314ea5, type 2
+source CameraPlaneFar, proc 1315b70, type 2
+source CameraPlaneWidth, proc 1313d5c, type 2
+source CameraPlaneHeight, proc 1316a57, type 2
+source CameraProjectionMatrix, proc 13182bc, type 6
+source CameraWorldMatrix, proc 13135af, type 6
+source InvertCameraProjectionMatrix, proc 131872b, type 6
+source InvertCameraProjectionMatrix, proc 131531e, type 6
+source LightInnerCos, proc 1317920, type 2
+source LightOuterCos, proc 131445f, type 2
+source LightPosition, proc 1316bc9, type 4
+source LightDirection, proc 131801e, type 4
+source LightColor, proc 131465d, type 5
+source LightAtteCoef, proc 131828f, type 2
+source LightNumEmitters, proc 1315cce, type 12
+source LightProjectionMatrix0, proc 1313136, type 6
+source LightProjectionMatrix1, proc 1313dc5, type 6
+source LightProjectionMatrix2, proc 131316d, type 6
+source LightProjectionMatrix3, proc 1317510, type 6
+source LightProjectionMatrix4, proc 1317e89, type 6
+source LightProjectionMatrix5, proc 1315404, type 6
+source LightWorldMatrix0, proc 1317538, type 6
+source LightWorldMatrix1, proc 131825d, type 6
+source LightWorldMatrix2, proc 1314ae0, type 6
+source LightWorldMatrix3, proc 1315fc1, type 6
+source LightWorldMatrix4, proc 13142f7, type 6
+source LightWorldMatrix5, proc 13154ef, type 6
+source ShadowMap0, proc 1314ca7, type 10
+source ShadowMap1, proc 1314e73, type 10
+source ShadowMap2, proc 1314153, type 10
+source ShadowMap3, proc 131755b, type 10
+source ShadowMap4, proc 1318091, type 10
+source ShadowMap5, proc 1318942, type 10
+source ShadowCubeMap, proc 1317353, type 14
+source LightInfluence, proc 131523d, type 2
+source ShadowDirection0, proc 1313cc6, type 4
+source ShadowDirection1, proc 1313181, type 4
+source ShadowDirection2, proc 1316c1e, type 4
+source ShadowDirection3, proc 1314621, type 4
+source ShadowDirection4, proc 1317aab, type 4
+source ShadowDirection5, proc 1316d4a, type 4
+source RenderableWorldMatrix, proc 13148d8, type 6
+source ColorMap0, proc 1313122, type 10
+param source ColorMap1 cant find
+param source ColorMap2 cant find
+param source ColorMap3 cant find
+source NormalMap0, proc 131585a, type 10
+param source NormalMap1 cant find
+param source NormalMap2 cant find
+param source NormalMap3 cant find
+source Plaster, proc 1315cba, type 10
+source ColorSketch, proc 1314cf7, type 10
+source NormalSketch, proc 1317ce0, type 10
+source MaterialIDSketch, proc 131428e, type 10
+source LightingSketch, proc 1313cf3, type 10
+source DiffuseLightingSketch, proc 1314e78, type 10
+source SpecularLightingSketch, proc 1313ad2, type 10
+source ColorSketchPixelSize, proc 1316f2a, type 3
+param source AmbiColor cant find
+source CurrentMaterialID, proc 1318a05, type 2
+########
+########
+CameraPosition
+CameraDirection
+CameraPlaneNear
+CameraPlaneFar
+CameraPlaneWidth
+CameraPlaneHeight
+CameraProjectionMatrix
+CameraWorldMatrix
+InvertCameraProjectionMatrix
+InvertCameraProjectionMatrix
+LightInnerCos
+LightOuterCos
+LightPosition
+LightDirection
+LightColor
+LightAtteCoef
+LightNumEmitters
+LightProjectionMatrix0
+LightProjectionMatrix1
+LightProjectionMatrix2
+LightProjectionMatrix3
+LightProjectionMatrix4
+LightProjectionMatrix5
+LightWorldMatrix0
+LightWorldMatrix1
+LightWorldMatrix2
+LightWorldMatrix3
+LightWorldMatrix4
+LightWorldMatrix5
+ShadowMap0
+ShadowMap1
+ShadowMap2
+ShadowMap3
+ShadowMap4
+ShadowMap5
+ShadowCubeMap
+LightInfluence
+ShadowDirection0
+ShadowDirection1
+ShadowDirection2
+ShadowDirection3
+ShadowDirection4
+ShadowDirection5
+RenderableWorldMatrix
+ColorMap0
+NormalMap0
+Plaster
+ColorSketch
+NormalSketch
+MaterialIDSketch
+LightingSketch
+DiffuseLightingSketch
+SpecularLightingSketch
+ColorSketchPixelSize
+CurrentMaterialID
+########
+param source EmptySrc cant find
+param source VaryWorldPosition cant find
+param source VaryPosition cant find
+param source VaryTexCoord cant find
+param source VaryNormal cant find
+param source VaryTangent cant find
+param source VaryBinormal cant find
+source CameraPosition, proc 1317a1a, type 4
+source CameraDirection, proc 1315af8, type 4
+source CameraPlaneNear, proc 1314ea5, type 2
+source CameraPlaneFar, proc 1315b70, type 2
+source CameraPlaneWidth, proc 1313d5c, type 2
+source CameraPlaneHeight, proc 1316a57, type 2
+source CameraProjectionMatrix, proc 13182bc, type 6
+source CameraWorldMatrix, proc 13135af, type 6
+source InvertCameraProjectionMatrix, proc 131872b, type 6
+source InvertCameraProjectionMatrix, proc 131531e, type 6
+source LightInnerCos, proc 1317920, type 2
+source LightOuterCos, proc 131445f, type 2
+source LightPosition, proc 1316bc9, type 4
+source LightDirection, proc 131801e, type 4
+source LightColor, proc 131465d, type 5
+source LightAtteCoef, proc 131828f, type 2
+source LightNumEmitters, proc 1315cce, type 12
+source LightProjectionMatrix0, proc 1313136, type 6
+source LightProjectionMatrix1, proc 1313dc5, type 6
+source LightProjectionMatrix2, proc 131316d, type 6
+source LightProjectionMatrix3, proc 1317510, type 6
+source LightProjectionMatrix4, proc 1317e89, type 6
+source LightProjectionMatrix5, proc 1315404, type 6
+source LightWorldMatrix0, proc 1317538, type 6
+source LightWorldMatrix1, proc 131825d, type 6
+source LightWorldMatrix2, proc 1314ae0, type 6
+source LightWorldMatrix3, proc 1315fc1, type 6
+source LightWorldMatrix4, proc 13142f7, type 6
+source LightWorldMatrix5, proc 13154ef, type 6
+source ShadowMap0, proc 1314ca7, type 10
+source ShadowMap1, proc 1314e73, type 10
+source ShadowMap2, proc 1314153, type 10
+source ShadowMap3, proc 131755b, type 10
+source ShadowMap4, proc 1318091, type 10
+source ShadowMap5, proc 1318942, type 10
+source ShadowCubeMap, proc 1317353, type 14
+source LightInfluence, proc 131523d, type 2
+source ShadowDirection0, proc 1313cc6, type 4
+source ShadowDirection1, proc 1313181, type 4
+source ShadowDirection2, proc 1316c1e, type 4
+source ShadowDirection3, proc 1314621, type 4
+source ShadowDirection4, proc 1317aab, type 4
+source ShadowDirection5, proc 1316d4a, type 4
+source RenderableWorldMatrix, proc 13148d8, type 6
+source ColorMap0, proc 1313122, type 10
+param source ColorMap1 cant find
+param source ColorMap2 cant find
+param source ColorMap3 cant find
+source NormalMap0, proc 131585a, type 10
+param source NormalMap1 cant find
+param source NormalMap2 cant find
+param source NormalMap3 cant find
+source Plaster, proc 1315cba, type 10
+source ColorSketch, proc 1314cf7, type 10
+source NormalSketch, proc 1317ce0, type 10
+source MaterialIDSketch, proc 131428e, type 10
+source LightingSketch, proc 1313cf3, type 10
+source DiffuseLightingSketch, proc 1314e78, type 10
+source SpecularLightingSketch, proc 1313ad2, type 10
+source ColorSketchPixelSize, proc 1316f2a, type 3
+param source AmbiColor cant find
+source CurrentMaterialID, proc 1318a05, type 2
+########
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\clear_sketchbook_pass.cpp 38
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\clear_sketchbook_pass.cpp 47
+
+0(24) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+########
+CameraPosition
+CameraDirection
+CameraPlaneNear
+CameraPlaneFar
+CameraPlaneWidth
+CameraPlaneHeight
+CameraProjectionMatrix
+CameraWorldMatrix
+InvertCameraProjectionMatrix
+InvertCameraProjectionMatrix
+LightInnerCos
+LightOuterCos
+LightPosition
+LightDirection
+LightColor
+LightAtteCoef
+LightNumEmitters
+LightProjectionMatrix0
+LightProjectionMatrix1
+LightProjectionMatrix2
+LightProjectionMatrix3
+LightProjectionMatrix4
+LightProjectionMatrix5
+LightWorldMatrix0
+LightWorldMatrix1
+LightWorldMatrix2
+LightWorldMatrix3
+LightWorldMatrix4
+LightWorldMatrix5
+ShadowMap0
+ShadowMap1
+ShadowMap2
+ShadowMap3
+ShadowMap4
+ShadowMap5
+ShadowCubeMap
+LightInfluence
+ShadowDirection0
+ShadowDirection1
+ShadowDirection2
+ShadowDirection3
+ShadowDirection4
+ShadowDirection5
+RenderableWorldMatrix
+ColorMap0
+NormalMap0
+Plaster
+ColorSketch
+NormalSketch
+MaterialIDSketch
+LightingSketch
+DiffuseLightingSketch
+SpecularLightingSketch
+ColorSketchPixelSize
+CurrentMaterialID
+########
+param source EmptySrc cant find
+param source VaryWorldPosition cant find
+param source VaryPosition cant find
+param source VaryTexCoord cant find
+param source VaryNormal cant find
+param source VaryTangent cant find
+param source VaryBinormal cant find
+source CameraPosition, proc 1317a1a, type 4
+source CameraDirection, proc 1315af8, type 4
+source CameraPlaneNear, proc 1314ea5, type 2
+source CameraPlaneFar, proc 1315b70, type 2
+source CameraPlaneWidth, proc 1313d5c, type 2
+source CameraPlaneHeight, proc 1316a57, type 2
+source CameraProjectionMatrix, proc 13182bc, type 6
+source CameraWorldMatrix, proc 13135af, type 6
+source InvertCameraProjectionMatrix, proc 131872b, type 6
+source InvertCameraProjectionMatrix, proc 131531e, type 6
+source LightInnerCos, proc 1317920, type 2
+source LightOuterCos, proc 131445f, type 2
+source LightPosition, proc 1316bc9, type 4
+source LightDirection, proc 131801e, type 4
+source LightColor, proc 131465d, type 5
+source LightAtteCoef, proc 131828f, type 2
+source LightNumEmitters, proc 1315cce, type 12
+source LightProjectionMatrix0, proc 1313136, type 6
+source LightProjectionMatrix1, proc 1313dc5, type 6
+source LightProjectionMatrix2, proc 131316d, type 6
+source LightProjectionMatrix3, proc 1317510, type 6
+source LightProjectionMatrix4, proc 1317e89, type 6
+source LightProjectionMatrix5, proc 1315404, type 6
+source LightWorldMatrix0, proc 1317538, type 6
+source LightWorldMatrix1, proc 131825d, type 6
+source LightWorldMatrix2, proc 1314ae0, type 6
+source LightWorldMatrix3, proc 1315fc1, type 6
+source LightWorldMatrix4, proc 13142f7, type 6
+source LightWorldMatrix5, proc 13154ef, type 6
+source ShadowMap0, proc 1314ca7, type 10
+source ShadowMap1, proc 1314e73, type 10
+source ShadowMap2, proc 1314153, type 10
+source ShadowMap3, proc 131755b, type 10
+source ShadowMap4, proc 1318091, type 10
+source ShadowMap5, proc 1318942, type 10
+source ShadowCubeMap, proc 1317353, type 14
+source LightInfluence, proc 131523d, type 2
+source ShadowDirection0, proc 1313cc6, type 4
+source ShadowDirection1, proc 1313181, type 4
+source ShadowDirection2, proc 1316c1e, type 4
+source ShadowDirection3, proc 1314621, type 4
+source ShadowDirection4, proc 1317aab, type 4
+source ShadowDirection5, proc 1316d4a, type 4
+source RenderableWorldMatrix, proc 13148d8, type 6
+source ColorMap0, proc 1313122, type 10
+param source ColorMap1 cant find
+param source ColorMap2 cant find
+param source ColorMap3 cant find
+source NormalMap0, proc 131585a, type 10
+param source NormalMap1 cant find
+param source NormalMap2 cant find
+param source NormalMap3 cant find
+source Plaster, proc 1315cba, type 10
+source ColorSketch, proc 1314cf7, type 10
+source NormalSketch, proc 1317ce0, type 10
+source MaterialIDSketch, proc 131428e, type 10
+source LightingSketch, proc 1313cf3, type 10
+source DiffuseLightingSketch, proc 1314e78, type 10
+source SpecularLightingSketch, proc 1313ad2, type 10
+source ColorSketchPixelSize, proc 1316f2a, type 3
+param source AmbiColor cant find
+source CurrentMaterialID, proc 1318a05, type 2
+########
+ColladaPosition
+array size 168, set 0, count 56, stride 3
+
+ColladaNormal
+array size 168, set 0, count 56, stride 3
+
+ColladaTexCoord
+array size 152, set 0, count 76, stride 2
+
+num_vtx 76
+
+pos_src 7ec75c
+
+tex_src 7ece9c
+
+nor_src 7ecafc
+
+num_pos 56
+
+num_tex 76
+
+num_nor 56
+
+stride_pos 3
+
+stride_tex 2
+
+stride_nor 3
+
+stride_idx 2
+
+offs_pos 0
+
+offs_tex 1
+
+offs_nor 0
+
+offs_base 1
+
+base_sem 4
+
+num_tri 108
+
+real_num_idx 647
+
+max_idx_base 75
+
+max_idx_pos 55
+
+max_idx_tex 75
+
+max_idx_nor 55
+
+ColladaPosition
+array size 19422, set 0, count 6474, stride 3
+
+ColladaNormal
+array size 77814, set 0, count 25938, stride 3
+
+ColladaTexCoord
+array size 12948, set 0, count 6474, stride 2
+
+num_vtx 25938
+
+pos_src 9f9ba9c
+
+tex_src 9fb4b1c
+
+nor_src bc4211c
+
+num_pos 6474
+
+num_tex 6474
+
+num_nor 25938
+
+stride_pos 3
+
+stride_tex 2
+
+stride_nor 3
+
+stride_idx 3
+
+offs_pos 0
+
+offs_tex 2
+
+offs_nor 1
+
+offs_base 1
+
+base_sem 3
+
+num_tri 8646
+
+real_num_idx 77813
+
+max_idx_base 25937
+
+max_idx_pos 6473
+
+max_idx_tex 6473
+
+max_idx_nor 25937
+
+##FPS 0
+##FPS 0
+
+-0.000000 0.000000 -1.000000 0.000000
+
+0.000000 1.000000 0.000000 0.000000
+
+1.000000 0.000000 -0.000000 0.000000
+
+0.000000 0.000000 0.000000 1.000000
+
+
+
+-0.000000 0.000000 1.000000 0.000000
+
+0.000000 1.000000 0.000000 0.000000
+
+-1.000000 0.000000 -0.000000 0.000000
+
+0.000000 0.000000 0.000000 1.000000
+
+
+
+1.000000 0.000000 0.000000 0.000000
+
+0.000000 -0.000000 -1.000000 0.000000
+
+0.000000 1.000000 -0.000000 0.000000
+
+0.000000 0.000000 0.000000 1.000000
+
+
+
+1.000000 0.000000 0.000000 0.000000
+
+0.000000 -0.000000 1.000000 0.000000
+
+0.000000 -1.000000 -0.000000 0.000000
+
+0.000000 0.000000 0.000000 1.000000
+
+
+
+-1.000000 0.000000 -0.000000 0.000000
+
+0.000000 1.000000 0.000000 0.000000
+
+0.000000 0.000000 -1.000000 0.000000
+
+0.000000 0.000000 0.000000 1.000000
+
+
+
+1.000000 0.000000 0.000000 0.000000
+
+0.000000 1.000000 0.000000 0.000000
+
+0.000000 0.000000 1.000000 0.000000
+
+0.000000 0.000000 0.000000 1.000000
+
+
+####
+STD SKETCHBOOK INIT BEGIN:
+        MATERIAL ID SKETCH ID 7
+        BASE COLOR SKETCH ID 8
+        NORMAL SPECULAR SKETCH ID 9
+STD SKETCHBOOK INIT END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(35) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+LIGHTING SKETCHBOOK INIT BEGIN:
+    SKETCH BOOK 0
+        DIFFUSE INDEX SKETCH ID 14
+        SPECULAR INDEX SKETCH ID 15
+    SKETCH BOOK 1
+        DIFFUSE INDEX SKETCH ID 16
+        SPECULAR INDEX SKETCH ID 17
+LIGHTING SKETCHBOOK INIT END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\display_pass.cpp 457
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\display_pass.cpp 469
+
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(35) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(32) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(33) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(114) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(32) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(33) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(114) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(24) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(25) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(110) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(24) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(24) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(26) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(26) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(22) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(23) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(22) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(23) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(35) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(32) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(33) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(114) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(23) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(23) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(35) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\display_pass.cpp 457
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\display_pass.cpp 469
+
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(35) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(32) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(33) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(114) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(32) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(33) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(114) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(24) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(25) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(110) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+##FPS 0
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 714
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\lighting_model.cpp 723
+
+0(26) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(27) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(28) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(29) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(30) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(31) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(112) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(24) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(24) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(21) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(22) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 584
+
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(26) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+SHADER LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(21) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(22) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(7) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(26) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+PROGRAM LOG BEGIN:d:\projects\ecg\renderer\src\pass.cpp 442
+
+Vertex info
+-----------
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+Fragment info
+-------------
+0(9) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(10) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(11) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(12) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(13) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(14) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(35) : warning C7533: global variable gl_FragData is deprecated after version 120
+
+PROGRAM LOG END:
+SHADER LOG BEGIN:d:\projects\ecg\passes\src\std_pass.cpp 575
+
+0(4) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(5) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(6) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(7) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(8) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(9) : warning C7555: 'attribute' is deprecated, use 'in/out' instead
+0(15) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(16) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(17) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(18) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(19) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(20) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+0(21) : warning C7555: 'varying' is deprecated, use 'in/out' instead
+
+SHADER LOG END:
+SHADER LOG BEGIN:d:\projec

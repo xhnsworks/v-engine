@@ -1,0 +1,303 @@
+#ifndef XHN_VECTOR_HPP
+#define XHN_VECTOR_HPP
+#include "common.h"
+#include "etypes.h"
+#include "emem.h"
+#include "emem.hpp"
+#include <new>
+
+#include "xhn_iterator.hpp"
+#include "xhn_utility.hpp"
+namespace xhn
+{
+template < typename T, typename GET_ELEM_REAL_SIZE = FGetElementRealSizeProc<T>, typename CTOR = FCtorProc<T>, typename DEST = FDestProc<T> >
+class vector : public RefObject
+{
+public:
+    struct FReadProc {
+        void operator() ( T *from, T &to ) {
+            to = *from;
+        }
+    };
+    struct FWriteProc {
+        void operator() ( T *to, T &from ) {
+            *to = from;
+        }
+    };
+    struct FNextProc {
+        void operator() ( T *from, T *&to, uint ele_real_size ) {
+            to = ( T * ) ( ( char * ) from + ele_real_size );
+        }
+    };
+    struct FPrevProc {
+        void operator() ( T *from, T *&to, uint ele_real_size ) {
+            to = ( T * ) ( ( char * ) from - ele_real_size );
+        }
+    };
+    template <typename Owner>
+    struct FRedirectProc {
+        void operator() ( Owner *owner, T *from, T *&to, uint ele_real_size, sint offset ) {
+            char *begin = owner->m_begin_addr;
+            char *end = owner->m_barrier;
+            char *ptr = ( char * ) from;
+            ptr += offset * ( sint ) ele_real_size;
+
+            if ( ptr < begin ) {
+                ptr = begin;
+            }
+
+            if ( ptr > end ) {
+                ptr = end;
+            }
+
+            to = ptr;
+        }
+    };
+
+    class iterator : public random_readwrite_iterator<T, FReadProc, FWriteProc, FNextProc, FPrevProc, FRedirectProc<vector>, vector>
+    {
+    public:
+        typedef random_readwrite_iterator<T, FReadProc, FWriteProc, FNextProc, FPrevProc, FRedirectProc<vector>, vector> base_type;
+        typedef T value_type;
+        typedef T *pointer;
+        typedef T &reference;
+        iterator ( vector<T> *owner, char *a, uint ele_real_size )
+            : base_type
+            ( ( T * ) a, ele_real_size, FReadProc(), FWriteProc(), FNextProc(), FPrevProc(), FRedirectProc<vector>(), owner )
+        {}
+        inline iterator &operator++() {
+            base_type::next();
+            return *this;
+        }
+        inline iterator operator++ ( int ) {
+            iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+        inline iterator &operator--() {
+            base_type::prev();
+            return *this;
+        }
+        inline iterator operator-- ( int ) {
+            iterator tmp = *this;
+            --*this;
+            return tmp;
+        }
+        inline iterator operator + ( sint offs ) {
+            iterator tmp = *this;
+            tmp.redirect ( offs );
+            return tmp;
+        }
+        inline iterator operator - ( sint offs ) {
+            iterator tmp = *this;
+            tmp.redirect ( -offs );
+            return tmp;
+        }
+    };
+    class const_iterator : public const_random_readwrite_iterator<T, FReadProc, FWriteProc, FNextProc, FPrevProc, FRedirectProc<vector>, vector>
+    {
+    public:
+        typedef const_random_readwrite_iterator<T, FReadProc, FWriteProc, FNextProc, FPrevProc, FRedirectProc<vector>, vector> base_type;
+        typedef T value_type;
+        typedef T *pointer;
+        typedef T &reference;
+        const_iterator ( vector<T> *owner, char *a, uint ele_real_size )
+            : base_type
+            ( ( T * ) a, ele_real_size, FReadProc(), FWriteProc(), FNextProc(), FPrevProc(), FRedirectProc<vector>(), owner )
+        {}
+        inline const_iterator &operator++() {
+            base_type::next();
+            return *this;
+        }
+        inline const_iterator operator++ ( int ) {
+            const_iterator tmp = *this;
+            ++*this;
+            return tmp;
+        }
+        inline const_iterator &operator--() {
+            base_type::prev();
+            return *this;
+        }
+        inline const_iterator operator-- ( int ) {
+            const_iterator tmp = *this;
+            --*this;
+            return tmp;
+        }
+        inline const_iterator operator + ( sint offs ) {
+            const_iterator tmp = *this;
+            tmp.redirect ( offs );
+            return tmp;
+        }
+        inline const_iterator operator - ( sint offs ) {
+            const_iterator tmp = *this;
+            tmp.redirect ( -offs );
+            return tmp;
+        }
+    };
+    uint m_totel_ele_count;
+    uint m_ele_real_size;
+    char *m_begin_addr;
+    char *m_barrier;
+    GET_ELEM_REAL_SIZE m_get_elem_real_size;
+    CTOR m_ctor;
+    DEST m_dest;
+    iterator begin() {
+        return iterator ( this, m_begin_addr, m_ele_real_size );
+    }
+    iterator end() {
+        return iterator ( this, m_barrier, m_ele_real_size );
+    }
+    const_iterator begin() const {
+        return const_iterator ( this, m_begin_addr, m_ele_real_size );
+    }
+    const_iterator end() const {
+        return const_iterator ( this, m_barrier, m_ele_real_size );
+    }
+    inline void push_back ( const T& v ) {
+		T& n_v = (T&)v;
+        uint curt_count = _get_size();
+
+        if ( curt_count + 1 > m_totel_ele_count ) {
+            reserve(m_totel_ele_count * 8);
+        }
+
+        m_ctor( (T*)m_barrier, n_v );
+        m_barrier += m_ele_real_size;
+    }
+    inline void pop_back() {
+        if ( m_barrier != m_begin_addr ) {
+            m_dest(m_barrier);
+            m_barrier -= m_ele_real_size;
+        }
+    }
+    inline T &back() {
+        uint i = size() - 1;
+        uint offs = m_ele_real_size * i;
+        char *ptr = m_begin_addr + offs;
+        return * ( ( T * ) ptr );
+    }
+    inline T &front() {
+        return * ( ( T * ) m_begin_addr );
+    }
+    inline const T &back() const {
+        uint i = size() - 1;
+        uint offs = m_ele_real_size * i;
+        char *ptr = m_begin_addr + offs;
+        return * ( ( T * ) ptr );
+    }
+    inline const T &front() const {
+        return * ( ( T * ) m_begin_addr );
+    }
+    inline T &operator [] ( uint i ) {
+        uint offs = m_ele_real_size * i;
+        char *ptr = m_begin_addr + offs;
+        return * ( ( T * ) ptr );
+    }
+    inline const T &operator [] ( uint i ) const {
+        uint offs = m_ele_real_size * i;
+        char *ptr = m_begin_addr + offs;
+        return * ( ( T * ) ptr );
+    }
+    inline bool empty() const {
+        return _get_size() == 0;
+    }
+    inline uint size() const {
+        return _get_size();
+    }
+    inline uint _get_size() const {
+        return ( m_barrier - m_begin_addr ) / m_ele_real_size;
+    }
+    inline void clear() {
+        m_barrier = m_begin_addr;
+    }
+    inline void reserve(uint n) {
+        if ( n > m_totel_ele_count ) {
+            uint curt_count = _get_size();
+            char *tmp = ( char * ) Malloc ( m_ele_real_size * n );
+            char *dst_ptr = tmp;
+            char *src_ptr = m_begin_addr;
+
+            for ( uint i = 0; i < curt_count; i++ ) {
+                m_ctor((T*)dst_ptr, * ( ( T * ) src_ptr ));
+                dst_ptr += m_ele_real_size;
+                src_ptr += m_ele_real_size;
+            }
+
+            src_ptr = m_begin_addr;
+
+            for ( uint i = 0; i < curt_count; i++ ) {
+                m_dest((T*)src_ptr);
+                src_ptr += m_ele_real_size;
+            }
+
+            Mfree ( m_begin_addr );
+            m_begin_addr = tmp;
+            m_barrier = m_begin_addr + ( m_ele_real_size * curt_count );
+            m_totel_ele_count = n;
+        }
+    }
+    inline void resize(uint n) {
+        reserve(n);
+        uint curt_count = _get_size();
+        uint d = n - curt_count;
+        for (uint i = 0; i < d; i++) {
+            m_ctor((T*)m_barrier);
+            m_barrier += m_ele_real_size;
+        }
+    }
+	inline void erase(iterator i) {
+		if ((ref_ptr)i.m_ptr >= (ref_ptr)m_begin_addr && (ref_ptr)i.m_ptr < (ref_ptr)m_barrier) {
+            m_dest(i.m_ptr);
+			iterator prev_iter = i;
+			i++;
+			for (; i != end(); i++)
+			{
+				*prev_iter = *i;
+			}
+			m_dest((T*)m_barrier);
+			m_barrier -= m_ele_real_size;
+		}
+	}
+	inline iterator insert(iterator i, const T& v) {
+		if ((ref_ptr)i.m_ptr >= (ref_ptr)m_begin_addr && (ref_ptr)i.m_ptr < (ref_ptr)m_barrier) {
+			T& n_v = (T&)v;
+			ref_ptr offset = (ref_ptr)i.m_ptr - (ref_ptr)m_begin_addr;
+			reserve(_get_size() + 1);
+			i = iterator(this, m_begin_addr + offset, m_ele_real_size);
+			iterator src(this, m_barrier, m_ele_real_size);
+			m_barrier += m_ele_real_size;
+			m_ctor((T*)m_barrier);
+			iterator dst(this, m_barrier, m_ele_real_size);
+			for (; src != i; src--, dst--) {
+                *dst = *src;
+			}
+			dst = i;
+			dst++;
+            *dst = *i;
+			*i = n_v;
+			return i;
+		}
+		return iterator(this, NULL, 0);
+	}
+	inline T* get() const {
+		return (T*)m_begin_addr;
+	}
+    vector() {
+        uint size = m_get_elem_real_size();
+        m_begin_addr = ( char * ) Malloc ( size * 32 );
+        m_barrier = m_begin_addr;
+        m_ele_real_size = size;
+        m_totel_ele_count = 32;
+    }
+    ~vector() {
+        uint curt_count = _get_size();
+        char *src_ptr = m_begin_addr;
+        for ( uint i = 0; i < curt_count; i++ ) {
+            m_dest((T*)src_ptr);
+            src_ptr += m_ele_real_size;
+        }
+        Mfree ( m_begin_addr );
+    }
+};
+};
+#endif

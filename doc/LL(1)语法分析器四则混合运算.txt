@@ -1,0 +1,160 @@
+
+S->+S | -S
+
+S->*S | /S
+
+S->aS
+
+S->#
+
+a+a*a#
+
+[aS] -> a[+S] -> a+[aS] -> a+a[*S] -> a+a*[aS] ->a+a*a#
+
+#
+a#
+*a#
+a*a#
++a*a#
+a+a*a#
+
+S->aS
+S->+S | -S | M
+S->#
+
+M->*M | /M | S
+
+a+a*a#
+
+[aS] -> a[+S] -> a+[aS] -> a+a[M] -> a+a[*M] -> a+a*[S] -> a+a*[aS] -> a+a*a#
+
+a+a-a*a/a-a#
+
+[aS]
+a[+S]
+a+[aS]
+a+a[-S]
+a+a-[aS]
+a+a-a[M]
+a+a-a[*M]
+a+a-a*[S]
+a+a-a*[aS]
+a+a-a*a[M]
+a+a-a*a[/M]
+a+a-a*a/[S]
+a+a-a*a/[aS]
+a+a-a*a/a[-S]
+a+a-a*a/a-[aS]
+a+a-a*a/a-a#
+
+S->aS
+
+S->+S | -S | M
+
+S->(S | )S
+
+S->#
+
+M->*M | /M | S
+
+a+(a-a)#
+
+[aS]
+a[+S]
+a+[(S]
+a+([aS]
+a+(a[-S]
+a+(a-[aS]
+a+(a-a[)S]
+a+(a-a)#
+
+S->aS
+
+S->+S | -S 
+
+S->*S | /S 
+
+S->(S | )S
+
+S->#
+
+a+(a-a)#
+
+[aS]
+a[+S]
+a+[(S]
+a+([aS]
+a+(a[-S]
+a+(a-[aS]
+a+(a-a[)S]
+a+(a-a)#
+
+a+a*a
+  
+  +
+  /\
+ a  N *
+    /\
+   a  a 
+    
+
+a + N
+    |
+    a * N -> a
+
+a-a+a-a
+
+a + N -> a + N -> a - N -> a
+
+a-a*a+a
+
+a - N   a + N -> a
+    |   |
+    a * N
+
+a-a*(a+a)
+
+a - N
+    |
+    a * N
+        |
+        (a + N -> a)
+
+
+a-a*(a+a*a)+a+a*a
+
+a - N                 a + N
+    |                 |   |
+    a * N        a) + N   a * N -> a
+        |        |     
+        (a + N   |
+             |   |
+             a * N
+
+a-a*(a+a*a-a)*a+a*a#
+
+a - N                     a + N
+    |                     |   |   
+    a * N            a) * N   a * N -> a
+        |            |          
+        (a + N   a - N   
+             |   |
+             a * N
+
+
+aS -> -S -> aS                                 )S -> N    +S -> aS 
+             |                                  |    |     |     |
+            *S -> N                             |   *S -> aS    *S -> aS ->#
+                  |                             |
+                 (S -> aS -> +S -> aS    -S -> aS
+                                    |     |
+                                   *S -> aS
+
+a <- (-Node) -> a                                                                                                  ) <-                 <- (+Node) -> a
+                |                                                                                                  |    |              |              |             
+                 <- (*Node) -> (                                                                                   |     <- (*Node) -> a               <- (*Node) -> a <- (EmptyNode) -> #
+                               |                                                                                   |
+                                <- (EmptyNode) -> a <- (+Node) -> a               <- (-Node) -> a <- (EmptyNode) -> 
+                                                                  |              |
+                                                                   <- (*Node) -> a
+                   

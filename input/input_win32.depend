@@ -1,0 +1,55 @@
+# depslib dependency file v1.0
+1342693455 source:c:\users\xhn\experimental-platform-for-computer-graphics\input\src\input_win32.cpp
+	"input_win32.h"
+	<windows.h>
+	<dinput.h>
+
+1342672948 c:\users\xhn\experimental-platform-for-computer-graphics\input\include\input_win32.h
+	<windows.h>
+	"common.h"
+	"etypes.h"
+	"rwbuffer.h"
+
+1274308618 c:\users\xhn\experimental-platform-for-computer-graphics\dependencies\dinput\include\dinput.h
+	<objbase.h>
+
+1339911171 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\common.h
+
+1342805267 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\etypes.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<stdbool.h>
+	<stdint.h>
+
+1342632656 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\rwbuffer.h
+	"common.h"
+	"etypes.h"
+
+1355585878 source:d:\projects\experimental-platform-for-computer-graphics\input\src\input_win32.cpp
+	"input_win32.h"
+	<windows.h>
+	<dinput.h>
+
+1342672948 d:\projects\experimental-platform-for-computer-graphics\input\include\input_win32.h
+	<windows.h>
+	"common.h"
+	"etypes.h"
+	"rwbuffer.h"
+
+1351917593 d:\projects\common\include\common.h
+
+1355585347 d:\projects\common\include\etypes.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<stdbool.h>
+	<stdint.h>
+
+1351917593 d:\projects\common\include\rwbuffer.h
+	"common.h"
+	"etypes.h"
+
+1274308618 d:\projects\experimental-platform-for-computer-graphics\dependencies\dinput\include\dinput.h
+	<objbase.h>
+

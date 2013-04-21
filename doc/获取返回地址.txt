@@ -1,0 +1,22 @@
+使用__builtin_return_address是可以获取到函数返回地址的，这里所说的返回地址并不是函数的地址，是我们使用call function以后要压栈的下一条指令的地址，但是根据此地址查找符号文件找到距此地址最近的函数名称。我在gdb调试中发现，当__builtin_return_address的参数为零的时候返回值实际上是调用它的函数（caller）中的地址，所以我理解这里参数为零是在当前函数栈中存储的返回地址，依次类推。
+
+__builtin_return_address汇编代码（未测试）
+int get_return_address(int iLevel)
+{
+        __asm__("pushl %%ebx\n\t"
+                "movl %%ebp,%%eax\n\t"
+                "movl 12(%%esp),%%ebx\n\n"
+                "__next:\n\t"
+                "test %%ebx,%%ebx\n\t"
+                "je __break\n\t"
+                "dec %%ebx\n\t"
+                "movl (%%eax),%%eax\n\t"
+                "jmp __next\n\n"
+                "__break:\n\t"
+                "movl 4(%%eax),%%eax\n\t"
+                "pop %%ebx\n\t"
+                ::
+        );
+}
+
+得到返回地址后再用addr2line获取函数名

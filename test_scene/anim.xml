@@ -1,0 +1,25 @@
+<root>
+  <animations>
+    <rotate num_timelines="1">
+      <timeline name="test" type="Float" num_keyframes="3" is_looped="true">
+        <keyframe time="0.0" value_x="0.0"/>
+        <keyframe time="0.4" value_x="0.5"/>
+        <keyframe time="0.8" value_x="0.0"/>
+      </timeline>
+    </rotate>
+    <scale num_timelines="1">
+      <timeline name="test" type="Float2" num_keyframes="3" is_looped="true">
+        <keyframe time="0.0" value_x="1.0" value_y="1.0"/>
+        <keyframe time="0.4" value_x="1.5" value_y="1.5"/>
+        <keyframe time="0.8" value_x="1.0" value_y="1.0"/>
+      </timeline>
+    </scale>
+    <offset num_timelines="1">
+      <timeline name="test" type="Float2" num_keyframes="3" is_looped="true">
+        <keyframe time="0.0" value_x="0.0" value_y="0.0"/>
+        <keyframe time="0.4" value_x="0.0" value_y="0.0"/>
+        <keyframe time="0.8" value_x="0.0" value_y="0.0"/>
+      </timeline>
+    </offset>
+</animations>
+</root>

@@ -1,0 +1,10 @@
+coord = {u, v}
+x = u * w / 2
+y = v * h / 2
+z = near
+
+pos_cam = {x, y, z}
+vec_world = mat_cam_rot * pos_cam
+vec_world = normalize(vec_world)
+vec_world = vec_world * depth
+pos_world = vec_world + cam_tran

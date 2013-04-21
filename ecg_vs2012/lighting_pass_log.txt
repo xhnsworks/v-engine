@@ -1,0 +1,3017 @@
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+case 5:
+case 6:
+case 7:
+{
+DiffuseValue = ClearLightingValue(  );
+SpecularValue = ClearLightingValue(  );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+DirectionLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D DiffuseLightingMap;
+uniform sampler2D SpecularLightingMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+case 5:
+case 6:
+case 7:
+{
+MapSample( DiffuseLightingMap, vTexCoord, DiffuseValue );
+MapSample( DiffuseLightingMap, vTexCoord, SpecularValue );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+DirectionLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+case 5:
+case 6:
+case 7:
+{
+DiffuseValue = ClearLightingValue(  );
+SpecularValue = ClearLightingValue(  );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+SpotLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, LightOuterCos, LightInnerCos, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D DiffuseLightingMap;
+uniform sampler2D SpecularLightingMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+case 5:
+case 6:
+case 7:
+{
+MapSample( DiffuseLightingMap, vTexCoord, DiffuseValue );
+MapSample( DiffuseLightingMap, vTexCoord, SpecularValue );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+SpotLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, LightOuterCos, LightInnerCos, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform samplerCube ShadowCubeMap;
+uniform float LightInfluence;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+case 5:
+case 6:
+case 7:
+{
+DiffuseValue = ClearLightingValue(  );
+SpecularValue = ClearLightingValue(  );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = ShadowCubeTest( ShadowCubeMap, TargetPosition, LightPosition, LightInfluence );
+TargetNormal = NormalDecode( Normal );
+PointLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightColor, LightAtteCoef, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D DiffuseLightingMap;
+uniform sampler2D SpecularLightingMap;
+uniform samplerCube ShadowCubeMap;
+uniform float LightInfluence;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+case 5:
+case 6:
+case 7:
+{
+MapSample( DiffuseLightingMap, vTexCoord, DiffuseValue );
+MapSample( DiffuseLightingMap, vTexCoord, SpecularValue );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = ShadowCubeTest( ShadowCubeMap, TargetPosition, LightPosition, LightInfluence );
+TargetNormal = NormalDecode( Normal );
+PointLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightColor, LightAtteCoef, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+{
+DiffuseValue = ClearLightingValue(  );
+SpecularValue = ClearLightingValue(  );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+DirectionLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D DiffuseLightingMap;
+uniform sampler2D SpecularLightingMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+{
+MapSample( DiffuseLightingMap, vTexCoord, DiffuseValue );
+MapSample( DiffuseLightingMap, vTexCoord, SpecularValue );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+DirectionLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+{
+DiffuseValue = ClearLightingValue(  );
+SpecularValue = ClearLightingValue(  );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+SpotLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, LightOuterCos, LightInnerCos, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D DiffuseLightingMap;
+uniform sampler2D SpecularLightingMap;
+uniform sampler2D ShadowMap0;
+uniform mat4 LightWorldMatrix0;
+uniform mat4 LightProjMatrix0;
+uniform vec3 ShadowDirection0;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+{
+MapSample( DiffuseLightingMap, vTexCoord, DiffuseValue );
+MapSample( DiffuseLightingMap, vTexCoord, SpecularValue );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = Shadow2DTest( ShadowMap0, TargetPosition, LightWorldMatrix0, LightProjMatrix0, LightPosition, ShadowDirection0 );
+TargetNormal = NormalDecode( Normal );
+SpotLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightDirection, LightColor, LightAtteCoef, LightOuterCos, LightInnerCos, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform samplerCube ShadowCubeMap;
+uniform float LightInfluence;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragData[0] = vec4(InDiffuse, 1.0);
+    gl_FragData[1] = vec4(InSpecular, 1.0);
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    vec4 MaterialIDPixel;
+    vec4 Normal;
+    vec4 Depth;
+    vec3 TargetPosition;
+    vec3 TargetNormal;
+    vec3 DiffuseValue;
+    vec3 SpecularValue;
+    vec3 ViewLightDir;
+    vec3 LightingWeight;
+    MapSampleRGBA( MaterialIDMap, vTexCoord, MaterialIDPixel );
+switch ( int(MaterialIDPixel.w * 255.000000) )
+{
+case 2:
+case 3:
+case 4:
+{
+DiffuseValue = ClearLightingValue(  );
+SpecularValue = ClearLightingValue(  );
+MapSampleRGBA( NormalMap, vTexCoord, Normal );
+MapSampleRGBA( DepthMap, vTexCoord, Depth );
+TargetPosition = PositionDecode( vTexCoord, Depth, CamNearPlane, CamFarPlane, CamWidth, CamHeight, InvCamWorldMatrix, InvCamProjMatrix );
+LightingWeight = ShadowCubeTest( ShadowCubeMap, TargetPosition, LightPosition, LightInfluence );
+TargetNormal = NormalDecode( Normal );
+PointLighting( DiffuseValue, SpecularValue, UnifCameraPosition, TargetPosition, TargetNormal, LightColor, LightAtteCoef, LightPosition, Normal.z, LightingWeight, DiffuseValue, SpecularValue );
+DiffuseSpecularOutput( DiffuseValue, SpecularValue );
+
+}
+break;
+}
+
+
+}
+
+#version 400
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+}
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 400
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D DepthMap;
+uniform float CamWidth;
+uniform float CamHeight;
+uniform float CamNearPlane;
+uniform float CamFarPlane;
+uniform vec3 UnifCameraPosition;
+uniform vec3 LightPosition;
+uniform vec3 LightDirection;
+uniform vec4 LightColor;
+uniform float LightAtteCoef;
+uniform float LightInnerCos;
+uniform float LightOuterCos;
+uniform mat4 InvCamWorldMatrix;
+uniform mat4 InvCamProjMatrix;
+uniform mat4 CamWorldMatrix;
+uniform mat4 CamProjMatrix;
+uniform sampler2D MaterialIDMap;
+uniform sampler2D DiffuseLightingMap;
+uniform sampler2D SpecularLightingMap;
+uniform samplerCube ShadowCubeMap;
+uniform float LightInfluence;
+///varying///
+varying vec4 vPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+void SpotLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float OuterCosHalfAngle, float InnerCosHalfAngle, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    float d = dot(normalize(LightDir), realLightDir);
+    d = clamp(d, 0.0, 1.0);
+    if (d > OuterCosHalfAngle)
+    {
+        float weight = 1.0 + (d - InnerCosHalfAngle) / (1.0 - InnerCosHalfAngle);
+        weight = clamp(weight, 0.0, 1.0);
+        realLightDir = -realLightDir;
+        d = dot(realLightDir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        c = LightColor.rgb * d * weight;
+        vec3 eye_dir = normalize(EyePos - TargetPos);
+        vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+        r = normalize(r);
+        d = dot(r, eye_dir);
+        d = clamp(d, 0.0, 1.0);
+        s = pow(d, 16.0) * LightColor.rgb * 0.15 * weight;
+    }
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+vec3 Shadow2DTest(sampler2D ShadowMap, vec3 PixelWorldPosition, mat4 LightWorldMatrix, mat4 LightProjectionMatrix, vec3 LightPosition, vec3 LightDirection){
+    vec4 world_pos = vec4(PixelWorldPosition, 1.0);
+    world_pos = LightWorldMatrix * world_pos;
+    world_pos = LightProjectionMatrix * world_pos;
+    world_pos /= world_pos.w;
+    vec2 uv = world_pos.xy;
+    uv = uv * 0.5 + vec2(0.5, 0.5);
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+        return vec3(0.0f, 0.0f, 0.0f);
+    float depth = world_pos.z * 0.5 + 0.5;
+    vec2 moments = texture(ShadowMap, uv).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.000001);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void PointLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec4 LightColor, float AtteCoef, vec3 LightPos, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec3 s = vec3(0.0, 0.0, 0.0);
+    vec3 realLightDir = normalize(TargetPos - LightPos);
+    realLightDir = -realLightDir;
+    float d = dot(realLightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(realLightDir, TargetNor) + realLightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+vec3 ShadowCubeTest(samplerCube ShadowMap, vec3 PixelWorldPosition, vec3 LightPosition, float LightInfluence){
+    vec3 ray_dir = PixelWorldPosition - LightPosition;
+    float depth = length(ray_dir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    ray_dir = normalize(ray_dir);
+    vec2 moments = texture(ShadowMap, ray_dir).rg;
+    if (depth < moments.x)
+        return vec3(1.0f, 1.0f, 1.0f);
+    float variance = moments.y - (moments.x * moments.x);
+    variance = max(variance,0.002);
+    float d = depth - moments.x;
+    float p_max = variance / (variance + d*d);
+    return vec3(p_max, p_max, p_max);
+}
+void DirectionLighting(vec3 InDiffuse, vec3 InSpecular, vec3 EyePos, vec3 TargetPos, vec3 TargetNor, vec3 LightDir, vec4 LightColor, float AtteCoef, float TargetSpecular, vec3 LightingWeight, out vec3 OutDiffuse, out vec3 OutSpecular){
+    LightDir = -LightDir;
+    float d = dot(LightDir, TargetNor);
+    d = clamp(d, 0.0, 1.0);
+    vec3 c = LightColor.rgb * d;
+    vec3 eye_dir = normalize(EyePos - TargetPos);
+    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;
+    r = normalize(r);
+    d = dot(r, eye_dir);
+    d = clamp(d, 0.0, 1.0);
+    vec3 s = pow(d, 16.0) * LightColor.rgb * 0.15;
+    OutDiffuse = InDiffuse + c * LightingWeight;
+    OutSpecular = InSpecular + s * LightingWeight;
+}
+vec3 WhiteScreen(){
+    return vec3(1.0f, 1.0f, 1.0f);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+void DiffuseSpecularOutput(vec3 InDiffuse, vec3 InSpecular){
+    gl_FragDa

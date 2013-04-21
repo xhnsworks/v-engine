@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="common" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\common" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\common" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-march=core2" />
+			<Add option="-Wall" />
+			<Add option="-std=gnu99" />
+			<Add directory="include" />
+			<Add directory="..\dependencies\tcc-0.9.25\win32\libtcc" />
+			<Add directory="..\dependencies\backtrace" />
+		</Compiler>
+		<Linker>
+			<Add library="pthread" />
+			<Add library="tcc" />
+			<Add library="bfd" />
+			<Add library="imagehlp" />
+			<Add library="iberty" />
+			<Add directory="..\dependencies\tcc-0.9.25\win32\libtcc" />
+		</Linker>
+		<Unit filename="include\array.h" />
+		<Unit filename="include\common.h" />
+		<Unit filename="include\comparison_algorithm.h" />
+		<Unit filename="include\container.h" />
+		<Unit filename="include\eassert.h" />
+		<Unit filename="include\elog.h" />
+		<Unit filename="include\esignal.h" />
+		<Unit filename="include\estring.h" />
+		<Unit filename="include\etypes.h" />
+		<Unit filename="include\get_proc.h" />
+		<Unit filename="include\golden_cudgel.h" />
+		<Unit filename="include\hash.h" />
+		<Unit filename="include\list.h" />
+		<Unit filename="include\mem.h" />
+		<Unit filename="include\parser.h" />
+		<Unit filename="include\rwbuffer.h" />
+		<Unit filename="include\stack.h" />
+		<Unit filename="include\tree.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\eassert.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\elog.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\esignal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\estring.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\golden_cudgel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\hash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\mem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\parser.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\rwbuffer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\stack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\tree.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

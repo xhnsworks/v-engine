@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author></author>
+      <authoring_tool>FBX COLLADA exporter</authoring_tool>
+      <comments></comments>
+    </contributor>
+    <created>2012-12-25T14:42:28Z</created>
+    <keywords></keywords>
+    <modified>2012-12-25T14:42:28Z</modified>
+    <revision></revision>
+    <subject></subject>
+    <title></title>
+    <unit meter="0.010000" name="centimeter"></unit>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_materials>
+    <material id="lambert1" name="lambert1">
+      <instance_effect url="#lambert1-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="lambert1-fx" name="lambert1">
+      <profile_COMMON>
+        <technique sid="standard">
+          <lambert>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.400000  0.400000 0.400000 1.000000</color>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="pSphere1-lib" name="pSphere1Mesh">
+      <mesh>
+        <source id="pSphere1-POSITION">
+          <float_array id="pSphere1-POSITION-array" count="24">
+-0.433013 -0.500000 -0.750000
+-0.433013 -0.500000 0.750000
+0.866025 -0.500000 0.000000
+-0.433013 0.500000 -0.750000
+-0.433013 0.500000 0.750000
+0.866025 0.500000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 1.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pSphere1-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pSphere1-Normal0">
+          <float_array id="pSphere1-Normal0-array" count="108">
+-1.000000 0.000000 -0.000000
+-1.000000 0.000000 -0.000000
+-1.000000 0.000000 -0.000000
+-1.000000 0.000000 -0.000000
+-1.000000 0.000000 -0.000000
+-1.000000 0.000000 -0.000000
+0.500000 0.000000 0.866025
+0.500000 0.000000 0.866025
+0.500000 0.000000 0.866025
+0.500000 0.000000 0.866025
+0.500000 0.000000 0.866025
+0.500000 0.000000 0.866025
+0.500000 0.000000 -0.866025
+0.500000 0.000000 -0.866025
+0.500000 0.000000 -0.866025
+0.500000 0.000000 -0.866025
+0.500000 0.000000 -0.866025
+0.500000 0.000000 -0.866025
+-0.755929 -0.654654 -0.000000
+-0.755929 -0.654654 -0.000000
+-0.755929 -0.654654 -0.000000
+0.377964 -0.654654 0.654654
+0.377964 -0.654654 0.654654
+0.377964 -0.654654 0.654654
+0.377964 -0.654654 -0.654654
+0.377964 -0.654654 -0.654654
+0.377964 -0.654654 -0.654654
+-0.755929 0.654654 -0.000000
+-0.755929 0.654654 -0.000000
+-0.755929 0.654654 -0.000000
+0.377964 0.654654 0.654654
+0.377964 0.654654 0.654654
+0.377964 0.654654 0.654654
+0.377964 0.654654 -0.654654
+0.377964 0.654654 -0.654654
+0.377964 0.654654 -0.654654
+</float_array>
+          <technique_common>
+            <accessor source="#pSphere1-Normal0-array" count="36" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="pSphere1-UV0">
+          <float_array id="pSphere1-UV0-array" count="28">
+0.000000 0.333333
+0.333333 0.333333
+0.666667 0.333333
+1.000000 0.333333
+0.000000 0.666667
+0.333333 0.666667
+0.666667 0.666667
+1.000000 0.666667
+0.166667 0.000000
+0.500000 0.000000
+0.833333 0.000000
+0.166667 1.000000
+0.500000 1.000000
+0.833333 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#pSphere1-UV0-array" count="14" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="pSphere1-VERTEX">
+          <input semantic="POSITION" source="#pSphere1-POSITION"/>
+        </vertices>
+        <triangles count="12" material="lambert1">
+          <input semantic="VERTEX" offset="0" source="#pSphere1-VERTEX"/>
+          <input semantic="NORMAL" offset="1" source="#pSphere1-Normal0"/>
+          <input semantic="TEXCOORD" offset="2" set="0" source="#pSphere1-UV0"/>
+          <p> 4 0 5 0 1 0 1 2 1 0 3 0 4 4 5 3 5 4 5 6 6 4 7 5 1 8 1 5 9 6 1 10 1 2 11 2 0 12 3 3 13 7 2 14 2 2 15 2 3 16 7 5 17 6 1 18 1 0 19 0 6 20 8 2 21 2 1 22 1 6 23 9 0 24 3 2 25 2 6 26 10 3 27 4 4 28 5 7 29 11 4 30 5 5 31 6 7 32 12 5 33 6 3 34 7 7 35 13</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="" name="">
+      <node name="pSphere1" id="pSphere1" sid="pSphere1">
+        <matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
+        <instance_geometry url="#pSphere1-lib">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="lambert1" target="#lambert1"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra>
+          <technique profile="FCOLLADA">
+            <visibility>1.000000</visibility>
+          </technique>
+        </extra>
+      </node>
+      <extra>
+        <technique profile="MAX3D">
+          <frame_rate>24.000000</frame_rate>
+        </technique>
+        <technique profile="FCOLLADA">
+          <start_time>0.041667</start_time>
+          <end_time>2.000000</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#"></instance_visual_scene>
+  </scene>
+</COLLADA>
+

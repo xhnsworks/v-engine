@@ -1,0 +1,826 @@
+# depslib dependency file v1.0
+1350724304 source:c:\users\xhn\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\main.c
+	<stdio.h>
+	<stdlib.h>
+	"test.tab.h"
+	"etypes.h"
+	"tree.h"
+	"mem.h"
+
+1351259965 c:\users\xhn\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\test.tab.h
+
+1350713504 source:c:\users\xhn\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\test.tab.c
+	"common.h"
+	"etypes.h"
+	<stddef.h>
+	<libintl.h>
+	<alloca.h>
+	<malloc.h>
+	<stdlib.h>
+	<stdlib.h>
+	<stdio.h>
+
+1350724269 source:c:\users\xhn\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\lex.c
+	"etypes.h"
+	"common.h"
+	"tree.h"
+	"test.tab.h"
+
+1351694849 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\etypes.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<stdbool.h>
+	<stdint.h>
+
+1346245193 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\common.h
+
+1350311449 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\tree.h
+	"etypes.h"
+	"common.h"
+	"comparison_algorithm.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\comparison_algorithm.h
+
+1351316453 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\tree.c
+	"tree.h"
+	"container.h"
+	"estring.h"
+	"elog.h"
+	"eassert.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\container.h
+	"common.h"
+	"etypes.h"
+	<pthread.h>
+	"tree.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\estring.h
+	"common.h"
+	"etypes.h"
+
+1349357769 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\elog.h
+	"common.h"
+	"etypes.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\eassert.h
+	"common.h"
+	"etypes.h"
+	<assert.h>
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\mem.c
+	"mem.h"
+	"elog.h"
+	"eassert.h"
+	<malloc.h>
+	"list.h"
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\mem.h
+	<stdio.h>
+	<stdlib.h>
+	"etypes.h"
+	"common.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\list.h
+	"etypes.h"
+	"common.h"
+
+1349349059 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\estring.c
+	"estring.h"
+	"hash.h"
+	"mem.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\hash.h
+	"common.h"
+	"etypes.h"
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\eassert.c
+	"eassert.h"
+	"elog.h"
+
+1349357769 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\elog.c
+	"elog.h"
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\esignal.c
+	"esignal.h"
+	<stdio.h>
+	<signal.h>
+	<setjmp.h>
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\esignal.h
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\golden_cudgel.c
+	"golden_cudgel.h"
+	"mem.h"
+	<windows.h>
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\golden_cudgel.h
+	"common.h"
+	"etypes.h"
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\hash.c
+	"hash.h"
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\list.c
+	"list.h"
+	"container.h"
+
+1349605752 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\parser.c
+	"parser.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1349605692 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\parser.h
+	"etypes.h"
+	"common.h"
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\rwbuffer.c
+	"rwbuffer.h"
+	"mem.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\rwbuffer.h
+	"common.h"
+	"etypes.h"
+
+1346245193 source:c:\users\xhn\experimental-platform-for-computer-graphics\common\src\stack.c
+	"stack.h"
+	"mem.h"
+	"container.h"
+
+1346245192 c:\users\xhn\experimental-platform-for-computer-graphics\common\include\stack.h
+	"etypes.h"
+	"common.h"
+
+1350721217 source:c:\users\xhn\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\proc.c
+	"common.h"
+	"etypes.h"
+	"mem.h"
+
+1352529352 source:d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\lex.c
+	"etypes.h"
+	"common.h"
+	"tree.h"
+	"test.tab.h"
+	"parser_env.h"
+	"symbol_stack.h"
+	"estring.h"
+
+1352539392 d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\test.tab.h
+
+1351694849 d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\parser_env.h
+	"common.h"
+	"etypes.h"
+	"stack.h"
+
+1352539360 d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\symbol_stack.h
+	"common.h"
+	"etypes.h"
+	"stack.h"
+	"tree.h"
+	"parser_env.h"
+
+1352535222 source:d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\main.c
+	<stdio.h>
+	<stdlib.h>
+	"test.tab.h"
+	"etypes.h"
+	"parser_env.h"
+	"tree.h"
+	"mem.h"
+	"symbol_stack.h"
+
+1352539385 source:d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\proc.c
+	"common.h"
+	"etypes.h"
+	"eassert.h"
+	"elog.h"
+	"mem.h"
+	"parser_env.h"
+	"symbol_stack.h"
+
+1352300343 source:d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\symbol_stack.c
+	"symbol_stack.h"
+	"mem.h"
+
+1352539392 source:d:\projects\experimental-platform-for-computer-graphics\dependencies\bison\bison-2.4.1-bin\bin\test.tab.c
+	"common.h"
+	"etypes.h"
+	"parser_env.h"
+	<stddef.h>
+	<libintl.h>
+	<alloca.h>
+	<malloc.h>
+	<stdlib.h>
+	<stdlib.h>
+	<stdio.h>
+
+1351917595 source:d:\projects\common\src\eassert.c
+	"eassert.h"
+	"elog.h"
+
+1351917593 d:\projects\common\include\eassert.h
+	"common.h"
+	"etypes.h"
+	<assert.h>
+
+1351917593 d:\projects\common\include\common.h
+
+1355321423 d:\projects\common\include\etypes.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<stdbool.h>
+	<stdint.h>
+
+1351917593 d:\projects\common\include\elog.h
+	"common.h"
+	"etypes.h"
+
+1351917595 source:d:\projects\common\src\elog.c
+	"elog.h"
+
+1351917595 source:d:\projects\common\src\esignal.c
+	"esignal.h"
+	<stdio.h>
+	<signal.h>
+	<setjmp.h>
+
+1351917593 d:\projects\common\include\esignal.h
+
+1354968870 source:d:\projects\common\src\estring.c
+	"estring.h"
+	"hash.h"
+	"emem.h"
+
+1355319134 d:\projects\common\include\estring.h
+	"common.h"
+	"etypes.h"
+
+1351917593 d:\projects\common\include\hash.h
+	"common.h"
+	"etypes.h"
+
+1351917593 d:\projects\common\include\mem.h
+	<stdio.h>
+	<stdlib.h>
+	"etypes.h"
+	"common.h"
+
+1354959507 source:d:\projects\common\src\golden_cudgel.c
+	"golden_cudgel.h"
+	"emem.h"
+	<windows.h>
+
+1351917593 d:\projects\common\include\golden_cudgel.h
+	"common.h"
+	"etypes.h"
+
+1351917595 source:d:\projects\common\src\hash.c
+	"hash.h"
+
+1351917595 source:d:\projects\common\src\list.c
+	"list.h"
+	"container.h"
+
+1351917593 d:\projects\common\include\list.h
+	"etypes.h"
+	"common.h"
+
+1351917593 d:\projects\common\include\container.h
+	"common.h"
+	"etypes.h"
+	<pthread.h>
+	"tree.h"
+
+1351917593 d:\projects\common\include\tree.h
+	"etypes.h"
+	"common.h"
+	"comparison_algorithm.h"
+
+1354969635 d:\projects\common\include\comparison_algorithm.h
+
+1352213732 source:d:\projects\common\src\mem.c
+	"mem.h"
+	"elog.h"
+	"eassert.h"
+	<malloc.h>
+	"list.h"
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+
+1354959549 source:d:\projects\common\src\rwbuffer.c
+	"rwbuffer.h"
+	"emem.h"
+
+1351917593 d:\projects\common\include\rwbuffer.h
+	"common.h"
+	"etypes.h"
+
+1355041499 source:d:\projects\common\src\stack.c
+	"stack.h"
+	"emem.h"
+	"container.h"
+
+1355041499 d:\projects\common\include\stack.h
+	"etypes.h"
+	"common.h"
+
+1355319077 source:d:\projects\common\src\tree.c
+	"tree.h"
+	"container.h"
+	"estring.h"
+	"elog.h"
+	"eassert.h"
+
+1314140394 d:\mingw\include\stdio.h
+	<_mingw.h>
+	<stddef.h>
+	<stdarg.h>
+	<sys/types.h>
+
+1314140392 d:\mingw\include\_mingw.h
+
+1314140395 d:\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1314140394 d:\mingw\include\stdlib.h
+	<_mingw.h>
+	<stddef.h>
+
+1314140394 d:\mingw\include\memory.h
+	<string.h>
+
+1314140394 d:\mingw\include\string.h
+	<_mingw.h>
+	<stddef.h>
+
+1314140394 d:\mingw\include\stdint.h
+	<stddef.h>
+
+1314140392 d:\mingw\include\assert.h
+	<_mingw.h>
+
+1314140394 d:\mingw\include\signal.h
+	<_mingw.h>
+
+1314140394 d:\mingw\include\setjmp.h
+	<_mingw.h>
+
+1301111162 d:\mingw\include\windows.h
+	<winresrc.h>
+	<stdarg.h>
+	<windef.h>
+	<wincon.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<winver.h>
+	<winnetwk.h>
+	<winreg.h>
+	<winsvc.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<imm.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<commdlg.h>
+	<winspool.h>
+	<winsock2.h>
+	<winsock.h>
+	<ole2.h>
+
+1301111163 d:\mingw\include\winresrc.h
+	<winuser.h>
+	<winnt.h>
+	<winver.h>
+	<dde.h>
+	<dlgs.h>
+	<commctrl.h>
+
+1301111164 d:\mingw\include\winuser.h
+
+1301111163 d:\mingw\include\winnt.h
+	<winerror.h>
+	<string.h>
+	<basetsd.h>
+	<pshpack4.h>
+	<poppack.h>
+
+1301111162 d:\mingw\include\winerror.h
+
+1301111149 d:\mingw\include\basetsd.h
+
+1301111157 d:\mingw\include\pshpack4.h
+
+1301111157 d:\mingw\include\poppack.h
+
+1301111164 d:\mingw\include\winver.h
+
+1301111149 d:\mingw\include\dde.h
+
+1301111150 d:\mingw\include\dlgs.h
+
+1301111149 d:\mingw\include\commctrl.h
+	<prsht.h>
+
+1301111157 d:\mingw\include\prsht.h
+
+1301111162 d:\mingw\include\windef.h
+	<winnt.h>
+
+1301111162 d:\mingw\include\wincon.h
+
+1301111161 d:\mingw\include\winbase.h
+
+1301111162 d:\mingw\include\wingdi.h
+
+1301111163 d:\mingw\include\winnls.h
+
+1301111163 d:\mingw\include\winnetwk.h
+
+1301111163 d:\mingw\include\winreg.h
+
+1301111164 d:\mingw\include\winsvc.h
+
+1301111149 d:\mingw\include\cderr.h
+
+1301111149 d:\mingw\include\ddeml.h
+
+1301111151 d:\mingw\include\imm.h
+
+1301111154 d:\mingw\include\lzexpand.h
+
+1301111154 d:\mingw\include\mmsystem.h
+
+1301111155 d:\mingw\include\nb30.h
+
+1301111158 d:\mingw\include\rpc.h
+	<windows.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcnterr.h>
+	<winerror.h>
+	<excpt.h>
+
+1301111158 d:\mingw\include\rpcdce.h
+	<basetyps.h>
+	<rpcdcep.h>
+
+1301111149 d:\mingw\include\basetyps.h
+
+1301111159 d:\mingw\include\rpcdcep.h
+
+1301111159 d:\mingw\include\rpcnsi.h
+
+1301111159 d:\mingw\include\rpcnterr.h
+
+1314140393 d:\mingw\include\excpt.h
+	<_mingw.h>
+	<windef.h>
+
+1301111160 d:\mingw\include\shellapi.h
+	<pshpack2.h>
+	<poppack.h>
+
+1301111157 d:\mingw\include\pshpack2.h
+
+1301111163 d:\mingw\include\winperf.h
+
+1301111149 d:\mingw\include\commdlg.h
+	<unknwn.h>
+	<prsht.h>
+
+1301111161 d:\mingw\include\unknwn.h
+	<windows.h>
+	<objfwd.h>
+	<wtypes.h>
+
+1301111156 d:\mingw\include\objfwd.h
+	<basetyps.h>
+
+1301111164 d:\mingw\include\wtypes.h
+	<rpc.h>
+	<rpcndr.h>
+
+1301111159 d:\mingw\include\rpcndr.h
+	<rpcnsip.h>
+	<objfwd.h>
+
+1301111159 d:\mingw\include\rpcnsip.h
+
+1301111163 d:\mingw\include\winspool.h
+
+1301111163 d:\mingw\include\winsock2.h
+	<windows.h>
+
+1301111163 d:\mingw\include\winsock.h
+	<windows.h>
+	<mswsock.h>
+
+1301111155 d:\mingw\include\mswsock.h
+
+1301111156 d:\mingw\include\ole2.h
+	<winerror.h>
+	<objbase.h>
+	<olectlid.h>
+	<oleauto.h>
+	<oleidl.h>
+
+1301111155 d:\mingw\include\objbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<stdlib.h>
+	<basetyps.h>
+	<wtypes.h>
+	<unknwn.h>
+	<objidl.h>
+	<cguid.h>
+
+1301111156 d:\mingw\include\objidl.h
+	<objfwd.h>
+
+1301111149 d:\mingw\include\cguid.h
+
+1301111156 d:\mingw\include\olectlid.h
+
+1301111156 d:\mingw\include\oleauto.h
+	<oaidl.h>
+
+1301111155 d:\mingw\include\oaidl.h
+	<windows.h>
+	<ole2.h>
+
+1301111156 d:\mingw\include\oleidl.h
+	<objfwd.h>
+
+1305928318 d:\mingw\include\pthread.h
+	<windows.h>
+	"config.h"
+	<time.h>
+	<signal.h>
+	<setjmp.h>
+	<limits.h>
+	"need_errno.h"
+	<errno.h>
+	<sched.h>
+	<sys/types.h>
+
+1314140394 d:\mingw\include\time.h
+	<_mingw.h>
+	<stddef.h>
+
+1314140393 d:\mingw\include\limits.h
+	<_mingw.h>
+
+1314140393 d:\mingw\include\errno.h
+	<_mingw.h>
+
+1305928318 d:\mingw\include\sched.h
+	"need_errno.h"
+	<errno.h>
+	<sys/types.h>
+	<time.h>
+
+1314140393 d:\mingw\include\malloc.h
+	<_mingw.h>
+	<stdlib.h>
+
+1319215741 d:\mingw\include\libintl.h
+	<locale.h>
+	<xlocale.h>
+	<stdio.h>
+	<stddef.h>
+	<stdarg.h>
+	<varargs.h>
+
+1314140393 d:\mingw\include\locale.h
+	<_mingw.h>
+	<stddef.h>
+	<stddef.h>
+
+1314140394 d:\mingw\include\varargs.h
+
+1354973103 source:d:\projects\experimental-platform-for-computer-graphics\new_language\lex.c
+	"etypes.h"
+	"common.h"
+	"tree.h"
+	"test.tab.h"
+	"parser_env.h"
+	"symbol_stack.h"
+	"estring.h"
+	"mem.h"
+
+1355229369 d:\projects\experimental-platform-for-computer-graphics\new_language\test.tab.h
+
+1355321478 d:\projects\experimental-platform-for-computer-graphics\new_language\parser_env.h
+	"common.h"
+	"etypes.h"
+	"stack.h"
+	"symbol_stack.h"
+	"elog.h"
+	"estring.h"
+	"array.h"
+	"eassert.h"
+
+1355229368 d:\projects\experimental-platform-for-computer-graphics\new_language\symbol_stack.h
+	"common.h"
+	"etypes.h"
+	"stack.h"
+	"tree.h"
+
+1355320373 source:d:\projects\experimental-platform-for-computer-graphics\new_language\main.c
+	<stdio.h>
+	<stdlib.h>
+	"test.tab.h"
+	"etypes.h"
+	"parser_env.h"
+	"tree.h"
+	"emem.h"
+	"symbol_stack.h"
+	"path.h"
+	"single_op_single.h"
+	"function_print.h"
+	<direct.h>
+	<sys\stat.h>
+
+1355320515 source:d:\projects\experimental-platform-for-computer-graphics\new_language\proc.c
+	"common.h"
+	"etypes.h"
+	"eassert.h"
+	"elog.h"
+	"mem.h"
+	"parser_env.h"
+	"symbol_stack.h"
+	"array.h"
+	"estring.h"
+	"float_op_float.h"
+	"float_op_int.h"
+	"int_op_float.h"
+	"int_op_int.h"
+	"function_call.h"
+	"single_op_single.h"
+	"jump.h"
+	"print.h"
+
+1354959668 source:d:\projects\experimental-platform-for-computer-graphics\new_language\symbol_stack.c
+	"symbol_stack.h"
+	"emem.h"
+	"eassert.h"
+	"parser_env.h"
+
+1355229369 source:d:\projects\experimental-platform-for-computer-graphics\new_language\test.tab.c
+	"common.h"
+	"etypes.h"
+	"parser_env.h"
+	"array.h"
+	<stddef.h>
+	<libintl.h>
+	<alloca.h>
+	<malloc.h>
+	<stdlib.h>
+	<stdlib.h>
+	<stdio.h>
+
+1355321194 source:d:\projects\experimental-platform-for-computer-graphics\new_language\parser_env.c
+	"parser_env.h"
+	"emem.h"
+	"array.h"
+	"tree.h"
+	"test.tab.h"
+	"symbol_stack.h"
+	"stack.h"
+	"array.h"
+	"function_print.h"
+	"single_op_single.h"
+
+1354959693 d:\projects\common\include\array.h
+	"common.h"
+	"etypes.h"
+	"emem.h"
+
+1354955151 source:d:\projects\experimental-platform-for-computer-graphics\new_language\float_op_float.c
+	"float_op_float.h"
+
+1354954360 d:\projects\experimental-platform-for-computer-graphics\new_language\float_op_float.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354947077 source:d:\projects\experimental-platform-for-computer-graphics\new_language\int_op_float.c
+	"int_op_float.h"
+
+1354947077 source:d:\projects\experimental-platform-for-computer-graphics\new_language\int_op_int.c
+	"int_op_int.h"
+
+1354196467 d:\projects\experimental-platform-for-computer-graphics\new_language\float_op_int.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354196467 d:\projects\experimental-platform-for-computer-graphics\new_language\int_op_float.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354196467 d:\projects\experimental-platform-for-computer-graphics\new_language\int_op_int.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354947077 source:d:\projects\experimental-platform-for-computer-graphics\new_language\float_op_int.c
+	"float_op_int.h"
+
+1354955243 source:d:\projects\experimental-platform-for-computer-graphics\new_language\jump.c
+	"jump.h"
+
+1354955151 d:\projects\experimental-platform-for-computer-graphics\new_language\jump.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354947077 source:d:\projects\experimental-platform-for-computer-graphics\new_language\function_call.c
+	"function_call.h"
+
+1354345592 d:\projects\experimental-platform-for-computer-graphics\new_language\function_call.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1355321194 d:\projects\experimental-platform-for-computer-graphics\new_language\single_op_single.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1355321194 source:d:\projects\experimental-platform-for-computer-graphics\new_language\single_op_single.c
+	"single_op_single.h"
+	"float_op_float.h"
+	"float_op_int.h"
+	"int_op_float.h"
+	"int_op_int.h"
+
+1355044561 source:d:\projects\experimental-platform-for-computer-graphics\new_language\function_print.c
+	"function_print.h"
+	"float_op_float.h"
+	"float_op_int.h"
+	"int_op_float.h"
+	"int_op_int.h"
+	"single_op_single.h"
+	"function_call.h"
+	"jump.h"
+	"print.h"
+
+1354545238 d:\projects\experimental-platform-for-computer-graphics\new_language\function_print.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354448308 d:\projects\experimental-platform-for-computer-graphics\new_language\print.h
+	"etypes.h"
+	"common.h"
+	"parser_env.h"
+
+1354448308 source:d:\projects\experimental-platform-for-computer-graphics\new_language\print.c
+	"print.h"
+
+1354959440 d:\projects\common\include\emem.h
+	<stdio.h>
+	<stdlib.h>
+	"etypes.h"
+	"common.h"
+
+1354959440 source:d:\projects\common\src\emem.c
+	"emem.h"
+	"elog.h"
+	"eassert.h"
+	<malloc.h>
+	"list.h"
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+
+1354969132 d:\projects\common\include\path.h
+	"common.h"
+	"etypes.h"
+	"estring.h"
+	"tree.h"
+	"array.h"
+	"emem.h"
+
+1354968885 source:d:\projects\common\src\path.c
+	"path.h"
+	<dir.h>
+	<direct.h>
+

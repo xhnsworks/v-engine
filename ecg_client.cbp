@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ecg" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\ecg_client" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DDEBUG" />
+				</Compiler>
+				<Linker>
+					<Add library="bin\Debug\libecg.dll.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\ecg_client" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-DRELEASE" />
+				</Compiler>
+				<Linker>
+					<Add library="bin\Release\libecg.dll.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-march=nocona" />
+			<Add option="-Wshadow" />
+			<Add option="-Winit-self" />
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wcast-align" />
+			<Add option="-Wundef" />
+			<Add option="-Wfloat-equal" />
+			<Add option="-Winline" />
+			<Add option="-Wunreachable-code" />
+			<Add option="-Wmissing-declarations" />
+			<Add option="-Wmissing-include-dirs" />
+			<Add option="-Wswitch-enum" />
+			<Add option="-Wswitch-default" />
+			<Add option="-Wmain" />
+			<Add option="-w" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+			<Add option="-std=gnu99" />
+			<Add option="-fopenmp" />
+			<Add directory="common\include" />
+			<Add directory="renderer\include" />
+			<Add directory="common\test" />
+			<Add directory="media\include" />
+			<Add directory="passes\include" />
+			<Add directory="dependencies\libpng-1.5.4\include" />
+			<Add directory="dependencies\libpng-1.5.4\config" />
+			<Add directory="dependencies\zlib-1.2.3\include" />
+			<Add directory="dependencies\mxml-2.6\include" />
+			<Add directory="dependencies\sse_mathfun" />
+			<Add directory="mesh\include" />
+			<Add directory="math\include" />
+			<Add directory="primitive_geometry\include" />
+			<Add directory="input\include" />
+			<Add directory="utilities\include" />
+			<Add directory="client\include" />
+		</Compiler>
+		<Linker>
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="gdi32" />
+			<Add library="dependencies\glew-1.5.8\bin\glew32.dll" />
+			<Add library="dependencies\libpng-1.5.4\lib\libpng.dll.a" />
+			<Add library="pthread" />
+			<Add library="input\bin\Debug\libinput_win32.dll.a" />
+		</Linker>
+		<Unit filename="client\include\render_engine.hpp" />
+		<Unit filename="client\src\client.cpp" />
+		<Unit filename="client\src\render_engine.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

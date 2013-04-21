@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1333272994 source:c:\users\xhn\experimental-platform-for-computer-graphics\utf8_to_unicode\main.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
