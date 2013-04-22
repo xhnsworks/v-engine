@@ -16,7 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6810DCAC1723E10300F276F9 /* ecg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ecg.app; path = "/Users/joumining/experimental-platform-for-computer-graphics/ecg/build/Release/ecg.app"; sourceTree = "<absolute>"; };
 		6810DCAF1723E10300F276F9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6810DCB21723E10300F276F9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6810DCB31723E10300F276F9 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -24,11 +23,12 @@
 		6810DCB71723E10300F276F9 /* ecg-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ecg-Info.plist"; sourceTree = "<group>"; };
 		6810DCB91723E10300F276F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6810DCBB1723E10300F276F9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6810DCBD1723E10300F276F9 /* ecg-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ecg-Prefix.pch"; sourceTree = "<group>"; };
 		6810DCBF1723E10300F276F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6810DCC11723E10300F276F9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6810DCC21723E10300F276F9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6810DCC51723E10300F276F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		687DA1BE172572B8000218FA /* ecg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ecg.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		687DA1BF17257903000218FA /* ecg-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ecg-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +48,7 @@
 			children = (
 				6810DCB51723E10300F276F9 /* ecg */,
 				6810DCAE1723E10300F276F9 /* Frameworks */,
+				687DA1BE172572B8000218FA /* ecg.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,6 +78,7 @@
 				6810DCC21723E10300F276F9 /* AppDelegate.m */,
 				6810DCC41723E10300F276F9 /* MainMenu.xib */,
 				6810DCB61723E10300F276F9 /* Supporting Files */,
+				687DA1BF17257903000218FA /* ecg-Prefix.pch */,
 			);
 			path = ecg;
 			sourceTree = "<group>";
@@ -87,7 +89,6 @@
 				6810DCB71723E10300F276F9 /* ecg-Info.plist */,
 				6810DCB81723E10300F276F9 /* InfoPlist.strings */,
 				6810DCBB1723E10300F276F9 /* main.m */,
-				6810DCBD1723E10300F276F9 /* ecg-Prefix.pch */,
 				6810DCBE1723E10300F276F9 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -110,7 +111,7 @@
 			);
 			name = ecg;
 			productName = ecg;
-			productReference = 6810DCAC1723E10300F276F9 /* ecg.app */;
+			productReference = 687DA1BE172572B8000218FA /* ecg.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -292,6 +293,7 @@
 				6810DCCB1723E10300F276F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
