@@ -392,33 +392,17 @@ void ShaderNode_clear_links(ShaderNode _sn)
 
 const char* ShaderNode_compile(ShaderNode _sn)
 {
-    const char* tmp0 = EString_new("");
+	string_buffer_new(STRING_BUFFER_SIZE);
+	
     if ( to_ptr(_sn->result_link) != NULL )
     {
-        const char* tmp = tmp0;
-        tmp0 = EString_add( tmp0, ShaderObject_get_name(_sn->result_link) );
-        EString_delete(tmp);
-        tmp = tmp0;
-        tmp0 = EString_add( tmp0, " = ");
-        EString_delete(tmp);
+		sbuf_printf("%s = ", ShaderObject_get_name(_sn->result_link));
     }
 
-    const char* tmp1 = EString_add(tmp0, _sn->node_name);
-    EString_delete(tmp0);
-    const char* tmp = tmp1;
-    tmp1 = EString_add(tmp1, "( ");
-    EString_delete(tmp);
-
-    tmp0 = _compile_links(_sn);
-    tmp = tmp1;
-    tmp1 = EString_add(tmp1, tmp0);
-    EString_delete(tmp);
-    EString_delete(tmp0);
-
-    tmp0 = EString_add(tmp1, " );");
-    EString_delete(tmp1);
-
-    return tmp0;
+	EString tmp = _compile_links(_sn);
+	sbuf_printf("%s( %s );", _sn->node_name, tmp);
+	EString_delete(tmp);
+	return EString_new(get_string_buffer);
 }
 
 const char* ShaderNode_compile_function_declaration(ShaderNode _sn)
