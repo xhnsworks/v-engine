@@ -1721,11 +1721,11 @@
 			Name="tmp"
 			>
 			<File
-				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
+				RelativePath="..\glew\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath="..\glew\GL\glew.h"
+				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
 				>
 			</File>
 			<File
@@ -2124,70 +2124,6 @@
 				RelativePath="..\dependencies\sse_mathfun\sse_mathfun.h"
 				>
 			</File>
-			<Filter
-				Name="mxml"
-				>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-attr.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-entity.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-file.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-get.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-index.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-node.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-private.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-private.h"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-search.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-set.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml-string.c"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxml.h"
-					>
-				</File>
-				<File
-					RelativePath="..\dependencies\mxml-2.7\mxmldoc.c"
-					>
-				</File>
-				<Filter
-					Name="cfg"
-					>
-					<File
-						RelativePath="..\dependencies\mxml-2.7\vcnet\config.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
 			<Filter
 				Name="lib"
 				>

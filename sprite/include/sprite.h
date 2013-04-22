@@ -11,7 +11,7 @@
 #include "xhn_smart_ptr.hpp"
 #include "sprite_geom_buffer.h"
 #include "rtti.hpp"
-#include "mxml.h"
+///#include "mxml.h"
 #include "matrix4x4.h"
 #include "sprite_event.h"
 #include "sprite_factory.h"
