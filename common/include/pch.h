@@ -2,7 +2,9 @@
 #ifdef __cplusplus
 #include "common.h"
 #include "etypes.h"
+#ifndef __APPLE__
 #include "GL/glew.h"
+#endif
 #include "array.h"
 #include "comparison_algorithm.h"
 #include "container.h"
@@ -20,7 +22,7 @@
 #include "stack.h"
 #include "tree.h"
 #include "map.hpp"
-
+#ifndef __APPLE__
 #include "cone.h"
 #include "float2.h"
 #include "float3.h"
@@ -31,7 +33,7 @@
 #include "sfloat4.h"
 #include "matrix4x3.h"
 #include "matrix4x4.h"
-
+#endif
 #include "xhn_vector.hpp"
 #include "xhn_map.hpp"
 #include "xhn_string.hpp"

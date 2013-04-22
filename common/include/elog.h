@@ -2,8 +2,8 @@
 #define ELOG_H
 #include "common.h"
 #include "etypes.h"
-#include "pthread.h"
-extern pthread_spinlock_t g_lock;
+
+extern pthread_rwlock_t g_lock;
 #define ELOG_BUFFER_SIZE 4096 * 2
 API_EXPORT void ELog_Init();
 API_EXPORT void ELog_Release();

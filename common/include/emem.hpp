@@ -3,7 +3,7 @@
 #include "emem.h"
 #include "eassert.h"
 #include "elog.h"
-#include <pthread.h>
+
 class MemObject
 {
 public:
@@ -53,16 +53,16 @@ public:
 class RefObject : public MemObject
 {
 public:
-	pthread_spinlock_t lock;
+	pthread_rwlock_t lock;
 	volatile int ref_count;
 	RefObject()
 	{
-		pthread_spin_init(&lock, PTHREAD_PROCESS_PRIVATE);
+		pthread_rwlock_init(&lock, NULL);
 		ref_count = 0;
 	}
 	~RefObject()
 	{
-		pthread_spin_destroy(&lock);
+		pthread_rwlock_destroy(&lock);
 	}
 };
 

@@ -9,14 +9,14 @@ typedef void* Iterator;
 #define STD_NAMESPACE xhn
 /**
 #ifdef  __GNUC__
-#if __GNUC__ >= 3 // GCC3.0ÒÔÉÏ
+#if __GNUC__ >= 3 // GCC3.0â€œâ€˜â€¦Å“
 
-#ifdef  _MSC_VER£¨·ÇVC±àÒëÆ÷ºÜ¶àµØ·½Ò²ÓÐ¶¨Òå£©
-#if _MSC_VER >=1000 // VC++4.0ÒÔÉÏ
-#if _MSC_VER >=1100 // VC++5.0ÒÔÉÏ
-#if _MSC_VER >=1200 // VC++6.0ÒÔÉÏ
-#if _MSC_VER >=1300 // VC2003ÒÔÉÏ
-#if _MSC_VER >=1400 // VC2005ÒÔÉÏ
+#ifdef  _MSC_VERÂ£Â®âˆ‘Â«VCÂ±â€¡â€œÃŽâˆ†Ëœâˆ«â€¹âˆ‚â€¡ÂµÃ¿âˆ‘Î©â€œâ‰¤â€â€“âˆ‚Â®â€œÃ‚Â£Â©
+#if _MSC_VER >=1000 // VC++4.0â€œâ€˜â€¦Å“
+#if _MSC_VER >=1100 // VC++5.0â€œâ€˜â€¦Å“
+#if _MSC_VER >=1200 // VC++6.0â€œâ€˜â€¦Å“
+#if _MSC_VER >=1300 // VC2003â€œâ€˜â€¦Å“
+#if _MSC_VER >=1400 // VC2005â€œâ€˜â€¦Å“
 
 #ifdef  __BORLANDC__
 
@@ -32,27 +32,27 @@ or
 #ifdef  __FreeBSD__
 #ifdef  __NetBSD__
 
-#ifdef  _WIN32£¨»òÕßWIN32£©
+#ifdef  _WIN32Â£Â®ÂªÃšâ€™ï¬‚WIN32Â£Â©
 #ifdef  _WIN64
 
 #ifdef  _WINDOWS
 #ifdef  _CONSOLE
 
-#if (WINVER >= 0x030a) // Windows 3.1ÒÔÉÏ
-#if (WINVER >= 0x0400) // Windows 95/NT 4.0ÒÔÉÏ
-#if (WINVER >= 0x0410) // Windows 98ÒÔÉÏ
-#if (WINVER >= 0x0500) // Windows Me/2000ÒÔÉÏ
-#if (WINVER >= 0x0501) // Windows XPÒÔÉÏ
-#if (WINVER >= 0x0600) // Windows VistaÒÔÉÏ
+#if (WINVER >= 0x030a) // Windows 3.1â€œâ€˜â€¦Å“
+#if (WINVER >= 0x0400) // Windows 95/NT 4.0â€œâ€˜â€¦Å“
+#if (WINVER >= 0x0410) // Windows 98â€œâ€˜â€¦Å“
+#if (WINVER >= 0x0500) // Windows Me/2000â€œâ€˜â€¦Å“
+#if (WINVER >= 0x0501) // Windows XPâ€œâ€˜â€¦Å“
+#if (WINVER >= 0x0600) // Windows Vistaâ€œâ€˜â€¦Å“
 
 #ifdef  _WIN32_WINDOWS
-#if (_WIN32_WINDOWS >= 0x0400) // Windows 95ÒÔÉÏ
-#if (_WIN32_WINDOWS >= 0x0410) // Windows 98ÒÔÉÏ
-#if (_WIN32_WINDOWS >= 0x0500) // Windows MeÒÔÉÏ
+#if (_WIN32_WINDOWS >= 0x0400) // Windows 95â€œâ€˜â€¦Å“
+#if (_WIN32_WINDOWS >= 0x0410) // Windows 98â€œâ€˜â€¦Å“
+#if (_WIN32_WINDOWS >= 0x0500) // Windows Meâ€œâ€˜â€¦Å“
 
-#if (_WIN32_WINNT  >= 0x0500) // Windows 2000ÒÔÉÏ
-#if (_WIN32_WINNT  >= 0x0501) // Windows XPÒÔÉÏ
-#if (_WIN32_WINNT  >= 0x0600) // Windows VistaÒÔÉÏ
+#if (_WIN32_WINNT  >= 0x0500) // Windows 2000â€œâ€˜â€¦Å“
+#if (_WIN32_WINNT  >= 0x0501) // Windows XPâ€œâ€˜â€¦Å“
+#if (_WIN32_WINNT  >= 0x0600) // Windows Vistaâ€œâ€˜â€¦Å“
 
 #ifdef  _WIN32_WCE
 
@@ -95,7 +95,11 @@ or
 #define snprintf sprintf_s
 #endif
 
+#ifndef __APPLE__
 #define BIT_WIDTH 32
+#else
+#define BIT_WIDTH 64
+#endif
 
 #define USE_SSE
 
@@ -134,4 +138,7 @@ inline FILE* SafeFOpen(const char* path, const char* mode)
 #define EDELETE_ARRAY delete
 #endif
 
+#ifndef __APPLE__
+#include <pthread.h>
+#endif
 #endif

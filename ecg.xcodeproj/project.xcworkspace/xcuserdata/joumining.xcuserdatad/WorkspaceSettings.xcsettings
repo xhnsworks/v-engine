@@ -4,14 +4,20 @@
 <dict>
 	<key>BuildLocationStyle</key>
 	<string>UseAppPreferences</string>
+	<key>CustomBuildIntermediatesPath</key>
+	<string>Build/Intermediates</string>
 	<key>CustomBuildLocationType</key>
 	<string>RelativeToDerivedData</string>
+	<key>CustomBuildProductsPath</key>
+	<string>Build/Products</string>
 	<key>DerivedDataLocationStyle</key>
 	<string>Default</string>
 	<key>IssueFilterStyle</key>
-	<string>ShowActiveSchemeOnly</string>
+	<string>ShowAll</string>
 	<key>LiveSourceIssuesEnabled</key>
 	<true/>
+	<key>SharedBuildFolderName</key>
+	<string>Build</string>
 	<key>SnapshotAutomaticallyBeforeSignificantChanges</key>
 	<true/>
 	<key>SnapshotLocationStyle</key>

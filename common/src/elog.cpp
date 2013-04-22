@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "elog.h"
 #include "string.h"
-#include "pthread.h"
-pthread_spinlock_t g_lock;
+
+pthread_rwlock_t g_lock;
 static FILE* g_elog_file = NULL;
 char g_elog_buffer[ELOG_BUFFER_SIZE];
 void ELog_Init()

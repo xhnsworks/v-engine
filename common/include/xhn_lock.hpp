@@ -1,6 +1,7 @@
 #ifndef XHN_LOCK_HPP
 #define XHN_LOCK_HPP
-#include "pthread.h"
+#include "common.h"
+#include "etypes.h"
 #include "emem.hpp"
 #include "xhn_smart_ptr.hpp"
 namespace xhn
