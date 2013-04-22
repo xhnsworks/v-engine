@@ -1,0 +1,81 @@
+EXPORTS
+    DllGetVersion @1
+    _dist_code @2 DATA
+    _length_code @3 DATA
+    _tr_align @4
+    _tr_flush_block @5
+    _tr_init @6
+    _tr_stored_block @7
+    _tr_tally @8
+    adler32 @9
+    adler32_combine @10
+    compress @11
+    compress2 @12
+    compressBound @13
+    crc32 @14
+    crc32_combine @15
+    deflate @16
+    deflateBound @17
+    deflateCopy @18
+    deflateEnd @19
+    deflateInit2_ @20
+    deflateInit_ @21
+    deflateParams @22
+    deflatePrime @23
+    deflateReset @24
+    deflateSetDictionary @25
+    deflateSetHeader @26
+    deflateTune @27
+    deflate_copyright @28 DATA
+    error @29
+    file_compress @30
+    file_uncompress @31
+    get_crc_table @32
+    gz_compress @33
+    gz_uncompress @34
+    gzclearerr @35
+    gzclose @36
+    gzdirect @37
+    gzdopen @38
+    gzeof @39
+    gzerror @40
+    gzflush @41
+    gzgetc @42
+    gzgets @43
+    gzopen @44
+    gzprintf @45
+    gzputc @46
+    gzputs @47
+    gzread @48
+    gzrewind @49
+    gzseek @50
+    gzsetparams @51
+    gztell @52
+    gzungetc @53
+    gzwrite @54
+    inflate @55
+    inflateBack @56
+    inflateBackEnd @57
+    inflateBackInit_ @58
+    inflateCopy @59
+    inflateEnd @60
+    inflateGetHeader @61
+    inflateInit2_ @62
+    inflateInit_ @63
+    inflatePrime @64
+    inflateReset @65
+    inflateSetDictionary @66
+    inflateSync @67
+    inflateSyncPoint @68
+    inflate_copyright @69 DATA
+    inflate_fast @70
+    inflate_table @71
+    main @72
+    prog @73 DATA
+    uncompress @74
+    zError @75
+    z_errmsg @76 DATA
+    zcalloc @77
+    zcfree @78
+    zlibCompileFlags @79
+    zlibVersion @80

@@ -1,0 +1,110 @@
+# depslib dependency file v1.0
+1103622728 source:e:\ecg\dependencies\zlib-1.2.3\src\adler32.c
+	"zlib.h"
+
+1121632010 e:\ecg\dependencies\zlib-1.2.3\include\zlib.h
+	"zconf.h"
+
+1121852426 e:\ecg\dependencies\zlib-1.2.3\config\zconf.h
+	<windows.h>
+	<sys/types.h>
+	<unistd.h>
+	<unixio.h>
+
+1057534676 source:e:\ecg\dependencies\zlib-1.2.3\src\compress.c
+	"zlib.h"
+
+1118598968 source:e:\ecg\dependencies\zlib-1.2.3\src\crc32.c
+	<stdio.h>
+	"zutil.h"
+	<limits.h>
+	"crc32.h"
+
+1121092548 e:\ecg\dependencies\zlib-1.2.3\include\zutil.h
+	"zlib.h"
+	<stddef.h>
+	<string.h>
+	<stdlib.h>
+	<errno.h>
+	<alloc.h>
+	<malloc.h>
+	<malloc.h>
+	<unix.h>
+	<stdio.h>
+
+1041760414 e:\ecg\dependencies\zlib-1.2.3\include\crc32.h
+
+1121632052 source:e:\ecg\dependencies\zlib-1.2.3\src\deflate.c
+	"deflate.h"
+
+1117360522 e:\ecg\dependencies\zlib-1.2.3\include\deflate.h
+	"zutil.h"
+
+1121852426 source:e:\ecg\dependencies\zlib-1.2.3\src\gzio.c
+	<stdio.h>
+	"zutil.h"
+	<stdarg.h>
+
+1117472280 source:e:\ecg\dependencies\zlib-1.2.3\src\infback.c
+	"zutil.h"
+	"inftrees.h"
+	"inflate.h"
+	"inffast.h"
+	"inffixed.h"
+
+1121043038 e:\ecg\dependencies\zlib-1.2.3\include\inftrees.h
+
+1100299108 e:\ecg\dependencies\zlib-1.2.3\include\inflate.h
+
+1041417980 e:\ecg\dependencies\zlib-1.2.3\include\inffast.h
+
+1038156298 e:\ecg\dependencies\zlib-1.2.3\include\inffixed.h
+
+1100300730 source:e:\ecg\dependencies\zlib-1.2.3\src\inffast.c
+	"zutil.h"
+	"inftrees.h"
+	"inflate.h"
+	"inffast.h"
+
+1118764212 source:e:\ecg\dependencies\zlib-1.2.3\src\inflate.c
+	"zutil.h"
+	"inftrees.h"
+	"inflate.h"
+	"inffast.h"
+	"inffixed.h"
+	<stdio.h>
+
+1121632042 source:e:\ecg\dependencies\zlib-1.2.3\src\inftrees.c
+	"zutil.h"
+	"inftrees.h"
+
+1117240850 source:e:\ecg\dependencies\zlib-1.2.3\src\minigzip.c
+	<stdio.h>
+	"zlib.h"
+	<string.h>
+	<stdlib.h>
+	<sys/types.h>
+	<sys/mman.h>
+	<sys/stat.h>
+	<fcntl.h>
+	<io.h>
+	<unix.h>
+
+1118601282 source:e:\ecg\dependencies\zlib-1.2.3\src\trees.c
+	"deflate.h"
+	<ctype.h>
+	"trees.h"
+	<stdio.h>
+
+888297296 e:\ecg\dependencies\zlib-1.2.3\include\trees.h
+
+1057534616 source:e:\ecg\dependencies\zlib-1.2.3\src\uncompr.c
+	"zlib.h"
+
+1121853898 source:e:\ecg\dependencies\zlib-1.2.3\src\zlib-dllversion.c
+	<windows.h>
+	<shlwapi.h>
+
+1118601470 source:e:\ecg\dependencies\zlib-1.2.3\src\zutil.c
+	"zutil.h"
+

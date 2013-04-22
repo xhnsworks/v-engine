@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="libpng" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="..\lib\png_d" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-DBUILD_DLL" />
+				</Compiler>
+				<Linker>
+					<Add library="user32" />
+					<Add library="..\..\zlib-1.2.3\lib\libzlib_d.dll.a" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="..\lib\png" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DBUILD_DLL" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="user32" />
+					<Add library="..\..\zlib-1.2.3\lib\libzlib.dll.a" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add directory="..\..\zlib-1.2.3\include" />
+			<Add directory="..\..\zlib-1.2.3\config" />
+			<Add directory="..\include" />
+			<Add directory="..\config" />
+		</Compiler>
+		<Unit filename="..\config\pngconf.h" />
+		<Unit filename="..\config\pnglibconf.h" />
+		<Unit filename="..\include\png.h" />
+		<Unit filename="..\include\pngdebug.h" />
+		<Unit filename="..\include\pnginfo.h" />
+		<Unit filename="..\include\pngpriv.h" />
+		<Unit filename="..\include\pngstruct.h" />
+		<Unit filename="..\src\png.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngerror.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngmem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngpread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngrio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngrtran.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngrutil.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngtrans.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngwio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngwrite.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngwtran.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\src\pngwutil.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
