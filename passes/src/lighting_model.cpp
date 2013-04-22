@@ -287,7 +287,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderNode_add_input_link(sampler_node, diffuse_map, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(sampler_node, tex_crd, INVALID_ARRAY_INDEX);
         ShaderNode_add_output_link(sampler_node, diffuse, INVALID_ARRAY_INDEX);
-
+	
         sampler_node = ISdrNdGen.add_reference_node_2(_sng, _cb, MapSampleNode);
         ShaderObject specular_map = IPxlSdrBuf.find_object((ShaderBuffer)_psb, SPECULAR_LIGHTING_MAP);
         ShaderNode_add_input_link(sampler_node, diffuse_map, INVALID_ARRAY_INDEX);
@@ -623,9 +623,14 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
     comp_idx.comps[0] = CompW;
     ShaderObject mat_id = ShaderObject_get_component(mat_id_pxl, comp_idx, INVALID_ARRAY_INDEX);
     ShaderObject int_mat_id = ShaderObject_float_to_int(mat_id, 255.0f);
-
+#ifdef USE_SWITCH
     SwitchNode sn = SwitchNode_new();
     SwitchNode_set_switch_object(sn, int_mat_id);
+#else
+	BranchNode bn = BranchNode_new();
+	ShaderObject null_sdr_obj = {NULL};
+	ShaderObject* tag_obj_buf = array_new(ShaderObject, 5, null_sdr_obj);
+#endif
     Tree inv_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
 
     /// 提取出光照处理函数，将函数指针作为key，
@@ -662,7 +667,7 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
         var data = Tree_get_value(inv_iter);
 		LightingProc2 light_proc = (LightingProc2)key.vptr_var;
         Tree tag_set = (Tree)data.vptr_var;
-
+#ifdef USE_SWITCH
         sint* tags = array_new(sint, Tree_count(tag_set), -1);
         Iterator tag_iter = Tree_begin(tag_set);
         while (tag_iter)
@@ -675,18 +680,39 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
         CircuitBoard cb = SwitchNode_add_branch_block(sn, tags);
         light_proc(_lt_state, psb, sng, cb, _has_lighting_map);
 
-        array_delete(tags);
-
+		array_delete(tags);
+#else
+		Iterator tag_iter = Tree_begin(tag_set);
+		while (tag_iter)
+		{
+			var data = Tree_get_value(tag_iter);
+			///apush(tags, data.sint32_var);
+			ShaderObject so = ShaderObject_new_from_sint(data.sint32_var);
+			CircuitBoard cb = BranchNode_add_branch(bn, int_mat_id, Equal, so);
+			light_proc(_lt_state, psb, sng, cb, _has_lighting_map);
+			apush(tag_obj_buf, so);
+			tag_iter = Tree_next(tag_iter);
+		}
+#endif
         inv_iter = Tree_next(inv_iter);
     }
-
+#ifdef USE_SWITCH
     IPxlSdrBuf.add_branch_node((ShaderBuffer)psb, (BranchNode)sn);
-
+#else
+	IPxlSdrBuf.add_branch_node((ShaderBuffer)psb, bn);
+#endif
     IVtxSdrBuf.complete(vsb);
     IPxlSdrBuf.complete(psb);
-
+#ifdef USE_SWITCH
     SwitchNode_delete(sn);
-
+#else
+	BranchNode_delete(bn);
+	uint num_objs = array_n(tag_obj_buf);
+	for (uint i = 0; i < num_objs; i++)
+	{
+		ShaderObject_delete(tag_obj_buf[i]);
+	}
+#endif
     /// 清除用过的inv_tree
     inv_iter = Tree_begin(inv_tree);
     while (inv_iter)

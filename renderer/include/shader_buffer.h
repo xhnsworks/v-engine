@@ -45,6 +45,8 @@ API_EXPORT ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _se
 API_EXPORT ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_float_object(ShaderBuffer _sb, float _ft);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_int_object(ShaderBuffer _sb, int _i);
+API_EXPORT ShaderObject ShaderBuffer_sample_texture2d_rgba(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);
+API_EXPORT ShaderObject ShaderBuffer_sample_texture2d_rgb(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);
 API_EXPORT void ShaderBuffer_add_prototype_node(ShaderBuffer _sb, ShaderNode _sn);
 ///API_EXPORT void ShaderBuffer_add_reference_node(ShaderBuffer _sb, ShaderNode _sn);
 API_EXPORT ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name, const char* _file, uint _line);

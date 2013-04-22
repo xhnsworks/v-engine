@@ -586,6 +586,20 @@ ShaderObject ShaderBuffer_new_immediate_int_object(ShaderBuffer _sb, int _i)
     return ret;
 }
 
+ShaderObject ShaderBuffer_sample_texture2d_rgba(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv)
+{
+	ShaderObject ret = ShaderObject_sample_texture2d_rgba(_tex, _uv);
+	ShaderBuffer_push_immediate_shader_object(_sb, ret);
+	return ret;
+}
+
+ShaderObject ShaderBuffer_sample_texture2d_rgb(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv)
+{
+	ShaderObject ret = ShaderObject_sample_texture2d_rgb(_tex, _uv);
+	ShaderBuffer_push_immediate_shader_object(_sb, ret);
+	return ret;
+}
+
 void ShaderBuffer_add_prototype_node(ShaderBuffer _sb, ShaderNode _sn)
 {
     if (ShaderNode_get_name(_sn))

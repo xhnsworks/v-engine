@@ -41,4 +41,7 @@ typedef struct _component_index
 API_EXPORT ShaderObject ShaderObject_get_component(ShaderObject _so, component_index _comp_idx, uint32 _array_idx);
 API_EXPORT ShaderObject ShaderObject_float_to_int(ShaderObject _so, float _scale);
 
+API_EXPORT ShaderObject ShaderObject_new_from_sint(sint _v);
+API_EXPORT ShaderObject ShaderObject_sample_texture2d_rgb(ShaderObject _sampler, ShaderObject _uv);
+API_EXPORT ShaderObject ShaderObject_sample_texture2d_rgba(ShaderObject _sampler, ShaderObject _uv);
 #endif

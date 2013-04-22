@@ -233,3 +233,36 @@ ShaderObject ShaderObject_float_to_int(ShaderObject _so, float _scale)
     ret.self->array_index = INVALID_ARRAY_INDEX;
     return ret;
 }
+
+ShaderObject ShaderObject_new_from_sint(sint _v)
+{
+	char mbuf[256];
+	snprintf(mbuf, 255, "%d", _v);
+	ShaderObject ret = ShaderObject_new(Int_Obj, mbuf, 1);
+	return ret;
+}
+
+ShaderObject ShaderObject_sample_texture2d_rgb(ShaderObject _sampler, ShaderObject _uv)
+{
+    ShaderObject ret = {NULL};
+	if (_sampler.self->type != Texture2D_Obj)
+		return ret;
+	if (_uv.self->type != Float2_Obj)
+		return ret;
+	char mbuf[256];
+	snprintf(mbuf, 255, "texture(%s, %s).rgb", _sampler.self->name_string, _uv.self->name_string);
+	ret = ShaderObject_new(Float3_Obj, mbuf, 1);
+	return ret;
+}
+ShaderObject ShaderObject_sample_texture2d_rgba(ShaderObject _sampler, ShaderObject _uv)
+{
+	ShaderObject ret = {NULL};
+	if (_sampler.self->type != Texture2D_Obj)
+		return ret;
+	if (_uv.self->type != Float2_Obj)
+		return ret;
+	char mbuf[256];
+	snprintf(mbuf, 255, "texture(%s, %s).rgba", _sampler.self->name_string, _uv.self->name_string);
+	ret = ShaderObject_new(Float4_Obj, mbuf, 1);
+	return ret;
+}

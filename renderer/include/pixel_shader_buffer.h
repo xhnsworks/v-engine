@@ -44,6 +44,8 @@ struct _i_pxl_sdr_buf
     ShaderObject (*new_object)(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size);
     ShaderObject (*new_immediate_float_object)(ShaderBuffer _sb, float _ft);
     ShaderObject (*new_immediate_int_object)(ShaderBuffer _sb, int _i);
+	ShaderObject (*sample_texture2d_rgba)(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);
+	ShaderObject (*sample_texture2d_rgb)(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);
     void (*add_prototype_node)(ShaderBuffer _sb, ShaderNode _sn);
     ShaderNode (*_add_reference_node)(ShaderBuffer _sb, const char* _name, const char* _file, uint _line);
     void (*_add_branch_node)(ShaderBuffer _sb, BranchNode _bn, const char* _file, uint _line);
@@ -66,6 +68,8 @@ static struct _i_pxl_sdr_buf IPxlSdrBuf = {
     ShaderBuffer_new_object,
     ShaderBuffer_new_immediate_float_object,
     ShaderBuffer_new_immediate_int_object,
+	ShaderBuffer_sample_texture2d_rgba,
+	ShaderBuffer_sample_texture2d_rgb,
     ShaderBuffer_add_prototype_node,
     _ShaderBuffer_add_reference_node,
     _ShaderBuffer_add_branch_node,

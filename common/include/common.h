@@ -107,7 +107,7 @@ or
 #define API_EXPORT
 #endif
 
-#define GLSL_VERSION "#version 400\n"
+#define GLSL_VERSION "#version 130\n"
 
 #define NEG_NAN 0xffc00000
 #define POS_NAN 0x7fc00000
