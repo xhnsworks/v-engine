@@ -1,0 +1,952 @@
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    vWorldPosition = Position.xyz;
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+///varying///
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    vWorldPosition = Position.xyz;
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+///varying///
+///function///
+vec3 LightingAccumulator(vec3 LightingValue0, vec3 LightingValue1){
+    return LightingValue0 + LightingValue1;
+}
+void MapSampleRGBA(sampler2D Map, vec2 UV, out vec4 Color){
+    Color = texture(Map, UV).rgba;
+}
+vec3 NormalDecode(vec4 Enc){
+    vec3 ret;
+    vec2 fenc = Enc.xy * 2.0 - 1.0;
+    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);
+    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);
+    return ret;
+}
+vec3 ToCameraSpace(vec3 Dir, mat4 CamWorldMat){
+    mat3 m = mat3(CamWorldMat);
+    vec3 ret = m * Dir;
+    return ret;
+}
+void Output(vec3 LightingValue){
+    gl_FragData[0] = vec4(LightingValue, 1.0);
+}
+void MapSample(sampler2D Map, vec2 UV, out vec3 Color){
+    Color = texture(Map, UV).rgb;
+}
+vec3 PointArrayLighting(vec3 Lighting, vec3 TargetPos, vec3 TargetNor, vec3 LightPosArray, vec4 LightColorArray, float LightAtteCoefArray, float TargetSpecular){
+    vec3 ret = Lighting;
+    {
+        vec3 LightPos = LightPosArray;
+        vec4 LightColor = LightColorArray;
+        float LightAtteCoef = LightAtteCoefArray;
+        vec3 lit_dir = LightPos - TargetPos;
+        float a = length(lit_dir);
+        lit_dir = normalize(lit_dir);
+        a = clamp( (6.8 - a) * (1.0 - LightAtteCoef), 0.0, 1.0);
+        a = pow(a, 5.0);
+        float d = dot(lit_dir, TargetNor);
+        d = clamp(d, 0.0, 1.0);
+        vec3 c = LightColor.rgb * d * a;
+        ret += c;
+    }
+    return ret;
+}
+vec3 PositionDecode(vec2 TexCoord, vec4 Enc, float Near, float Far, float Width, float Height, mat4 InvCameraMatrix, mat4 InvProjectionMatrix){
+    float x = ( TexCoord.x - 0.5 ) * 2.0;
+    float y = ( TexCoord.y - 0.5 ) * 2.0;
+    vec4 pos = vec4(x, y, (Enc.r - 0.5) * 2.0, 1.0);
+    pos = InvProjectionMatrix * pos;
+    pos = vec4(pos.xyz / pos.w, 1.0);
+    pos = InvCameraMatrix * pos;
+    return pos.xyz;
+}
+vec3 ClearLightingValue(){
+    return vec3(0.0, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    vWorldPosition = Position.xyz;
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNormal = Normal;
+    vTangent = Tangent;
+    vBinormal = Binormal;
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform sampler2D ColorMap;
+uniform vec2 PixelSize;
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec4 pixels[4];
+    vec2 offs = PixelSize;
+    vec2 uv = vTexCoord;
+    vec4 cmap;
+    if ( uv.x > PixelSize.x && uv.x < 1.0 - PixelSize.x && uv.y > PixelSize.y && uv.y < 1.0 - PixelSize.y )
+    {
+        pixels[0] = texture( ColorMap, vec2(uv.x,          uv.y) );
+        pixels[1] = texture( ColorMap, vec2(uv.x + offs.x, uv.y) );
+        pixels[2] = texture( ColorMap, vec2(uv.x,          uv.y + offs.y) );
+        pixels[3] = texture( ColorMap, vec2(uv.x + offs.x, uv.y + offs.y) );
+        cmap = pixels[0] + pixels[1] + pixels[2] + pixels[3];
+        cmap /= 4.0;
+    }
+    else
+    {
+        cmap = texture( ColorMap, uv );
+    }
+    gl_FragData[0] = cmap;
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec4 cmap = vec4(1.0, 1.0, 1.0, 1.0);
+    mat3x3 m = mat3x3(vBinormal, vTangent, vNormal);
+    vec3 nmap = vec3(0.49, 0.49, 0.99);
+    nmap = (nmap - 0.5) * 2.0;
+    nmap = m * nmap;
+    nmap = normalize(nmap);
+    vec2 enc = normalize(nmap.xy) * (sqrt(-nmap.z * 0.5 + 0.5));
+    enc = enc * 0.5 + 0.5;
+    vec3 tmap = vTangent;
+    gl_FragData[0] = vec4(0.0, 0.0, 0.0, MaterialID / 255.0);
+    gl_FragData[1] = cmap;
+    gl_FragData[2] = vec4(enc, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform sampler2D NormalMap;
+uniform sampler2D ColorMap;
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec4 cmap = texture(ColorMap, vTexCoord);
+    mat3x3 m = mat3x3(vBinormal, vTangent, vNormal);
+    vec3 nmap = texture(NormalMap, vTexCoord).rgb;
+    nmap = (nmap - 0.5) * 2.0;
+    nmap = m * nmap;
+    nmap = normalize(nmap);
+    vec2 enc = normalize(nmap.xy) * (sqrt(-nmap.z * 0.5 + 0.5));
+    enc = enc * 0.5 + 0.5;
+    vec3 tmap = vTangent;
+    gl_FragData[0] = vec4(0.0, 0.0, 0.0, MaterialID / 255.0);
+    gl_FragData[1] = cmap;
+    gl_FragData[2] = vec4(enc, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    float depth = vPosition.z / vPosition.w;
+    depth = depth * 0.5 + 0.5;
+    float moment1 = depth;
+    float moment2 = depth * depth;
+    float dx = dFdx(depth);
+    float dy = dFdy(depth);
+    moment2 += 0.25*(dx*dx+dy*dy);
+    gl_FragData[0] = vec4(moment1, moment2, 0.0, 1.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+uniform vec3 LightPosition;
+uniform float LightInfluence;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec3 pxlDir = vWorldPosition - LightPosition;
+    float depth = length(pxlDir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    float moment1 = depth;
+    float moment2 = depth * depth;
+    gl_FragData[0] = vec4(moment1, moment2, 0.0, 1.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    float depth = vPosition.z / vPosition.w;
+    depth = depth * 0.5 + 0.5;
+    float moment1 = depth;
+    float moment2 = depth * depth;
+    float dx = dFdx(depth);
+    float dy = dFdy(depth);
+    moment2 += 0.25*(dx*dx+dy*dy);
+    gl_FragData[0] = vec4(moment1, moment2, 0.0, 1.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+uniform vec3 LightPosition;
+uniform float LightInfluence;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec3 pxlDir = vWorldPosition - LightPosition;
+    float depth = length(pxlDir);
+    depth /= LightInfluence;
+    depth = clamp(depth, 0.0, 1.0);
+    float moment1 = depth;
+    float moment2 = depth * depth;
+    gl_FragData[0] = vec4(moment1, moment2, 0.0, 1.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec4 Color;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec4 vColor;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vColor = Color;
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec4 vColor;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec4 cmap = vec4(1.0, 1.0, 1.0, 1.0);
+    cmap = cmap * vec4(vColor.rgb, 1.0);
+    mat3x3 m = mat3x3(vBinormal, vTangent, vNormal);
+    vec3 nmap = vec3(0.49, 0.49, 0.99);
+    nmap = (nmap - 0.5) * 2.0;
+    nmap = m * nmap;
+    nmap = normalize(nmap);
+    vec2 enc = normalize(nmap.xy) * (sqrt(-nmap.z * 0.5 + 0.5));
+    enc = enc * 0.5 + 0.5;
+    vec3 tmap = vTangent;
+    gl_FragData[0] = vec4(0.0, 0.0, 0.0, MaterialID / 255.0);
+    gl_FragData[1] = cmap;
+    gl_FragData[2] = vec4(enc, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 CameraWorldMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    mat3 RenderableWorldRotateMatrix = mat3(RenderableWorldMatrix);
+    pos = RenderableWorldMatrix * pos;
+    vWorldPosition = pos.xyz;
+    pos = CameraWorldMatrix * pos;
+    pos = ProjMatrix * pos;
+    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vNormal = RenderableWorldRotateMatrix * Normal;
+    vNormal = normalize(vNormal);
+    vTangent = RenderableWorldRotateMatrix * Tangent;
+    vTangent = normalize(vTangent);
+    vBinormal = RenderableWorldRotateMatrix * Binormal;
+    vBinormal = normalize(vBinormal);
+ }
+///main///
+void main(void)
+{
+    VertexProc(  );
+
+}
+
+#version 130
+///uniform///
+uniform vec3 UnifCameraPosition;
+uniform vec3 UnifCameraDirection;
+uniform float MaterialID;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void StdPassPixelProc(vec3 CameraPos, vec3 CameraDir){
+    vec4 cmap = vec4(1.0, 1.0, 1.0, 1.0);
+    mat3x3 m = mat3x3(vBinormal, vTangent, vNormal);
+    vec3 nmap = vec3(0.49, 0.49, 0.99);
+    nmap = (nmap - 0.5) * 2.0;
+    nmap = m * nmap;
+    nmap = normalize(nmap);
+    vec2 enc = normalize(nmap.xy) * (sqrt(-nmap.z * 0.5 + 0.5));
+    enc = enc * 0.5 + 0.5;
+    vec3 tmap = vTangent;
+    gl_FragData[0] = vec4(0.0, 0.0, 0.0, MaterialID / 255.0);
+    gl_FragData[1] = cmap;
+    gl_FragData[2] = vec4(enc, 0.0, 0.0);
+}
+///main///
+void main(void)
+{
+    StdPassPixelProc( UnifCameraPosition, UnifCameraDirection );
+
+}
+
+#version 130
+///shader///
+///attribute///
+attribute vec4 Position;
+attribute vec2 TexCoord;
+attribute vec4 Color;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+///uniform///
+uniform mat4 ProjMatrix;
+uniform mat4 RenderableWorldMatrix;
+uniform vec3 UnifCameraPosition;
+///varying///
+varying vec4 vPosition;
+varying vec3 vWorldPosition;
+varying vec2 vTexCoord;
+varying vec4 vColor;
+varying vec3 vNormal;
+varying vec3 vTangent;
+varying vec3 vBinormal;
+///function///
+void VertexProc(){
+    vec4 pos = vec4(Position.xyz, 1.0);
+    vWorldPosition = Position.xyz;
+    pos = ProjMatrix * pos;
+    gl_Position = pos;
+    vPosition = pos;
+    vTexCoord = TexCoord;
+    vColor = Color;
+    vNo
