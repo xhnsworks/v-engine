@@ -33,7 +33,7 @@ ShaderNode create_position_decode_node()
                             "    pos = InvProjectionMatrix * pos;\n"
                             "    pos = vec4(pos.xyz / pos.w, 1.0);\n"
                             "    pos = InvCameraMatrix * pos;\n"
-                            "    return pos.xyz;\n"
+                            "    Result = pos.xyz;\n"
                             "}\n");
     ShaderNode_add_input_param(ret, Float2_Obj,    "TexCoord", 1);
     ShaderNode_add_input_param(ret, Float4_Obj,    "Enc", 1);
@@ -43,7 +43,8 @@ ShaderNode create_position_decode_node()
     ShaderNode_add_input_param(ret, Float_Obj,     "Height", 1);
     ShaderNode_add_input_param(ret, Matrix4x4_Obj, "InvCameraMatrix", 1);
     ShaderNode_add_input_param(ret, Matrix4x4_Obj, "InvProjectionMatrix", 1);
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
 
     return ret;
 }
@@ -65,10 +66,11 @@ n.xy = normalize(fenc) * sqrt(1-n.z*n.z);
                             "    vec2 fenc = Enc.xy * 2.0 - 1.0;\n"
                             "    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
                             "    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
-                            "    return ret;\n"
+                            "    Result = ret;\n"
                             "}\n");
     ShaderNode_add_input_param(ret, Float4_Obj, "Enc", 1);
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
 
@@ -226,12 +228,13 @@ ShaderNode create_to_camera_space_node()
     ShaderNode_set_function(ret, "{\n"
                                  "    mat3 m = mat3(CamWorldMat);\n"
                                  "    vec3 ret = m * Dir;\n"
-                                 "    return ret;\n"
+                                 "    Result = ret;\n"
                                  "}\n");
     ShaderNode_add_input_param(ret, Float3_Obj, "Dir", 1);
     ShaderNode_add_input_param(ret, Matrix4x4_Obj, "CamWorldMat", 1);
     ///ShaderNode_add_input_param(ret, Matrix4x4_Obj, "CamProjMat", 1);
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
 
@@ -273,7 +276,7 @@ ShaderNode create_point_array_lighting_node()
              "        vec3 c = LightColor.rgb * d * a;\n"
              "        ret += c;\n"
              "    }\n"
-             "    return ret;\n"
+             "    Result = ret;\n"
              "}\n",
              light_proc);
 
@@ -288,7 +291,8 @@ ShaderNode create_point_array_lighting_node()
     ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
     ///ShaderNode_add_input_param(ret, Int_Obj, "LightCount", 1);
 
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
 /**
@@ -323,12 +327,13 @@ ShaderNode create_lighting_accumulator_node()
 
     ShaderNode_set_function(ret,
                             "{\n"
-                            "    return LightingValue0 + LightingValue1;\n"
+                            "    Result = LightingValue0 + LightingValue1;\n"
                             "}\n");
 
     ShaderNode_add_input_param(ret, Float3_Obj, "LightingValue0", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightingValue1", 1);
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
 

@@ -126,7 +126,8 @@ ShaderNode pure_normal_material_proc(PxlSdrBuf _psb, int _id)
     ShaderNode_set_function(psn,
                             "{\n"
                             "    vec4 lmap = texture(NormalTangentMap, vTexCoord).rgba;\n"
-                            "    vec3 ret = NormalDecode(lmap);\n"
+							"    vec3 ret;"
+                            "    NormalDecode(lmap, ret);\n"
                             "    gl_FragData[0] = vec4( ret, 1.0 );"
                             "}\n");
 
@@ -146,7 +147,8 @@ ShaderNode pure_tangent_material_proc(PxlSdrBuf _psb, int _id)
                             "{\n"
                             "    vec4 lmap = texture(NormalTangentMap, vTexCoord).rgba;\n"
                             "    lmap.xy = lmap.zw;\n"
-                            "    vec3 ret = NormalDecode(lmap);\n"
+                            "    vec3 ret;"
+							"    NormalDecode(lmap, ret);\n"
                             "    gl_FragData[0] = vec4( ret, 1.0 );"
                             "}\n");
 

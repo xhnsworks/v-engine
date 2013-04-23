@@ -96,10 +96,10 @@ ShaderNode create_clear_lighting_value_node()
 
     ShaderNode_set_function(ret,
                             "{\n"
-                            "    return vec3(0.0, 0.0, 0.0);\n"
+                            "    Result = vec3(0.0, 0.0, 0.0);\n"
                             "}\n");
 
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
 

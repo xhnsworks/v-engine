@@ -297,9 +297,9 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
     else
     {
         ShaderNode clear_node = ISdrNdGen.add_reference_node_2(_sng, _cb, ClearLightingValueNode);
-        ShaderNode_set_result_link(clear_node, diffuse, INVALID_ARRAY_INDEX);
+        ShaderNode_add_output_link(clear_node, diffuse, INVALID_ARRAY_INDEX);
         clear_node = ISdrNdGen.add_reference_node_2(_sng, _cb, ClearLightingValueNode);
-        ShaderNode_set_result_link(clear_node, specular, INVALID_ARRAY_INDEX);
+        ShaderNode_add_output_link(clear_node, specular, INVALID_ARRAY_INDEX);
     }
     {
         ShaderNode sampler_node = ISdrNdGen.add_reference_node_2(_sng, _cb, MapSampleNodeRGBA);
@@ -322,7 +322,8 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderNode_add_input_link(decode_node, height, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(decode_node, inv_cam_world_mat, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(decode_node, inv_cam_proj_mat, INVALID_ARRAY_INDEX);
-        ShaderNode_set_result_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
+        ///ShaderNode_set_result_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
+		ShaderNode_add_output_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
     }
     {
         if (_lt_state->type != Point)
@@ -350,7 +351,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
             else if (_num_shadow_map == 0)
             {
                 ShaderNode white_screen = ISdrNdGen.add_reference_node_2(_sng, _cb, WhiteScreenNode);
-                ShaderNode_set_result_link(white_screen, light_weight, INVALID_ARRAY_INDEX);
+                ShaderNode_add_output_link(white_screen, light_weight, INVALID_ARRAY_INDEX);
             }
         }
         else
@@ -361,14 +362,16 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
             ShaderNode_add_input_link(shadow_test_node, tgt_pos, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(shadow_test_node, light_pos, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(shadow_test_node, light_influence, INVALID_ARRAY_INDEX);
-            ShaderNode_set_result_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
+            ///ShaderNode_set_result_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
+			ShaderNode_add_output_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
         }
     }
     {
         ///ShaderNode decode_node = ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(nor_decode_node));
         ShaderNode decode_node = ISdrNdGen.add_reference_node_2(_sng, _cb, NormalDecodeNode);
         ShaderNode_add_input_link(decode_node, nor, INVALID_ARRAY_INDEX);
-        ShaderNode_set_result_link(decode_node, tgt_nor, INVALID_ARRAY_INDEX);
+        ///ShaderNode_set_result_link(decode_node, tgt_nor, INVALID_ARRAY_INDEX);
+		ShaderNode_add_output_link(decode_node, tgt_nor, INVALID_ARRAY_INDEX);
     }
     {
         ///ShaderNode pt_array_node = ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(point_array_lighting_node));

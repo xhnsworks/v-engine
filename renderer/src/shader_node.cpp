@@ -11,10 +11,10 @@ typedef struct _shader_node
 {
     shader_node_base base;
     char* node_name;
-    ShaderObject result;
+    ///ShaderObject result;
     ShaderObject* input_param_table;
     ShaderObject* output_param_table;
-    ShaderObject result_link;
+    ///ShaderObject result_link;
     ShaderObject* input_links;
     ShaderObject* output_links;
     char* function;
@@ -225,11 +225,11 @@ void ShaderNode_Dest(shader_node* _sn, const char* _file, uint _line)
         EString_delete(_sn->node_name);
     if (_sn->function)
         EString_delete(_sn->function);
-
+/**
     ShaderObject_delete(_sn->result);
     if ( to_ptr(_sn->result_link) != NULL )
         ShaderObject_delete(_sn->result_link);
-
+**/
     for (uint32 i = 0; i < array_n(_sn->input_param_table); i++)
     {
         ShaderObject so = array_safe_get(_sn->input_param_table, i);
@@ -271,10 +271,10 @@ shader_node* ShaderNode_Init(struct _shader_node* _sn, const char* _file, uint _
     _sn->base.compile_proc = NULL;
     _sn->node_name = NULL;
     ShaderObject exec_so = {NULL};
-    _sn->result = _ShaderObject_new(Void_Obj, "", 1, _file, _line);
+    ///_sn->result = _ShaderObject_new(Void_Obj, "", 1, _file, _line);
     _sn->input_param_table = array_new(ShaderObject, 5, exec_so);
     _sn->output_param_table = array_new(ShaderObject, 5, exec_so);
-    _sn->result_link = exec_so;
+    ///_sn->result_link = exec_so;
     _sn->input_links = array_new(ShaderObject, 5, exec_so);
     _sn->output_links = array_new(ShaderObject, 5, exec_so);
     _sn->function = NULL;
@@ -293,12 +293,12 @@ void _ShaderNode_delete(ShaderNode _sn, const char* _file, uint _line)
 {
     ShaderNodeBase_delete((ShaderNodeBase)_sn, _file, _line);
 }
-
+/**
 void ShaderNode_set_return_type(ShaderNode _sn, shader_object_type _type, uint32 _array_size)
 {
     ShaderObject_set_type(_sn->result, _type, _array_size, INVALID_ARRAY_INDEX);
 }
-
+**/
 void _ShaderNode_add_input_param(ShaderNode _sn, shader_object_type _type, const char* _pam_name, uint32 _array_size,
                                  const char* _file, uint _line)
 {
@@ -345,7 +345,7 @@ void ShaderNode_add_output_link(ShaderNode _sn, ShaderObject _so, uint32 _array_
     ShaderObject_set_index(so, _array_index);
     _sn->output_links = array_push(_sn->output_links, so);
 }
-
+/**
 void ShaderNode_set_result_link(ShaderNode _sn, ShaderObject _so, uint32 _array_index)
 {
     if ( to_ptr(_sn->result_link) != NULL )
@@ -356,7 +356,7 @@ void ShaderNode_set_result_link(ShaderNode _sn, ShaderObject _so, uint32 _array_
     ShaderObject_set_index(so, _array_index);
     _sn->result_link = so;
 }
-
+**/
 void ShaderNode_set_function(ShaderNode _sn, const char* _func)
 {
     _sn->function = (char*)EString_new(_func);
@@ -365,12 +365,13 @@ void ShaderNode_set_function(ShaderNode _sn, const char* _func)
 void ShaderNode_clear_links(ShaderNode _sn)
 {
     ShaderObject exec_so = {NULL};
+	/**
     if ( to_ptr(_sn->result_link) != NULL )
     {
         ShaderObject_delete(_sn->result_link);
         _sn->result_link = exec_so;
     }
-
+**/
     for (uint32 i = 0; i < array_n(_sn->input_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->input_links, i);
@@ -393,12 +394,12 @@ void ShaderNode_clear_links(ShaderNode _sn)
 const char* ShaderNode_compile(ShaderNode _sn)
 {
 	string_buffer_new(STRING_BUFFER_SIZE);
-	
+	/**
     if ( to_ptr(_sn->result_link) != NULL )
     {
 		sbuf_printf("%s = ", ShaderObject_get_name(_sn->result_link));
     }
-
+**/
 	EString tmp = _compile_links(_sn);
 	sbuf_printf("%s( %s );", _sn->node_name, tmp);
 	EString_delete(tmp);
@@ -411,14 +412,11 @@ const char* ShaderNode_compile_function_declaration(ShaderNode _sn)
     ///sprintf(mbuf, "");
     mbuf[0] = 0x00;
     char* tmp = mbuf;
-    uint32 array_size, array_index;
-    const char* obj_type = get_shader_object_string( ShaderObject_get_type(_sn->result, &array_size, &array_index) );
+    ///uint32 array_size, array_index;
+    ///const char* obj_type = get_shader_object_string( ShaderObject_get_type(_sn->result, &array_size, &array_index) );
     const char* node_name = _sn->node_name;
     const char* params = _compile_params(_sn);
-    if (array_size <= 1)
-        tmp += snprintf(tmp, STRING_BUFFER_SIZE - 1, "%s %s(%s)"    , obj_type, node_name,  params);
-    else
-        tmp += snprintf(tmp, STRING_BUFFER_SIZE - 1, "%s[%d] %s(%s)", obj_type, array_size, node_name, params);
+	tmp += snprintf(tmp, STRING_BUFFER_SIZE - 1, "void %s(%s)"    , node_name,  params);
     EString_delete(params);
     return EString_new(mbuf);
 }
@@ -480,12 +478,14 @@ ShaderNode _ShaderNode_clone(ShaderNode _sn, const char* _file, uint _line)
         ShaderObject so = array_safe_get(_sn->output_links, i);
         ret->output_links = array_push(ret->output_links, ShaderObject_clone(so));
     }
+	/**
     if ( to_ptr(_sn->result_link) )
     {
         ret->result_link = ShaderObject_clone(_sn->result_link);
     }
-    ShaderObject_delete(ret->result);
-    ret->result = ShaderObject_clone(_sn->result);
+	**/
+    ///ShaderObject_delete(ret->result);
+    ///ret->result = ShaderObject_clone(_sn->result);
     ret->base.compile_proc = (shader_node_compile_proc)ShaderNode_compile;
     return ret;
 }

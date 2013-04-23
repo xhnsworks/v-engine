@@ -69,7 +69,8 @@ ShaderNode create_shadowcube_test_node()
     ShaderNode_add_input_param(ret, Float3_Obj, "LightPosition", 1);
     ShaderNode_add_input_param(ret, Float_Obj, "LightInfluence", 1);
     ///ShaderNode_add_input_param(ret, Float3_Obj, "LightDirection", 1);
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
 
     const char* func =
     "{\n"
@@ -80,12 +81,17 @@ ShaderNode create_shadowcube_test_node()
     "    ray_dir = normalize(ray_dir);\n"
     "    vec2 moments = texture(ShadowMap, ray_dir).rg;\n"
     "    if (depth < moments.x)\n"
-    "        return vec3(1.0f, 1.0f, 1.0f);\n"
-    "    float variance = moments.y - (moments.x * moments.x);\n"
-    "    variance = max(variance,0.002);\n"
-    "    float d = depth - moments.x;\n"
-    "    float p_max = variance / (variance + d*d);\n"
-    "    return vec3(p_max, p_max, p_max);\n"
+	"    {\n"
+    "        Result = vec3(1.0f, 1.0f, 1.0f);\n"
+	"    }\n"    
+	"    else\n"
+	"    {\n"
+	"        float variance = moments.y - (moments.x * moments.x);\n"
+    "        variance = max(variance,0.002);\n"
+    "        float d = depth - moments.x;\n"
+    "        float p_max = variance / (variance + d*d);\n"
+    "        Result = vec3(p_max, p_max, p_max);\n"
+	"    }\n"
     "}\n";
 
     ShaderNode_set_function(ret, func);
@@ -96,11 +102,11 @@ ShaderNode create_white_screen_node()
 {
     ShaderNode ret = ShaderNode_new();
     ShaderNode_set_name(ret, "WhiteScreen");
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
 
     const char* func =
     "{\n"
-    "    return vec3(1.0f, 1.0f, 1.0f);\n"
+    "    Result = vec3(1.0f, 1.0f, 1.0f);\n"
     "}\n";
 
     ShaderNode_set_function(ret, func);
