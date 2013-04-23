@@ -20,7 +20,6 @@
 		687DA2AB17257F97000218FA /* estring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28317257F97000218FA /* estring.cpp */; };
 		687DA2AC17257F97000218FA /* exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28417257F97000218FA /* exception.cpp */; };
 		687DA2AD17257F97000218FA /* gc_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28517257F97000218FA /* gc_test.cpp */; };
-		687DA2AF17257F97000218FA /* golden_cudgel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28717257F97000218FA /* golden_cudgel.cpp */; };
 		687DA2B117257F97000218FA /* hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28917257F97000218FA /* hash.cpp */; };
 		687DA2B317257F97000218FA /* list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28B17257F97000218FA /* list.cpp */; };
 		687DA2B617257F97000218FA /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA28E17257F97000218FA /* parser.cpp */; };
@@ -63,7 +62,6 @@
 		687DA25117257F97000218FA /* etypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = etypes.h; sourceTree = "<group>"; };
 		687DA25217257F97000218FA /* exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exception.h; sourceTree = "<group>"; };
 		687DA25317257F97000218FA /* gc_test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gc_test.h; sourceTree = "<group>"; };
-		687DA25417257F97000218FA /* golden_cudgel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = golden_cudgel.h; sourceTree = "<group>"; };
 		687DA25517257F97000218FA /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash.h; sourceTree = "<group>"; };
 		687DA25617257F97000218FA /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
 		687DA25717257F97000218FA /* list_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list_base.h; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 		687DA28317257F97000218FA /* estring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = estring.cpp; sourceTree = "<group>"; };
 		687DA28417257F97000218FA /* exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = exception.cpp; sourceTree = "<group>"; };
 		687DA28517257F97000218FA /* gc_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gc_test.cpp; sourceTree = "<group>"; };
-		687DA28717257F97000218FA /* golden_cudgel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = golden_cudgel.cpp; sourceTree = "<group>"; };
 		687DA28917257F97000218FA /* hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash.cpp; sourceTree = "<group>"; };
 		687DA28B17257F97000218FA /* list.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = list.cpp; sourceTree = "<group>"; };
 		687DA28E17257F97000218FA /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
@@ -207,7 +204,6 @@
 				687DA25117257F97000218FA /* etypes.h */,
 				687DA25217257F97000218FA /* exception.h */,
 				687DA25317257F97000218FA /* gc_test.h */,
-				687DA25417257F97000218FA /* golden_cudgel.h */,
 				687DA25517257F97000218FA /* hash.h */,
 				687DA25617257F97000218FA /* list.h */,
 				687DA25717257F97000218FA /* list_base.h */,
@@ -253,7 +249,6 @@
 				687DA28317257F97000218FA /* estring.cpp */,
 				687DA28417257F97000218FA /* exception.cpp */,
 				687DA28517257F97000218FA /* gc_test.cpp */,
-				687DA28717257F97000218FA /* golden_cudgel.cpp */,
 				687DA28917257F97000218FA /* hash.cpp */,
 				687DA28B17257F97000218FA /* list.cpp */,
 				687DA28E17257F97000218FA /* parser.cpp */,
@@ -343,7 +338,6 @@
 				687DA2AB17257F97000218FA /* estring.cpp in Sources */,
 				687DA2AC17257F97000218FA /* exception.cpp in Sources */,
 				687DA2AD17257F97000218FA /* gc_test.cpp in Sources */,
-				687DA2AF17257F97000218FA /* golden_cudgel.cpp in Sources */,
 				687DA2B117257F97000218FA /* hash.cpp in Sources */,
 				687DA2B317257F97000218FA /* list.cpp in Sources */,
 				687DA2B617257F97000218FA /* parser.cpp in Sources */,

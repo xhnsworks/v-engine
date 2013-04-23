@@ -49,7 +49,7 @@ public:
 	}
 };
 typedef SmartPtr<RWLock> RWLockPtr;
-
+/**
 class SpinLock : public RefObject
 {
 private:
@@ -88,7 +88,7 @@ public:
 	}
 };
 typedef SmartPtr<SpinLock> SpinLockPtr;
-
+**/
 class RWLock2
 {
 private:

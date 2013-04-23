@@ -55,7 +55,7 @@ public:
 	TTMap(TTDest destProc, KeyCompareProc compareProc)
 		: m_destProc(destProc)
 	{
-		m_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+		m_tree = Tree_new(Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
 		Tree_set_key_compare_proc(m_tree, (KEY_COMPARE)compareProc);
 	}
 	~TTMap()

@@ -1,6 +1,8 @@
 #ifndef SMART_PTR_H
 #define SMART_PTR_H
+#ifndef __APPLE__
 #include <omp.h>
+#endif
 #include "xhn_vector.hpp"
 namespace xhn
 {
@@ -71,16 +73,24 @@ public:
 	{
 		if (ptr)
 		{
+#ifndef __APPLE__
 			#pragma omp atomic
 			ptr->ref_count++;
+#else
+            OSAtomicIncrement32(&ptr->ref_count);
+#endif
 		}
 	}
 	inline void _dec(T* ptr)
 	{
 		T* must_deleted = NULL;
 		if (ptr) {
+#ifndef __APPLE__
 			#pragma omp atomic
 			ptr->ref_count--;
+#else
+            OSAtomicDecrement32(&ptr->ref_count);
+#endif
 			if (!ptr->ref_count)
 				must_deleted = ptr;
 		}
@@ -152,7 +162,11 @@ public:
 
 	bool Submit(CheckoutHandle& src, GARBAGE_COLLECTOR& gc)
 	{
+#ifdef _WIN32
 		if (InterlockedCompareExchange((LONG volatile *)&m_ptr, (LONG)src.m_cloned, (LONG)src.m_original) == (LONG)src.m_original) {
+#else
+        if (OSAtomicCompareAndSwapPtr((void*)src.m_original, (void*)src.m_cloned, (void* volatile *)&m_ptr)) {
+#endif
 			if (src.m_cloned) {
 				#pragma omp atomic
 				src.m_cloned->ref_count++;

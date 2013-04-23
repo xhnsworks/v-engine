@@ -10,7 +10,7 @@ typedef struct _list
 	uint count;
 	etype value_type;
 #ifdef ALLOW_CONCURRENT
-	pthread_spinlock_t lock;
+	pthread_rwlock_t lock;
 #endif
 }list;
 
@@ -30,7 +30,7 @@ List ListFunc(Init)(List _lst, etype _value_type, MALLOC _alc, MFREE _fre)
 	lst->alloc_proc = _alc;
 	lst->free_proc = _fre;
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_init(&lst->lock, PTHREAD_PROCESS_PRIVATE);
+	pthread_rwlock_init(&lst->lock, NULL);
 #endif
 	return _lst;
 }
@@ -47,7 +47,7 @@ void ListFunc(Dest)(List _lst)
 		iter = List_remove(_lst, iter);
 	}
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_destroy(&_lst->lock);
+	pthread_rwlock_destroy(&_lst->lock);
 #endif
 }
 
@@ -57,7 +57,7 @@ Iterator ListFunc(push_back)(List _lst, var _data)
 	Iterator ret = NULL;
 	ListFunc(node_Init)(node, _data);
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_lock(&_lst->lock);
+	pthread_rwlock_wrlock(&_lst->lock);
 #endif
 	if (_lst->tail)
 	{
@@ -75,7 +75,7 @@ Iterator ListFunc(push_back)(List _lst, var _data)
 	_lst->count++;
 	ret = _lst->tail;
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_unlock(&_lst->lock);
+	pthread_rwlock_unlock(&_lst->lock);
 #endif
 	return ret;
 }
@@ -86,7 +86,7 @@ Iterator ListFunc(push_front)(List _lst, var _data)
 	Iterator ret = NULL;
 	ListFunc(node_Init)(node, _data);
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_lock(&_lst->lock);
+	pthread_rwlock_wrlock(&_lst->lock);
 #endif
 	if (_lst->head)
 	{
@@ -104,7 +104,7 @@ Iterator ListFunc(push_front)(List _lst, var _data)
 	_lst->count++;
 	ret = _lst->head;
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_unlock(&_lst->lock);
+	pthread_rwlock_unlock(&_lst->lock);
 #endif
 	return ret;
 }
@@ -115,7 +115,7 @@ Iterator ListFunc(insert_after)(List _lst, Iterator _i, var _data)
 	struct list_node* n = (struct list_node*)_lst->alloc_proc(sizeof(struct list_node));
 	ListFunc(node_Init)(n, _data);
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_lock(&_lst->lock);
+	pthread_rwlock_wrlock(&_lst->lock);
 #endif
 	if (node->iter_next)
 	{
@@ -125,7 +125,7 @@ Iterator ListFunc(insert_after)(List _lst, Iterator _i, var _data)
 		node->iter_next = n;
 		_lst->count++;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return n;
 	}
@@ -139,7 +139,7 @@ Iterator ListFunc(insert_after)(List _lst, Iterator _i, var _data)
 		_lst->count++;
 		ret = _lst->tail;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return ret;
 	}
@@ -151,7 +151,7 @@ Iterator ListFunc(insert_before)(List _lst, Iterator _i, var _data)
 	struct list_node* n = (struct list_node*)_lst->alloc_proc(sizeof(struct list_node));
 	ListFunc(node_Init)(n, _data);
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_lock(&_lst->lock);
+	pthread_rwlock_wrlock(&_lst->lock);
 #endif
 	if (node->iter_prev)
 	{
@@ -161,7 +161,7 @@ Iterator ListFunc(insert_before)(List _lst, Iterator _i, var _data)
 		node->iter_prev = n;
 		_lst->count++;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return n;
 	}
@@ -175,7 +175,7 @@ Iterator ListFunc(insert_before)(List _lst, Iterator _i, var _data)
 		_lst->count++;
 		ret = _lst->head;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return ret;
 	}
@@ -191,7 +191,7 @@ Iterator ListFunc(remove)(List _lst, Iterator _i)
 	{
 		struct list_node* node = (struct list_node*)_i;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_lock(&_lst->lock);
+		pthread_rwlock_wrlock(&_lst->lock);
 #endif
 		_lst->count--;
 		if (node != _lst->head && node != _lst->tail)
@@ -200,7 +200,7 @@ Iterator ListFunc(remove)(List _lst, Iterator _i)
 			node->iter_prev->iter_next = node->iter_next;
 			node->iter_next->iter_prev = node->iter_prev;
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			_lst->free_proc((vptr)node);
 			return ret;
@@ -210,7 +210,7 @@ Iterator ListFunc(remove)(List _lst, Iterator _i)
 			node->iter_prev->iter_next = NULL;
 			_lst->tail = node->iter_prev;
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			_lst->free_proc(node);
 			return NULL;
@@ -221,7 +221,7 @@ Iterator ListFunc(remove)(List _lst, Iterator _i)
 			node->iter_next->iter_prev = NULL;
 			_lst->head = node->iter_next;
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			_lst->free_proc(node);
 			return ret;
@@ -231,7 +231,7 @@ Iterator ListFunc(remove)(List _lst, Iterator _i)
 			struct list_node* tmp = _lst->head;
 			_lst->head = _lst->tail = NULL;
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			_lst->free_proc(tmp);
 			return NULL;
@@ -262,22 +262,22 @@ Iterator ListFunc(end)(List _lst)
 List ListFunc(append)(List _head, List _tail)
 {
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_lock(&_head->lock);
-	pthread_spin_lock(&_tail->lock);
+	pthread_rwlock_wrlock(&_head->lock);
+	pthread_rwlock_wrlock(&_tail->lock);
 #endif
 	if (!_head || !_tail)
 	{
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_head->lock);
-		pthread_spin_unlock(&_tail->lock);
+		pthread_rwlock_unlock(&_head->lock);
+		pthread_rwlock_unlock(&_tail->lock);
 #endif
 		return NULL;
 	}
 	if (_head->value_type != _tail->value_type)
 	{
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_head->lock);
-		pthread_spin_unlock(&_tail->lock);
+		pthread_rwlock_unlock(&_head->lock);
+		pthread_rwlock_unlock(&_tail->lock);
 #endif
 		return NULL;
 	}
@@ -286,8 +286,8 @@ List ListFunc(append)(List _head, List _tail)
 		_head->count += _tail->count;
 		_head->tail = _tail->tail;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_head->lock);
-		pthread_spin_unlock(&_tail->lock);
+		pthread_rwlock_unlock(&_head->lock);
+		pthread_rwlock_unlock(&_tail->lock);
 #endif
 		return _head;
 	}
@@ -297,30 +297,30 @@ List ListFunc(append)(List _head, List _tail)
 		_head->head = _tail->head;
 		_head->tail = _tail->tail;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_head->lock);
-		pthread_spin_unlock(&_tail->lock);
+		pthread_rwlock_unlock(&_head->lock);
+		pthread_rwlock_unlock(&_tail->lock);
 #endif
 		return _head;
 	}
 	else if (_head->count && !_tail->count)
 	{
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_head->lock);
-		pthread_spin_unlock(&_tail->lock);
+		pthread_rwlock_unlock(&_head->lock);
+		pthread_rwlock_unlock(&_tail->lock);
 #endif
 		return _head;
 	}
 	else if (!_head->count && !_tail->count)
 	{
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_head->lock);
-		pthread_spin_unlock(&_tail->lock);
+		pthread_rwlock_unlock(&_head->lock);
+		pthread_rwlock_unlock(&_tail->lock);
 #endif
 		return _head;
 	}
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_unlock(&_head->lock);
-	pthread_spin_unlock(&_tail->lock);
+	pthread_rwlock_unlock(&_head->lock);
+	pthread_rwlock_unlock(&_tail->lock);
 #endif
 	return NULL;
 }
@@ -329,12 +329,12 @@ List ListFunc(break)(List _lst, Iterator _i)
 {
 	struct list_node* prev = NULL;
 #ifdef ALLOW_CONCURRENT
-	pthread_spin_lock(&_lst->lock);
+	pthread_rwlock_wrlock(&_lst->lock);
 #endif
 	if (!_lst || !_i)
 	{
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return NULL;
 	}
@@ -353,7 +353,7 @@ List ListFunc(break)(List _lst, Iterator _i)
 		if (!count)
 		{
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			return NULL;
 		}
@@ -366,14 +366,14 @@ List ListFunc(break)(List _lst, Iterator _i)
 		_lst->count -= count;
 		_lst->tail = prev;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return ret;
 	}
 	else
 	{
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 		return NULL;
 	}
@@ -396,7 +396,7 @@ void ListFunc(throw_front)(List _lst, Iterator _i)
 	{
 		struct list_node* node = (struct list_node*)_i;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_lock(&_lst->lock);
+		pthread_rwlock_wrlock(&_lst->lock);
 #endif
 		if (node != _lst->head && node != _lst->tail)
 		{
@@ -411,7 +411,7 @@ void ListFunc(throw_front)(List _lst, Iterator _i)
 		else
 		{
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			return;
 		}
@@ -421,7 +421,7 @@ void ListFunc(throw_front)(List _lst, Iterator _i)
 		node->iter_prev = NULL;
 		_lst->head = node;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 	}
 }
@@ -433,7 +433,7 @@ void ListFunc(throw_back)(List _lst, Iterator _i)
 	{
 		struct list_node* node = (struct list_node*)_i;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_lock(&_lst->lock);
+		pthread_rwlock_wrlock(&_lst->lock);
 #endif
 		if (node != _lst->head && node != _lst->tail)
 		{
@@ -448,7 +448,7 @@ void ListFunc(throw_back)(List _lst, Iterator _i)
 		else
 		{
 #ifdef ALLOW_CONCURRENT
-			pthread_spin_unlock(&_lst->lock);
+			pthread_rwlock_unlock(&_lst->lock);
 #endif
 			return;
 		}
@@ -458,7 +458,7 @@ void ListFunc(throw_back)(List _lst, Iterator _i)
 		node->iter_next = NULL;
 		_lst->tail = node;
 #ifdef ALLOW_CONCURRENT
-		pthread_spin_unlock(&_lst->lock);
+		pthread_rwlock_unlock(&_lst->lock);
 #endif
 	}
 }

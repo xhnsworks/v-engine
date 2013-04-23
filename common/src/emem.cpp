@@ -8,9 +8,11 @@
 #define REFER_INFO_RESERVED 16
 
 ///#define USE_C_MALLOC
-
+#ifndef __APPLE__
 #include <malloc.h>
-
+#else
+#include <sys/malloc.h>
+#endif
 ///==================================================================================///
 #include "list.h"
 
@@ -86,7 +88,11 @@ void* alloc_mem_list(uint _chk_size, uint _num_chks, uint* _real_chk_size, vptr*
 	totel_size = chk_size * _num_chks;
 
     *_real_chk_size = chk_size;
+#ifndef __APPLE__
     ret = (char*)__mingw_aligned_malloc(totel_size, 16);
+#else
+    ret = (char*)malloc(totel_size);
+#endif
     *_head = (mem_node*)ret;
     *_begin = ret;
 
@@ -107,7 +113,11 @@ void* alloc_mem_list(uint _chk_size, uint _num_chks, uint* _real_chk_size, vptr*
 }
 void free_mem_list(void* _mem_list)
 {
+#ifndef __APPLE__
     __mingw_aligned_free(_mem_list);
+#else
+    free(_mem_list);
+#endif
 }
 
 typedef struct _mem_pool_node
@@ -452,7 +462,11 @@ void* MemAllocator_alloc(MemAllocator _self, uint _size, bool _is_safe_alloc)
 	}
 	else
 	{
+#ifndef __APPLE__
 		ret = (char*)__mingw_aligned_malloc(_size, 16);
+#else
+        ret = (char*)malloc(_size);
+#endif
 		if (_is_safe_alloc)
 		    meminit(ret, _size);
 	}

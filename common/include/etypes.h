@@ -6,9 +6,11 @@
 
 ///#define _MSC_VER
 
-#ifndef _MSC_VER
+#ifdef __MINGW32__
 #include <stdbool.h>
 #include <stdint.h>
+#elif defined(__APPLE__)
+/// nothing
 #else
 ///typedef char bool;
 #ifndef __cplusplus

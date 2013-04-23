@@ -1,13 +1,17 @@
 #include "pch.h"
 #include "path.h"
-#ifndef _MSC_VER
+#ifdef __MINGW32__
 #include <dir.h>
-#else
+#elif defined(_MSC_VER)
 #include <io.h>
 #include <string.h>
 #endif
+#ifndef __APPLE__
 #include <direct.h>
-
+#else
+#include <sys/dir.h>
+#include <sys/dirent.h>
+#endif
 void GetAllFileNamesInDir(const char* dir, const char* filter_rule, EStringArray* result)
 {
     struct _finddata_t fd;
