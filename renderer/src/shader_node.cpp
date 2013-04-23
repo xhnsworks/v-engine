@@ -416,7 +416,7 @@ const char* ShaderNode_compile_function_declaration(ShaderNode _sn)
     ///const char* obj_type = get_shader_object_string( ShaderObject_get_type(_sn->result, &array_size, &array_index) );
     const char* node_name = _sn->node_name;
     const char* params = _compile_params(_sn);
-	tmp += snprintf(tmp, STRING_BUFFER_SIZE - 1, "void %s(%s)"    , node_name,  params);
+	tmp += snprintf(tmp, STRING_BUFFER_SIZE - 1, "void %s(%s)", node_name,  params);
     EString_delete(params);
     return EString_new(mbuf);
 }
