@@ -9,14 +9,14 @@ typedef void* Iterator;
 #define STD_NAMESPACE xhn
 /**
 #ifdef  __GNUC__
-#if __GNUC__ >= 3 // GCC3.0“‘…œ
+#if __GNUC__ >= 3 // GCC3.0
 
-#ifdef  _MSC_VER£®∑«VC±‡“Î∆˜∫‹∂‡µÿ∑Ω“≤”–∂®“Â£©
-#if _MSC_VER >=1000 // VC++4.0“‘…œ
-#if _MSC_VER >=1100 // VC++5.0“‘…œ
-#if _MSC_VER >=1200 // VC++6.0“‘…œ
-#if _MSC_VER >=1300 // VC2003“‘…œ
-#if _MSC_VER >=1400 // VC2005“‘…œ
+#ifdef  _MSC_VER
+#if _MSC_VER >=1000 // VC++4.0
+#if _MSC_VER >=1100 // VC++5.0
+#if _MSC_VER >=1200 // VC++6.0
+#if _MSC_VER >=1300 // VC2003
+#if _MSC_VER >=1400 // VC2005
 
 #ifdef  __BORLANDC__
 
@@ -32,27 +32,27 @@ or
 #ifdef  __FreeBSD__
 #ifdef  __NetBSD__
 
-#ifdef  _WIN32£®ªÚ’ﬂWIN32£©
+#ifdef  _WIN32
 #ifdef  _WIN64
 
 #ifdef  _WINDOWS
 #ifdef  _CONSOLE
 
-#if (WINVER >= 0x030a) // Windows 3.1“‘…œ
-#if (WINVER >= 0x0400) // Windows 95/NT 4.0“‘…œ
-#if (WINVER >= 0x0410) // Windows 98“‘…œ
-#if (WINVER >= 0x0500) // Windows Me/2000“‘…œ
-#if (WINVER >= 0x0501) // Windows XP“‘…œ
-#if (WINVER >= 0x0600) // Windows Vista“‘…œ
+#if (WINVER >= 0x030a) // Windows 3.1
+#if (WINVER >= 0x0400) // Windows 95/NT 4.0
+#if (WINVER >= 0x0410) // Windows 98
+#if (WINVER >= 0x0500) // Windows Me/2000
+#if (WINVER >= 0x0501) // Windows XP
+#if (WINVER >= 0x0600) // Windows Vista
 
 #ifdef  _WIN32_WINDOWS
-#if (_WIN32_WINDOWS >= 0x0400) // Windows 95“‘…œ
-#if (_WIN32_WINDOWS >= 0x0410) // Windows 98“‘…œ
-#if (_WIN32_WINDOWS >= 0x0500) // Windows Me“‘…œ
+#if (_WIN32_WINDOWS >= 0x0400) // Windows 95
+#if (_WIN32_WINDOWS >= 0x0410) // Windows 98
+#if (_WIN32_WINDOWS >= 0x0500) // Windows Me
 
-#if (_WIN32_WINNT  >= 0x0500) // Windows 2000“‘…œ
-#if (_WIN32_WINNT  >= 0x0501) // Windows XP“‘…œ
-#if (_WIN32_WINNT  >= 0x0600) // Windows Vista“‘…œ
+#if (_WIN32_WINNT  >= 0x0500) // Windows 2000
+#if (_WIN32_WINNT  >= 0x0501) // Windows XP
+#if (_WIN32_WINNT  >= 0x0600) // Windows Vista
 
 #ifdef  _WIN32_WCE
 

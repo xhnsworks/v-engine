@@ -344,7 +344,8 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
                 ShaderNode_add_input_link(shadow_test_node, light_proj_mats[0], INVALID_ARRAY_INDEX);
                 ShaderNode_add_input_link(shadow_test_node, light_pos, INVALID_ARRAY_INDEX);
                 ShaderNode_add_input_link(shadow_test_node, shadow_dirs[0], INVALID_ARRAY_INDEX);
-                ShaderNode_set_result_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
+                ///ShaderNode_set_result_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
+				ShaderNode_add_output_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
             }
             else if (_num_shadow_map == 0)
             {

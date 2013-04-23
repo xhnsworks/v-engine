@@ -16,7 +16,8 @@ ShaderNode create_shadow2d_test_node()
     ShaderNode_add_input_param(ret, Matrix4x4_Obj, "LightProjectionMatrix", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightPosition", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightDirection", 1);
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+	ShaderNode_add_output_param(ret, Float3_Obj, "LightValue", 1);
 
     const char* func =
     "{\n"
@@ -27,24 +28,26 @@ ShaderNode create_shadow2d_test_node()
     "    vec2 uv = world_pos.xy;\n"
     "    uv = uv * 0.5 + vec2(0.5, 0.5);\n"
     "    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)\n"
-    "        return vec3(0.0f, 0.0f, 0.0f);\n"
-    "    float depth = world_pos.z * 0.5 + 0.5;\n"
-    ///"    float depthMapPixel = texture(ShadowMap, uv).r;\n"
-    "    vec2 moments = texture(ShadowMap, uv).rg;\n"
-    /**
-    "    if (depth < depthMapPixel + 0.0001f)\n"
-    "        return vec3(1.0f, 1.0f, 1.0f);\n"
-    "    else\n"
-    "        return vec3(0.0f, 0.0f, 0.0f);\n"
-    **/
-    "    if (depth < moments.x)\n"
-    "        return vec3(1.0f, 1.0f, 1.0f);\n"
-    "    float variance = moments.y - (moments.x * moments.x);\n"
-    ///"    variance = max(variance,0.00002);\n"
-    "    variance = max(variance,0.000001);\n"
-    "    float d = depth - moments.x;\n"
-    "    float p_max = variance / (variance + d*d);\n"
-    "    return vec3(p_max, p_max, p_max);\n"
+	"    {\n"
+    "        LightValue = vec3(0.0f, 0.0f, 0.0f);\n"
+	"    }\n"
+	"    else\n"
+	"    {\n"
+    "        float depth = world_pos.z * 0.5 + 0.5;\n"
+    "        vec2 moments = texture(ShadowMap, uv).rg;\n"
+    "        if (depth < moments.x)\n"
+	"        {\n"
+    "            LightValue = vec3(1.0f, 1.0f, 1.0f);\n"
+	"        }\n"
+    "        else\n"
+	"        {\n"
+    "            float variance = moments.y - (moments.x * moments.x);\n"
+    "            variance = max(variance,0.000001);\n"
+    "            float d = depth - moments.x;\n"
+    "            float p_max = variance / (variance + d*d);\n"
+    "            LightValue = vec3(p_max, p_max, p_max);\n"
+	"        }\n"
+	"    }\n"
     "}\n";
 
     ShaderNode_set_function(ret, func);

@@ -6,9 +6,9 @@ static FILE* g_post_pass_log_file = NULL;
 char g_shader_log_buffer[SHADER_LOG_BUFFER_SIZE];
 void ShaderLog_Init()
 {
-    g_std_pass_log_file = SafeFOpen("std_pass_log.txt", "w+");
-    g_lighting_pass_log_file = SafeFOpen("lighting_pass_log.txt", "w+");
-    g_post_pass_log_file = SafeFOpen("post_pass_log.txt", "w+");
+    g_std_pass_log_file = SafeFOpen("std_pass_log.log", "w+");
+    g_lighting_pass_log_file = SafeFOpen("lighting_pass_log.log", "w+");
+    g_post_pass_log_file = SafeFOpen("post_pass_log.log", "w+");
 }
 
 void ShaderLog_write(ShaderLogType log_type)

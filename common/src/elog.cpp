@@ -7,8 +7,8 @@ static FILE* g_elog_file = NULL;
 char g_elog_buffer[ELOG_BUFFER_SIZE];
 void ELog_Init()
 {
-	g_elog_file = SafeFOpen("log.txt", "w+");
-	pthread_spin_init(&g_lock, PTHREAD_PROCESS_PRIVATE);
+	g_elog_file = SafeFOpen("log.log", "w+");
+	pthread_rwlock_init(&g_lock, NULL);
 }
 
 void ELog_write()
