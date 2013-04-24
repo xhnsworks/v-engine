@@ -1,7 +1,6 @@
 
 ///#include <omp.h>
-#include <windows.h>
-#include <GL/glew.h>
+#include "common.h"
 ///#include <GL/gl.h>
 
 #include "xhn_vector.hpp"
@@ -92,6 +91,8 @@
 
 #include "xhn_test.hpp"
 
+#include "glsl_lex.h"
+
 Mesh g_mesh0 = {NULL};
 Mesh g_mesh1 = {NULL};
 
@@ -161,6 +162,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	ShaderLog_Init();
 
 	VectorTest();
+
+	GLSL::test();
 
 	TRY(0)
 

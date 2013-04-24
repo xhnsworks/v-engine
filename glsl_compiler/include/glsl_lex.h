@@ -1,7 +1,13 @@
 #ifndef GLSL_LEX_H
 #define GLSL_LEX_H
+#include "common.h"
+#include "etypes.h"
+#include "xhn_map.hpp"
+#include "xhn_string.hpp"
 namespace GLSL
 {
+	#include "glsl.tab.hpp"
+	typedef int GLSLSymbolValue;
 	enum ExpectedSymType
 	{
         EmptyType = 0,
@@ -9,7 +15,6 @@ namespace GLSL
         NumericalType,
 		TextType,
 	};
-	typedef int GLSLSymbolValue;
 	class GLSLLexStatus
 	{
 	public:
@@ -21,6 +26,7 @@ namespace GLSL
 	public:
 		void Init();
 	};
+	
 	class GLSLParserEnv
 	{
 	public:
@@ -28,9 +34,12 @@ namespace GLSL
 		int m_charCount;
 		int m_lineCount;
 		GLSLLexStatus m_lexStatus;
+		xhn::map<xhn::string, GLSLSymbolValue> m_symValue;
+		GLSLParserEnv(const char* str);
 	};
-#include "glsl.tab.h"
 	int yylex(GLSLSymbolValue *lvalp, GLSLParserEnv* e);
+	void yyerror(GLSLParserEnv* e, const char* error);
+	void test();
 }
 
 #endif

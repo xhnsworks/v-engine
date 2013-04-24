@@ -1,7 +1,6 @@
 #ifndef INPUT_WIN32_H
 #define INPUT_WIN32_H
 
-#include <windows.h>
 #include "common.h"
 #include "etypes.h"
 #include "rwbuffer.h"

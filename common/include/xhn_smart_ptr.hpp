@@ -1,8 +1,7 @@
 #ifndef SMART_PTR_H
 #define SMART_PTR_H
-#ifndef __APPLE__
-#include <omp.h>
-#endif
+#include "common.h"
+#include "etypes.h"
 #include "xhn_vector.hpp"
 namespace xhn
 {

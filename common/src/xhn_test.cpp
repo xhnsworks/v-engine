@@ -4,7 +4,6 @@
 #include "emem.hpp"
 #include "emem2.h"
 #include <vector>
-#include <windows.h>
 #include "elog.h"
 class Timer
 {

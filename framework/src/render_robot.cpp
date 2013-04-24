@@ -1,6 +1,4 @@
 #include "render_robot.h"
-#include <windows.h>
-#include <GL/glew.h>
 #include "camera_utility.h"
 #include "sfloat3.h"
 #include "collada_loader.h"

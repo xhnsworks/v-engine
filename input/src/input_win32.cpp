@@ -1,5 +1,4 @@
 #include "input_win32.h"
-#include <windows.h>
 
 #define DIRECTINPUT_VERSION 0x0800
 

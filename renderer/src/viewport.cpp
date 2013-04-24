@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "viewport.h"
-#include <windows.h>
-#include <GL/glew.h>
 ///#include <GL/gl.h>
 
 typedef struct _viewport

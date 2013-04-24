@@ -2,7 +2,6 @@
 #define RENDER_SYSTEM_H
 #include "common.h"
 #include "etypes.h"
-#include <windows.h>
 #include "pass_declaration.h"
 #include "pass.h"
 #include "xml_resource.h"

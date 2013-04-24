@@ -8,8 +8,7 @@
 
 /****************/
 /// fixed me! this function is unsafed
-#ifdef WIN32
-#include <windows.h>
+#ifdef _WIN32
 sint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 {
 	// Get the required size of the buffer that receives the Unicode

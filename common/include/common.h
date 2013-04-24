@@ -95,9 +95,15 @@ or
 #define snprintf sprintf_s
 #endif
 
-#ifndef __APPLE__
+#ifdef _WIN32
+#include <windows.h>
+#include <GL/glew.h>
 #define BIT_WIDTH 32
-#else
+#elif defined (_WIN64)
+#include <windows.h>
+#include <GL/glew.h>
+#define BIT_WIDTH 64
+#elif defined(__APPLE__)
 #define BIT_WIDTH 64
 #endif
 
@@ -140,6 +146,7 @@ inline FILE* SafeFOpen(const char* path, const char* mode)
 
 #ifndef __APPLE__
 #include <pthread.h>
+#include <omp.h>
 #else
 #include <libkern/OSAtomic.h>
 #endif
