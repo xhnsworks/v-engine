@@ -145,9 +145,9 @@ inline FILE* SafeFOpen(const char* path, const char* mode)
 #endif
 
 #ifndef __APPLE__
-#include <pthread.h>
 #include <omp.h>
 #else
 #include <libkern/OSAtomic.h>
 #endif
+#include <pthread.h>
 #endif

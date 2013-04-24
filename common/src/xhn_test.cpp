@@ -5,6 +5,7 @@
 #include "emem2.h"
 #include <vector>
 #include "elog.h"
+#ifndef __APPLE__
 class Timer
 {
 public:
@@ -161,3 +162,4 @@ void VectorTest()
 		elog("mem alloc");
 	}
 }
+#endif

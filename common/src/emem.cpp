@@ -46,10 +46,10 @@ _INLINE_ void meminit(void* _mem, uint _size)
 {
 #ifdef USE_SSE
 	uint i = 0;
-	/// 当USE_SSE被定义时_size一定是16的整数倍
+
 	uint cnt = _size / 16;
 	__m128* m128_ptr = NULL;
-    /// 这里分支预测很容易预测正确的
+    
     if (!zero_ptr)
     {
         ref_ptr offs = (ref_ptr)align_char % 16;
@@ -59,7 +59,6 @@ _INLINE_ void meminit(void* _mem, uint _size)
         memset(zero_ptr, 0, sizeof(__m128));
     }
 
-    /// 当USE_SSE被定义时_mem一定是16字节对齐的
     m128_ptr = (__m128*)_mem;
     for (; i < cnt; i++)
         m128_ptr[i] = *zero_ptr;
@@ -70,13 +69,11 @@ _INLINE_ void meminit(void* _mem, uint _size)
 
 _INLINE_ void mem_node_init(mem_node* _node)
 {
-    /// _node->data是未对齐的
     memset(_node->data, 0, ALLOC_INFO_RESERVED + REFER_INFO_RESERVED);
 }
 
-/// 分配尺寸对齐16字节
 #define cale_alloc_size(s) ( s + (16 - (s % 16)) );
-/// 从begin到end(包含end)之间的内存区为有效内存区
+
 void* alloc_mem_list(uint _chk_size, uint _num_chks, uint* _real_chk_size, vptr* _begin, vptr* _end, mem_node** _head)
 {
 	char* ret = NULL;
@@ -260,7 +257,7 @@ typedef struct _mem_pool
     uint real_chk_size;
     uint num_chunk_per_mem_block;
     List mem_pool_chain;
-	pthread_spinlock_t lock;
+	pthread_rwlock_t lock;
 } mem_pool;
 
 #define PAGE_SIZE (4 * 1024)
@@ -273,7 +270,7 @@ MemPool MemPool_new(uint _chk_size)
 	var v;
 
     ret.self = (struct _mem_pool*)malloc(sizeof(mem_pool));
-    ret.self->mem_pool_chain = List_new(Vptr, malloc, free);
+    ret.self->mem_pool_chain = List_new(Vptr,  (MALLOC)malloc, (MFREE)free);
     ret.self->real_chk_size = cale_alloc_size(_chk_size);
 
     while (!num_chunk_per_mem_block)
@@ -290,7 +287,7 @@ MemPool MemPool_new(uint _chk_size)
 
     ret.self->num_chunk_per_mem_block *= 2;
 
-	pthread_spin_init(&ret.self->lock, PTHREAD_PROCESS_PRIVATE);
+	pthread_rwlock_init(&ret.self->lock, NULL);
     return ret;
 }
 
@@ -304,7 +301,7 @@ void MemPool_delete(MemPool _self)
 		MemPoolNode_delete(node);
 		iter = List_next(iter);
 	}
-	pthread_spin_destroy(&_self.self->lock);
+	pthread_rwlock_destroy(&_self.self->lock);
 	free(_self.self);
 }
 
@@ -353,7 +350,7 @@ typedef struct _mem_desc
 
 void* MemPool_alloc(MemPool _self, Iterator* _iter, bool _is_safe_alloc)
 {
-	pthread_spin_lock(&_self.self->lock);
+	pthread_rwlock_wrlock(&_self.self->lock);
 	Iterator iter = List_begin(SELF.mem_pool_chain);
 
 	var v = List_get_value(iter);
@@ -374,18 +371,18 @@ void* MemPool_alloc(MemPool _self, Iterator* _iter, bool _is_safe_alloc)
 			SELF.num_chunk_per_mem_block *= 2;
 		}
 	}
-    pthread_spin_unlock(&_self.self->lock);
+    pthread_rwlock_unlock(&_self.self->lock);
 	return ret;
 }
 
 void MemPool_free(MemPool _self, Iterator _iter, void* _ptr)
 {
-	pthread_spin_lock(&_self.self->lock);
+	pthread_rwlock_wrlock(&_self.self->lock);
     var v = List_get_value(_iter);
     MemPoolNode node = {(struct _mem_pool_node*)v.vptr_var};
     MemPoolNode_free(node, _ptr);
     List_throw_front(SELF.mem_pool_chain, _iter);
-	pthread_spin_unlock(&_self.self->lock);
+	pthread_rwlock_unlock(&_self.self->lock);
 }
 
 uint MemPool_chunk_size(MemPool _self)
@@ -399,7 +396,7 @@ uint MemPool_chunk_size(MemPool _self)
 typedef struct _mem_allocator
 {
     MemPool mem_pools[MAX_MEM_POOLS];
-	pthread_spinlock_t lock;
+	pthread_rwlock_t lock;
 } mem_allocator;
 
 typedef struct _alloc_info
@@ -410,7 +407,11 @@ typedef struct _alloc_info
 
 void* align_malloc_16(uint32 size)
 {
+#ifndef __APPLE__
 	return __mingw_aligned_malloc(size, 16);
+#else
+    return malloc(size);
+#endif
 }
 
 static MemAllocator g_MemAllocator = {NULL};
@@ -419,7 +420,7 @@ MemAllocator MemAllocator_new()
     MemAllocator ret;
 	ret.self = (struct _mem_allocator*)malloc(sizeof(mem_allocator));
 	memset(ret.self->mem_pools, 0, sizeof(ret.self->mem_pools));
-	pthread_spin_init(&ret.self->lock, PTHREAD_PROCESS_PRIVATE);
+	pthread_rwlock_init(&ret.self->lock, NULL);
 	return ret;
 }
 void MemAllocator_delete(MemAllocator _self)
@@ -432,7 +433,7 @@ void MemAllocator_delete(MemAllocator _self)
 			MemPool_delete(SELF.mem_pools[i]);
 		}
 	}
-	pthread_spin_destroy(&_self.self->lock);
+	pthread_rwlock_destroy(&_self.self->lock);
 	free(_self.self);
 }
 void* MemAllocator_alloc(MemAllocator _self, uint _size, bool _is_safe_alloc)
@@ -448,13 +449,13 @@ void* MemAllocator_alloc(MemAllocator _self, uint _size, bool _is_safe_alloc)
 	if (i < MAX_MEM_POOLS)
 	{
 		MemPool mp = SELF.mem_pools[i];
-		pthread_spin_lock(&_self.self->lock);
+		pthread_rwlock_wrlock(&_self.self->lock);
 		if (!mp.self)
 		{
 			mp = MemPool_new( (i + 1) * DEFAULT_CHUNK_SIZE + ALLOC_INFO_RESERVED + REFER_INFO_RESERVED );
 			SELF.mem_pools[i] = mp;
 		}
-		pthread_spin_unlock(&_self.self->lock);
+		pthread_rwlock_unlock(&_self.self->lock);
 		Iterator iter;
         ret = (char*)MemPool_alloc(mp, &iter, _is_safe_alloc);
 		ainfo.mem_pool = mp;
@@ -499,7 +500,11 @@ void MemAllocator_free(MemAllocator _self, void* _ptr)
 
 	if ( !to_ptr(info.mem_pool) )
 	{
+#ifndef __APPLE__
 		__mingw_aligned_free(ptr);
+#else
+        free(ptr);
+#endif
 	}
 	else
 	{

@@ -9,11 +9,13 @@
 #ifndef __APPLE__
 #include <direct.h>
 #else
+#include <stdio.h>
 #include <sys/dir.h>
 #include <sys/dirent.h>
 #endif
 void GetAllFileNamesInDir(const char* dir, const char* filter_rule, EStringArray* result)
 {
+#ifndef __APPLE__
     struct _finddata_t fd;
     array_n(*result) = 0;
 
@@ -51,4 +53,5 @@ void GetAllFileNamesInDir(const char* dir, const char* filter_rule, EStringArray
     }
     _findclose(h);
     EString_delete(fulldir);
+#endif
 }
