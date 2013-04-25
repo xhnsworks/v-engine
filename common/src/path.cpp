@@ -12,6 +12,24 @@
 #include <stdio.h>
 #include <sys/dir.h>
 #include <sys/dirent.h>
+#include "apple_file_manager.h"
+#endif
+#ifdef __APPLE__
+class EFilenameArray : public FilenameArray
+{
+public:
+    EStringArray* m_result;
+public:
+    EFilenameArray(EStringArray* strArray)
+    : m_result(strArray)
+    {}
+    virtual void AddFilename(const char* filename);
+};
+void EFilenameArray::AddFilename(const char* filename)
+{
+    EString str = EString_new(filename);
+    apush(*m_result, str);
+}
 #endif
 void GetAllFileNamesInDir(const char* dir, const char* filter_rule, EStringArray* result)
 {
@@ -53,5 +71,8 @@ void GetAllFileNamesInDir(const char* dir, const char* filter_rule, EStringArray
     }
     _findclose(h);
     EString_delete(fulldir);
+#else
+    EFilenameArray filenameArray(result);
+    GetFilenames(AppDirectory, &filenameArray);
 #endif
 }

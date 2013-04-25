@@ -13,6 +13,7 @@
 		6810DCC01723E10300F276F9 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6810DCBE1723E10300F276F9 /* Credits.rtf */; };
 		6810DCC31723E10300F276F9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6810DCC21723E10300F276F9 /* AppDelegate.m */; };
 		6810DCC61723E10300F276F9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6810DCC41723E10300F276F9 /* MainMenu.xib */; };
+		68701AC41729801500CA9BD7 /* apple_file_manager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68701AC31729801500CA9BD7 /* apple_file_manager.mm */; };
 		687DA2A417257F97000218FA /* eassert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA27C17257F97000218FA /* eassert.cpp */; };
 		687DA2A617257F97000218FA /* elog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA27E17257F97000218FA /* elog.cpp */; };
 		687DA2A717257F97000218FA /* emem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA27F17257F97000218FA /* emem.cpp */; };
@@ -45,6 +46,8 @@
 		6810DCC11723E10300F276F9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6810DCC21723E10300F276F9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6810DCC51723E10300F276F9 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		68701AC217297D9800CA9BD7 /* apple_file_manager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apple_file_manager.h; sourceTree = "<group>"; };
+		68701AC31729801500CA9BD7 /* apple_file_manager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = apple_file_manager.mm; sourceTree = "<group>"; };
 		687DA1BE172572B8000218FA /* ecg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ecg.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		687DA1BF17257903000218FA /* ecg-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ecg-Prefix.pch"; sourceTree = "<group>"; };
 		687DA24617257F96000218FA /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
@@ -188,6 +191,7 @@
 		687DA24517257F96000218FA /* include */ = {
 			isa = PBXGroup;
 			children = (
+				68701AC217297D9800CA9BD7 /* apple_file_manager.h */,
 				687DA24617257F96000218FA /* array.h */,
 				687DA24717257F96000218FA /* common.h */,
 				687DA24817257F96000218FA /* comparison_algorithm.h */,
@@ -240,6 +244,7 @@
 		687DA27A17257F97000218FA /* src */ = {
 			isa = PBXGroup;
 			children = (
+				68701AC31729801500CA9BD7 /* apple_file_manager.mm */,
 				687DA27C17257F97000218FA /* eassert.cpp */,
 				687DA27E17257F97000218FA /* elog.cpp */,
 				687DA27F17257F97000218FA /* emem.cpp */,
@@ -346,6 +351,7 @@
 				687DA2C017257F97000218FA /* tree.cpp in Sources */,
 				687DA2C117257F97000218FA /* xhn_static_string.cpp in Sources */,
 				687DA2C217257F97000218FA /* xhn_test.cpp in Sources */,
+				68701AC41729801500CA9BD7 /* apple_file_manager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
