@@ -243,7 +243,10 @@ public:
             count++;
         }
 
-        return npos;
+		if (matching)
+			return match_pos;
+		else
+            return npos;
     }
     uint rfind ( const string_base &str, uint pos = npos ) const {
         if ( pos == npos ) {
@@ -283,7 +286,10 @@ public:
             count--;
         }
 
-        return npos;
+		if (matching)
+			return match_pos;
+		else
+            return npos;
     }
     uint find ( const C *str, uint pos = 0 ) const {
         string_base tmp ( str );

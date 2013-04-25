@@ -34,9 +34,26 @@ namespace GLSL
 		int m_charCount;
 		int m_lineCount;
 		GLSLLexStatus m_lexStatus;
+		xhn::string m_output;
 		xhn::map<xhn::string, GLSLSymbolValue> m_symValue;
 		GLSLParserEnv(const char* str);
+		virtual void PushConstStringValue(GLSL::GLSLSymbolValue * lvalp, const char* str);
+		virtual int PushValue(GLSL::GLSLSymbolValue * lvalp);
+		virtual void PushSpace();
+		virtual void PushNextLine();
+		virtual int DecodeSymbol(GLSL::GLSLSymbolValue * lvalp, int retValue);
 	};
+
+	class ShaderTranslator : public GLSLParserEnv
+	{
+	public:
+		ShaderTranslator(const char* str)
+			: GLSLParserEnv(str)
+		{}
+		xhn::map<xhn::string, xhn::string> m_translationTable;
+		virtual int PushValue(GLSL::GLSLSymbolValue * lvalp);
+	};
+
 	int yylex(GLSLSymbolValue *lvalp, GLSLParserEnv* e);
 	void yyerror(GLSLParserEnv* e, const char* error);
 	void test();
