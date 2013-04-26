@@ -41,6 +41,7 @@ int GLSL::GLSLParserEnv::PushValue(GLSL::GLSLSymbolValue * lvalp)
 }
 void GLSL::GLSLParserEnv::PushSpace()
 {
+	m_lexStatus.curtExpType = GLSL::EmptyType;
     m_output += " ";
 }
 void GLSL::GLSLParserEnv::PushNextLine()
@@ -134,8 +135,6 @@ int GLSL::ShaderTranslator::PushValue(GLSL::GLSLSymbolValue * lvalp)
 			return GLSL::NumericalType;
 		}
 		else if (m_lexStatus.curtExpType == GLSL::SymbolType) {
-			if (xhn::string(m_lexStatus.mbuf).find("vPosition") != xhn::string::npos)
-				printf("here\n");
 			xhn::map<xhn::string, xhn::string>::iterator iter = m_translationTable.find(m_lexStatus.mbuf);
 			if (iter != m_translationTable.end())
 				m_output += iter->second;
@@ -173,9 +172,14 @@ START:
 		{
 			if (e->m_lexStatus.curtExpType == GLSL::EmptyType)
 				e->m_lexStatus.curtExpType = GLSL::SymbolType;
-			if (e->m_lexStatus.curtExpType != GLSL::SymbolType &&
-				e->m_lexStatus.curtExpType != GLSL::TextType)
-				return 0;
+			if (e->m_lexStatus.curtExpType == GLSL::NumericalType) {
+				if (e->m_text[e->m_charCount] == 'f') {
+				    /// nothing
+				}
+				else {
+					return 0;
+				}
+			}
 		}
 		else if (e->m_text[e->m_charCount] >= '0' &&
 			e->m_text[e->m_charCount] <= '9')
@@ -364,6 +368,10 @@ START:
 				return e->DecodeSymbol(lvalp, GLSL::_SEMICOLON);
 			}
 		}
+		if (e->m_text[e->m_charCount] < 32) {
+			printf("invalid characters\n");
+			return -1;
+		}
 
 		int offs = snprintf(e->m_lexStatus.str, e->m_lexStatus.remainder, "%c", e->m_text[e->m_charCount]);
 		e->m_lexStatus.str += offs;
@@ -409,14 +417,12 @@ void GLSL::test()
 	"///varying///\n"
 	**/
 	"varying vec4 vPosition;\n"
-	/**
 	"varying vec2 vTexCoord;\n"
 	"varying vec4 vColor;\n"
 	"varying vec3 vNormal;\n"
 	"varying vec3 vTangent;\n"
 	"varying vec3 vBinormal;\n"
 	"///function///\n"
-	**/
 	/**
 	"void VertexProc(){\n"
 	**/
@@ -424,12 +430,12 @@ void GLSL::test()
 	"	vec4 pos = vec4(Position.xyz, 1.0);\n"
 	"	gl_Position = pos;\n"
 	**/
-	"	vPosition = pos;\n"
-	"	vTexCoord = TexCoord;\n"
-	"	vColor = Color;\n"
-	"	vNormal = Normal;\n"
-	"	vTangent = Tangent;\n"
-	"	vBinormal = Binormal;\n"
+	"    vPosition = pos;\n"
+	"    vTexCoord = TexCoord;\n"
+	"    vColor = Color;\n"
+	"    vNormal = Normal;\n"
+	"    vTangent = Tangent;\n"
+	"    vBinormal = Binormal;\n"
 	/**
 	"}\n"
 	"///main///\n"
@@ -440,7 +446,8 @@ void GLSL::test()
 	**/;
 
 	ShaderTranslator e(str);
-	e.m_translationTable.insert(xhn::make_pair(xhn::string("vPosition"), xhn::string("TTT")));
+	e.m_translationTable.insert(xhn::make_pair(xhn::string("vPosition"), xhn::string("PPP")));
+	e.m_translationTable.insert(xhn::make_pair(xhn::string("vTexCoord"), xhn::string("TTT")));
 	while (yylex(NULL, &e)) {
 	}
 	printf("%s", e.m_output.c_str());

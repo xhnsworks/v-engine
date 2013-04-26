@@ -61,7 +61,11 @@ ShaderNode create_map_sample_node()
 
     ShaderNode_set_function(ret,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    Color = texture(Map, UV).rgb;\n"
+#else
+							"    Color = texture2D(Map, UV).rgb;\n"
+#endif
                             "}\n");
 
     ShaderNode_add_input_param(ret, Texture2D_Obj, "Map", 1);
@@ -78,7 +82,11 @@ ShaderNode create_map_sample_node_rgba()
 
     ShaderNode_set_function(ret,
                             "{\n"
-                            "    Color = texture(Map, UV).rgba;\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
+							"    Color = texture(Map, UV).rgba;\n"
+#else
+							"    Color = texture2D(Map, UV).rgba;\n"
+#endif
                             "}\n");
 
     ShaderNode_add_input_param(ret, Texture2D_Obj, "Map", 1);

@@ -12,6 +12,7 @@
 #include "shader_object_table.h"
 
 #include "shader_node_generator.h"
+#include "shader_log.h"
 
 ShaderNode create_material_id_test_node(VertexDecl _dec)
 {
@@ -48,8 +49,13 @@ ShaderNode create_display_pixel_shader_node(VertexDecl _dec)
 
     ShaderNode_set_function(ret,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 cmap = texture(ColorMap, vTexCoord).rgb;\n"
                             "    vec3 lmap = texture(DiffuseLightingMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 cmap = texture2D(ColorMap, vTexCoord).rgb;\n"
+							"    vec3 lmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
+#endif
                             ///"    vec3 pos_lmap = clamp(lmap - vec3(0.5, 0.5, 0.5), 0.0, 1.0);\n"
                             ///"    vec3 neg_lmap = clamp(lmap - vec3(0.5, 0.5, 0.5), -1.0, 0.0);\n"
                             ///"    gl_FragData[0] = vec4( clamp(cmap * lmap + neg_lmap * 0.5 + pos_lmap * 0.5, 0.0, 1.0), 1.0 );"
@@ -71,7 +77,11 @@ ShaderNode create_display_normal_map_node(VertexDecl _dec)
 
     ShaderNode_set_function(ret,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 nmap = texture(NormalMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 nmap = texture2D(NormalMap, vTexCoord).rgb;\n"
+#endif
                             "    vec3 n;\n"
                             "    n.xy = nmap.xy * 2.0 - 1.0;\n"
                             "    n.z = sqrt(1.0 - dot(n.xy, n.xy));\n"
@@ -93,7 +103,11 @@ ShaderNode create_display_lighting_map_node(VertexDecl _dec)
 
     ShaderNode_set_function(ret,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 lmap = texture(DiffuseLightingMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 lmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
+#endif
                             "    gl_FragData[0] = vec4( lmap, 1.0 );"
                             "}\n");
 
@@ -112,7 +126,11 @@ ShaderNode create_display_depth_map_node(VertexDecl _dec)
 
     ShaderNode_set_function(ret,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 nmap = texture(NormalMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 nmap = texture2D(NormalMap, vTexCoord).rgb;\n"
+#endif
                             "    float depth = nmap.z * 0.05;\n"
                             "    gl_FragData[0] = vec4( depth, depth, depth, 1.0 );"
                             "}\n");
@@ -168,7 +186,11 @@ ShaderNode create_display_position_map_node(VertexDecl _dec)
 
     ShaderNode_set_function(ret,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 pmap = texture(PositionMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 pmap = texture2D(PositionMap, vTexCoord).rgb;\n"
+#endif
                             "    gl_FragData[0] = vec4( pmap, 1.0 );"
                             "}\n");
 
@@ -310,9 +332,8 @@ Pass create_display_texture_pass(VertexDecl _dec)
                   "#extension GL_EXT_texture_integer  : enable\n"
                   "%s", sb.self->output);
                   **/
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     sb = to_ShaderBuffer(psb);
@@ -322,9 +343,8 @@ Pass create_display_texture_pass(VertexDecl _dec)
                   "#extension GL_EXT_texture_integer  : enable\n"
                   "%s", sb.self->output);
                   **/
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
 
@@ -450,9 +470,8 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
                   "#extension GL_EXT_texture_integer  : enable\n"
                   "%s", sb.self->output);
                   **/
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
 
@@ -462,11 +481,11 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     ///sprintf(mbuf, "#extension GL_EXT_gpu_shader4      : require\n"
     ///              "%s", sb.self->output);
 
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
+	slog(PostPassLog, "%s", mbuf);
 
     Pass ret = create_pass_from_shader(auto_vs, auto_ps);
 
@@ -508,17 +527,15 @@ Pass create_clear_buffer_pass(VertexDecl _dec, SdrNdGen _shader_node_gen)
     sb = to_ShaderBuffer(vsb);
 
     char mbuf[STRING_BUFFER_SIZE];
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
 
     sb = to_ShaderBuffer(psb);
 
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
 

@@ -82,9 +82,15 @@ ShaderNode default_material_proc3 ( PxlSdrBuf _psb, int _id )
 
     ShaderNode_set_function ( psn,
                               "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                               "    vec3 cmap = texture(ColorMap, vTexCoord).rgb;\n"
                               "    vec3 dmap = texture(DiffuseLightingMap, vTexCoord).rgb;\n"
                               "    vec3 smap = texture(SpecularLightingMap, vTexCoord).rgb;\n"
+#else
+							  "    vec3 cmap = texture2D(ColorMap, vTexCoord).rgb;\n"
+							  "    vec3 dmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
+							  "    vec3 smap = texture2D(SpecularLightingMap, vTexCoord).rgb;\n"
+#endif
                               "    gl_FragData[0] = vec4( clamp(cmap * dmap + smap, 0.0, 1.0), 1.0 );"
                               "}\n" );
 

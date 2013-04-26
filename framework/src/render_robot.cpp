@@ -89,7 +89,11 @@ ShaderNode pure_color_material_proc(PxlSdrBuf _psb, int _id)
 
     ShaderNode_set_function(psn,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 cmap = texture(ColorMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 cmap = texture2D(ColorMap, vTexCoord).rgb;\n"
+#endif
                             "    gl_FragData[0] = vec4( cmap, 1.0 );"
                             "}\n");
     return psn;
@@ -105,7 +109,11 @@ ShaderNode pure_lighting_material_proc(PxlSdrBuf _psb, int _id)
 
     ShaderNode_set_function(psn,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec3 lmap = texture(DiffuseLightingMap, vTexCoord).rgb;\n"
+#else
+							"    vec3 lmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
+#endif
                             "    gl_FragData[0] = vec4( lmap, 1.0 );"
                             "}\n");
 
@@ -123,9 +131,20 @@ ShaderNode pure_normal_material_proc(PxlSdrBuf _psb, int _id)
 
     ShaderNode_set_function(psn,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec4 lmap = texture(NormalTangentMap, vTexCoord).rgba;\n"
+#else
+							"    vec4 lmap = texture2D(NormalTangentMap, vTexCoord).rgba;\n"
+#endif
 							"    vec3 ret;"
-                            "    NormalDecode(lmap, ret);\n"
+                            ///"    NormalDecode(lmap, ret);\n"
+							"{\n"
+							///"    ret.xy = Enc.xy * 2.0 - 1.0;\n"
+							///"    ret.z = sqrt(1.0 - dot(ret.xy, ret.xy));\n"
+							"    vec2 fenc = lmap.xy * 2.0 - 1.0;\n"
+							"    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
+							"    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
+							"}\n"
                             "    gl_FragData[0] = vec4( ret, 1.0 );"
                             "}\n");
 
@@ -143,10 +162,21 @@ ShaderNode pure_tangent_material_proc(PxlSdrBuf _psb, int _id)
 
     ShaderNode_set_function(psn,
                             "{\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
                             "    vec4 lmap = texture(NormalTangentMap, vTexCoord).rgba;\n"
+#else
+							"    vec4 lmap = texture2D(NormalTangentMap, vTexCoord).rgba;\n"
+#endif
                             "    lmap.xy = lmap.zw;\n"
                             "    vec3 ret;"
-							"    NormalDecode(lmap, ret);\n"
+							///"    NormalDecode(lmap, ret);\n"
+							"{\n"
+							///"    ret.xy = Enc.xy * 2.0 - 1.0;\n"
+							///"    ret.z = sqrt(1.0 - dot(ret.xy, ret.xy));\n"
+							"    vec2 fenc = lmap.xy * 2.0 - 1.0;\n"
+							"    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
+							"    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
+							"}\n"
                             "    gl_FragData[0] = vec4( ret, 1.0 );"
                             "}\n");
 

@@ -222,7 +222,11 @@ enc = enc*0.5+0.5;
         normal_proc =
             "    mat3x3 m = mat3x3(vBinormal, vTangent, vNormal);\n"
             ///"    m = inverse(m);\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
             "    vec3 nmap = texture(NormalMap, vTexCoord).rgb;\n"
+#else
+			"    vec3 nmap = texture2D(NormalMap, vTexCoord).rgb;\n"
+#endif
             ///"    nmap -= vec3(0.5, 0.5, 0.5);\n"
             "    nmap = (nmap - 0.5) * 2.0;\n"
             ///"    nmap *= 2.0;\n"
@@ -258,7 +262,11 @@ enc = enc*0.5+0.5;
     {
         if (!_status->use_gausscian_blur) {
             color_proc =
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
             "    vec4 cmap = texture(ColorMap, vTexCoord);\n";
+#else
+			"    vec4 cmap = texture2D(ColorMap, vTexCoord);\n";
+#endif
         }
         else {
             color_proc =
@@ -295,16 +303,27 @@ enc = enc*0.5+0.5;
 
             "    if ( uv.x > PixelSize.x && uv.x < 1.0 - PixelSize.x && uv.y > PixelSize.y && uv.y < 1.0 - PixelSize.y )\n"
             "    {\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
             "        pixels[0] = texture( ColorMap, vec2(uv.x,          uv.y) );\n"
             "        pixels[1] = texture( ColorMap, vec2(uv.x + offs.x, uv.y) );\n"
             "        pixels[2] = texture( ColorMap, vec2(uv.x,          uv.y + offs.y) );\n"
             "        pixels[3] = texture( ColorMap, vec2(uv.x + offs.x, uv.y + offs.y) );\n"
+#else
+			"        pixels[0] = texture2D( ColorMap, vec2(uv.x,          uv.y) );\n"
+			"        pixels[1] = texture2D( ColorMap, vec2(uv.x + offs.x, uv.y) );\n"
+			"        pixels[2] = texture2D( ColorMap, vec2(uv.x,          uv.y + offs.y) );\n"
+			"        pixels[3] = texture2D( ColorMap, vec2(uv.x + offs.x, uv.y + offs.y) );\n"
+#endif
             "        cmap = pixels[0] + pixels[1] + pixels[2] + pixels[3];\n"
             "        cmap /= 4.0;\n"
             "    }\n"
             "    else\n"
             "    {\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
             "        cmap = texture( ColorMap, uv );\n"
+#else
+			"        cmap = texture2D( ColorMap, uv );\n"
+#endif
             "    }\n";
         }
     }
@@ -570,17 +589,15 @@ Pass create_std_pass_from_dec(std_pass_status* _status, bool write_log)
     Shader auto_ps = Shader_new();
     sb = to_ShaderBuffer(vsb);
     snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+        "#version %d%d0\n %s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     if (write_log)
         slog(StdPassLog, "%s", mbuf);
 
     sb = to_ShaderBuffer(psb);
     ///sprintf(mbuf, "#version 140\n#extension GL_ARB_gpu_shader5 : enable\n%s", sb.self->output);
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n %s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
     if (write_log)
         slog(StdPassLog, "%s", mbuf);

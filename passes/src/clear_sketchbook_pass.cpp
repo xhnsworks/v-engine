@@ -31,18 +31,16 @@ Pass create_clear_sketchbook_pass(VertexDecl _decl)
     ShaderBuffer sb = to_ShaderBuffer(vsb);
 
     char mbuf[STRING_BUFFER_SIZE];
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     slog(StdPassLog, "%s", mbuf);
 
     sb = to_ShaderBuffer(psb);
 
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-            GLSL_VERSION
-            "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
 
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
     slog(StdPassLog, "%s", mbuf);

@@ -83,24 +83,12 @@ public:
         return m_str_cmp_proc(m_str, s) != 0;
     }
     bool operator < ( const string_base &str ) const {
-        if ( m_hash < str.m_hash ) {
-            return true;
-        }
-
         return m_str_cmp_proc ( m_str, str.m_str ) < 0;
     }
     bool operator == ( const string_base &str ) const {
-        if ( m_hash != str.m_hash ) {
-            return false;
-        }
-
         return m_str_cmp_proc ( m_str, str.m_str ) == 0;
     }
     bool operator != ( const string_base &str ) const {
-        if ( m_hash != str.m_hash ) {
-            return true;
-        }
-
         return m_str_cmp_proc ( m_str, str.m_str ) != 0;
     }
     string_base &operator = ( const string_base &str ) {
@@ -174,7 +162,7 @@ public:
 		return ret;
 	}
     string_base &operator += ( const string_base &str ) {
-        C *tmp = ( C * ) Malloc ( (m_size + 1) * sizeof(C) );
+        C *tmp = ( C * ) Malloc ( (m_size + str.m_size + 1) * sizeof(C) );
         memcpy ( tmp, m_str, m_size * sizeof(C) );
         memcpy ( &tmp[m_size], str.m_str, (str.m_size + 1) * sizeof(C) );
         m_size += str.m_size;
@@ -190,7 +178,7 @@ public:
             count++;
         }
 
-        C *tmp = ( C * ) Malloc ( (m_size + 1) * sizeof(C) );
+        C *tmp = ( C * ) Malloc ( (m_size + count + 1) * sizeof(C) );
         memcpy ( tmp, m_str, m_size * sizeof(C) );
         memcpy ( &tmp[m_size], str, (count + 1) * sizeof(C) );
         m_size += count;
@@ -200,7 +188,7 @@ public:
         return *this;
     }
 	string_base &operator += ( C s ) {
-		C *tmp = ( C * ) Malloc ( (m_size + 1) * sizeof(C) );
+		C *tmp = ( C * ) Malloc ( (m_size + 2) * sizeof(C) );
 		memcpy ( tmp, m_str, m_size * sizeof(C) );
 		memcpy ( &tmp[m_size], &s, 2 * sizeof(C) );
 		m_size += 1;

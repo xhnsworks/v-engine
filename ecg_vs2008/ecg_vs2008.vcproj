@@ -2733,11 +2733,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\src\glsl_lex.cpp"
+				RelativePath="..\glsl_compiler\src\glsltex.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\include\glsl_lex.h"
+				RelativePath="..\glsl_compiler\include\glsltex.h"
 				>
 			</File>
 		</Filter>

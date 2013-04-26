@@ -7,6 +7,7 @@
 #include "shader_buffer.h"
 #include "shader_node_base.h"
 #include "eassert.h"
+#include "glsltex.h"
 typedef struct _shader_node
 {
     shader_node_base base;
@@ -19,6 +20,36 @@ typedef struct _shader_node
     ShaderObject* output_links;
     char* function;
 } shader_node;
+
+EString _recompile(ShaderNode _sn)
+{
+	GLSL::ShaderTranslator sdrTran(_sn->function);
+	uint num_input_params = array_n(_sn->input_param_table);
+	uint num_input_links = array_n(_sn->input_links);
+	uint num_output_params = array_n(_sn->output_param_table);
+	uint num_output_links = array_n(_sn->output_links);
+	if (num_input_params != num_input_links)
+		return NULL;
+	if (num_output_params != num_output_links)
+		return NULL;
+	for (uint i = 0; i < num_input_params; i++) {
+		const char* param = ShaderObject_get_name(_sn->input_param_table[i]);
+		const char* link = ShaderObject_get_name(_sn->input_links[i]);
+		sdrTran.m_translationTable.insert(xhn::make_pair(xhn::string(param), xhn::string(link)));
+	}
+	for (uint i = 0; i < num_output_params; i++) {
+		const char* param = ShaderObject_get_name(_sn->output_param_table[i]);
+		const char* link = ShaderObject_get_name(_sn->output_links[i]);
+		sdrTran.m_translationTable.insert(xhn::make_pair(xhn::string(param), xhn::string(link)));
+	}
+	while (GLSL::yylex(NULL, &sdrTran) > 0) {
+	}
+	xhn::string output = "//##";
+	output += ShaderNode_get_name(_sn);
+	output += "\n";
+	output += sdrTran.m_output;
+	return EString_new(output.c_str());
+}
 
 const char* _compile_params(ShaderNode _sn)
 {
@@ -403,7 +434,12 @@ const char* ShaderNode_compile(ShaderNode _sn)
 	EString tmp = _compile_links(_sn);
 	sbuf_printf("%s( %s );", _sn->node_name, tmp);
 	EString_delete(tmp);
+
+#ifndef USE_RECOMPILE
 	return EString_new(get_string_buffer);
+#else
+	return _recompile(_sn);
+#endif
 }
 
 const char* ShaderNode_compile_function_declaration(ShaderNode _sn)

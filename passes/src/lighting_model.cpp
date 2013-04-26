@@ -152,13 +152,13 @@ ShaderNode create_direction_lighting_node()
     snprintf(mbuf, STRING_BUFFER_SIZE - 1,
              "{\n"
              /// diffuse
-             "    LightDir = -LightDir;\n"
-             "    float d = dot(LightDir, TargetNor);\n"
+             "    vec3 ldir = -LightDir;\n"
+             "    float d = dot(ldir, TargetNor);\n"
              "    d = clamp(d, 0.0, 1.0);\n"
              "    vec3 c = LightColor.rgb * d;\n"
              /// specular
              "    vec3 eye_dir = normalize(EyePos - TargetPos);\n"
-             "    vec3 r = 2.0 * TargetNor * dot(LightDir, TargetNor) + LightDir;\n"
+             "    vec3 r = 2.0 * TargetNor * dot(ldir, TargetNor) + ldir;\n"
              "    r = normalize(r);\n"
              "    d = dot(r, eye_dir);\n"
              "    d = clamp(d, 0.0, 1.0);\n"
@@ -738,18 +738,16 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
     sb = to_ShaderBuffer(vsb);
 
     ///snprintf(mbuf, STRING_BUFFER_SIZE - 1, "#version 400\n%s", sb.self->output);
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-             GLSL_VERSION
-             "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     slog(LightingPassLog, "%s", mbuf);
 
     sb = to_ShaderBuffer(psb);
 
     ///snprintf(mbuf, STRING_BUFFER_SIZE - 1, "#version 400\n%s", sb.self->output);
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-             GLSL_VERSION
-             "%s", sb->output);
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
     slog(LightingPassLog, "%s", mbuf);
 

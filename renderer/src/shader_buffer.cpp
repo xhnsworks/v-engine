@@ -323,7 +323,7 @@ void ShaderBuffer_complete(struct _shader_buffer* _buf)
     ///tmp += sprintf(tmp, "%s", _buf->function);
     sbuf_printf("%s", _buf->function);
     EString_delete(_buf->function);
-
+#ifndef USE_RECOMPILE
     Iterator iter = Tree_begin(_buf->shader_node_prototype_tree);
     while(iter)
     {
@@ -335,11 +335,11 @@ void ShaderBuffer_complete(struct _shader_buffer* _buf)
             const char* func = ShaderNode_get_function(sn);
             ///tmp += sprintf(tmp, "%s%s", compiled, func);
             sbuf_printf("%s%s", compiled, func);
-
             EString_delete(compiled);
         }
         iter = Tree_next(iter);
     }
+#endif
     ///_buf->function = EString_new(mbuf);
     _buf->function = (char*)EString_new(get_string_buffer);
     ///tmp = mbuf;
@@ -474,22 +474,16 @@ ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const
 
     if (_array_size <= 1)
     {
-        ///tmp += sprintf(tmp, "%s", _sb.self->uniform);
         sbuf_printf("%s", _sb->uniform);
         EString_delete(_sb->uniform);
-        ///tmp += sprintf(tmp, "uniform %s %s;\n", type, _unif);
-        sbuf_printf("uniform %s %s;\n", type, _unif);
-        ///_sb.self->uniform = EString_new(mbuf);
+		sbuf_printf("uniform %s %s;\n", type, _unif);
         _sb->uniform = (char*)EString_new(get_string_buffer);
     }
     else
     {
-        ///tmp += sprintf(tmp, "%s", _sb.self->uniform);
         sbuf_printf("%s", _sb->uniform);
         EString_delete(_sb->uniform);
-        ///tmp += sprintf(tmp, "uniform %s %s[%d];\n", type, _unif, _array_size);
-        sbuf_printf("uniform %s %s[%d];\n", type, _unif, _array_size);
-        ///_sb.self->uniform = EString_new(mbuf);
+		sbuf_printf("uniform %s %s[%d];\n", type, _unif, _array_size);
         _sb->uniform = (char*)EString_new(get_string_buffer);
     }
     var key, data;

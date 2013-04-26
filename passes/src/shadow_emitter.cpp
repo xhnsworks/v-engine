@@ -34,7 +34,11 @@ ShaderNode create_shadow2d_test_node()
 	"    else\n"
 	"    {\n"
     "        float depth = world_pos.z * 0.5 + 0.5;\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
     "        vec2 moments = texture(ShadowMap, uv).rg;\n"
+#else
+	"        vec2 moments = texture2D(ShadowMap, uv).rg;\n"
+#endif
     "        if (depth < moments.x)\n"
 	"        {\n"
     "            LightValue = vec3(1.0f, 1.0f, 1.0f);\n"
@@ -79,7 +83,11 @@ ShaderNode create_shadowcube_test_node()
     "    depth /= LightInfluence;\n"
     "    depth = clamp(depth, 0.0, 1.0);\n"
     "    ray_dir = normalize(ray_dir);\n"
+#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
     "    vec2 moments = texture(ShadowMap, ray_dir).rg;\n"
+#else
+	"    vec2 moments = textureCube(ShadowMap, ray_dir).rg;\n"
+#endif
     "    if (depth < moments.x)\n"
 	"    {\n"
     "        Result = vec3(1.0f, 1.0f, 1.0f);\n"

@@ -13,7 +13,7 @@
 #define SHADER_LOG_H
 #include "common.h"
 #include "etypes.h"
-#define SHADER_LOG_BUFFER_SIZE 4096 * 4
+#define SHADER_LOG_BUFFER_SIZE 4096 * 16
 typedef enum _shader_log_type
 {
     StdPassLog,
