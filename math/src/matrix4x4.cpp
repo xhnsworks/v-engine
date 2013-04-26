@@ -4,7 +4,9 @@
 #include "float3.h"
 #include "sfloat3.h"
 #include "sfloat4.h"
+#ifndef __APPLE__
 #include "sse_mathfun.h"
+#endif
 #include "elog.h"
 
 void Matrix4x4_Dest(matrix4x4* _mat)
@@ -587,11 +589,20 @@ void Matrix4x4_from_axis_angle(matrix4x4* _mat, sfloat3 _axis, float _radian)
 #ifdef USE_SSE
     ///ALIGN_Value20(__m128, buf, x, s, c, one, fOneMinusCos, fxyz2, fxyz_sin, tmp0, tmp1, tmp11, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9, tmp10);
     ///__m128 buf, x, s, c, one, fOneMinusCos, fxyz2, fxyz_sin, tmp0, tmp1, tmp11, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9, tmp10;
-	__m128 x, s, c, one, fOneMinusCos, fxyz2, fxyz_sin, tmp0, tmp1, tmp11, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9, tmp10;
+	__m128 s, c, one, fOneMinusCos, fxyz2, fxyz_sin, tmp0, tmp1, tmp11, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8, tmp9, tmp10;
 
-    x = _mm_set1_ps(_radian);
     one = _mm_set1_ps(1.0f);
+#ifndef __APPLE__
+    __m128 x = _mm_set1_ps(_radian);
     sincos_ps(x, &s, &c);
+#else
+    {
+        float _s = sinf(_radian);
+        float _c = sqrtf(1.0f - _s * _s);
+        s = _mm_set1_ps(_s);
+        c = _mm_set1_ps(_c);
+    }
+#endif
     fOneMinusCos = _mm_sub_ps(one, c);
 
     ///__m128 axis_m = _mm_set_ps(1.0f, _axis->z, _axis->y, _axis->x);

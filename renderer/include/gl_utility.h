@@ -11,7 +11,6 @@
 */
 #ifndef GL_UTILITY_H
 #define GL_UTILITY_H
-#include <GL/glew.h>
 ///#include <GL/gl.h>
 #include "common.h"
 #include "etypes.h"
