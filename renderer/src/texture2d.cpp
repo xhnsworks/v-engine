@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "texture2d.h"
-#include <GL/glew.h>
-///#include <GL/gl.h>
 #include "gl_utility.h"
 #include "emem.h"
 #include "clamp.h"

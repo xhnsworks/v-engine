@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "texture_cube.h"
-#include <GL/glew.h>
 #include "emem.h"
 typedef struct _texture_cube
 {

@@ -215,12 +215,12 @@ class Sprite : public SpriteLayer
 public:
     ElementList m_elements;
     EventProcMap m_eventProcs;
-private:
-	EFloat2 m_pivotOffset;
+protected:
+	EFloat2 m_pivot;
 	EFloat2 m_coordinate;
     EFloat m_rotation;
 	EFloat2 m_scale;
-	AttributeHandle m_pivotOffsetHandle;
+	AttributeHandle m_pivotHandle;
 	AttributeHandle m_coordinateHandle;
 	AttributeHandle m_rotationHandle;
 	AttributeHandle m_scaleHandle;
@@ -252,8 +252,8 @@ public:
         m_children.push_back(spriteLayer);
 		spriteLayer->m_parent = this;
 	}
-	inline AttributeHandle GetPivotOffsetHandle() {
-		return m_pivotOffsetHandle;
+	inline AttributeHandle GetPivotHandle() {
+		return m_pivotHandle;
 	}
 	inline AttributeHandle GetCoordinateHandle() {
 		return m_coordinateHandle;

@@ -105,6 +105,7 @@ or
 #define BIT_WIDTH 64
 #elif defined(__APPLE__)
 #define BIT_WIDTH 64
+#include <OpenGL/gl.h>
 #endif
 
 #define USE_SSE

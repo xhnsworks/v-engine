@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "index_buffer.h"
 #include "vertex_buffer.h"
-#include <GL/glew.h>
-///#include <GL/gl.h>
 #include "emem.h"
 #include "renderable_base.h"
 

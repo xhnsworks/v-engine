@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "shadow_renderer.h"
 #include "render_system.h"
-#include <GL/glew.h>
 #include "gl_utility.h"
 #include "renderer.h"
 ShadowRenderer::ShadowRenderer()

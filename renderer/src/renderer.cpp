@@ -4,8 +4,6 @@
 #include "array.h"
 #include "camera.h"
 #include "sketch.h"
-#include <GL/glew.h>
-///#include <GL/gl.h>
 #include "pass_console.h"
 #include "float3.h"
 #include "gl_utility.h"

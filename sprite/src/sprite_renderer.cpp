@@ -1,6 +1,5 @@
 #include "sprite_pch.h"
 #include "sprite_renderer.h"
-#include <GL/glew.h>
 #include "renderable_base.h"
 #include "gl_utility.h"
 #include "plane_mesh.h"

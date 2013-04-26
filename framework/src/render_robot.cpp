@@ -365,7 +365,8 @@ void ResourceAction::DoImpl()
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
 		m_guiPanel->SetCoord(30.0f, 50.0f);
-		m_guiPanel->SetScale(1.0f, 2.0f);
+		m_guiPanel->SetScale(1.0f, 1.0f);
+		m_guiPanel->SetSize(100.0f, 100.0f);
 
 		m_guiButton->SetCoord(50.0f, 150.0f);
 		///m_guiButton->SetRotate(0.5f);
@@ -540,7 +541,7 @@ void ResourceAction::DoImpl()
 					RWBuffer_Write(channel, (const uint*)&cac, sizeof(cac));
 				}
 				{
-					CreateAnimCommand* cac = ENEW CreateAnimCommand(m_guiButton->GetPivotOffsetHandle(), Attribute::Float2);
+					CreateAnimCommand* cac = ENEW CreateAnimCommand(m_guiButton->GetPivotHandle(), Attribute::Float2);
 					cac->m_animFileName = "anim.xml";
 					cac->m_animName = "offset";
 					RWBuffer_Write(channel, (const uint*)&cac, sizeof(cac));

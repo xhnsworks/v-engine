@@ -284,8 +284,8 @@ Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 , m_scale(1.0f, 1.0f)
 , SpriteLayer(name)
 {
-	m_pivotOffsetHandle.m_attr = &m_pivotOffset;
-	m_pivotOffsetHandle.m_lock = ENEW xhn::RWLock;
+	m_pivotHandle.m_attr = &m_pivot;
+	m_pivotHandle.m_lock = ENEW xhn::RWLock;
 
 	m_coordinateHandle.m_attr = &m_coordinate;
 	m_coordinateHandle.m_lock = ENEW xhn::RWLock;
@@ -421,8 +421,8 @@ Matrix4x4 Sprite::GetMatrix()
 	matrix4x4 tran;
 	EFloat2 p = m_renderer->get_real_position(0.0f, 0.0f);
 	{
-		xhn::RWLock::Instance inst = m_pivotOffsetHandle.m_lock->GetReadLock();
-		p = p + m_pivotOffset;
+		xhn::RWLock::Instance inst = m_pivotHandle.m_lock->GetReadLock();
+		p = p + m_pivot;
 	}
 	sfloat3 axis = SFloat3(0.0f, 0.0f, 1.0f);
 	Matrix4x4_set_as_translate(&offs, -p.x, -p.y, 0.0f);
@@ -460,13 +460,13 @@ void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, S
 	{
 		xhn::RWLock2::Instance inst = b->get_write_lock();
 		SpriteFactory::AnimAttrArray* a = b->find_unlock(this);
-		a->push_back(&m_pivotOffset);
+		a->push_back(&m_pivot);
 		a->push_back(&m_coordinate);
 		a->push_back(&m_rotation);
 		a->push_back(&m_scale);
 	}
 
-	aaslMap.insert(&m_pivotOffset, this);
+	aaslMap.insert(&m_pivot, this);
 	aaslMap.insert(&m_coordinate, this);
 	aaslMap.insert(&m_rotation, this);
 	aaslMap.insert(&m_scale, this);

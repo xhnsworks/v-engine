@@ -10,9 +10,17 @@ class SpriteRenderer;
 class GUIPanelLayer : public SpriteNormalLayer
 {
 	DeclareRTTI;
+private:
+	AttributeHandle m_pivotHandle;
+	AttributeHandle m_sizeHandle;
 public:
-	GUIPanelLayer();
-	virtual void ApplyTransform(const matrix4x4* trans);
+	GUIPanelLayer(AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+		: m_pivotHandle(pivotHandle)
+	    , m_sizeHandle(sizeHandle)
+		, SpriteNormalLayer("base")
+	{}
+	///virtual void ApplyTransform(const matrix4x4* trans);
+	virtual void BuildElements(xhn::list<SpriteElement>& to);
 };
 class GUIPanel : public Sprite
 {
@@ -23,6 +31,7 @@ public:
 public:
 	GUIPanel(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual void Init(const xhn::static_string configName);
+	void SetSize(float x, float y);
 };
 
 class GUIPanelFactory : public SpriteFactory

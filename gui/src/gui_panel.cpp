@@ -8,52 +8,105 @@
 ImplementRTTI(GUIPanelLayer, SpriteNormalLayer);
 ImplementRTTI(GUIPanel, Sprite);
 
-GUIPanelLayer::GUIPanelLayer()
-: SpriteNormalLayer("base")
+void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 {
-}
-void GUIPanelLayer::ApplyTransform(const matrix4x4* trans)
-{
-	xhn::map<xhn::static_string, SpriteElement>::iterator iter = m_elementBuffer.begin();
-	for (; iter != m_elementBuffer.end(); iter++)
-	{
-		SpriteElement& ele = iter->second;
-		ele.ApplyTransform(trans);
-	}
-	/**
 	xhn::map<xhn::static_string, SpriteElement>::iterator iterLowerLeft = m_elementBuffer.find("lower_left_corner");
 	xhn::map<xhn::static_string, SpriteElement>::iterator iterUpperLeft = m_elementBuffer.find("upper_left_corner");
 	xhn::map<xhn::static_string, SpriteElement>::iterator iterUpperRight = m_elementBuffer.find("upper_right_corner");
 	xhn::map<xhn::static_string, SpriteElement>::iterator iterLowerRight = m_elementBuffer.find("lower_right_corner");
+
+	xhn::map<xhn::static_string, SpriteElement>::iterator iterLeft = m_elementBuffer.find("left");
+	xhn::map<xhn::static_string, SpriteElement>::iterator iterTop = m_elementBuffer.find("top");
+	xhn::map<xhn::static_string, SpriteElement>::iterator iterRight = m_elementBuffer.find("right");
+	xhn::map<xhn::static_string, SpriteElement>::iterator iterBottom = m_elementBuffer.find("bottom");
+
+	xhn::map<xhn::static_string, SpriteElement>::iterator iterCenter = m_elementBuffer.find("center");
+
+	SpriteElement tmpLowerLeft = iterLowerLeft->second;
 	SpriteElement tmpUpperLeft = iterUpperLeft->second;
+	SpriteElement tmpUpperRight = iterUpperRight->second;
 	SpriteElement tmpLowerRight = iterLowerRight->second;
-	
-    tmpUpperLeft.ApplyTransform(trans);
-	tmpLowerRight.ApplyTransform(trans);
-	float left = tmpUpperLeft.m_left;
-	float top = tmpUpperLeft.m_top;
-	float right = tmpLowerRight.m_left + tmpLowerRight.m_width;
-	float bottom = tmpLowerRight.m_top + tmpLowerRight.m_height;
 
-	SpriteElement& lowerLeft = iterLowerLeft->second;
-	SpriteElement& upperLeft = iterUpperLeft->second;
-	SpriteElement& upperRight = iterUpperRight->second;
-	SpriteElement& lowerRight = iterLowerRight->second;
-	**/
-/**
-	lowerLeft.m_left = left;
-	lowerLeft.m_top = bottom - lowerLeft.m_height;
+	SpriteElement tmpLeft = iterLeft->second;
+	SpriteElement tmpTop = iterTop->second;
+	SpriteElement tmpRight = iterRight->second;
+	SpriteElement tmpBottom = iterBottom->second;
 
-	upperLeft.m_left = left;
-	upperLeft.m_top = top;
+	SpriteElement tmpCenter = iterCenter->second;
 
-	upperRight.m_left = right - upperRight.m_width;
-	upperRight.m_top = top;
+	EFloat2 pivot;
+	EFloat2 size;
+	{
+		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		pivot = *((EFloat2*)m_pivotHandle.m_attr);
+	}
+	{
+		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
+		size = *((EFloat2*)m_sizeHandle.m_attr);
+	}
 
-	lowerRight.m_left = right - lowerRight.m_width;
-	lowerRight.m_top = bottom - lowerRight.m_height;
-	**/
+	float left = tmpUpperLeft.m_left - pivot.x;
+	float top = tmpUpperLeft.m_top - pivot.y;
+	float right = tmpLowerRight.m_left + tmpLowerRight.m_width - pivot.x;
+	float bottom = tmpLowerRight.m_top + tmpLowerRight.m_height - pivot.y;
+
+	float realWidth = right - left;
+	float realHeight = bottom - top;
+
+	float scaleX = size.x / realWidth;
+	float scaleY = size.y / realHeight;
+
+	left *= scaleX;
+	top *= scaleY;
+	right *= scaleX;
+	bottom *= scaleY;
+
+	tmpLowerLeft.m_left = left;
+	tmpLowerLeft.m_top = bottom - tmpLowerLeft.m_height;
+
+    tmpUpperLeft.m_left = left;
+	tmpUpperLeft.m_top = top;
+
+    tmpUpperRight.m_left = right - tmpUpperRight.m_width;
+	tmpUpperRight.m_top = top;
+
+    tmpLowerRight.m_left = right - tmpLowerRight.m_width;
+	tmpLowerRight.m_top = bottom - tmpLowerRight.m_height;
+
+	tmpLeft.m_left = left;
+	tmpLeft.m_top = top + tmpUpperLeft.m_height;
+	tmpLeft.m_height = tmpLowerLeft.m_top - tmpUpperLeft.m_top - tmpUpperLeft.m_height;
+
+	tmpTop.m_left = left + tmpUpperLeft.m_width;
+	tmpTop.m_top = top;
+	tmpTop.m_width = tmpUpperRight.m_left - tmpUpperLeft.m_left - tmpUpperLeft.m_width;
+
+	tmpRight.m_left = right - tmpRight.m_width;
+	tmpRight.m_top = tmpUpperRight.m_top + tmpUpperRight.m_height;
+	tmpRight.m_height = tmpLowerRight.m_top - tmpUpperRight.m_top - tmpUpperRight.m_height;
+
+	tmpBottom.m_left = left + tmpLowerLeft.m_width;
+	tmpBottom.m_top = tmpLowerLeft.m_top;
+	tmpBottom.m_width = tmpLowerRight.m_top - tmpLowerLeft.m_left - tmpLowerLeft.m_width;
+
+    tmpCenter.m_left = left + tmpLeft.m_width;
+	tmpCenter.m_top = top + tmpTop.m_height;
+	tmpCenter.m_width = tmpTop.m_width;
+	tmpCenter.m_height = tmpRight.m_height;
+
+	to.push_back(tmpCenter);
+
+	to.push_back(tmpLeft);
+	to.push_back(tmpTop);
+	to.push_back(tmpRight);
+	to.push_back(tmpBottom);
+
+	to.push_back(tmpLowerLeft);
+	to.push_back(tmpLowerRight);
+	to.push_back(tmpUpperLeft);
+	to.push_back(tmpUpperRight);
 }
+
 GUIPanel::GUIPanel(SpriteRenderer* renderer, const xhn::static_string name)
 : Sprite(renderer, name)
 {
@@ -71,10 +124,18 @@ void GUIPanel::Init(const xhn::static_string configName)
 		pugi::xml_node baselayer = layers.child("base");
 		if (!baselayer)
 			return;
-		SpriteLayerPtr layer = ENEW GUIPanelLayer;
+		SpriteLayerPtr layer = ENEW GUIPanelLayer(m_pivotHandle, m_sizeHandle);
 		layer->LoadConfig(baselayer);
 		m_children.push_back(layer);
 	}
+}
+
+void GUIPanel::SetSize(float x, float y)
+{
+    xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
+	EFloat2* size = (EFloat2*)m_sizeHandle.m_attr;
+	size->x = x;
+	size->y = y;
 }
 
 Sprite* GUIPanelFactory::MakeSpriteImpl()
