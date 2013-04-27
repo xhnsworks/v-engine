@@ -1,6 +1,32 @@
 #include "sprite_pch.h"
 #include "sprite_factory.h"
 #include "sprite_event_hub.h"
+
+bool FSpriteDestProc::Test(SpriteLayer* ptr, xhn::set<SpriteLayer*>& testBuffer) {
+	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator iter = ptr->m_children.begin();
+	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator end = ptr->m_children.end();
+	for (; iter != end; iter++) {
+		SpriteLayer* p = (*iter).get();
+		if (testBuffer.find(p) != testBuffer.end())
+			return false;
+		xhn::set<SpriteLayer*> nextTestBuffer = testBuffer;
+		if (!Test(p, nextTestBuffer))
+			return false;
+	}
+	return true;
+}
+bool FSpriteDestProc::Test(SpriteLayer* ptr) {
+	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator iter = ptr->m_children.begin();
+	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator end = ptr->m_children.end();
+	xhn::set<SpriteLayer*> buffer;
+	buffer.insert(ptr);
+	for (; iter != end; iter++) {	
+		if (!Test(ptr, buffer))
+			return false;
+	}
+	return true;
+}
+
 SpriteFactory::SpriteLayerAnimAttrMap SpriteFactory::s_spriteLayerAnimAttrMap;
 SpriteFactory::AnimAttrSpriteLayerMap SpriteFactory::s_animAttrSpriteLayerMap;
 Sprite* SpriteFactory::MakeSprite()

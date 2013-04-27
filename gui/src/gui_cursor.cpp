@@ -10,6 +10,7 @@ GUICursorLayer::GUICursorLayer()
 : SpriteNormalLayer("base")
 {
 }
+
 void GUICursor::Init(const xhn::static_string configName)
 {
 	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
@@ -24,6 +25,14 @@ void GUICursor::Init(const xhn::static_string configName)
 		layer->LoadConfig(baselayer);
 		m_children.push_back(layer);
 	}
+}
+
+void GUICursor::GetScopeImpl(SpriteRect& result)
+{
+	result.left = 0.0f;
+	result.top = 0.0f;
+	result.width = 0.0f;
+	result.height = 0.0f;
 }
 
 void GUICursorMouseEventProc::Proc(const SpriteEvent* evt)

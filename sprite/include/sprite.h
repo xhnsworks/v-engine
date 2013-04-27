@@ -24,14 +24,58 @@ namespace pugi
 
 class SpriteRenderer;
 struct FourBorders;
+struct SpriteRect
+{
+	float left;
+	float top;
+	float width;
+	float height;
+	SpriteRect()
+		: left(0.0f)
+		, top(0.0f)
+		, width(32.0f)
+		, height(32.0f)
+	{}
+	SpriteRect(float x, float y, float w, float h)
+		: left(x)
+		, top(y)
+		, width(w)
+		, height(h)
+	{}
+	SpriteRect(const SpriteRect& rc)
+		: left(rc.left)
+		, top(rc.top)
+		, width(rc.width)
+		, height(rc.height)
+	{}
+	inline SpriteRect& operator = (const SpriteRect& rc) {
+		left = rc.left;
+		top = rc.top;
+		width = rc.width;
+		height = rc.height;
+		return *this;
+	}
+	inline void Merge(const SpriteRect& rc) {
+		float right = left + width;
+		float bottom = top + height;
+		float rcRight = rc.left + rc.width;
+		float rcBottom = rc.top + rc.height;
+
+		left = left < rc.left ? left : rc.left;
+		top = top < rc.top ? top : rc.top;
+		right = right > rcRight ? right : rcRight;
+		bottom = bottom > rcBottom ? bottom : rcBottom;
+
+		width = right - left;
+		height = bottom - top;
+	}
+	void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
+};
 class SpriteElement
 {
 public:
     xhn::static_string m_filename;
-    float m_left;
-    float m_top;
-    float m_width;
-    float m_height;
+    SpriteRect m_rect;
     float m_area_x0;
     float m_area_x1;
     float m_area_y0;
@@ -40,38 +84,28 @@ public:
 	EColor m_color_u1v0;
 	EColor m_color_u1v1;
 	EColor m_color_u0v1;
+	float m_transparent;
 	matrix4x4 m_transform;
-	bool m_visiable;
 	SpriteElement()
         : m_filename("default")
-        , m_left(0.0f)
-        , m_top(0.0f)
-        , m_width(32.0f)
-        , m_height(32.0f)
         , m_area_x0(0.0f)
         , m_area_x1(32.0f)
         , m_area_y0(0.0f)
         , m_area_y1(32.0f)
-		, m_visiable(true)
+		, m_transparent(1.0f)
     {}
     SpriteElement(float x, float y, float w, float h)
         : m_filename("default")
-        , m_left(x)
-        , m_top(y)
-        , m_width(w)
-        , m_height(h)
+        , m_rect(x, y, w, h)
 		, m_area_x0(0.0f)
 		, m_area_x1(32.0f)
 		, m_area_y0(0.0f)
 		, m_area_y1(32.0f)
-		, m_visiable(true)
+		, m_transparent(1.0f)
     {}
     SpriteElement(const SpriteElement& e)
         : m_filename(e.m_filename)
-        , m_left(e.m_left)
-        , m_top(e.m_top)
-        , m_width(e.m_width)
-        , m_height(e.m_height)
+        , m_rect(e.m_rect)
 		, m_area_x0(e.m_area_x0)
 		, m_area_x1(e.m_area_x1)
 		, m_area_y0(e.m_area_y0)
@@ -81,15 +115,12 @@ public:
 		, m_color_u1v1(e.m_color_u1v1)
 		, m_color_u0v1(e.m_color_u0v1)
 		, m_transform(e.m_transform)
-		, m_visiable(e.m_visiable)
+		, m_transparent(e.m_transparent)
     {}
     inline SpriteElement& operator = (const SpriteElement& e)
     {
         m_filename = e.m_filename;
-        m_left = e.m_left;
-        m_top = e.m_top;
-        m_width = e.m_width;
-        m_height = e.m_height;
+        m_rect = e.m_rect;
         m_area_x0 = e.m_area_x0;
         m_area_x1 = e.m_area_x1;
         m_area_y0 = e.m_area_y0;
@@ -99,20 +130,20 @@ public:
 		m_color_u1v1 = e.m_color_u1v1;
 	    m_color_u0v1 = e.m_color_u0v1;
 		m_transform = e.m_transform;
-		m_visiable = e.m_visiable;
+		m_transparent = e.m_transparent;
         return *this;
     }
     inline void SetFilename(const xhn::static_string& filename)
     {
         m_filename = filename;
     }
-	inline void SetVisible(bool visible)
+	inline void SetTransparent(float t)
 	{
-		m_visiable = visible;
+		m_transparent = t;
 	}
 	void ApplyTransform(const matrix4x4* transform);
     Mesh Build(SpriteRenderer* sprite_renderer) const;
-	void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
+	///void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
 };
 
 class SpriteLayer : public RefObject
@@ -122,12 +153,11 @@ public:
 	/// perhaps loop reference, must to check
 	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> > m_children;
 	xhn::SmartPtr<SpriteLayer, FSpriteDestProc> m_parent;
+	AttributeHandle m_transparentHandle;
 private:
 	xhn::static_string m_name;
 public:
-	SpriteLayer(const xhn::static_string& name)
-		: m_name(name)
-	{}
+	SpriteLayer(const xhn::static_string& name);
 	virtual ~SpriteLayer() {}
 	virtual void LoadConfig(const pugi::xml_node& from) = 0;
 	virtual void SaveConfig(pugi::xml_node& to) = 0;
@@ -139,6 +169,9 @@ public:
 	}
 	virtual Matrix4x4 GetMatrix() = 0;
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
+	void SetTransparent(float t);
+	void GetScope(SpriteRect& result);
+	virtual void GetScopeImpl(SpriteRect& result) = 0;
 };
 typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
 class SpriteNormalLayer : public SpriteLayer
@@ -178,6 +211,7 @@ public:
 		return NULL;
 	}
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) {}
+	virtual void GetScopeImpl(SpriteRect& result);
 };
 
 typedef xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> > EventProcMap;
@@ -216,10 +250,6 @@ public:
     ElementList m_elements;
     EventProcMap m_eventProcs;
 protected:
-	EFloat2 m_pivot;
-	EFloat2 m_coordinate;
-    EFloat m_rotation;
-	EFloat2 m_scale;
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_coordinateHandle;
 	AttributeHandle m_rotationHandle;

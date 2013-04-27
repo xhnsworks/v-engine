@@ -112,6 +112,15 @@ public:
         }
     };
 
+	set() {}
+	set(const set& s) {
+		const_iterator iter = s.begin();
+		const_iterator end = s.end();
+		for (; iter != end; iter++) {
+            insert(*iter);
+		}
+	}
+
     void insert ( K key ) {
         rbnode_type *node = ( rbnode_type * ) rbtree_type::_find ( &m_rbtree, key, true );
     }

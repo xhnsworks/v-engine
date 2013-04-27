@@ -33,6 +33,8 @@ public:
 
 struct FSpriteDestProc
 {
+	bool Test(SpriteLayer* ptr, xhn::set<SpriteLayer*>& testBuffer);
+	bool Test(SpriteLayer* ptr);
 	void operator () (SpriteLayer* ptr) {
 		SpriteFactory::SpriteLayerDestCallback(ptr);
 	}

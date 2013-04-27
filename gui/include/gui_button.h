@@ -15,6 +15,7 @@ class GUIButtonTextLayer : public SpriteTextLayer
     DeclareRTTI;
 public:
     GUIButtonTextLayer(ComposingStick* cs);
+	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIButton : public Sprite
 {
@@ -24,6 +25,7 @@ public:
 		: Sprite(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
+	virtual void GetScopeImpl(SpriteRect& result);
 };
 
 class GUIButtonMouseEventProc : public SpriteEventProc

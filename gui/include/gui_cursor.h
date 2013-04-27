@@ -19,6 +19,7 @@ public:
 		: Sprite(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
+	virtual void GetScopeImpl(SpriteRect& result);
 };
 
 class GUICursorMouseEventProc : public SpriteEventProc

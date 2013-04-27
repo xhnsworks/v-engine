@@ -335,16 +335,16 @@ public:
 		switch (type)
 		{
 		case Attribute::Float:
-			*((EFloat*)tgt.m_attr) = *((EFloat*)v);
+			*((EFloat*)tgt.GetAttribute()) = *((EFloat*)v);
 			break;
 		case Attribute::Float2:
-			*((EFloat2*)tgt.m_attr) = *((EFloat2*)v);
+			*((EFloat2*)tgt.GetAttribute()) = *((EFloat2*)v);
 			break;
 		case Attribute::Float3:
-			*((EFloat3*)tgt.m_attr) = *((EFloat3*)v);
+			*((EFloat3*)tgt.GetAttribute()) = *((EFloat3*)v);
 			break;
 		case Attribute::Float4:
-			*((EFloat4*)tgt.m_attr) = *((EFloat4*)v);
+			*((EFloat4*)tgt.GetAttribute()) = *((EFloat4*)v);
 			break;
 		}
 		delete v;
