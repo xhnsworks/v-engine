@@ -7,6 +7,8 @@ ImplementRTTI(SpriteFrameStartEvent, SpriteEvent);
 
 void SpriteFrameStartEventProc::Proc(const SpriteEvent* evt)
 {
+	const SpriteFrameStartEvent* frameStartEvent = evt->DynamicCast<SpriteFrameStartEvent>();
+	m_sprite->Tick(frameStartEvent->m_elapsedTime);
     m_sprite->Build();
 	m_sprite->AttachToGeomBuffer(m_renderer->GetGeomBuffer());
 }

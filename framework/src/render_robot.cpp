@@ -302,12 +302,16 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		sptEvt.m_curtMousePos.x = m_mouseX;
 		sptEvt.m_curtMousePos.y = m_mouseY;
 		///m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
-		SpriteEventHub::Get()->BroadcastMouseEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+		SpriteEventHub::Get()->BroadcastEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
 	}
 	else if (event.type == MouseButtonDownEvent)
 	{
-		if (event.info.mouse_info.mouse_button_info == LeftButton)
+		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = true;
+			SpriteMouseButtonDownEvent sptEvt;
+			sptEvt.m_leftButtomDown = true;
+			SpriteEventHub::Get()->BroadcastEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = true;
 		else if (event.info.mouse_info.mouse_button_info == MiddleButton)
@@ -315,8 +319,13 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 	}
 	else if (event.type == MouseButtonUpEvent)
 	{
-		if (event.info.mouse_info.mouse_button_info == LeftButton)
+		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = false;
+			m_leftButtonDown = true;
+			SpriteMouseButtonUpEvent sptEvt;
+			sptEvt.m_leftButtomUp = true;
+			SpriteEventHub::Get()->BroadcastEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = false;
 		else if (event.info.mouse_info.mouse_button_info == MiddleButton)
@@ -357,7 +366,7 @@ void ResourceAction::DoImpl()
 		SpriteRenderer* guiRdr = m_guiRendererChain->GetRenderer("GUIRenderer");
 
 		SpriteEventHub::Init();
-		m_buttonFactory = ENEW GUIButtonFactory(guiRdr, "button.xml");
+		m_buttonFactory = ENEW GUIButtonFactory(guiRdr, "button2.xml");
 		m_cursorFactory = ENEW GUICursorFactory(guiRdr, "cursor.xml");
 		m_panelFactory = ENEW GUIPanelFactory(guiRdr, "panel2.xml");
 
@@ -603,7 +612,11 @@ void LogicAction::DoImpl()
 	m_resAct->m_guiPanel->SetRotate(s_rotate);
 	///s_rotate += 0.01f;
 
-	SpriteFrameStartEvent evt(0.0f);
+	TimeCheckpoint checkPoint = TimeCheckpoint::Tick();
+	double elapsedTime = TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkPoint);
+	elapsedTime = us_to_s(elapsedTime);
+	m_prevCheckpoint = checkPoint;
+	SpriteFrameStartEvent evt(elapsedTime);
 	SpriteEventHub::Get()->BroadcastFrameStartEvent(evt, SpriteEventHub::Get()->GetAllReceivers());
 
 	guiRdr->clear_depth();

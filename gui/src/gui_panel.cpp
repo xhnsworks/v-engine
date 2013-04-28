@@ -87,7 +87,7 @@ void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 	tmpBottom.m_rect.left = left + tmpLowerLeft.m_rect.width;
 	tmpBottom.m_rect.top = tmpLowerLeft.m_rect.top;
-	tmpBottom.m_rect.width = tmpLowerRight.m_rect.top - tmpLowerLeft.m_rect.left - tmpLowerLeft.m_rect.width;
+	tmpBottom.m_rect.width = right - tmpLowerLeft.m_rect.left - tmpLowerLeft.m_rect.width;
 
     tmpCenter.m_rect.left = left + tmpLeft.m_rect.width;
 	tmpCenter.m_rect.top = top + tmpTop.m_rect.height;
@@ -152,10 +152,18 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 	float realWidth = right - left;
 	float realHeight = bottom - top;
 
+	float scaleX = size.x / realWidth;
+	float scaleY = size.y / realHeight;
+
+	left *= scaleX;
+	top *= scaleY;
+	right *= scaleX;
+	bottom *= scaleY;
+
 	result.left = left;
 	result.top = top;
-	result.width = realWidth;
-	result.height = realHeight;
+	result.width = right - left;
+	result.height = bottom - top;
 }
 
 GUIPanel::GUIPanel(SpriteRenderer* renderer, const xhn::static_string name)

@@ -61,6 +61,7 @@ ImplementRTTI(Sprite, SpriteLayer);
 
 SpriteLayer::SpriteLayer(const xhn::static_string& name)
 : m_name(name)
+, m_parent(NULL)
 {
 	m_transparentHandle.m_lock = ENEW xhn::RWLock;
 	m_transparentHandle.AttachAttribute<EFloat>();
@@ -503,7 +504,7 @@ void Sprite::GetMatrix(matrix4x4* result)
 {
 	matrix4x4 parentMatrix;
 	Matrix4x4_set_one(&parentMatrix);
-	if (m_parent.get()) {
+	if (m_parent) {
 		m_parent->GetMatrix(&parentMatrix);
 	}
 	matrix4x4 offs;

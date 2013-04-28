@@ -14,14 +14,38 @@ class SpriteMouseMoveEvent : public SpriteEvent
 	DeclareRTTI;
 public:
 	SInt2 m_curtMousePos;
+public:
+	SpriteMouseMoveEvent()
+	{}
+};
+
+class SpriteMouseButtonDownEvent : public SpriteEvent
+{
+	DeclareRTTI;
+public:
 	bool m_leftButtomDown;
 	bool m_middleButtonDown;
 	bool m_rightButtonDown;
 public:
-	SpriteMouseMoveEvent()
+	SpriteMouseButtonDownEvent()
 		: m_leftButtomDown(false)
 		, m_middleButtonDown(false)
 		, m_rightButtonDown(false)
+	{}
+};
+
+class SpriteMouseButtonUpEvent : public SpriteEvent
+{
+	DeclareRTTI;
+public:
+	bool m_leftButtomUp;
+	bool m_middleButtonUp;
+	bool m_rightButtonUp;
+public:
+	SpriteMouseButtonUpEvent()
+		: m_leftButtomUp(false)
+		, m_middleButtonUp(false)
+		, m_rightButtonUp(false)
 	{}
 };
 
@@ -37,13 +61,11 @@ private:
 	xhn::map< const RTTI*, xhn::set<Sprite*> > m_spriteMap;
 	ReceiverSet m_receiverSet;
 private:
-	void _BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& reces);
-private:
 	SpriteEventHub();
 	~SpriteEventHub();
 public:
+	void BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& reces);
 	void RegisterSprite(Sprite* spt);
-	void BroadcastMouseEvent(const SpriteMouseMoveEvent& evt, const ReceiverSet& reces);
 	void BroadcastFrameStartEvent(const SpriteFrameStartEvent& evt, const ReceiverSet& reces);
 	inline const ReceiverSet& GetAllReceivers() const {
 		return m_receiverSet;

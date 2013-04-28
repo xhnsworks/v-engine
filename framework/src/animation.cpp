@@ -60,7 +60,7 @@ double AnimationRobot::GetCurrentTime()
 double AnimationRobot::Tick()
 {
 	TimeCheckpoint checkpoint = TimeCheckpoint::Tick();
-	double elapsedTime = TimeCheckpoint::CaleElapsedTime(checkpoint, m_prevCheckpoint);
+	double elapsedTime = TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkpoint);
 	m_prevCheckpoint = checkpoint;
 	m_timer += elapsedTime;
 	return elapsedTime;

@@ -9,8 +9,8 @@ ImplementRTTI(GUIButtonLayer, SpriteNormalLayer);
 ImplementRTTI(GUIButtonTextLayer, SpriteTextLayer);
 ImplementRTTI(GUIButton, Sprite);
 
-GUIButtonLayer::GUIButtonLayer()
-: SpriteNormalLayer("base")
+GUIButtonLayer::GUIButtonLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+: GUIPanelLayer(name, pivotHandle, sizeHandle)
 {
 }
 
@@ -32,22 +32,49 @@ void GUIButton::Init(const xhn::static_string configName)
 		pugi::xml_document& doc = cfg->GetDocument();
 		pugi::xml_node root = doc.child("root");
 		pugi::xml_node layers = root.child("layers");
-		pugi::xml_node baselayer = layers.child("base");
-		if (!baselayer)
-			return;
-		SpriteLayerPtr layer = ENEW GUIButtonLayer;
-		layer->LoadConfig(baselayer);
-		m_children.push_back(layer);
 
-		pugi::xml_node textlayer = layers.child("text");
-		if (!textlayer)
-			return;
-		FontRenderer* fr = ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
-		fr->set_font_size(Pixel30);
-		ComposingStick* cs = ENEW ComposingStick(fr, 256);
-		layer = ENEW GUIButtonTextLayer(cs);
-		layer->LoadConfig(textlayer);
-		m_children.push_back(layer);
+		{
+			xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
+            EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
+			size->x = 100.0f;
+			size->y = 50.0f;
+		}
+		
+		{
+			pugi::xml_node baselayer = layers.child("normal");
+			if (!baselayer)
+				return;
+			SpriteLayerPtr layer = ENEW GUIButtonLayer("normal", m_pivotHandle, m_sizeHandle);
+			layer->LoadConfig(baselayer);
+			AddChild(layer);
+		}
+		{
+			pugi::xml_node baselayer = layers.child("selected");
+			if (!baselayer)
+				return;
+			SpriteLayerPtr layer = ENEW GUIButtonLayer("selected", m_pivotHandle, m_sizeHandle);
+			layer->LoadConfig(baselayer);
+			AddChild(layer);
+		}
+		{
+			pugi::xml_node baselayer = layers.child("pressed");
+			if (!baselayer)
+				return;
+			SpriteLayerPtr layer = ENEW GUIButtonLayer("pressed", m_pivotHandle, m_sizeHandle);
+			layer->LoadConfig(baselayer);
+			AddChild(layer);
+		}
+		{
+			pugi::xml_node textlayer = layers.child("text");
+			if (!textlayer)
+				return;
+			FontRenderer* fr = ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
+			fr->set_font_size(Pixel30);
+			ComposingStick* cs = ENEW ComposingStick(fr, 256);
+			SpriteLayerPtr layer = ENEW GUIButtonTextLayer(cs);
+			layer->LoadConfig(textlayer);
+			m_children.push_back(layer);
+		}
 	}
 }
 void GUIButton::GetScopeImpl(SpriteRect& result)
@@ -58,38 +85,115 @@ void GUIButton::GetScopeImpl(SpriteRect& result)
 	result.height = 0.0f;
 }
 
-void GUIButtonMouseEventProc::Proc(const SpriteEvent* evt)
+void GUIButton::Build()
 {
-	const SpriteMouseMoveEvent* mouseEvt = evt->DynamicCast<SpriteMouseMoveEvent>();
-	SpriteLayerPtr layer = m_button->GetLayer(0);
-	if (layer.get()) {
-		///elog("mouse pos %d %d\n", mouseEvt->m_curtMousePos.x, mouseEvt->m_curtMousePos.y);
-		SpriteNormalLayer* norLayer = layer->DynamicCast<SpriteNormalLayer>();
-		SpriteElement* unpressed = norLayer->GetElement("unpressed");
-		SpriteElement* pressed = norLayer->GetElement("pressed");
-		FourBorders borders;
-		SpriteRect rect;
-		m_button->GetScope(rect);
-		rect.GetFourBorders(m_button->m_renderer, borders);
-		///unpressed->GetFourBorders(m_button->m_renderer, borders);
-		matrix4x4 mat;
-		Matrix4x4_set_one(&mat);
-		m_button->GetMatrix(&mat);
-		///borders.ApplyTranform(&unpressed->m_transform);
-		borders.ApplyTranform(&mat);
-		EFloat2 realCrd = m_button->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x, (float)mouseEvt->m_curtMousePos.y);
-		EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
-		sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
-		///pt = Matrix4x4_mul_float3(&unpressed->m_transform, pt);
-		if (borders.IsInBorders(pt)) {
-			unpressed->SetTransparent(0.0f);
-			pressed->SetTransparent(1.0f);
+	m_elements.clear();
+	matrix4x4 transform;
+	GetMatrix(&transform);
+    switch (m_curtState)
+	{
+	case Normal:
+		{
+			SpriteLayerArray::iterator iter = m_children.begin();
+			for (; iter != m_children.end(); iter++)
+			{
+				SpriteLayerPtr layerPtr = *iter;
+				if (layerPtr->GetName() == "normal") {
+					layerPtr->ApplyTransform(&transform);
+					layerPtr->BuildElements(m_elements);
+				}
+			}
 		}
-		else {
-			unpressed->SetTransparent(1.0f);
-			pressed->SetTransparent(0.0f);
+		break;
+	case Selected:
+		{
+			SpriteLayerArray::iterator iter = m_children.begin();
+			for (; iter != m_children.end(); iter++)
+			{
+				SpriteLayerPtr layerPtr = *iter;
+				if (layerPtr->GetName() == "selected") {
+					layerPtr->ApplyTransform(&transform);
+					layerPtr->BuildElements(m_elements);
+				}
+			}
+		}
+		break;
+	case Pressed:
+	default:
+		{
+			SpriteLayerArray::iterator iter = m_children.begin();
+			for (; iter != m_children.end(); iter++)
+			{
+				SpriteLayerPtr layerPtr = *iter;
+				if (layerPtr->GetName() == "pressed") {
+					layerPtr->ApplyTransform(&transform);
+					layerPtr->BuildElements(m_elements);
+				}
+			}
+		}
+		break;
+	}
+	SpriteLayerArray::iterator iter = m_children.begin();
+	for (; iter != m_children.end(); iter++)
+	{
+		SpriteLayerPtr layerPtr = *iter;
+		if (layerPtr->GetName() == "text") {
+			layerPtr->ApplyTransform(&transform);
+			layerPtr->BuildElements(m_elements);
 		}
 	}
+}
+
+void GUIButton::Tick(double elapsedTime)
+{
+	if (m_curtState == Pressed) {
+		m_releaseTimer -= elapsedTime;
+		if (m_releaseTimer < 0.0) {
+			m_releaseTimer = 0.0;
+			m_curtState = Normal;
+		}
+	}
+}
+
+void GUIButton::MouseMoveEventProc::Proc(const SpriteEvent* evt)
+{
+	if (m_button->m_curtState == GUIButton::Pressed)
+		return;
+	const SpriteMouseMoveEvent* mouseEvt = evt->DynamicCast<SpriteMouseMoveEvent>();
+	FourBorders borders;
+	SpriteRect rect;
+	m_button->GetScope(rect);
+	rect.GetFourBorders(m_button->m_renderer, borders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	m_button->GetMatrix(&mat);
+
+	borders.ApplyTranform(&mat);
+	EFloat2 realCrd = m_button->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x, (float)mouseEvt->m_curtMousePos.y);
+	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
+	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
+
+	if (borders.IsInBorders(pt)) {
+		m_button->SetState(GUIButton::Selected);
+	}
+	else {
+		m_button->SetState(GUIButton::Normal);
+	}
+}
+
+void GUIButton::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
+{
+	const SpriteMouseButtonDownEvent* mouseEvt = evt->DynamicCast<SpriteMouseButtonDownEvent>();
+	if (mouseEvt->m_leftButtomDown && m_button->m_curtState == GUIButton::Selected) {
+		m_button->SetState(GUIButton::Pressed);
+		m_button->m_releaseTimer = m_button->m_releaseDelay;
+	}
+}
+
+void GUIButton::MouseButtonUpEventProc::Proc(const SpriteEvent* evt)
+{
+	const SpriteMouseButtonUpEvent* mouseEvt = evt->DynamicCast<SpriteMouseButtonUpEvent>();
 }
 
 Sprite* GUIButtonFactory::MakeSpriteImpl()
@@ -99,7 +203,9 @@ Sprite* GUIButtonFactory::MakeSpriteImpl()
 	m_buttonCount++;
     GUIButton* ret = ENEW GUIButton(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUIButtonMouseEventProc(ret));
+	ret->RegisterEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUIButton::MouseMoveEventProc(ret));
+	ret->RegisterEventCallback(&SpriteMouseButtonDownEvent::s_RTTI, ENEW GUIButton::MouseButtonDownEventProc(ret));
+	ret->RegisterEventCallback(&SpriteMouseButtonUpEvent::s_RTTI, ENEW GUIButton::MouseButtonUpEventProc(ret));
 	ret->RegisterEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }

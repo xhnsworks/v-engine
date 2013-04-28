@@ -2,6 +2,8 @@
 #include "sprite_event_hub.h"
 
 ImplementRTTI(SpriteMouseMoveEvent, SpriteEvent);
+ImplementRTTI(SpriteMouseButtonDownEvent, SpriteEvent);
+ImplementRTTI(SpriteMouseButtonUpEvent, SpriteEvent);
 
 SpriteEventHub* SpriteEventHub::s_singleton_inst = NULL;
 SpriteEventHub::SpriteEventHub()
@@ -27,7 +29,7 @@ SpriteEventHub* SpriteEventHub::Get()
     return s_singleton_inst;
 }
 
-void SpriteEventHub::_BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& reces)
+void SpriteEventHub::BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& reces)
 {
 	ReceiverSet::const_iterator iter = reces.begin();
 	ReceiverSet::const_iterator end = reces.end();
@@ -57,12 +59,7 @@ void SpriteEventHub::RegisterSprite(Sprite* spt)
 	}
 }
 
-void SpriteEventHub::BroadcastMouseEvent(const SpriteMouseMoveEvent& evt, const ReceiverSet& reces)
-{
-    _BroadcastEvent(evt, reces);
-}
-
 void SpriteEventHub::BroadcastFrameStartEvent(const SpriteFrameStartEvent& evt, const ReceiverSet& reces)
 {
-    _BroadcastEvent(evt, reces);
+    BroadcastEvent(evt, reces);
 }

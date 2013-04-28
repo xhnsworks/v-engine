@@ -19,7 +19,6 @@ public:
 	    , m_sizeHandle(sizeHandle)
 		, SpriteNormalLayer(name)
 	{}
-	///virtual void ApplyTransform(const matrix4x4* trans);
 	virtual void BuildElements(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
@@ -27,7 +26,6 @@ class GUIPanel : public Sprite
 {
 	DeclareRTTI;
 public:
-    ///EFloat2 m_size;
 	AttributeHandle m_sizeHandle;
 public:
 	GUIPanel(SpriteRenderer* renderer, const xhn::static_string name);

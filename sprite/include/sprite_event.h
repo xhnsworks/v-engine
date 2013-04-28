@@ -16,8 +16,8 @@ class SpriteFrameStartEvent : public SpriteEvent
 {
 	DeclareRTTI;
 public:
-	float m_elapsedTime;
-	SpriteFrameStartEvent(float elapsedTime)
+	double m_elapsedTime;
+	SpriteFrameStartEvent(double elapsedTime)
 		: m_elapsedTime(elapsedTime)
 	{}
 };

@@ -48,5 +48,10 @@
         <element name="center" filename="BlueWhiteSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="72.0" area_y1="83.0" transparent="1.0" />
       </elements>
     </pressed>
+    <text>
+      <styles num_styles="1">
+        <style name="default" text="kill you!" color="ff00ffff" interval="2.0" transparent="1.0"/>
+      </styles>
+    </text>
   </layers>
 </root>

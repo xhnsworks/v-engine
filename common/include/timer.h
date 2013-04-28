@@ -46,7 +46,7 @@ inline double pref_frequency(void)
 }
 inline double cale_elapsed_time(uint64 start, uint64 end, double freq)
 {
-	return ((double)start - (double)end) / freq;
+	return ((double)end - (double)start) / freq;
 }
 struct TimeCheckpoint
 {

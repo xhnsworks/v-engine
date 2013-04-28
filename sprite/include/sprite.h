@@ -152,7 +152,7 @@ class SpriteLayer : public RefObject
 public:
 	/// perhaps loop reference, must to check
 	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> > m_children;
-	xhn::SmartPtr<SpriteLayer, FSpriteDestProc> m_parent;
+	SpriteLayer* m_parent;
 	AttributeHandle m_transparentHandle;
 private:
 	xhn::static_string m_name;
@@ -300,6 +300,8 @@ public:
 	virtual void GetMatrix(matrix4x4* result);
 	virtual void Build();
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
+	virtual void Tick(double elapsedTime) {}
+	virtual void Tock() {}
 };
 
 #endif

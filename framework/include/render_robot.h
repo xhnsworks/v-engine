@@ -247,6 +247,7 @@ class LogicAction : public Action
 private:
 	ResourceAction* m_resAct;
 	InputAction* m_inputAct;
+	TimeCheckpoint m_prevCheckpoint;
 public:
 	LogicAction(ResourceAction* resAct, InputAction* inputAct)
 		: m_resAct(resAct)
