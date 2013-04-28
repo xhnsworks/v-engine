@@ -72,7 +72,11 @@ void GUIButtonMouseEventProc::Proc(const SpriteEvent* evt)
 		m_button->GetScope(rect);
 		rect.GetFourBorders(m_button->m_renderer, borders);
 		///unpressed->GetFourBorders(m_button->m_renderer, borders);
-		borders.ApplyTranform(&unpressed->m_transform);
+		matrix4x4 mat;
+		Matrix4x4_set_one(&mat);
+		m_button->GetMatrix(&mat);
+		///borders.ApplyTranform(&unpressed->m_transform);
+		borders.ApplyTranform(&mat);
 		EFloat2 realCrd = m_button->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x, (float)mouseEvt->m_curtMousePos.y);
 		EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
 		sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);

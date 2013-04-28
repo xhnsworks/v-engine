@@ -167,7 +167,7 @@ public:
 	inline const xhn::static_string& GetName() const {
 		return m_name;
 	}
-	virtual Matrix4x4 GetMatrix() = 0;
+	virtual void GetMatrix(matrix4x4* result) = 0;
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
 	void SetTransparent(float t);
 	void GetScope(SpriteRect& result);
@@ -207,8 +207,7 @@ public:
 		else
 			return NULL;
 	}
-	virtual Matrix4x4 GetMatrix() {
-		return NULL;
+	virtual void GetMatrix(matrix4x4* result) {
 	}
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) {}
 	virtual void GetScopeImpl(SpriteRect& result);
@@ -237,8 +236,7 @@ public:
 	virtual void ApplyTransform(const matrix4x4* trans);
 	virtual void BuildElements(xhn::list<SpriteElement>& to);
 	virtual void Clear();
-	virtual Matrix4x4 GetMatrix() {
-		return NULL;
+	virtual void GetMatrix(matrix4x4* result) {
 	}
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) {}
 };
@@ -255,7 +253,6 @@ protected:
 	AttributeHandle m_rotationHandle;
 	AttributeHandle m_scaleHandle;
 public:
-	matrix4x4 m_transform;
     SpriteRenderer* m_renderer;
 public:
 	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
@@ -300,7 +297,7 @@ public:
 	virtual void ApplyTransform(const matrix4x4* trans);
 	virtual void BuildElements(xhn::list<SpriteElement>& to);
 	virtual void Clear();
-	virtual Matrix4x4 GetMatrix();
+	virtual void GetMatrix(matrix4x4* result);
 	virtual void Build();
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
 };

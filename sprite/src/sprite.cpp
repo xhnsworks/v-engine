@@ -419,12 +419,13 @@ void Sprite::EventCallback(const SpriteEvent* evt)
 void Sprite::Build()
 {
 	m_elements.clear();
-	Matrix4x4 transform = GetMatrix();
+	matrix4x4 transform;
+	GetMatrix(&transform);
 	SpriteLayerArray::iterator iter = m_children.begin();
 	for (; iter != m_children.end(); iter++)
 	{
 		SpriteLayerPtr layerPtr = *iter;
-		layerPtr->ApplyTransform(transform);
+		layerPtr->ApplyTransform(&transform);
 		layerPtr->BuildElements(m_elements);
 	}
 }
@@ -498,11 +499,12 @@ void Sprite::Clear()
     /// nothing
 }
 
-Matrix4x4 Sprite::GetMatrix()
+void Sprite::GetMatrix(matrix4x4* result)
 {
-	Matrix4x4 parentMatrix = NULL;
+	matrix4x4 parentMatrix;
+	Matrix4x4_set_one(&parentMatrix);
 	if (m_parent.get()) {
-		parentMatrix = m_parent->GetMatrix();
+		m_parent->GetMatrix(&parentMatrix);
 	}
 	matrix4x4 offs;
 	matrix4x4 inv_offs;
@@ -537,14 +539,12 @@ Matrix4x4 Sprite::GetMatrix()
 		///Matrix4x4_set_scale(&scal, m_scale.x, m_scale.y, 1.0f);
 		Matrix4x4_set_scale(&scal, scale->x, scale->y, 1.0f);
 	}
-	Matrix4x4_mul_matrix4(&offs, &rota, &m_transform);
-	Matrix4x4_mul_matrix4(&m_transform, &scal, &m_transform);
-	Matrix4x4_mul_matrix4(&m_transform, &inv_offs, &m_transform);
-	Matrix4x4_mul_matrix4(&m_transform, &tran, &m_transform);
-	if (parentMatrix) {
-		Matrix4x4_mul_matrix4(&m_transform, parentMatrix, &m_transform);
-	}
-	return &m_transform;
+	Matrix4x4_mul_matrix4(&offs, &rota, result);
+	Matrix4x4_mul_matrix4(result, &scal, result);
+	Matrix4x4_mul_matrix4(result, &inv_offs, result);
+	Matrix4x4_mul_matrix4(result, &tran, result);
+	
+	Matrix4x4_mul_matrix4(result, &parentMatrix, result);
 }
 
 void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)

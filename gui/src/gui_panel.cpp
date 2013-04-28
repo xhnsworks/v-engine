@@ -176,7 +176,7 @@ void GUIPanel::Init(const xhn::static_string configName)
 		pugi::xml_node baselayer = layers.child("base");
 		if (!baselayer)
 			return;
-		SpriteLayerPtr layer = ENEW GUIPanelLayer(m_pivotHandle, m_sizeHandle);
+		SpriteLayerPtr layer = ENEW GUIPanelLayer("base", m_pivotHandle, m_sizeHandle);
 		layer->LoadConfig(baselayer);
 		m_children.push_back(layer);
 	}

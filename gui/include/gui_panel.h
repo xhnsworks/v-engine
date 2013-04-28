@@ -14,10 +14,10 @@ private:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_sizeHandle;
 public:
-	GUIPanelLayer(AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+	GUIPanelLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
 		: m_pivotHandle(pivotHandle)
 	    , m_sizeHandle(sizeHandle)
-		, SpriteNormalLayer("base")
+		, SpriteNormalLayer(name)
 	{}
 	///virtual void ApplyTransform(const matrix4x4* trans);
 	virtual void BuildElements(xhn::list<SpriteElement>& to);
