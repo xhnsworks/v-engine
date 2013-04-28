@@ -19,7 +19,7 @@ typedef struct _ref_entry
 static Tree g_ref_table = NULL;
 void ref_init()
 {
-    g_ref_table = Tree_new(Vptr, Vptr, malloc, free);
+    g_ref_table = Tree_new(Vptr, Vptr, (MALLOC)malloc, (MFREE)free);
 }
 void ref_insert(ShaderNode _node, ShaderBuffer _buf)
 {
@@ -231,7 +231,7 @@ void ShaderBuffer_print_shader_object(ShaderBuffer _sb)
     {
         var data = Tree_get_value(iter);
         ShaderObject so = {(struct _shader_object*)data.vptr_var};
-        uint32 array_size, array_index;
+        uint array_size, array_index;
         shader_object_type type = ShaderObject_get_type(so, &array_size, &array_index);
         const char* name = ShaderObject_get_name(so);
         if (array_size <= 1)
@@ -244,10 +244,10 @@ void ShaderBuffer_print_shader_object(ShaderBuffer _sb)
 shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, uint _line)
 {
     ///ShaderNode exec_node = {NULL};
-    _buf->shader_node_prototype_tree = Tree_new(String, Vptr, Ealloc, Efree);
-    _buf->param_src_obj_tree = Tree_new(Sint32, Vptr, Ealloc, Efree);
+    _buf->shader_node_prototype_tree = Tree_new(String, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
+    _buf->param_src_obj_tree = Tree_new(Sint32, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     ///_buf->shader_node_reference_table = array_new(ShaderNode, 5, exec_node);
-    _buf->shader_object_tree = Tree_new(String, Vptr, Ealloc, Efree);
+    _buf->shader_object_tree = Tree_new(String, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     _buf->function = (char*)EString_new("///function///\n");
     _buf->uniform = (char*)EString_new("///uniform///\n");
     _buf->varying = (char*)EString_new("///varying///\n");

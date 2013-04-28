@@ -115,6 +115,8 @@
 		687DA2C017257F97000218FA /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA29817257F97000218FA /* tree.cpp */; };
 		687DA2C117257F97000218FA /* xhn_static_string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA29917257F97000218FA /* xhn_static_string.cpp */; };
 		687DA2C217257F97000218FA /* xhn_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA29A17257F97000218FA /* xhn_test.cpp */; };
+		68C8B1F7172D5945008DB750 /* glsl.tab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68C8B1B9172D5945008DB750 /* glsl.tab.cpp */; };
+		68C8B1F8172D5945008DB750 /* glsl_lex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68C8B1BA172D5945008DB750 /* glsl_lex.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -377,6 +379,10 @@
 		687DA29817257F97000218FA /* tree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tree.cpp; sourceTree = "<group>"; };
 		687DA29917257F97000218FA /* xhn_static_string.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xhn_static_string.cpp; sourceTree = "<group>"; };
 		687DA29A17257F97000218FA /* xhn_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xhn_test.cpp; sourceTree = "<group>"; };
+		68C8B1B6172D5945008DB750 /* glsl.tab.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glsl.tab.hpp; sourceTree = "<group>"; };
+		68C8B1B7172D5945008DB750 /* glsl_lex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glsl_lex.h; sourceTree = "<group>"; };
+		68C8B1B9172D5945008DB750 /* glsl.tab.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glsl.tab.cpp; sourceTree = "<group>"; };
+		68C8B1BA172D5945008DB750 /* glsl_lex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glsl_lex.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,6 +428,7 @@
 		6810DCB51723E10300F276F9 /* ecg */ = {
 			isa = PBXGroup;
 			children = (
+				68C8B1B4172D5945008DB750 /* glsl_compiler */,
 				681D7F0D172ABD170005C8C4 /* media */,
 				681D7F16172ABD170005C8C4 /* mesh */,
 				681D7F31172ABD180005C8C4 /* passes */,
@@ -952,6 +959,33 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		68C8B1B4172D5945008DB750 /* glsl_compiler */ = {
+			isa = PBXGroup;
+			children = (
+				68C8B1B5172D5945008DB750 /* include */,
+				68C8B1B8172D5945008DB750 /* src */,
+			);
+			path = glsl_compiler;
+			sourceTree = SOURCE_ROOT;
+		};
+		68C8B1B5172D5945008DB750 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				68C8B1B6172D5945008DB750 /* glsl.tab.hpp */,
+				68C8B1B7172D5945008DB750 /* glsl_lex.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		68C8B1B8172D5945008DB750 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				68C8B1B9172D5945008DB750 /* glsl.tab.cpp */,
+				68C8B1BA172D5945008DB750 /* glsl_lex.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1120,6 +1154,8 @@
 				681D80CC172ABD180005C8C4 /* sprite_geom_buffer.cpp in Sources */,
 				681D80CD172ABD180005C8C4 /* sprite_pch.cpp in Sources */,
 				681D80CE172ABD180005C8C4 /* sprite_renderer.cpp in Sources */,
+				68C8B1F7172D5945008DB750 /* glsl.tab.cpp in Sources */,
+				68C8B1F8172D5945008DB750 /* glsl_lex.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,7 +1192,7 @@
 		6810DCC71723E10300F276F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1179,6 +1215,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -1188,7 +1225,7 @@
 		6810DCC81723E10300F276F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1205,6 +1242,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
@@ -1213,31 +1251,24 @@
 		6810DCCA1723E10300F276F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ecg/ecg-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					$SRCROOT/glsl_compiler/include,
+					"$SRCROOT/dependencies/libpng-1.5.4/config",
+					"$SRCROOT/dependencies/libpng-1.5.4/include",
 					$SRCROOT/common/include,
 					$SRCROOT/math/include,
 					$SRCROOT/renderer/include,
 					$SRCROOT/framework/include,
 					$SRCROOT/dependencies/sse_mathfun,
+					"$SRCROOT/dependencies/pugi-1.0",
+					"$SRCROOT/dependencies/freetype-2.4.10/include",
 				);
 				INFOPLIST_FILE = "ecg/ecg-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/dependencies/dinput/lib\"",
-					"\"$(SRCROOT)/dependencies/DX/x64\"",
-					"\"$(SRCROOT)/dependencies/DX/x86\"",
-					"\"$(SRCROOT)/dependencies/freetype-2.4.10/lib\"",
-					"\"$(SRCROOT)/dependencies/freetype-2.4.10/objs/win32/vc2008\"",
-					"\"$(SRCROOT)/dependencies/glew-1.5.8/lib\"",
-					"\"$(SRCROOT)/dependencies/libpng-1.5.4/lib\"",
-					"\"$(SRCROOT)/dependencies/pthread\"",
-					"\"$(SRCROOT)/dependencies/tcc-0.9.25/win32/libtcc\"",
-					"\"$(SRCROOT)/dependencies/zlib-1.2.3/lib\"",
-					"\"$(SRCROOT)/dependencies/zlib-1.2.7/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1246,31 +1277,24 @@
 		6810DCCB1723E10300F276F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ecg/ecg-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					$SRCROOT/glsl_compiler/include,
+					"$SRCROOT/dependencies/libpng-1.5.4/config",
+					"$SRCROOT/dependencies/libpng-1.5.4/include",
 					$SRCROOT/common/include,
 					$SRCROOT/math/include,
 					$SRCROOT/renderer/include,
 					$SRCROOT/framework/include,
 					$SRCROOT/dependencies/sse_mathfun,
+					"$SRCROOT/dependencies/pugi-1.0",
+					"$SRCROOT/dependencies/freetype-2.4.10/include",
 				);
 				INFOPLIST_FILE = "ecg/ecg-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/dependencies/dinput/lib\"",
-					"\"$(SRCROOT)/dependencies/DX/x64\"",
-					"\"$(SRCROOT)/dependencies/DX/x86\"",
-					"\"$(SRCROOT)/dependencies/freetype-2.4.10/lib\"",
-					"\"$(SRCROOT)/dependencies/freetype-2.4.10/objs/win32/vc2008\"",
-					"\"$(SRCROOT)/dependencies/glew-1.5.8/lib\"",
-					"\"$(SRCROOT)/dependencies/libpng-1.5.4/lib\"",
-					"\"$(SRCROOT)/dependencies/pthread\"",
-					"\"$(SRCROOT)/dependencies/tcc-0.9.25/win32/libtcc\"",
-					"\"$(SRCROOT)/dependencies/zlib-1.2.3/lib\"",
-					"\"$(SRCROOT)/dependencies/zlib-1.2.7/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -55,6 +55,7 @@ local.properties
 *.meta
 *.obj
 *.pch
+*.pth
 *.pdb
 *.pgc
 *.pgd
@@ -67,6 +68,13 @@ local.properties
 *.vspscc
 .builds
 *.dotCover
+*.hash-criteria
+*.hmap
+*. xcactivitylog
+*.db
+*.plist
+*.idx
+*.xcactivitylog
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "pass.h"
-#include <GL/glew.h>
 ///#include <GL/gl.h>
 #include "float3.h"
 #include "float4.h"
@@ -245,8 +244,8 @@ Pass Pass_new(void)
     ret = (Pass)SMalloc(sizeof(pass));
     memset(ret, 0, sizeof(pass));
     ret->param_table = Stack_new(Vptr);
-    ret->param_tree = Tree_new(String, Uint32, Ealloc, Efree);
-    ret->attr_tree = Tree_new(String, Uint32, Ealloc, Efree);
+    ret->param_tree = Tree_new(String, Uint32, (MALLOC)Ealloc, (MFREE)Efree);
+    ret->attr_tree = Tree_new(String, Uint32, (MALLOC)Ealloc, (MFREE)Efree);
     ret->vertex_param_source_tree = NULL;
     ret->pixel_param_source_tree = NULL;
     ret->linked = 0;
@@ -829,7 +828,7 @@ void _auto_set_uniform_params(Tree _param_source_tree, Pass _self, RendererBase*
 			{
 				renderer_param_value shader_object_value = _rdr->get_shader_object_value(src);
 				ShaderObject obj = {(struct _shader_object*)data.vptr_var};
-				uint32 array_size, array_index;
+				uint array_size, array_index;
 				shader_object_type type = ShaderObject_get_type(obj, &array_size, &array_index);
 				EAssert(array_size > 0, "%s", "param array size less equal zero!");
 				const char* name = ShaderObject_get_name(obj);

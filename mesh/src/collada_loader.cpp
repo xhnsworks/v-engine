@@ -76,8 +76,8 @@ typedef struct _collada_state
 ColladaState ColladaState_new()
 {
     ColladaState ret = (ColladaState)SMalloc(sizeof(collada_state));
-    ret->stream_tree = Tree_new(String, Vptr, Ealloc, Efree);
-    ret->sem_stream_tree = Tree_new(Uint32, Vptr, Ealloc, Efree);
+    ret->stream_tree = Tree_new(String, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
+    ret->sem_stream_tree = Tree_new(Uint32, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     index_element null_idx_ele = {ColladaEmptySemantic, 0};
     ret->idx_eles = array_new(index_element, 5, null_idx_ele);
     ret->num_tri = 0;
@@ -208,7 +208,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
                 Tree_insert(_self->sem_stream_tree, key, data);
                 if (offsAttr)
                 {
-					index_element ie = {(collada_semantic)key.uint32_var, atoi(offsAttr.value())};
+					index_element ie = {(collada_semantic)key.uint32_var, (uint)atoi(offsAttr.value())};
                     apush(_self->idx_eles, ie);
                 }
             }
@@ -218,7 +218,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
                 {
                     var key;
                     key.uint32_var = ColladaVertex;
-                    index_element ie = {(collada_semantic)key.uint32_var, atoi(offsAttr.value())};
+                    index_element ie = {(collada_semantic)key.uint32_var, (uint)atoi(offsAttr.value())};
                     apush(_self->idx_eles, ie);
                 }
             }

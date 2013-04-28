@@ -16,8 +16,8 @@ typedef struct _shader_node_generator
 SdrNdGen SdrNdGen_new()
 {
     shader_node_generator* ret = (shader_node_generator*)SMalloc(sizeof(shader_node_generator));
-    ret->shader_node_factory_tree = Tree_new(Uint32, Vptr, Ealloc, Efree);
-    ret->prototype_shader_node_tree = Tree_new(Uint32, Vptr, Ealloc, Efree);
+    ret->shader_node_factory_tree = Tree_new(Uint32, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
+    ret->prototype_shader_node_tree = Tree_new(Uint32, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     ShaderNode null_node = {NULL};
     ret->recycle_bin = array_new(ShaderNode, 20, null_node);
     ShaderBuffer null_buf = {NULL};

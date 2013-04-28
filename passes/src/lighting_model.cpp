@@ -16,7 +16,7 @@
 LightingModelRendererParamTable LightingModelRendererParamTable_new()
 {
     LightingModelRendererParamTable ret = (LightingModelRendererParamTable)SMalloc(sizeof(lighting_model_renderer_param_table));
-    ret->param_table = Tree_new(Sint32, String, Ealloc, Efree);
+    ret->param_table = Tree_new(Sint32, String, (MALLOC)Ealloc, (MFREE)Efree);
     return ret;
 }
 void LightingModelRendererParamTable_delete(LightingModelRendererParamTable _self)
@@ -635,7 +635,7 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
 	ShaderObject null_sdr_obj = {NULL};
 	ShaderObject* tag_obj_buf = array_new(ShaderObject, 5, null_sdr_obj);
 #endif
-    Tree inv_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree inv_tree = Tree_new(Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
 
     /// 提取出光照处理函数，将函数指针作为key，
     /// 从std::map<lighting_proc, std::set<material_id>>的tree里面找出std::set<material_id>，
@@ -652,7 +652,7 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
             tag_set = (Tree)data.vptr_var;
         else
         {
-            tag_set = Tree_new(Sint32, Sint32, Ealloc, Efree);
+            tag_set = Tree_new(Sint32, Sint32, (MALLOC)Ealloc, (MFREE)Efree);
             key.vptr_var = (vptr)light_proc;
             data.vptr_var = tag_set;
             Tree_insert(inv_tree, key, data);

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "render_system.h"
-#include <GL/glew.h>
 ///#include <GL/gl.h>
 #include <pthread.h>
 #include "emem.h"
@@ -68,7 +67,7 @@ Texture2DPtr _create_texture_from_file(const char* _file_name)
     FILE* file_stream = SafeFOpen(_file_name, "rb");
 	return _create_texture_from_file(file_stream);
 }
-
+#ifndef __APPLE__
 void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;
@@ -271,6 +270,7 @@ void RenderSystem_SwapBuffers(HDC hDC)
 {
     SwapBuffers(hDC);
 }
+#endif
 
 VertexDecl RenderSystem_register_vertex_declaration(VertexDecl dec)
 {

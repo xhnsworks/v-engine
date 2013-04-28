@@ -12,7 +12,7 @@
 #include "tree.h"
 #include "eassert.h"
 #include "shader_object_table.h"
-#define POINT_LIGHT_AFFECT_DISTANCE "6.8"
+#define POINT_LIGHT_AFFECT_DISTANCE 6.8f
 
 #define USE_DEPTH_MAP
 
@@ -269,7 +269,7 @@ ShaderNode create_point_array_lighting_node()
              "        vec3 lit_dir = LightPos - TargetPos;\n"
              "        float a = length(lit_dir);\n"
              "        lit_dir = normalize(lit_dir);\n"
-             "        a = clamp( ("POINT_LIGHT_AFFECT_DISTANCE" - a) * (1.0 - LightAtteCoef), 0.0, 1.0);\n"
+             "        a = clamp( (%f - a) * (1.0 - LightAtteCoef), 0.0, 1.0);\n"
              "        a = pow(a, 5.0);\n"
              "        float d = dot(lit_dir, TargetNor);\n"
              "        d = clamp(d, 0.0, 1.0);\n"
@@ -278,7 +278,8 @@ ShaderNode create_point_array_lighting_node()
              "    }\n"
              "    Result = ret;\n"
              "}\n",
-             light_proc);
+             light_proc
+             , POINT_LIGHT_AFFECT_DISTANCE);
 
     ShaderNode_set_function(ret, mbuf);
 
@@ -356,7 +357,7 @@ ShaderNode create_lighting_output_node()
 ParamTable ParamTable_new()
 {
     ParamTable ret;
-    ret.param_entries = Tree_new(String, Sint32, Ealloc, Efree);
+    ret.param_entries = Tree_new(String, Sint32, (MALLOC)Ealloc, (MFREE)Efree);
     return ret;
 }
 void ParamTable_delete(ParamTable _self)

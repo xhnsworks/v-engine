@@ -7,7 +7,7 @@
 #include "shader_buffer.h"
 #include "shader_node_base.h"
 #include "eassert.h"
-#include "glsltex.h"
+#include "glsl_lex.h"
 typedef struct _shader_node
 {
     shader_node_base base;
@@ -66,7 +66,7 @@ const char* _compile_params(ShaderNode _sn)
         {
             ShaderObject so = array_safe_get(_sn->input_param_table, i);
 
-            uint32 array_size, array_index;
+            uint array_size, array_index;
 
             const char* obj_type = get_shader_object_string( ShaderObject_get_type(so, &array_size, &array_index) );
             const char* obj_name = ShaderObject_get_name(so);
@@ -114,7 +114,7 @@ const char* _compile_params(ShaderNode _sn)
         {
             ShaderObject so = array_safe_get(_sn->output_param_table, i);
 
-            uint32 array_size, array_index;
+            uint array_size, array_index;
 
             const char* obj_type = get_shader_object_string( ShaderObject_get_type(so, &array_size, &array_index) );
             const char* obj_name = ShaderObject_get_name(so);
@@ -165,7 +165,7 @@ const char* _compile_links(ShaderNode _sn)
         {
             ShaderObject so = array_safe_get(_sn->input_links, i);
 
-            uint32 array_size, array_index;
+            uint array_size, array_index;
 
             ///const char* obj_type = get_shader_object_string( ShaderObject_get_type(so, &array_size, &array_index) );
             get_shader_object_string( ShaderObject_get_type(so, &array_size, &array_index) );
@@ -212,7 +212,7 @@ const char* _compile_links(ShaderNode _sn)
         {
             ShaderObject so = array_safe_get(_sn->output_links, i);
 
-            uint32 array_size, array_index;
+            uint array_size, array_index;
 
             ///const char* obj_type = get_shader_object_string( ShaderObject_get_type(so, &array_size, &array_index) );
             get_shader_object_string( ShaderObject_get_type(so, &array_size, &array_index) );

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "texture2d_array.h"
-#include <GL/glew.h>
 ///#include <GL/gl.h>
 #include "emem.h"
 void create_tex_array(uint* _id)

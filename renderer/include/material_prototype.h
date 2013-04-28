@@ -34,13 +34,13 @@ typedef void (*LightingProc2)(vptr, PxlSdrBuf, SdrNdGen, CircuitBoard, bool);
 typedef struct _lighting_decl
 {
     LightingProc2 light_proc;
-    int mat_id;
+    sint mat_id;
 } lighting_decl;
 
 typedef struct _material_decl
 {
     DisplayProc2 disp_proc;
-    int mat_id;
+    sint mat_id;
 } material_decl;
 
 typedef struct _material_prototype

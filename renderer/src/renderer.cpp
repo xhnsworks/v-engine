@@ -58,7 +58,7 @@ light_prototype::light_prototype()
     : first_lighting_pass ( NULL )
     , lighting_pass ( NULL )
 {
-    light_tree = Tree_new ( Vptr, Vptr, Ealloc, Efree );
+    light_tree = Tree_new ( Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree );
 }
 light_prototype::~light_prototype()
 {
@@ -949,7 +949,7 @@ void Renderer::lighting()
 
         curt_material_id_sketch = SketchBook_get_sketch ( prev_render_skb, MATERIAL_ID_INDEX );
 
-        uint32 light_count = 0;
+        uint light_count = 0;
 
         all_lighting_render ( dir_light_ptype, curt_lighting_skb, &light_count );
         all_lighting_render ( spot_light_ptype, curt_lighting_skb, &light_count );

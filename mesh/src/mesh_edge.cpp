@@ -28,7 +28,7 @@ int _mesh_edge_compare(vptr a, vptr b)
 
 Tree MeshEdgeTriangleTree_new()
 {
-    Tree ret = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree ret = Tree_new(Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     Tree_set_key_compare_proc(ret, _mesh_edge_compare);
     return ret;
 }

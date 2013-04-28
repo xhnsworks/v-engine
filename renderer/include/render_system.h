@@ -27,14 +27,14 @@ typedef enum _depth_pass_type
     NormalDepthPass,
     PointDepthPass
 } depth_pass_type;
-
+#ifndef __APPLE__
 API_EXPORT void RenderSystem_Init(HWND h);
 API_EXPORT void RenderSystem_Dest();
 API_EXPORT void RenderSystem_SwapBuffers(HDC hDC);
 API_EXPORT void gl_Init(void);
 API_EXPORT void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC);
 API_EXPORT void DisableOpenGL (HWND hwnd, HDC hDC, HGLRC hRC);
-
+#endif
 API_EXPORT VertexDecl RenderSystem_register_vertex_declaration(VertexDecl dec);
 API_EXPORT Pass RenderSystem_register_depth_pass(PassDecl dec, depth_pass_type type);
 API_EXPORT Pass RenderSystem_register_blur_pass(VertexDecl dec);
