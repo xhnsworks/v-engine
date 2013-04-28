@@ -4,6 +4,7 @@
 #include "shader_test.h"
 #include "render_system.h"
 #include "clear_sketchbook_pass.h"
+#include "sfloat3.h"
 
 void DefaultRenderableSorter::Sort(STD_NAMESPACE::set<Renderable>& used_renderable_set, STD_NAMESPACE::list<Renderable>& sorted_renderable_list)
 {
@@ -114,7 +115,7 @@ void RendererParamEntry_delete ( RendererParamEntry _self )
 
 void RendererBase::CommonInit()
 {
-	param_proc_tree = Tree_new ( Sint32, Vptr, Ealloc, Efree );
+	param_proc_tree = Tree_new ( Sint32, Vptr, (MALLOC)Ealloc, (MFREE)Efree );
     {
         var key, data;
         key.sint32_var = CameraPosition;
@@ -392,7 +393,7 @@ RendererBase::RendererBase ( ViewportPtr view, RenderableSorter* sorter )
     ///used_renderable_tree = Tree_new ( Vptr, Vptr, Ealloc, Efree );
     ///unused_renderable_tree = Tree_new ( Vptr, Vptr, Ealloc, Efree );
 
-    material_table = Tree_new ( String, Vptr, Ealloc, Efree );
+    material_table = Tree_new ( String, Vptr, (MALLOC)Ealloc, (MFREE)Efree );
     var key, data;
     key.str_var = "default_material";
     MaterialPrototype mp;
@@ -442,7 +443,7 @@ RendererBase::RendererBase ( RendererBase *prev_renderer, bool inherit_material_
     ///unused_renderable_tree = Tree_new ( Vptr, Vptr, Ealloc, Efree );
 
     if ( !inherit_material_table ) {
-        material_table = Tree_new ( String, Vptr, Ealloc, Efree );
+        material_table = Tree_new ( String, Vptr, (MALLOC)Ealloc, (MFREE)Efree );
         var key, data;
         key.str_var = "default_material";
         MaterialPrototype mp;

@@ -126,7 +126,7 @@ static inline sfloat3 SFloat3_sub(sfloat3 f3_0, sfloat3 f3_1)
 #endif
 }
 
-static inline sfloat3 SFloat3_mul_float(float _ft, sfloat3 f3)
+inline sfloat3 SFloat3_mul_float(float _ft, sfloat3 f3)
 {
 #ifdef USE_SSE
   #ifdef DEBUG
@@ -138,7 +138,7 @@ static inline sfloat3 SFloat3_mul_float(float _ft, sfloat3 f3)
 #endif
 }
 
-static inline sfloat3 SFloat3_mul(sfloat3 f3_0, sfloat3 f3_1)
+inline sfloat3 SFloat3_mul(sfloat3 f3_0, sfloat3 f3_1)
 {
 #ifdef USE_SSE
   #ifdef DEBUG
@@ -150,7 +150,7 @@ static inline sfloat3 SFloat3_mul(sfloat3 f3_0, sfloat3 f3_1)
 #endif
 }
 
-static inline sfloat3 SFloat3_div(sfloat3 f3_0, sfloat3 f3_1)
+inline sfloat3 SFloat3_div(sfloat3 f3_0, sfloat3 f3_1)
 {
 #ifdef USE_SSE
   #ifdef DEBUG
@@ -164,7 +164,7 @@ static inline sfloat3 SFloat3_div(sfloat3 f3_0, sfloat3 f3_1)
 #endif
 }
 
-static inline sfloat3 SFloat3_normalize(sfloat3 f3)
+inline sfloat3 SFloat3_normalize(sfloat3 f3)
 {
 #ifdef USE_SSE
   #ifdef DEBUG
@@ -183,7 +183,7 @@ static inline sfloat3 SFloat3_normalize(sfloat3 f3)
 #endif
 }
 
-static inline float SFloat3_length(sfloat3 f3)
+inline float SFloat3_length(sfloat3 f3)
 {
 #ifdef USE_SSE
   #ifdef DEBUG

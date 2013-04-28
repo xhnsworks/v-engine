@@ -68,7 +68,7 @@ SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, uint _line)
     ret->base.clone_proc = (shader_node_clone_proc)SwitchNode_clone;
     ret->base.compile_proc = (shader_node_compile_proc)SwitchNode_compile;
 
-    ret->switch_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    ret->switch_tree = Tree_new(Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     Iterator iter = Tree_begin(_self->switch_tree);
     while (iter)
     {
@@ -107,7 +107,7 @@ void SwitchNode_Init(SwitchNode _self, const char* _file, uint _line)
     _self->base.clone_proc = (shader_node_clone_proc)SwitchNode_clone;
     _self->base.compile_proc = (shader_node_compile_proc)SwitchNode_compile;
 
-    _self->switch_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    _self->switch_tree = Tree_new(Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
     _self->switch_obj.self = NULL;
 }
 

@@ -2,7 +2,7 @@
 #include "texture2d_array.h"
 ///#include <GL/gl.h>
 #include "emem.h"
-void create_tex_array(uint* _id)
+void create_tex_array(uint32* _id)
 {
     glGenTextures(1, _id);
     glBindTexture(GL_TEXTURE_2D_ARRAY, *_id);

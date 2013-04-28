@@ -213,11 +213,20 @@ ResourceSystem::~ResourceSystem()
 		delete grp;
 	}
 }
+#ifndef __APPLE__
 #include <direct.h>
+#else
+#include <sys/dirent.h>
+#include <unistd.h>
+#endif
 xhn::static_string ResourceSystem::GetWorkDirectory()
 {
 	char mbuf[260];
+#ifndef __APPLE__
 	_getcwd(mbuf, 259);
+#else
+    getcwd(mbuf, 259);
+#endif
 	return xhn::static_string(mbuf);
 }
 void ResourceSystem::NewResourceGroup(const xhn::static_string grpName, const xhn::static_string parentGrpName, DerivedType dt)

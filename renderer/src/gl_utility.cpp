@@ -27,6 +27,7 @@ const char* convertInternalFormatToString(GLenum format)
     case GL_RGBA:
         formatName = "GL_RGBA";
         break;
+#ifndef __APPLE__
     case GL_LUMINANCE:
         formatName = "GL_LUMINANCE";
         break;
@@ -90,6 +91,7 @@ const char* convertInternalFormatToString(GLenum format)
     case GL_INTENSITY16:
         formatName = "GL_INTENSITY16";
         break;
+#endif
     case GL_R3_G3_B2:
         formatName = "GL_R3_G3_B2";
         break;
@@ -384,15 +386,16 @@ bool checkFramebufferStatus()
     case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
         printf("[ERROR] Framebuffer incomplete: No image is attached to FBO.\n");
         return false;
-
+#ifdef GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT
     case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
         printf("[ERROR] Framebuffer incomplete: Attached images have different dimensions.\n");
         return false;
-
+#endif
+#ifdef GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT
     case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
         printf("[ERROR] Framebuffer incomplete: Color attached images have different internal formats.\n");
         return false;
-
+#endif
     case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
         printf("[ERROR] Framebuffer incomplete: Draw buffer.\n");
         return false;
