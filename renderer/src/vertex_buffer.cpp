@@ -1,5 +1,4 @@
 #include "pch.h"
-#include <GL/glew.h>
 ///#include <GL/gl.h>
 #include "vertex_buffer.h"
 #include "vertex_declaration.h"
