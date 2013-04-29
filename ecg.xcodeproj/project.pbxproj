@@ -115,7 +115,6 @@
 		687DA2C017257F97000218FA /* tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA29817257F97000218FA /* tree.cpp */; };
 		687DA2C117257F97000218FA /* xhn_static_string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA29917257F97000218FA /* xhn_static_string.cpp */; };
 		687DA2C217257F97000218FA /* xhn_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 687DA29A17257F97000218FA /* xhn_test.cpp */; };
-		68C8B1F7172D5945008DB750 /* glsl.tab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68C8B1B9172D5945008DB750 /* glsl.tab.cpp */; };
 		68C8B1F8172D5945008DB750 /* glsl_lex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68C8B1BA172D5945008DB750 /* glsl_lex.cpp */; };
 /* End PBXBuildFile section */
 
@@ -380,7 +379,6 @@
 		687DA29A17257F97000218FA /* xhn_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xhn_test.cpp; sourceTree = "<group>"; };
 		68C8B1B6172D5945008DB750 /* glsl.tab.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = glsl.tab.hpp; sourceTree = "<group>"; };
 		68C8B1B7172D5945008DB750 /* glsl_lex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glsl_lex.h; sourceTree = "<group>"; };
-		68C8B1B9172D5945008DB750 /* glsl.tab.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glsl.tab.cpp; sourceTree = "<group>"; };
 		68C8B1BA172D5945008DB750 /* glsl_lex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glsl_lex.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -869,21 +867,6 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		687CD1D2172DA03B00A4201F /* yacc */ = {
-			isa = PBXGroup;
-			children = (
-				687CD1D3172DA03B00A4201F /* bin */,
-			);
-			path = yacc;
-			sourceTree = "<group>";
-		};
-		687CD1D3172DA03B00A4201F /* bin */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = bin;
-			sourceTree = "<group>";
-		};
 		687DA24317257F96000218FA /* common */ = {
 			isa = PBXGroup;
 			children = (
@@ -975,7 +958,6 @@
 		68C8B1B4172D5945008DB750 /* glsl_compiler */ = {
 			isa = PBXGroup;
 			children = (
-				687CD1D2172DA03B00A4201F /* yacc */,
 				68C8B1B5172D5945008DB750 /* include */,
 				68C8B1B8172D5945008DB750 /* src */,
 			);
@@ -994,7 +976,6 @@
 		68C8B1B8172D5945008DB750 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				68C8B1B9172D5945008DB750 /* glsl.tab.cpp */,
 				68C8B1BA172D5945008DB750 /* glsl_lex.cpp */,
 			);
 			path = src;
@@ -1168,7 +1149,6 @@
 				681D80CC172ABD180005C8C4 /* sprite_geom_buffer.cpp in Sources */,
 				681D80CD172ABD180005C8C4 /* sprite_pch.cpp in Sources */,
 				681D80CE172ABD180005C8C4 /* sprite_renderer.cpp in Sources */,
-				68C8B1F7172D5945008DB750 /* glsl.tab.cpp in Sources */,
 				68C8B1F8172D5945008DB750 /* glsl_lex.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
