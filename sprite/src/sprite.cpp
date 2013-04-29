@@ -196,7 +196,7 @@ void SpriteNormalLayer::SaveConfig(pugi::xml_node& to)
 {
 	pugi::xml_node eles = to.append_child("elements");
 	pugi::xml_attribute num_elements = eles.append_attribute("num_elements");
-	num_elements.set_value(m_elementBuffer.size());
+	num_elements.set_value((unsigned int)m_elementBuffer.size());
 	xhn::map<xhn::static_string, SpriteElement>::iterator iter = m_elementBuffer.begin();
 	for (; iter != m_elementBuffer.end(); iter++)
 	{

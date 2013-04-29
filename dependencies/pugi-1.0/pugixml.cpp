@@ -3251,12 +3251,16 @@ namespace pugi
 	}
 
 #ifndef PUGIXML_NO_STL
-	xml_writer_stream::xml_writer_stream(std::basic_ostream<char, std::char_traits<char> >& stream): narrow_stream(&stream), wide_stream(0)
+	xml_writer_stream::xml_writer_stream(std::basic_ostream<char, std::char_traits<char> >& stream)
 	{
+        narrow_stream = &stream;
+        wide_stream = 0;
 	}
 
-	xml_writer_stream::xml_writer_stream(std::basic_ostream<wchar_t, std::char_traits<wchar_t> >& stream): narrow_stream(0), wide_stream(&stream)
+	xml_writer_stream::xml_writer_stream(std::basic_ostream<wchar_t, std::char_traits<wchar_t> >& stream)
 	{
+        narrow_stream = 0;
+        wide_stream = &stream;
 	}
 
 	void xml_writer_stream::write(const void* data, size_t size)

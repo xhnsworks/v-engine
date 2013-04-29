@@ -217,16 +217,16 @@ START:
 						}
 						else {
                             ///return _cale_sym_proc(lvalp, e, GLSL::_DOT);
-							return e->DecodeSymbol(lvalp, GLSL::_DOT);
+							return e->DecodeSymbol(lvalp, _DOT);
 						}
 					}
 					else
 						///return _cale_sym_proc(lvalp, e, GLSL::_DOT);
-						return e->DecodeSymbol(lvalp, GLSL::_DOT);
+						return e->DecodeSymbol(lvalp, _DOT);
 				}
 				else if (e->m_lexStatus.curtExpType == GLSL::SymbolType) {
                     ///return _cale_sym_proc(lvalp, e, GLSL::_DOT);
-					return e->DecodeSymbol(lvalp, GLSL::_DOT);
+					return e->DecodeSymbol(lvalp, _DOT);
 				}
 				break;
 			case ' ':
@@ -266,13 +266,13 @@ START:
 					  break;
 			case '+':
 				///return _cale_sym_proc(lvalp, e, GLSL::_PLUS);
-				return e->DecodeSymbol(lvalp, GLSL::_PLUS);
+				return e->DecodeSymbol(lvalp, _PLUS);
 			case '-':
 				///return _cale_sym_proc(lvalp, e, GLSL::_DASH);
-				return e->DecodeSymbol(lvalp, GLSL::_DASH);
+				return e->DecodeSymbol(lvalp, _DASH);
 			case '*':
 				///return _cale_sym_proc(lvalp, e, GLSL::_STAR);
-				return e->DecodeSymbol(lvalp, GLSL::_STAR);
+				return e->DecodeSymbol(lvalp, _STAR);
 			case '/':
 				{
 					/// skip the annotation...
@@ -288,27 +288,27 @@ START:
 					}
 				}
 				///return _cale_sym_proc(lvalp, e, GLSL::_SLASH);
-				return e->DecodeSymbol(lvalp, GLSL::_SLASH);
+				return e->DecodeSymbol(lvalp, _SLASH);
 			case '(':
 				///return _cale_sym_proc(lvalp, e, GLSL::_LEFT_PAREN);
-				return e->DecodeSymbol(lvalp, GLSL::_LEFT_PAREN);
+				return e->DecodeSymbol(lvalp, _LEFT_PAREN);
 			case ')':
 				///return _cale_sym_proc(lvalp, e, GLSL::_RIGHT_PAREN);
-				return e->DecodeSymbol(lvalp, GLSL::_RIGHT_PAREN);
+				return e->DecodeSymbol(lvalp, _RIGHT_PAREN);
 			case '[':
 				///return _cale_sym_proc(lvalp, e, GLSL::_LEFT_BRACKET);
-				return e->DecodeSymbol(lvalp, GLSL::_LEFT_BRACKET);
+				return e->DecodeSymbol(lvalp, _LEFT_BRACKET);
 			case ']':
 				///return _cale_sym_proc(lvalp, e, GLSL::_RIGHT_BRACKET);
-				return e->DecodeSymbol(lvalp, GLSL::_RIGHT_BRACKET);
+				return e->DecodeSymbol(lvalp, _RIGHT_BRACKET);
 			case '{':
 				///SymbolStack_push(&e->sym_stack);
 				///return _cale_sym_proc(lvalp, e, GLSL::_LEFT_BRACE);
-				return e->DecodeSymbol(lvalp, GLSL::_LEFT_BRACE);
+				return e->DecodeSymbol(lvalp, _LEFT_BRACE);
 			case '}':
 				///SymbolStack_pop(&e->sym_stack);
 				///return _cale_sym_proc(lvalp, e, GLSL::_RIGHT_BRACE);
-				return e->DecodeSymbol(lvalp, GLSL::_RIGHT_BRACE);
+				return e->DecodeSymbol(lvalp, _RIGHT_BRACE);
 			case '=': {
 				char next_char = e->m_text[e->m_charCount + 1];
 				if (next_char) {
@@ -316,11 +316,11 @@ START:
 						if (e->m_lexStatus.curtExpType == GLSL::EmptyType)
 							e->m_charCount++;
 						///return _cale_sym_proc(lvalp, e, GLSL::_EQ_OP);
-						return e->DecodeSymbol(lvalp, GLSL::_EQ_OP);
+						return e->DecodeSymbol(lvalp, _EQ_OP);
 					}
 					else
 						///return _cale_sym_proc(lvalp, e, GLSL::_EQUAL);
-						return e->DecodeSymbol(lvalp, GLSL::_EQUAL);
+						return e->DecodeSymbol(lvalp, _EQUAL);
 				}
 				else
 					return 0;
@@ -332,11 +332,11 @@ START:
 						if (e->m_lexStatus.curtExpType == GLSL::EmptyType)
 							e->m_charCount++;
 						///return _cale_sym_proc(lvalp, e, GLSL::_LE_OP);
-						return e->DecodeSymbol(lvalp, GLSL::_LE_OP);
+						return e->DecodeSymbol(lvalp, _LE_OP);
 					}
 					else
 						///return _cale_sym_proc(lvalp, e, GLSL::_LEFT_ANGLE);
-						return e->DecodeSymbol(lvalp, GLSL::_LEFT_ANGLE);
+						return e->DecodeSymbol(lvalp, _LEFT_ANGLE);
 				}
 				else
 					return 0;
@@ -348,24 +348,24 @@ START:
 						if (e->m_lexStatus.curtExpType == GLSL::EmptyType)
 							e->m_charCount++;
 						///return _cale_sym_proc(lvalp, e, GLSL::_GE_OP);
-						return e->DecodeSymbol(lvalp, GLSL::_GE_OP);
+						return e->DecodeSymbol(lvalp, _GE_OP);
 					}
 					else
 						///return _cale_sym_proc(lvalp, e, GLSL::_RIGHT_ANGLE);
-						return e->DecodeSymbol(lvalp, GLSL::_RIGHT_ANGLE);
+						return e->DecodeSymbol(lvalp, _RIGHT_ANGLE);
 				}
 				else
 					return 0;
 					  }
 			case ':':
 				///return _cale_sym_proc(lvalp, e, GLSL::_COLON);
-				return e->DecodeSymbol(lvalp, GLSL::_COLON);
+				return e->DecodeSymbol(lvalp, _COLON);
 			case ',':
 				///return _cale_sym_proc(lvalp, e, GLSL::_COMMA);
-				return e->DecodeSymbol(lvalp, GLSL::_COMMA);
+				return e->DecodeSymbol(lvalp, _COMMA);
 			case ';':
 				///return _cale_sym_proc(lvalp, e, GLSL::_SEMICOLON);
-				return e->DecodeSymbol(lvalp, GLSL::_SEMICOLON);
+				return e->DecodeSymbol(lvalp, _SEMICOLON);
 			}
 		}
 		if (e->m_text[e->m_charCount] < 32) {
