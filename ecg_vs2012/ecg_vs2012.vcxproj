@@ -210,6 +210,8 @@
     <ClCompile Include="..\framework\src\render_robot.cpp" />
     <ClCompile Include="..\framework\src\robot.cpp" />
     <ClCompile Include="..\framework\src\robot_thread.cpp" />
+    <ClCompile Include="..\glsl_compiler\src\glsl.tab.cpp" />
+    <ClCompile Include="..\glsl_compiler\src\glsl_lex.cpp" />
     <ClCompile Include="..\gui\src\gui_button.cpp" />
     <ClCompile Include="..\gui\src\gui_cursor.cpp" />
     <ClCompile Include="..\gui\src\gui_material.cpp" />
@@ -615,6 +617,8 @@
     <ClInclude Include="..\framework\include\render_robot.h" />
     <ClInclude Include="..\framework\include\robot.h" />
     <ClInclude Include="..\framework\include\robot_thread.h" />
+    <ClInclude Include="..\glsl_compiler\include\glsl.tab.hpp" />
+    <ClInclude Include="..\glsl_compiler\include\glsl_lex.h" />
     <ClInclude Include="..\gui\include\gui_button.h" />
     <ClInclude Include="..\gui\include\gui_cursor.h" />
     <ClInclude Include="..\gui\include\gui_material.h" />

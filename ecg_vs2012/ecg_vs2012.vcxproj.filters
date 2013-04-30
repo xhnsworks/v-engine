@@ -1,0 +1,989 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\client\src\main.cpp" />
+    <ClCompile Include="..\common\src\pch.cpp" />
+    <ClCompile Include="..\common\src\elog.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\eassert.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\emem.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\emem2.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\estring.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\exception.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\branch_node.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\camera.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\circuit_board.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\src\animation.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utilities\src\camera_utility.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\collada_loader.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\color.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\clear_sketchbook_pass.cpp">
+      <Filter>passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\float2.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\float3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\float4.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\float_base.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\float_op_float.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\float_op_int.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\function_call.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\gc_test.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\function_print.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\display_pass.cpp">
+      <Filter>passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\cone.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\primitive_geometry\src\cylinder.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\input\src\input_win32.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\gl_utility.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\font_renderer.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\golden_cudgel.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gui\src\gui_button.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gui\src\gui_cursor.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gui\src\gui_material.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gui\src\gui_panel.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gui\src\gui_pch.cpp">
+      <Filter>gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\hash.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\input\src\input_system.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\jump.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\int_op_int.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\int_op_float.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\lex.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\index_buffer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\lighting.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\lighting_model.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\material_instance.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\material_prototype.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\media\src\image.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\lighting_pass.cpp">
+      <Filter>passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\mesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\mesh_edge.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\mesh_triangle.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\list.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\matrix4x4.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\matrix4x3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\octree.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\plane.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utilities\src\line_utility.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\parser_env.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\primitive_geometry\src\locator.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\version_0004_data.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\version_0005_data.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\version_0006_data.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mesh\src\version_0007_data.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\xhn_test.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\xhn_static_string.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\media\src\png_load.cpp">
+      <Filter>media</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\pass.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\pass_console.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\pass_declaration.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\path.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\pixel_shader_buffer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\primitive_geometry\src\plane_mesh.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\print.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\proc.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\render_system.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\renderable.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\render_stage.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\renderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\renderer_base.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader_buffer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\shader_log.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader_node.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader_node_base.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader_node_generator.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader_object.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shader_object_table.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite_renderer.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite_pch.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite_geom_buffer.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite_factory.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite_event_hub.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite_event.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sprite\src\sprite.cpp">
+      <Filter>sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\rtti.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\dependencies\pugi-1.0\pugixml.cpp">
+      <Filter>dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\vertex_declaration.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\vertex_buffer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\vertex_element.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\vertex_shader_buffer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\viewport.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\texture1d.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\texture2d.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\texture2d_array.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resource\src\texture2d_resource.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\texture_cube.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\src\render_robot.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\vlang.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\vlang_test.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\resource_node.cpp">
+      <Filter>resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resource\src\resource_group.cpp">
+      <Filter>resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resource\src\resource.cpp">
+      <Filter>resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\ray.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\tree.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\stack.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\test.tab.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\math\src\triangle.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\std_pass.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\switch_node.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\sketch.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\renderer\src\shadow_renderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\src\rwbuffer.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\symbol_stack.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\src\robot.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\framework\src\robot_thread.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\vlang\src\single_op_single.cpp">
+      <Filter>vlang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utilities\src\texture_utility.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\resource\src\xml_resource.cpp">
+      <Filter>resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\passes\src\shadow_emitter.cpp">
+      <Filter>passes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\glsl_compiler\src\glsl.tab.cpp">
+      <Filter>glsl_compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\glsl_compiler\src\glsl_lex.cpp">
+      <Filter>glsl_compiler</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\pch.h" />
+    <ClInclude Include="..\common\include\elog.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\eassert.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\emem.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\emem.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\emem2.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\estring.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\etypes.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\exception.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\array.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\common.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\branch_node.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\camera.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\circuit_board.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\include\animation.hpp">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\include\attribute.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utilities\include\camera_utility.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\collada_loader.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\color.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\clear_sketchbook_pass.h">
+      <Filter>passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\float2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\float3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\float4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\float_base.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\float_op_float.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\float_op_int.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\function_call.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\gc_test.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\function_print.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\comparison_algorithm.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\container.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\display_pass.h">
+      <Filter>passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\cone.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\primitive_geometry\include\cylinder.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\input\include\input_system.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\input\include\input_win32.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\gl_utility.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\font_renderer.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\golden_cudgel.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\glew-1.5.8\include\GL\glew.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gui\include\gui_button.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gui\include\gui_cursor.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gui\include\gui_material.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gui\include\gui_panel.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gui\include\gui_pch.h">
+      <Filter>gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\hash.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\jump.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\int_op_int.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\int_op_float.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\index_buffer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\lighting.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\lighting_model.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\material_instance.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\material_prototype.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\media\include\image.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\lighting_pass.h">
+      <Filter>passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\mesh_base.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\mesh.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\mesh_edge.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\mesh_triangle.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\list.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\map.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\matrix4x3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\matrix4x4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\math_base.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\octree.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\plane.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utilities\include\line_utility.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\parser_env.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\primitive_geometry\include\locator.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\libpng-1.5.4\config\pngconf.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\libpng-1.5.4\include\png.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\version_0007_data.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\version_0004_data.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\version_0005_data.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mesh\include\version_0006_data.h">
+      <Filter>mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_void_vector.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_vector.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_utility.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_string_base.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_string.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_static_string.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_rbtree.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_set.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_test.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_pair.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_map.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_lock.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_list.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_iterator.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\xhn_hash_set.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\media\include\png_load.h">
+      <Filter>media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\pass.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\pass_console.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\pass_declaration.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\path.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\pixel_shader_buffer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\primitive_geometry\include\plane_mesh.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\print.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\proc.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\render_system.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\renderable.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\render_stage.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\renderable_base.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\renderer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\renderer_base.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\renderer_param_procs.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_buffer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\shader_log.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_node.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_node_base.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_node_generator.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_object.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_object_table.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shader_test.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite_renderer.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite_pch.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite_geom_buffer.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite_factory.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite_event_hub.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite_event.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sprite\include\sprite.h">
+      <Filter>sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\rtti.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\pugi-1.0\pugixml.hpp">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\pugi-1.0\pugiconfig.hpp">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\vertex_buffer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\vertex_element.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\vertex_declaration.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\vertex_shader_buffer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\viewport.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\texture1d.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\texture2d.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\texture2d_array.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resource\include\texture2d_resource.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\texture_cube.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\include\render_robot.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\vlang.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\vlang_test.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\resource_node.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resource\include\resource_group.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resource\include\resource.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\ray.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\tree.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\stack.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\test.tab.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\triangle.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\std_pass.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\switch_node.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\sketch.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\renderer\include\shadow_renderer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\rwbuffer.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\symbol_stack.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\smart_ptr.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\sphere.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\include\robot.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\framework\include\robot_thread.h">
+      <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vlang\include\single_op_single.h">
+      <Filter>vlang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\sfloat4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\include\sfloat3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\resource\include\xml_resource.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\passes\include\shadow_emitter.h">
+      <Filter>passes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\pthread\pthread.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dependencies\sse_mathfun\sse_mathfun.h">
+      <Filter>dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\glsl_compiler\include\glsl.tab.hpp">
+      <Filter>glsl_compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\glsl_compiler\include\glsl_lex.h">
+      <Filter>glsl_compiler</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\dependencies\DX\x86\XInput.lib" />
+    <Library Include="..\dependencies\DX\x86\dinput8.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\dependencies\DX\x86\DxErr.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\dependencies\DX\x86\dxgi.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\dependencies\DX\x86\dxguid.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\dependencies\glew-1.5.8\lib\glew32.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\dependencies\libpng-1.5.4\lib\libpng.lib">
+      <Filter>lib</Filter>
+    </Library>
+    <Library Include="..\dependencies\pthread\pthreadVC2.lib">
+      <Filter>lib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ecg_vs2012.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\test_scene\button.xml" />
+    <Xml Include="..\test_scene\cursor.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ecg_vs2012.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{0cec88a7-6826-4981-9d00-b6a37b6d07e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{6d764009-9727-4d62-9c0a-6321f9b360a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="passes">
+      <UniqueIdentifier>{f2956b17-3097-43ba-8f13-dfc7bf564bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework">
+      <UniqueIdentifier>{33e1d7d0-670b-44b8-9fa6-6579a669df39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{3a9b0bfe-aeb3-41b0-9bb8-b6e87e7f9d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mesh">
+      <UniqueIdentifier>{0f74c44d-ea04-43fa-bf23-2f7c5965221e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{c5b4ab52-225b-4d77-96ef-14ba23984550}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{8e3d84c7-534e-42c3-8737-a97900cd8260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vlang">
+      <UniqueIdentifier>{334a859f-41d6-46fd-8f1b-6afb8ae94ae3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="geom">
+      <UniqueIdentifier>{871605b1-75d9-4d5a-be16-e640dbe539bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{7a53f2d1-2e4d-419f-b5b0-c9bee0d3658f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui">
+      <UniqueIdentifier>{83c1e63a-1852-4755-82c7-59545e26180e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dependencies">
+      <UniqueIdentifier>{ddab8fd7-7f5d-4ceb-a3ed-e651410a1b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="media">
+      <UniqueIdentifier>{98e7d802-b84d-4da9-a99e-bf47bc31b92d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprite">
+      <UniqueIdentifier>{5097bb22-1960-47e7-ba28-1e679319bc7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{d9a9e60e-32fd-4fa1-862a-586552683a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="glsl_compiler">
+      <UniqueIdentifier>{c539c051-9d9a-4439-8389-c8a5b2431bb1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
