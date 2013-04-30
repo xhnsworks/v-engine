@@ -52,7 +52,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dependencies\freetype-2.4.10\include;..\sprite\include;..\framework\include;..\dependencies\pugi-1.0;..\resource\include;..\vlang\include;..\gui\include;..\input\include;..\dependencies\libpng-1.5.4\config;..\dependencies\libpng-1.5.4\include;..\dependencies\sse_mathfun;..\dependencies\pthread;..\dependencies\glew-1.5.8\include;..\primitive_geometry\include;..\media\include;..\utilities\include;..\renderer\include;..\passes\include;..\dependencies\mxml-2.7;..\dependencies\mxml-2.7\vcnet;..\common\include;..\math\include;..\mesh\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glsl_compiler\include;..\dependencies\freetype-2.4.10\include;..\sprite\include;..\framework\include;..\dependencies\pugi-1.0;..\resource\include;..\vlang\include;..\gui\include;..\input\include;..\dependencies\libpng-1.5.4\config;..\dependencies\libpng-1.5.4\include;..\dependencies\sse_mathfun;..\dependencies\pthread;..\dependencies\glew-1.5.8\include;..\primitive_geometry\include;..\media\include;..\utilities\include;..\renderer\include;..\passes\include;..\dependencies\mxml-2.7;..\dependencies\mxml-2.7\vcnet;..\common\include;..\math\include;..\mesh\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,7 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\dependencies\freetype-2.4.10\include;..\sprite\include;..\framework\include;..\dependencies\pugi-1.0;..\resource\include;..\vlang\include;..\gui\include;..\input\include;..\dependencies\libpng-1.5.4\config;..\dependencies\libpng-1.5.4\include;..\dependencies\sse_mathfun;..\dependencies\pthread;..\dependencies\glew-1.5.8\include;..\primitive_geometry\include;..\media\include;..\utilities\include;..\renderer\include;..\passes\include;..\dependencies\mxml-2.7;..\dependencies\mxml-2.7\vcnet;..\common\include;..\math\include;..\mesh\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glsl_compiler\include;..\dependencies\freetype-2.4.10\include;..\sprite\include;..\framework\include;..\dependencies\pugi-1.0;..\resource\include;..\vlang\include;..\gui\include;..\input\include;..\dependencies\libpng-1.5.4\config;..\dependencies\libpng-1.5.4\include;..\dependencies\sse_mathfun;..\dependencies\pthread;..\dependencies\glew-1.5.8\include;..\primitive_geometry\include;..\media\include;..\utilities\include;..\renderer\include;..\passes\include;..\dependencies\mxml-2.7;..\dependencies\mxml-2.7\vcnet;..\common\include;..\math\include;..\mesh\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
