@@ -31,7 +31,7 @@ Iterator SymbolStack_find_symbol(SymbolStack _self, const char* _sym)
 {
     var key, data;
     key.str_var = (EString)_sym;
-    uint top_ptr = 0;
+    euint top_ptr = 0;
     Tree sym_tree = NULL;
     Iterator ret = NULL;
     if (FixedStack_walk_begin(_self->main_stack, &sym_tree, &top_ptr))

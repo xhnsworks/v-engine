@@ -18,7 +18,7 @@ public:
     GetTex2dPixelSize(pixel_format fmt)
 		: m_pixelFormat(fmt)
 	{}
-	uint operator () () {
+	euint operator () () {
 		return _get_pixel_size(m_pixelFormat);
 	}
 };
@@ -29,10 +29,10 @@ public:
 };
 struct Tex2DRect
 {
-	uint x;
-	uint y;
-	uint width;
-	uint height;
+	euint x;
+	euint y;
+	euint width;
+	euint height;
     Tex2DRect()
 		: x(0)
 		, y(0)
@@ -44,20 +44,20 @@ class Tex2DLockedRect : public MemObject
 {
 	friend class Texture2D;
 private:
-	uint x;
-	uint y;
-	uint width;
-	uint height;
+	euint x;
+	euint y;
+	euint width;
+	euint height;
 	pixel_format format;
 	xhn::void_vector pxl_buffer;
-    Tex2DLockedRect(uint _x, uint _y, uint _width, uint _height, pixel_format _fmt);
+    Tex2DLockedRect(euint _x, euint _y, euint _width, euint _height, pixel_format _fmt);
 	~Tex2DLockedRect();
 public:
-	vptr GetAt(uint _x, uint _y);
-	inline uint GetWidth() const {
+	vptr GetAt(euint _x, euint _y);
+	inline euint GetWidth() const {
 		return width;
 	}
-	inline uint GetHeight() const {
+	inline euint GetHeight() const {
 		return height;
 	}
 };
@@ -84,10 +84,10 @@ public:
 	inline uint32 GetID() const {
 		return id;
 	}
-	inline uint GetWidth() const {
+	inline euint GetWidth() const {
 		return width;
 	}
-	inline uint GetHeight() const {
+	inline euint GetHeight() const {
 		return height;
 	}
 	Tex2DLockedRect* Lock(const Tex2DRect& rect);

@@ -28,21 +28,21 @@ void SdrNdGen_delete(SdrNdGen _self)
 {
     Tree_Dest(_self->shader_node_factory_tree);
     Tree_Dest(_self->prototype_shader_node_tree);
-    for (uint i = 0; i < array_n(_self->recycle_bin); i++)
+    for (euint i = 0; i < array_n(_self->recycle_bin); i++)
     {
         ShaderNode_delete(_self->recycle_bin[i]);
     }
     array_delete(_self->recycle_bin);
     Mfree(_self);
 }
-void SdrNdGen_register_shader_node(SdrNdGen _self, uint _node_id, CreateShaderNodeProc _create_node_proc)
+void SdrNdGen_register_shader_node(SdrNdGen _self, euint _node_id, CreateShaderNodeProc _create_node_proc)
 {
     var key, data;
     key.uint32_var = _node_id;
     data.vptr_var = (vptr)_create_node_proc;
     Tree_insert(_self->shader_node_factory_tree, key, data);
 }
-ShaderNode SdrNdGen_generate_shader_node(SdrNdGen _self, uint _node_id)
+ShaderNode SdrNdGen_generate_shader_node(SdrNdGen _self, euint _node_id)
 {
     ShaderNode ret = {NULL};
     var key, data;
@@ -61,7 +61,7 @@ ShaderNode SdrNdGen_generate_shader_node(SdrNdGen _self, uint _node_id)
 }
 void SdrNdGen_destroy_all_generated_shader_node(SdrNdGen _self)
 {
-    for (uint i = 0; i < array_n(_self->recycle_bin); i++)
+    for (euint i = 0; i < array_n(_self->recycle_bin); i++)
     {
         ShaderNode_delete(_self->recycle_bin[i]);
     }
@@ -121,7 +121,7 @@ void SdrNdGen_attach_all_prototype_nodes(SdrNdGen _self, ShaderBuffer _sb)
     _self->owner = _sb;
 }
 
-ShaderNode SdrNdGen_add_reference_node(SdrNdGen _self, uint _node_id)
+ShaderNode SdrNdGen_add_reference_node(SdrNdGen _self, euint _node_id)
 {
     if (!to_ptr(_self->owner))
         return NULL;
@@ -136,7 +136,7 @@ ShaderNode SdrNdGen_add_reference_node(SdrNdGen _self, uint _node_id)
         return NULL;
 }
 
-ShaderNode SdrNdGen_add_reference_node2(SdrNdGen _self, CircuitBoard _cb, uint _node_id)
+ShaderNode SdrNdGen_add_reference_node2(SdrNdGen _self, CircuitBoard _cb, euint _node_id)
 {
     if (!to_ptr(_self->owner))
         return NULL;

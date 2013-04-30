@@ -105,7 +105,7 @@ void RobotThreadManager::AddRobotThread()
 
 void RobotThreadManager::StopAllRobotThread()
 {
-    for (uint i = 0; i < m_robotThreads.size(); i++)
+    for (euint i = 0; i < m_robotThreads.size(); i++)
 	{
 		m_robotThreads[i]->Stop();
 	}

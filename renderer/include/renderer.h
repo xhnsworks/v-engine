@@ -39,7 +39,7 @@
 typedef struct _renderer_param_entry {
     GetRendererParamProc get_value_proc;
     param_type type;
-    sint array_size;
+    esint array_size;
 } renderer_param_entry;
 
 typedef void ( *DrawPointLightShapeProc ) ( PointLight );
@@ -123,13 +123,13 @@ private:
 
     void prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype );
     void shadow_render ( Renderable rbl, SketchBook curt_skb, sketch_type shadow_type );
-    void all_lighting_render ( light_prototype &prototype, SketchBook curt_lighting_skb, uint *light_count );
+    void all_lighting_render ( light_prototype &prototype, SketchBook curt_lighting_skb, euint *light_count );
 	void prepare_renderable(Renderable _rbl);
 
 	void lighting();
 
-    sint get_material_id ( const char *mat_name );
-    ///Renderer ( uint x, uint y, uint width, uint height );
+    esint get_material_id ( const char *mat_name );
+    ///Renderer ( euint x, euint y, euint width, euint height );
     ///Renderer ( Renderer *prev_renderer );
 protected:
     virtual void set_pre_lighting_state() {}
@@ -137,7 +137,7 @@ public:
     virtual void render();
     void register_material ( const char *mat_name, SDisplayProc disp_proc, e_draw_mode draw_mode, bool double_sided_flag );
     Renderable new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode );
-    void viewport_refresh ( uint _x, uint _y, uint _width, uint _height );
+    void viewport_refresh ( euint _x, euint _y, euint _width, euint _height );
     ///void FORCE_ALIGN_ARG_POINTER get_mouse_ray ( int _x, int _y, EFloat3 *ori, EFloat3 *dir );
     inline LightBase2 add_dir_light_2() {
         return dir_light_ptype.new_light();
@@ -160,11 +160,11 @@ public:
 
     renderer_param_value get_shader_object_value ( sint32 _src );
 	renderer_param_value get_shader_object_value ( RendererBase* rdr, sint32 _src );
-    void register_renderer_param ( sint32 _id, param_type _type, sint _array_size, GetRendererParamProc _proc );
+    void register_renderer_param ( sint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc );
     bool is_uniform_param_source ( sint32 _src );
     RendererParamEntry get_param_entry ( sint32 _id );
 
-	virtual Texture2DPtr get_shadow_map ( uint i ) {
+	virtual Texture2DPtr get_shadow_map ( euint i ) {
         return shadow_state.get_shadow_map ( i );
     }
     virtual TextureCube get_shadow_cube_map() {

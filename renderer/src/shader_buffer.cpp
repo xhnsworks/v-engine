@@ -13,7 +13,7 @@ typedef struct _ref_entry
 {
     ShaderBuffer buffer;
     const char* buf_ctor_file;
-    uint buf_ctor_line;
+    euint buf_ctor_line;
 } ref_entry;
 
 static Tree g_ref_table = NULL;
@@ -231,7 +231,7 @@ void ShaderBuffer_print_shader_object(ShaderBuffer _sb)
     {
         var data = Tree_get_value(iter);
         ShaderObject so = {(struct _shader_object*)data.vptr_var};
-        uint array_size, array_index;
+        euint array_size, array_index;
         shader_object_type type = ShaderObject_get_type(so, &array_size, &array_index);
         const char* name = ShaderObject_get_name(so);
         if (array_size <= 1)
@@ -241,7 +241,7 @@ void ShaderBuffer_print_shader_object(ShaderBuffer _sb)
         iter = Tree_next(iter);
     }
 }
-shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, uint _line)
+shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, euint _line)
 {
     ///ShaderNode exec_node = {NULL};
     _buf->shader_node_prototype_tree = Tree_new(String, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
@@ -261,7 +261,7 @@ shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file,
     return _buf;
 }
 
-void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, uint _line)
+void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, euint _line)
 {
     Iterator iter = NULL;
     if (_buf->param_src_obj_tree)
@@ -303,8 +303,8 @@ void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, uint _lin
     EString_delete(_buf->output);
 
     CircuitBoard_Dest(&_buf->circuit_board);
-    uint n = array_n(_buf->imme_shader_objects);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_buf->imme_shader_objects);
+    for (euint i = 0; i < n; i++)
     {
         ShaderObject_delete(_buf->imme_shader_objects[i]);
     }
@@ -425,7 +425,7 @@ ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const 
 }
 
 ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, uint32 _array_size, sint32 _src,
-                                       const char* _file, uint _line)
+                                       const char* _file, euint _line)
 {
     const char* type = get_param_type_string(_type);
     ShaderObject ret = {NULL};
@@ -499,7 +499,7 @@ ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const
 }
 
 ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, sint32 _id, const char* _unif,
-                                                     const char* _file, uint _line)
+                                                     const char* _file, euint _line)
 {
     RendererParamEntry ent = _rdr->get_param_entry(_id);
     if (!ent)
@@ -608,7 +608,7 @@ void ShaderBuffer_add_prototype_node(ShaderBuffer _sb, ShaderNode _sn)
     }
 }
 
-ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name, const char* _file, uint _line)
+ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name, const char* _file, euint _line)
 {
     var key;
     var data;
@@ -631,7 +631,7 @@ ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name,
     }
 }
 
-void _ShaderBuffer_add_branch_node(ShaderBuffer _sb, BranchNode _bn, const char* _file, uint _line)
+void _ShaderBuffer_add_branch_node(ShaderBuffer _sb, BranchNode _bn, const char* _file, euint _line)
 {
     _CircuitBoard_add_reference_node(&_sb->circuit_board, (ShaderNode)_bn, _file, _line);
 }

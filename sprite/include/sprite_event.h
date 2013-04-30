@@ -24,8 +24,8 @@ public:
 
 struct SInt2
 {
-	sint x;
-	sint y;
+	esint x;
+	esint y;
 	SInt2(const SInt2& int2)
 		: x(int2.x)
 		, y(int2.y)

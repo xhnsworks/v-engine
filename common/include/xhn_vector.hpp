@@ -25,22 +25,22 @@ public:
         }
     };
     struct FNextProc {
-        void operator() ( T *from, T *&to, uint ele_real_size ) {
+        void operator() ( T *from, T *&to, euint ele_real_size ) {
             to = ( T * ) ( ( char * ) from + ele_real_size );
         }
     };
     struct FPrevProc {
-        void operator() ( T *from, T *&to, uint ele_real_size ) {
+        void operator() ( T *from, T *&to, euint ele_real_size ) {
             to = ( T * ) ( ( char * ) from - ele_real_size );
         }
     };
     template <typename Owner>
     struct FRedirectProc {
-        void operator() ( Owner *owner, T *from, T *&to, uint ele_real_size, sint offset ) {
+        void operator() ( Owner *owner, T *from, T *&to, euint ele_real_size, esint offset ) {
             char *begin = owner->m_begin_addr;
             char *end = owner->m_barrier;
             char *ptr = ( char * ) from;
-            ptr += offset * ( sint ) ele_real_size;
+            ptr += offset * ( esint ) ele_real_size;
 
             if ( ptr < begin ) {
                 ptr = begin;
@@ -61,7 +61,7 @@ public:
         typedef T value_type;
         typedef T *pointer;
         typedef T &reference;
-        iterator ( vector<T> *owner, char *a, uint ele_real_size )
+        iterator ( vector<T> *owner, char *a, euint ele_real_size )
             : base_type
             ( ( T * ) a, ele_real_size, FReadProc(), FWriteProc(), FNextProc(), FPrevProc(), FRedirectProc<vector>(), owner )
         {}
@@ -83,12 +83,12 @@ public:
             --*this;
             return tmp;
         }
-        inline iterator operator + ( sint offs ) {
+        inline iterator operator + ( esint offs ) {
             iterator tmp = *this;
             tmp.redirect ( offs );
             return tmp;
         }
-        inline iterator operator - ( sint offs ) {
+        inline iterator operator - ( esint offs ) {
             iterator tmp = *this;
             tmp.redirect ( -offs );
             return tmp;
@@ -101,7 +101,7 @@ public:
         typedef T value_type;
         typedef T *pointer;
         typedef T &reference;
-        const_iterator ( vector<T> *owner, char *a, uint ele_real_size )
+        const_iterator ( vector<T> *owner, char *a, euint ele_real_size )
             : base_type
             ( ( T * ) a, ele_real_size, FReadProc(), FWriteProc(), FNextProc(), FPrevProc(), FRedirectProc<vector>(), owner )
         {}
@@ -123,19 +123,19 @@ public:
             --*this;
             return tmp;
         }
-        inline const_iterator operator + ( sint offs ) {
+        inline const_iterator operator + ( esint offs ) {
             const_iterator tmp = *this;
             tmp.redirect ( offs );
             return tmp;
         }
-        inline const_iterator operator - ( sint offs ) {
+        inline const_iterator operator - ( esint offs ) {
             const_iterator tmp = *this;
             tmp.redirect ( -offs );
             return tmp;
         }
     };
-    uint m_totel_ele_count;
-    uint m_ele_real_size;
+    euint m_totel_ele_count;
+    euint m_ele_real_size;
     char *m_begin_addr;
     char *m_barrier;
     GET_ELEM_REAL_SIZE m_get_elem_real_size;
@@ -155,7 +155,7 @@ public:
     }
     inline void push_back ( const T& v ) {
 		T& n_v = (T&)v;
-        uint curt_count = _get_size();
+        euint curt_count = _get_size();
 
         if ( curt_count + 1 > m_totel_ele_count ) {
             reserve(m_totel_ele_count * 8);
@@ -171,8 +171,8 @@ public:
         }
     }
     inline T &back() {
-        uint i = size() - 1;
-        uint offs = m_ele_real_size * i;
+        euint i = size() - 1;
+        euint offs = m_ele_real_size * i;
         char *ptr = m_begin_addr + offs;
         return * ( ( T * ) ptr );
     }
@@ -180,44 +180,44 @@ public:
         return * ( ( T * ) m_begin_addr );
     }
     inline const T &back() const {
-        uint i = size() - 1;
-        uint offs = m_ele_real_size * i;
+        euint i = size() - 1;
+        euint offs = m_ele_real_size * i;
         char *ptr = m_begin_addr + offs;
         return * ( ( T * ) ptr );
     }
     inline const T &front() const {
         return * ( ( T * ) m_begin_addr );
     }
-    inline T &operator [] ( uint i ) {
-        uint offs = m_ele_real_size * i;
+    inline T &operator [] ( euint i ) {
+        euint offs = m_ele_real_size * i;
         char *ptr = m_begin_addr + offs;
         return * ( ( T * ) ptr );
     }
-    inline const T &operator [] ( uint i ) const {
-        uint offs = m_ele_real_size * i;
+    inline const T &operator [] ( euint i ) const {
+        euint offs = m_ele_real_size * i;
         char *ptr = m_begin_addr + offs;
         return * ( ( T * ) ptr );
     }
     inline bool empty() const {
         return _get_size() == 0;
     }
-    inline uint size() const {
+    inline euint size() const {
         return _get_size();
     }
-    inline uint _get_size() const {
+    inline euint _get_size() const {
         return ( m_barrier - m_begin_addr ) / m_ele_real_size;
     }
     inline void clear() {
         m_barrier = m_begin_addr;
     }
-    inline void reserve(uint n) {
+    inline void reserve(euint n) {
         if ( n > m_totel_ele_count ) {
-            uint curt_count = _get_size();
+            euint curt_count = _get_size();
             char *tmp = ( char * ) Malloc ( m_ele_real_size * n );
             char *dst_ptr = tmp;
             char *src_ptr = m_begin_addr;
 
-            for ( uint i = 0; i < curt_count; i++ ) {
+            for ( euint i = 0; i < curt_count; i++ ) {
                 m_ctor((T*)dst_ptr, * ( ( T * ) src_ptr ));
                 dst_ptr += m_ele_real_size;
                 src_ptr += m_ele_real_size;
@@ -225,7 +225,7 @@ public:
 
             src_ptr = m_begin_addr;
 
-            for ( uint i = 0; i < curt_count; i++ ) {
+            for ( euint i = 0; i < curt_count; i++ ) {
                 m_dest((T*)src_ptr);
                 src_ptr += m_ele_real_size;
             }
@@ -236,11 +236,11 @@ public:
             m_totel_ele_count = n;
         }
     }
-    inline void resize(uint n) {
+    inline void resize(euint n) {
         reserve(n);
-        uint curt_count = _get_size();
-        uint d = n - curt_count;
-        for (uint i = 0; i < d; i++) {
+        euint curt_count = _get_size();
+        euint d = n - curt_count;
+        for (euint i = 0; i < d; i++) {
             m_ctor((T*)m_barrier);
             m_barrier += m_ele_real_size;
         }
@@ -283,16 +283,16 @@ public:
 		return (T*)m_begin_addr;
 	}
     vector() {
-        uint size = m_get_elem_real_size();
+        euint size = m_get_elem_real_size();
         m_begin_addr = ( char * ) Malloc ( size * 32 );
         m_barrier = m_begin_addr;
         m_ele_real_size = size;
         m_totel_ele_count = 32;
     }
     ~vector() {
-        uint curt_count = _get_size();
+        euint curt_count = _get_size();
         char *src_ptr = m_begin_addr;
-        for ( uint i = 0; i < curt_count; i++ ) {
+        for ( euint i = 0; i < curt_count; i++ ) {
             m_dest((T*)src_ptr);
             src_ptr += m_ele_real_size;
         }

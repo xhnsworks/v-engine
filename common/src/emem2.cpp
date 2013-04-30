@@ -1,32 +1,32 @@
 #include "emem2.h"
 
-_INLINE_ sint _get_aligned_16_size(sint size)
+_INLINE_ esint _get_aligned_16_size(esint size)
 {
-	sint num_qwords = size / 16;
-	sint mod = size % 16;
+	esint num_qwords = size / 16;
+	esint mod = size % 16;
 	if ( mod ) {
 		num_qwords++;
 	}
-	sint real_size = num_qwords * 16;
+	esint real_size = num_qwords * 16;
 	return real_size;
 }
-_INLINE_ sint _get_head_size()
+_INLINE_ esint _get_head_size()
 {
 	return _get_aligned_16_size(sizeof(memory_node_head));
 }
 _INLINE_ vptr MemoryNodeHead_get_memory(MemoryNodeHead _self)
 {
-	sint real_size = _get_head_size();
+	esint real_size = _get_head_size();
     char* mem = (char*)_self;
 	return (vptr)(mem + real_size);
 }
 _INLINE_ MemoryNodeHead MemoryNodeHead_get_node_head(vptr _ptr)
 {
-	sint real_size = _get_head_size();
+	esint real_size = _get_head_size();
 	char* mem = (char*)_ptr;
 	return (MemoryNodeHead)(mem - real_size);
 }
-_INLINE_ MemoryNodeHead MemoryNodeHead_Init(vptr mem, sint size)
+_INLINE_ MemoryNodeHead MemoryNodeHead_Init(vptr mem, esint size)
 {
 	MemoryNodeHead ret = (MemoryNodeHead)mem;
 	ret->totel_size = size;
@@ -36,17 +36,17 @@ _INLINE_ MemoryNodeHead MemoryNodeHead_Init(vptr mem, sint size)
 	ret->next_node_head = NULL;
 	return ret;
 }
-_INLINE_ sint MemoryNodeHead_get_available_size(MemoryNodeHead _self)
+_INLINE_ esint MemoryNodeHead_get_available_size(MemoryNodeHead _self)
 {
 	return _self->totel_size - _self->used_size - _get_head_size();
 }
-vptr MemoryNodeHead_alloc(MemoryNodeHead _self, sint _size)
+vptr MemoryNodeHead_alloc(MemoryNodeHead _self, esint _size)
 {
-	sint real_size = _get_aligned_16_size(_size);
+	esint real_size = _get_aligned_16_size(_size);
 	if (MemoryNodeHead_get_available_size(_self) >= real_size)
 	{
-		sint half_available_size = _get_aligned_16_size(MemoryNodeHead_get_available_size(_self) / 2);
-		sint new_totel_size = 0;
+		esint half_available_size = _get_aligned_16_size(MemoryNodeHead_get_available_size(_self) / 2);
+		esint new_totel_size = 0;
 		if (half_available_size >= real_size + _get_head_size())
             new_totel_size = _self->totel_size - half_available_size;
 		else
@@ -89,10 +89,10 @@ void MemoryNodeHead_free(vptr _ptr)
 		node_head->next_node_head = node_head->next_node_head->next_node_head;
 	}
 }
-BigMemoryAlloctor BigMemoryAlloctor_new(sint _totel_size)
+BigMemoryAlloctor BigMemoryAlloctor_new(esint _totel_size)
 {
 	BigMemoryAlloctor ret;
-	sint real_totel_size = _get_aligned_16_size(_totel_size);
+	esint real_totel_size = _get_aligned_16_size(_totel_size);
 	ret = (BigMemoryAlloctor)malloc(sizeof(big_memory_allocator));
 	ret->totel_mem_size = real_totel_size;
 	ret->root = (MemoryNodeHead)malloc(_get_head_size() + real_totel_size);
@@ -104,7 +104,7 @@ void BigMemoryAlloctor_delete(BigMemoryAlloctor _self)
 	free(_self->root);
 	free(_self);
 }
-vptr BigMemoryAlloctor_alloc(BigMemoryAlloctor _self, sint _size)
+vptr BigMemoryAlloctor_alloc(BigMemoryAlloctor _self, esint _size)
 {
 	return MemoryNodeHead_alloc(_self->root, _size);
 }

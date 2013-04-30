@@ -77,14 +77,14 @@ int LightBase2_get_num_shadow_emitters(LightBase2 _self)
 {
     return _self->num_shadow_emitters;
 }
-matrix4x4* LightBase2_get_proj_matrix(LightBase2 _self, uint i)
+matrix4x4* LightBase2_get_proj_matrix(LightBase2 _self, euint i)
 {
     if (i < _self->num_shadow_emitters)
         return Camera_get_render_matrix(_self->shadow_emitter_param_array[i].light_cam);
     else
         return NULL;
 }
-matrix4x4* LightBase2_get_world_matrix(LightBase2 _self, uint i)
+matrix4x4* LightBase2_get_world_matrix(LightBase2 _self, euint i)
 {
     if (i < _self->num_shadow_emitters)
         return Camera_get_world_matrix(_self->shadow_emitter_param_array[i].light_cam);
@@ -93,7 +93,7 @@ matrix4x4* LightBase2_get_world_matrix(LightBase2 _self, uint i)
 }
 **/
 /**
-Camera LightBase2_get_camera(LightBase2 _self, uint i)
+Camera LightBase2_get_camera(LightBase2 _self, euint i)
 {
     _self->Update(_self);
     if (i < _self->num_shadow_emitters) {
@@ -104,7 +104,7 @@ Camera LightBase2_get_camera(LightBase2 _self, uint i)
         return null_cam;
     }
 }
-EFloat3 LightBase2_get_shadow_dir(LightBase2 _self, uint i)
+EFloat3 LightBase2_get_shadow_dir(LightBase2 _self, euint i)
 {
     _self->Update(_self);
     if (i < _self->num_shadow_emitters)
@@ -162,7 +162,7 @@ void light_base_2::draw_shape(struct _line_drawer* _drawer)
 
 void light_base_2::update()
 {
-    for (uint i = 0; i < num_shadow_emitters; i++) {
+    for (euint i = 0; i < num_shadow_emitters; i++) {
         sfloat3 cam_pos = SFloat3_assign_from_efloat3(&pos);
         sfloat3 cam_dir = SFloat3_assign_from_efloat3(&dir);
         cam_dir = SFloat3_mul_float(-10.0f, cam_dir);

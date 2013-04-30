@@ -28,7 +28,7 @@ typedef struct _light_state
 {
     light_type type;
     int lighting_node_id;
-    uint num_shadow_emitters;
+    euint num_shadow_emitters;
 } light_state;
 typedef struct _light_state* LightState;
 

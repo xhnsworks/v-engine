@@ -217,7 +217,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
     ShaderObject view_light_dir = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "ViewLightDir", 1);
     ShaderObject light_weight = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "LightingWeight", 1);
 
-    uint _num_shadow_map = _lt_state->num_shadow_emitters;
+    euint _num_shadow_map = _lt_state->num_shadow_emitters;
     EAssert(_num_shadow_map <= 6, "%s", "num shadow map is more than 6");
 
 	ShaderObject shadow_cube_map = {NULL};
@@ -229,7 +229,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 
     if (_lt_state->type != Point)
     {
-        for (uint i = 0; i < _num_shadow_map; i++)
+        for (euint i = 0; i < _num_shadow_map; i++)
         {
             char shadow_map[256];
             char light_world_matrix[256];
@@ -503,7 +503,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
     }
 }
 
-PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, uint _num_shadow_map, light_type type, bool _has_lighting_map)
+PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, euint _num_shadow_map, light_type type, bool _has_lighting_map)
 {
     /**
     if (!VertexDecl_test(_dec))
@@ -562,7 +562,7 @@ PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, 
 
     if (type != Point)
     {
-        for (uint i = 0; i < _num_shadow_map; i++)
+        for (euint i = 0; i < _num_shadow_map; i++)
         {
             char shadow_map[256];
             char light_world_matrix[256];
@@ -641,8 +641,8 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
     /// 从std::map<lighting_proc, std::set<material_id>>的tree里面找出std::set<material_id>，
     /// 如找不到则创建并插入一个空的std::set<material_id>
     /// 最后向找到的或新创建出来的std::set<material_id>插入material_id
-    uint n = array_n(_decls);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_decls);
+    for (euint i = 0; i < n; i++)
     {
         LightingProc2 light_proc = _decls[i].light_proc;
         var key, data;
@@ -672,7 +672,7 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
 		LightingProc2 light_proc = (LightingProc2)key.vptr_var;
         Tree tag_set = (Tree)data.vptr_var;
 #ifdef USE_SWITCH
-        sint* tags = array_new(sint, Tree_count(tag_set), -1);
+        esint* tags = array_new(esint, Tree_count(tag_set), -1);
         Iterator tag_iter = Tree_begin(tag_set);
         while (tag_iter)
         {
@@ -711,8 +711,8 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
     SwitchNode_delete(sn);
 #else
 	BranchNode_delete(bn);
-	uint num_objs = array_n(tag_obj_buf);
-	for (uint i = 0; i < num_objs; i++)
+	euint num_objs = array_n(tag_obj_buf);
+	for (euint i = 0; i < num_objs; i++)
 	{
 		ShaderObject_delete(tag_obj_buf[i]);
 	}

@@ -20,7 +20,7 @@ API_EXPORT Iterator Tree_next(Iterator _i);
 API_EXPORT Iterator Tree_prev(Iterator _i);
 API_EXPORT Iterator Tree_begin(Tree _tree);
 API_EXPORT Iterator Tree_end(Tree _tree);
-API_EXPORT uint Tree_count(Tree _tree);
+API_EXPORT euint Tree_count(Tree _tree);
 
 API_EXPORT void Tree_set_key_compare_proc(Tree _tree, KEY_COMPARE _proc);
 #endif

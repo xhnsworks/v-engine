@@ -3,7 +3,7 @@
 #include "emem.h"
 typedef struct _texture_cube
 {
-    volatile uint ref_count;
+    volatile euint ref_count;
     uint32 id;
     pixel_format format;
     uint32 width;
@@ -12,7 +12,7 @@ typedef struct _texture_cube
     vptr pxl_buffer;
 } texture_cube;
 
-void _TextureCube_delete(TextureCube _self, const char* _file, uint _line)
+void _TextureCube_delete(TextureCube _self, const char* _file, euint _line)
 {
     _self->ref_count--;
     if (!_self->ref_count)
@@ -25,7 +25,7 @@ void _TextureCube_delete(TextureCube _self, const char* _file, uint _line)
     }
 }
 
-TextureCube _TextureCube_new(const char* _file, uint _line)
+TextureCube _TextureCube_new(const char* _file, euint _line)
 {
     TextureCube ret = (TextureCube)SMalloc(sizeof(texture_cube));
     ret->ref_count = 1;

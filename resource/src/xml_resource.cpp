@@ -34,7 +34,7 @@ xhn::static_string XMLDetector::Detect(const xhn::string& resName, FileStream st
 	xhn::string ecgResName( resName );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), xhn::to_lower);
 	xhn::string extName = ".xml";
-	uint pos = ecgResName.find_last_of(extName);
+	euint pos = ecgResName.find_last_of(extName);
 	if (pos != xhn::string::npos && pos +  extName.size() == ecgResName.size())
 		return xhn::static_string("XML");
 	else
@@ -45,7 +45,7 @@ xhn::static_string XMLDetector::Detect(const xhn::string& resName)
 	xhn::string ecgResName( resName );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), xhn::to_lower);
 	xhn::string extName = ".xml";
-	uint pos = ecgResName.find_last_of(extName);
+	euint pos = ecgResName.find_last_of(extName);
 	if (pos != xhn::string::npos && pos +  extName.size() == ecgResName.size())
 		return xhn::static_string("XML");
 	else

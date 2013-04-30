@@ -44,7 +44,7 @@ void SpriteFactory::SpriteLayerDestCallback(SpriteLayer* sl)
 		xhn::RWLock2::Instance inst = b->get_write_lock();
 		AnimAttrArray* a = b->find_unlock(sl);
 		if (a) {
-			for (uint i = 0; i < a->size(); i++)
+			for (euint i = 0; i < a->size(); i++)
 				s_animAttrSpriteLayerMap.erase( (*a)[i] );
 		}
 	}

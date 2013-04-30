@@ -25,13 +25,13 @@ typedef struct _mem_node
 typedef struct _refer_info
 {
     const char* file_name;
-    uint line;
+    euint line;
 } refer_info;
 
 typedef struct _totel_refer_info
 {
-    uint used_mem_size;
-    uint unused_mem_size;
+    euint used_mem_size;
+    euint unused_mem_size;
 } totel_refer_info;
 
 #ifdef USE_SSE
@@ -42,12 +42,12 @@ typedef struct _totel_refer_info
 static char align_char[32];
 static __m128* zero_ptr = NULL;
 #endif
-_INLINE_ void meminit(void* _mem, uint _size)
+_INLINE_ void meminit(void* _mem, euint _size)
 {
 #ifdef USE_SSE
-	uint i = 0;
+	euint i = 0;
 
-	uint cnt = _size / 16;
+	euint cnt = _size / 16;
 	__m128* m128_ptr = NULL;
     
     if (!zero_ptr)
@@ -74,12 +74,12 @@ _INLINE_ void mem_node_init(mem_node* _node)
 
 #define cale_alloc_size(s) ( s + (16 - (s % 16)) );
 
-void* alloc_mem_list(uint _chk_size, uint _num_chks, uint* _real_chk_size, vptr* _begin, vptr* _end, mem_node** _head)
+void* alloc_mem_list(euint _chk_size, euint _num_chks, euint* _real_chk_size, vptr* _begin, vptr* _end, mem_node** _head)
 {
 	char* ret = NULL;
-	uint totel_size = 0;
-    uint chk_size = 0;
-	uint i = 0;
+	euint totel_size = 0;
+    euint chk_size = 0;
+	euint i = 0;
 
 	chk_size = cale_alloc_size(_chk_size);
 	totel_size = chk_size * _num_chks;
@@ -120,13 +120,13 @@ void free_mem_list(void* _mem_list)
 typedef struct _mem_pool_node
 {
     void* mem_list;
-    uint real_chk_size;
+    euint real_chk_size;
     vptr begin;
     vptr end;
     mem_node* head;
 } mem_pool_node;
 
-mem_pool_node allco_mem_pool_node(uint _chk_size, uint _num_chks)
+mem_pool_node allco_mem_pool_node(euint _chk_size, euint _num_chks)
 {
     mem_pool_node ret;
     ret.mem_list = alloc_mem_list(_chk_size, _num_chks, &ret.real_chk_size, &ret.begin, &ret.end, &ret.head);
@@ -201,7 +201,7 @@ void dealloc(mem_pool_node* _node, void* _ptr)
     _node->head = n;
 }
 
-MemPoolNode MemPoolNode_new(uint _chk_size, uint _num_chks)
+MemPoolNode MemPoolNode_new(euint _chk_size, euint _num_chks)
 {
     MemPoolNode ret;
     ret.self = (struct _mem_pool_node*)malloc(sizeof(mem_pool_node));
@@ -254,18 +254,18 @@ bool MemPoolNode_empty(MemPoolNode _self)
 
 typedef struct _mem_pool
 {
-    uint real_chk_size;
-    uint num_chunk_per_mem_block;
+    euint real_chk_size;
+    euint num_chunk_per_mem_block;
     List mem_pool_chain;
 	pthread_rwlock_t lock;
 } mem_pool;
 
 #define PAGE_SIZE (4 * 1024)
-MemPool MemPool_new(uint _chk_size)
+MemPool MemPool_new(euint _chk_size)
 {
     MemPool ret;
-	uint num_chunk_per_mem_block = 0;
-	uint c = 1;
+	euint num_chunk_per_mem_block = 0;
+	euint c = 1;
 	MemPoolNode node = {NULL};
 	var v;
 
@@ -385,7 +385,7 @@ void MemPool_free(MemPool _self, Iterator _iter, void* _ptr)
 	pthread_rwlock_unlock(&_self.self->lock);
 }
 
-uint MemPool_chunk_size(MemPool _self)
+euint MemPool_chunk_size(MemPool _self)
 {
     return _self.self->real_chk_size;
 }
@@ -436,12 +436,12 @@ void MemAllocator_delete(MemAllocator _self)
 	pthread_rwlock_destroy(&_self.self->lock);
 	free(_self.self);
 }
-void* MemAllocator_alloc(MemAllocator _self, uint _size, bool _is_safe_alloc)
+void* MemAllocator_alloc(MemAllocator _self, euint _size, bool _is_safe_alloc)
 {
 	char* ret = NULL;
 	alloc_info ainfo = {{NULL}, NULL};
 	refer_info rinfo = {NULL, 0};
-	uint i = 0;
+	euint i = 0;
 
 	_size += (ALLOC_INFO_RESERVED + REFER_INFO_RESERVED);
 	i = _size / DEFAULT_CHUNK_SIZE;
@@ -478,7 +478,7 @@ void* MemAllocator_alloc(MemAllocator _self, uint _size, bool _is_safe_alloc)
 
 	return ret;
 }
-void* MemAllocator_salloc(MemAllocator _self, uint _size)
+void* MemAllocator_salloc(MemAllocator _self, euint _size)
 {
 	return MemAllocator_alloc(_self, _size, true);
 }
@@ -513,7 +513,7 @@ void MemAllocator_free(MemAllocator _self, void* _ptr)
 }
 void MemAllocator_log(MemAllocator _self)
 {
-	uint i = 0;
+	euint i = 0;
 	totel_refer_info ret;
 	ret.unused_mem_size = 0;
 	ret.used_mem_size = 0;
@@ -530,7 +530,7 @@ void MemAllocator_log(MemAllocator _self)
 }
 bool MemAllocator_check(MemAllocator _self)
 {
-	uint i = 0;
+	euint i = 0;
 	for (; i < MAX_MEM_POOLS; i++)
 	{
 		if (SELF.mem_pools[i].self && !MemPool_check(SELF.mem_pools[i]))
@@ -546,7 +546,7 @@ void MInit()
 #endif
 }
 
-vptr _Malloc(uint _size, const char* _file, uint32 _line)
+vptr _Malloc(euint _size, const char* _file, uint32 _line)
 {
 	vptr ret = Ealloc(_size);
 #ifndef USE_C_MALLOC
@@ -558,7 +558,7 @@ vptr _Malloc(uint _size, const char* _file, uint32 _line)
 	return ret;
 }
 
-vptr _SMalloc(uint _size, const char* _file, uint32 _line)
+vptr _SMalloc(euint _size, const char* _file, uint32 _line)
 {
     vptr ret = SEalloc(_size);
 #ifndef USE_C_MALLOC
@@ -591,7 +591,7 @@ void Mlog()
 {
 #ifndef USE_C_MALLOC
 	/**
-	uint i = 0;
+	euint i = 0;
     totel_refer_info ret;
     ret.unused_mem_size = 0;
     ret.used_mem_size = 0;
@@ -614,7 +614,7 @@ bool MCheck()
 {
 #ifndef USE_C_MALLOC
 	/**
-	uint i = 0;
+	euint i = 0;
     for (; i < MAX_MEM_POOLS; i++)
     {
         if (g_mem_pools[i].self && !MemPool_check(g_mem_pools[i]))
@@ -625,7 +625,7 @@ bool MCheck()
 	return MemAllocator_check(g_MemAllocator);
 #endif
 }
-vptr Ealloc(uint _size)
+vptr Ealloc(euint _size)
 {
 #ifdef USE_C_MALLOC
 	vptr ret = align_malloc_16(_size);
@@ -634,7 +634,7 @@ vptr Ealloc(uint _size)
 	return MemAllocator_alloc(g_MemAllocator, _size, false);
 #endif
 }
-vptr SEalloc(uint _size)
+vptr SEalloc(euint _size)
 {
 #ifdef USE_C_MALLOC
     vptr ret = align_malloc_16(_size);
@@ -654,7 +654,7 @@ void Efree(vptr _ptr)
 	MemAllocator_free(g_MemAllocator, _ptr);
 #endif
 }
-const char* Minfo(vptr _ptr, uint* _line)
+const char* Minfo(vptr _ptr, euint* _line)
 {
 #ifdef USE_C_MALLOC
     return NULL;
@@ -671,7 +671,7 @@ const char* Minfo(vptr _ptr, uint* _line)
 #endif
 }
 
-uint Msize(vptr _ptr)
+euint Msize(vptr _ptr)
 {
 #ifdef USE_C_MALLOC
     return 0;

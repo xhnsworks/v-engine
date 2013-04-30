@@ -24,7 +24,7 @@ void CreateAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 		RWBuffer receiptChannel = RobotManager::Get()->GetChannel(animRob->GetName(), sender);
 		if (receiptChannel) {
 			AnimStatusChangeReceipt* rec = ENEW AnimStatusChangeReceipt(animID, NotExist, animRob->GetAnimationStatus(animID));
-			RWBuffer_Write(receiptChannel, (const uint*)&rec, sizeof(rec));
+			RWBuffer_Write(receiptChannel, (const euint*)&rec, sizeof(rec));
 		}
 	}
 }
@@ -42,7 +42,7 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 		RWBuffer receiptChannel = RobotManager::Get()->GetChannel(animRob->GetName(), sender);
 		if (receiptChannel) {
 			AnimStatusChangeReceipt* rec = ENEW AnimStatusChangeReceipt(m_animID, NotExist, animRob->GetAnimationStatus(m_animID));
-			RWBuffer_Write(receiptChannel, (const uint*)&rec, sizeof(rec));
+			RWBuffer_Write(receiptChannel, (const euint*)&rec, sizeof(rec));
 		}
 	}
 }

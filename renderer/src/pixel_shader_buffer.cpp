@@ -8,7 +8,7 @@ typedef struct _pixel_shader_buffer
 } pixel_shader_buffer;
 
 ///==============================PxlSdrBuf========================================///
-pixel_shader_buffer* PxlSdrBuf_Init(struct _pixel_shader_buffer* _buf, const char* _file, uint _line)
+pixel_shader_buffer* PxlSdrBuf_Init(struct _pixel_shader_buffer* _buf, const char* _file, euint _line)
 {
     ShaderBuffer sb = {(struct _shader_buffer*)_buf};
     ShaderObject color_out_0 = ShaderObject_new(Float4_Obj, "gl_FragData[0]", 1);
@@ -23,11 +23,11 @@ pixel_shader_buffer* PxlSdrBuf_Init(struct _pixel_shader_buffer* _buf, const cha
     return _buf;
 }
 
-void PxlSdrBuf_Dest(struct _pixel_shader_buffer* _buf, const char* _file, uint _line)
+void PxlSdrBuf_Dest(struct _pixel_shader_buffer* _buf, const char* _file, euint _line)
 {
 }
 
-PxlSdrBuf _PxlSdrBuf_new(const char* _file, uint _line)
+PxlSdrBuf _PxlSdrBuf_new(const char* _file, euint _line)
 {
     PxlSdrBuf ret;
     ret = (pixel_shader_buffer*)_Malloc(sizeof(pixel_shader_buffer), _file, _line);
@@ -36,7 +36,7 @@ PxlSdrBuf _PxlSdrBuf_new(const char* _file, uint _line)
     return ret;
 }
 
-void _PxlSdrBuf_delete(PxlSdrBuf _psb, const char* _file, uint _line)
+void _PxlSdrBuf_delete(PxlSdrBuf _psb, const char* _file, euint _line)
 {
     PxlSdrBuf_Dest(_psb, _file, _line);
     ShaderBuffer sb = to_ShaderBuffer(_psb);

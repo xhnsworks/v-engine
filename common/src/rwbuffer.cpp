@@ -10,22 +10,22 @@
 
 struct rw_buffer
 {
-    volatile uint* top_barrier;
-    volatile uint* bottom_barrier;
-    volatile uint* top_pointer;
-    volatile uint* bottom_pointer;
+    volatile euint* top_barrier;
+    volatile euint* bottom_barrier;
+    volatile euint* top_pointer;
+    volatile euint* bottom_pointer;
 };
 
-RWBuffer RWBuffer_new(uint buffer_size)
+RWBuffer RWBuffer_new(euint buffer_size)
 {
     RWBuffer ret;
-    uint real_size = 0;
-    uint number_uints = 0;
+    euint real_size = 0;
+    euint number_uints = 0;
     ret = (rw_buffer*)SMalloc(sizeof(rw_buffer));
 
-    real_size = GetRealSize(uint, buffer_size);
-    number_uints = real_size / sizeof(uint);
-    ret->top_barrier = (uint*)SMalloc(real_size);
+    real_size = GetRealSize(euint, buffer_size);
+    number_uints = real_size / sizeof(euint);
+    ret->top_barrier = (euint*)SMalloc(real_size);
     ret->bottom_barrier = ret->top_barrier + number_uints;
     ret->top_pointer = ret->top_barrier;
     ret->bottom_pointer = ret->top_barrier;
@@ -42,13 +42,13 @@ void RWBuffer_delete(RWBuffer _self)
     }
 }
 
-bool RWBuffer_Read(RWBuffer _self, uint* result, uint* read_size)
+bool RWBuffer_Read(RWBuffer _self, euint* result, euint* read_size)
 {
-    register uint* registered_top_pointer = (uint*)_self->top_pointer;
-    uint* buffer_chunk_pointer = NULL;
-    uint number_uints = 0;
-    uint* next = NULL;
-    uint i = 0;
+    register euint* registered_top_pointer = (euint*)_self->top_pointer;
+    euint* buffer_chunk_pointer = NULL;
+    euint number_uints = 0;
+    euint* next = NULL;
+    euint i = 0;
 
     if (registered_top_pointer == _self->bottom_pointer)
         return false;
@@ -58,19 +58,19 @@ bool RWBuffer_Read(RWBuffer _self, uint* result, uint* read_size)
     buffer_chunk_pointer++;
 
     if (buffer_chunk_pointer > _self->bottom_barrier)
-        buffer_chunk_pointer = (uint*)_self->top_barrier;
+        buffer_chunk_pointer = (euint*)_self->top_barrier;
 
-    number_uints = *read_size / sizeof(uint);
-    next = (uint*)*buffer_chunk_pointer;
+    number_uints = *read_size / sizeof(euint);
+    next = (euint*)*buffer_chunk_pointer;
     buffer_chunk_pointer++;
 
     if (buffer_chunk_pointer > _self->bottom_barrier)
-        buffer_chunk_pointer = (uint*)_self->top_barrier;
+        buffer_chunk_pointer = (euint*)_self->top_barrier;
 
     for (i = 0; i < number_uints; i++)
     {
         if (buffer_chunk_pointer > _self->bottom_barrier)
-            buffer_chunk_pointer = (uint*)_self->top_barrier;
+            buffer_chunk_pointer = (euint*)_self->top_barrier;
 
         result[i] = *buffer_chunk_pointer;
         buffer_chunk_pointer++;
@@ -80,19 +80,19 @@ bool RWBuffer_Read(RWBuffer _self, uint* result, uint* read_size)
     return true;
 }
 
-bool RWBuffer_Write(RWBuffer _self, const uint* from, const uint write_size)
+bool RWBuffer_Write(RWBuffer _self, const euint* from, const euint write_size)
 {
-    register uint* registered_top_pointer = (uint*)_self->top_pointer;
-    register uint* registered_bottom_pointer = (uint*)_self->bottom_pointer;
-    uint real_write_size = GetRealSize(uint, write_size);
-    uint number_uints = real_write_size / sizeof(uint);
-    uint* buffer_chunk_pointer = registered_bottom_pointer + 2;
-    uint i = 0;
+    register euint* registered_top_pointer = (euint*)_self->top_pointer;
+    register euint* registered_bottom_pointer = (euint*)_self->bottom_pointer;
+    euint real_write_size = GetRealSize(euint, write_size);
+    euint number_uints = real_write_size / sizeof(euint);
+    euint* buffer_chunk_pointer = registered_bottom_pointer + 2;
+    euint i = 0;
 
     for (i = 0; i < number_uints; i++)
     {
         if (buffer_chunk_pointer > _self->bottom_barrier)
-            buffer_chunk_pointer = (uint*)_self->top_barrier;
+            buffer_chunk_pointer = (euint*)_self->top_barrier;
 
         if (buffer_chunk_pointer == registered_top_pointer)
             return false;
@@ -102,13 +102,13 @@ bool RWBuffer_Write(RWBuffer _self, const uint* from, const uint write_size)
     }
 
     if (buffer_chunk_pointer > _self->bottom_barrier)
-        buffer_chunk_pointer = (uint*)_self->top_barrier;
+        buffer_chunk_pointer = (euint*)_self->top_barrier;
 
     *registered_bottom_pointer = real_write_size;
     registered_bottom_pointer++;
     if (registered_bottom_pointer > _self->bottom_barrier)
-        registered_bottom_pointer = (uint*)_self->top_barrier;
-    *registered_bottom_pointer = (uint)buffer_chunk_pointer;
+        registered_bottom_pointer = (euint*)_self->top_barrier;
+    *registered_bottom_pointer = (euint)buffer_chunk_pointer;
 
     _self->bottom_pointer = buffer_chunk_pointer;
     return true;

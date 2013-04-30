@@ -34,25 +34,25 @@ typedef void (*LightingProc2)(vptr, PxlSdrBuf, SdrNdGen, CircuitBoard, bool);
 typedef struct _lighting_decl
 {
     LightingProc2 light_proc;
-    sint mat_id;
+    esint mat_id;
 } lighting_decl;
 
 typedef struct _material_decl
 {
     DisplayProc2 disp_proc;
-    sint mat_id;
+    esint mat_id;
 } material_decl;
 
 typedef struct _material_prototype
 {
-    sint material_id;
+    esint material_id;
     DisplayProc2 disp_proc;
     e_draw_mode draw_mode;
     bool double_sided_flag;
 } material_prototype;
 typedef material_prototype* MaterialPrototype;
 
-API_EXPORT MaterialPrototype MaterialPrototype_new(VertexDecl dec, sint material_id,
+API_EXPORT MaterialPrototype MaterialPrototype_new(VertexDecl dec, esint material_id,
                                                    SDisplayProc _disp_proc,
                                                    e_draw_mode draw_mode, bool double_sided_flag);
 API_EXPORT void MaterialPrototype_delete(MaterialPrototype self);

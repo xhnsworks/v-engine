@@ -42,13 +42,13 @@ public:
     };
     template<typename T>
     struct FNextProc {
-        void operator() ( T *from, T *&to, uint ele_real_size ) {
+        void operator() ( T *from, T *&to, euint ele_real_size ) {
             to = ( T * ) from->iter_next;
         }
     };
     template<typename T>
     struct FPrevProc {
-        void operator() ( T *from, T *&to, uint ele_real_size ) {
+        void operator() ( T *from, T *&to, euint ele_real_size ) {
             to = ( T * ) from->iter_prev;
         }
     };
@@ -57,7 +57,7 @@ public:
     {
     public:
         typedef bidirectional_readwrite_iterator<rbnode_type, FReadProc<rbnode_type>, FWriteProc<rbnode_type>, FNextProc<rbnode_type>, FPrevProc<rbnode_type> > base_type;
-        iterator ( rbnode_type *a, uint ele_real_size )
+        iterator ( rbnode_type *a, euint ele_real_size )
             : base_type (
                 a, ele_real_size, FReadProc<rbnode_type>(), FWriteProc<rbnode_type>(), FNextProc<rbnode_type>(), FPrevProc<rbnode_type>() )
         {}
@@ -85,7 +85,7 @@ public:
 	{
 	public:
 		typedef bidirectional_readwrite_iterator<rbnode_type, FReadProc<rbnode_type>, FWriteProc<rbnode_type>, FPrevProc<rbnode_type>, FNextProc<rbnode_type> > base_type;
-		reverse_iterator ( rbnode_type *a, uint ele_real_size )
+		reverse_iterator ( rbnode_type *a, euint ele_real_size )
 			: base_type (
 			a, ele_real_size, FReadProc<rbnode_type>(), FWriteProc<rbnode_type>(), FPrevProc<rbnode_type>(), FNextProc<rbnode_type>() )
 		{}
@@ -113,7 +113,7 @@ public:
     {
     public:
         typedef const_bidirectional_readwrite_iterator<rbnode_type, FReadProc<rbnode_type>, FWriteProc<rbnode_type>, FNextProc<rbnode_type>, FPrevProc<rbnode_type> > base_type;
-        const_iterator ( rbnode_type *a, uint ele_real_size )
+        const_iterator ( rbnode_type *a, euint ele_real_size )
             : base_type (
                 a, ele_real_size, FReadProc<rbnode_type>(), FWriteProc<rbnode_type>(), FNextProc<rbnode_type>(), FPrevProc<rbnode_type>() )
         {}
@@ -141,7 +141,7 @@ public:
 	{
 	public:
 		typedef const_bidirectional_readwrite_iterator<rbnode_type, FReadProc<rbnode_type>, FWriteProc<rbnode_type>, FPrevProc<rbnode_type>, FNextProc<rbnode_type> > base_type;
-		const_reverse_iterator ( rbnode_type *a, uint ele_real_size )
+		const_reverse_iterator ( rbnode_type *a, euint ele_real_size )
 			: base_type (
 			a, ele_real_size, FReadProc<rbnode_type>(), FWriteProc<rbnode_type>(), FPrevProc<rbnode_type>(), FNextProc<rbnode_type>() )
 		{}
@@ -200,10 +200,10 @@ public:
         rbnode_type *node = ( rbnode_type * ) rbtree_type::_find ( &m_rbtree, (K&)key, true );
         return node->second;
     }
-    uint erase ( const K &key ) {
+    euint erase ( const K &key ) {
         return rbtree_type::_remove ( &m_rbtree, key );
     }
-    uint erase ( iterator &iter ) {
+    euint erase ( iterator &iter ) {
         return rbtree_type::_erase ( &m_rbtree, & ( *iter ) );
     }
     iterator erase ( const_iterator &iter ) {
@@ -235,7 +235,7 @@ public:
 	const_reverse_iterator rend() const {
 		return const_reverse_iterator ( NULL, 0 );
 	}
-    uint size() const {
+    euint size() const {
         return m_rbtree.count;
     }
     void clear() {

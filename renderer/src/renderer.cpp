@@ -415,7 +415,7 @@ void Renderer::RendererDest()
             SketchBook_delete ( std_sketch_book );
         }
 
-        for ( uint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
+        for ( euint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
             SketchBook skb = lighting_sketch_book_array[i];
 
             if ( skb ) {
@@ -466,7 +466,7 @@ void Renderer::register_material ( const char *mat_name, SDisplayProc disp_proc,
     }
 }
 
-sint Renderer::get_material_id ( const char *mat_name )
+esint Renderer::get_material_id ( const char *mat_name )
 {
     var key, data;
     key.str_var = mat_name;
@@ -516,7 +516,7 @@ void Renderer::prepare_sketchbooks()
 
         elog ( "%s", "LIGHTING SKETCHBOOK INIT BEGIN:" );
 
-        for ( uint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
+        for ( euint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
             SketchBook skb = lighting_sketch_book_array[i];
 
             if ( to_ptr ( skb ) ) {
@@ -524,7 +524,7 @@ void Renderer::prepare_sketchbooks()
             }
         }
 
-        for ( uint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
+        for ( euint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
             elog ( "    SKETCH BOOK %d", i );
             SketchBookConfig cfg = SketchBookConfig_new();
             SketchBookConfig_set_size ( cfg, width, height );
@@ -547,7 +547,7 @@ void Renderer::prepare_sketchbooks()
     else {
         std_sketch_book = prev_renderer->std_sketch_book;
 
-        for ( uint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
+        for ( euint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
             lighting_sketch_book_array[i] = prev_renderer->lighting_sketch_book_array[i];
         }
     }
@@ -609,7 +609,7 @@ void Renderer::render_std_passes()
         SketchBook_bind_renderbuffer();
     }
 
-    uint clear_flag = 0;
+    euint clear_flag = 0;
 
     if ( clear_color_buffer_flag ) {
         clear_flag |= GL_COLOR_BUFFER_BIT;
@@ -634,7 +634,7 @@ void Renderer::render_std_passes()
 	renderable_sorter->Sort(used_renderable_set, sorted_renderable_list);
 	STD_NAMESPACE::list<Renderable>::iterator r_iter = sorted_renderable_list.begin();
 	STD_NAMESPACE::list<Renderable>::iterator end = sorted_renderable_list.end();
-    uint count = 0;
+    euint count = 0;
 
     ///while ( r_iter ) {
 	for (; r_iter != end; r_iter++ ) {
@@ -691,7 +691,7 @@ void Renderer::render_std_passes()
         curt_mat_inst = rbl->material;
         Pass_auto_set_uniform_params ( std_pass, this, false );
 
-        uint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
+        euint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
         e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
         if ( mode == Triangular ) {
@@ -775,7 +775,7 @@ void Renderer::shadow_render ( Renderable rbl, SketchBook curt_skb, sketch_type 
 
     Pass_auto_set_uniform_params ( std_pass, this, false );
 
-    uint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
+    euint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
     e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
     if ( mode == Triangular ) {
@@ -825,8 +825,8 @@ void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
             clear_sketch_book ( skb );
 
 			for (; rbl_iter != end; rbl_iter++) {
-                uint width = SketchBookConfig_get_width ( shadow_state.depth_sketch_cfg );
-                uint height = SketchBookConfig_get_height ( shadow_state.depth_sketch_cfg );
+                euint width = SketchBookConfig_get_width ( shadow_state.depth_sketch_cfg );
+                euint height = SketchBookConfig_get_height ( shadow_state.depth_sketch_cfg );
 
 				Renderable rbl = *rbl_iter;
                 glViewport ( 0, 0, width, height );
@@ -847,7 +847,7 @@ void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
     }
     else if ( shadow_type == Sketch2DBox ) {
         /// 阴影是cube map，需要渲染6次
-        for ( uint i = 0; i < 6; i++ ) {
+        for ( euint i = 0; i < 6; i++ ) {
             Camera light_cam = pl->get_camera ( i );
 
             if ( to_ptr ( light_cam ) ) {
@@ -863,8 +863,8 @@ void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
 
                 ///while ( rbl_iter ) {
 				for (; rbl_iter != end; rbl_iter++) {
-                    uint width = shadow_state.blurred_depth_sketch_cube_size;
-                    uint height = shadow_state.blurred_depth_sketch_cube_size;
+                    euint width = shadow_state.blurred_depth_sketch_cube_size;
+                    euint height = shadow_state.blurred_depth_sketch_cube_size;
 
 					Renderable rbl = *rbl_iter;
                     glViewport ( 0, 0, width, height );
@@ -888,7 +888,7 @@ void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
     curt_render_cam = camera_base;
 }
 
-void Renderer::all_lighting_render ( light_prototype &prototype, SketchBook curt_lighting_skb, uint *light_count )
+void Renderer::all_lighting_render ( light_prototype &prototype, SketchBook curt_lighting_skb, euint *light_count )
 {
     Iterator light_iter = Tree_begin ( prototype.light_tree );
 
@@ -949,7 +949,7 @@ void Renderer::lighting()
 
         curt_material_id_sketch = SketchBook_get_sketch ( prev_render_skb, MATERIAL_ID_INDEX );
 
-        uint light_count = 0;
+        euint light_count = 0;
 
         all_lighting_render ( dir_light_ptype, curt_lighting_skb, &light_count );
         all_lighting_render ( spot_light_ptype, curt_lighting_skb, &light_count );
@@ -1061,7 +1061,7 @@ Renderable Renderer::new_renderable ( VertexDecl _dec, MaterialInstance _m_inst,
     return RendererBase::new_renderable ( _dec, _m_inst, _mesh_mode );
 }
 
-void Renderer::viewport_refresh ( uint _x, uint _y, uint _width, uint _height )
+void Renderer::viewport_refresh ( euint _x, euint _y, euint _width, euint _height )
 {
     Camera cam = curt_render_cam;
 
@@ -1114,7 +1114,7 @@ renderer_param_value Renderer::get_shader_object_value ( sint32 _src )
     return get_shader_object_value(this, _src);
 }
 
-void Renderer::register_renderer_param ( sint32 _id, param_type _type, sint _array_size, GetRendererParamProc _proc )
+void Renderer::register_renderer_param ( sint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc )
 {
     var key, data;
     key.sint32_var = _id;

@@ -7,7 +7,7 @@ typedef struct _list
 	MFREE free_proc;
 	struct list_node* head;
 	struct list_node* tail;
-	uint count;
+	euint count;
 	etype value_type;
 #ifdef ALLOW_CONCURRENT
 	pthread_rwlock_t lock;
@@ -379,7 +379,7 @@ List ListFunc(break)(List _lst, Iterator _i)
 	}
 }
 
-uint ListFunc(count)(List _lst)
+euint ListFunc(count)(List _lst)
 {
 	return _lst->count;
 }

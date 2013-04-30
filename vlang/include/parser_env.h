@@ -200,7 +200,7 @@ void FunctionClosures_pop_for_loop_block(FunctionClosures _self);
 void FunctionClosures_execute(ParserEnv* e, FunctionClosures _self);
 void FunctionClosures_push_vari(FunctionClosures _self, const char* var_name, SymbolValue* v);
 vptr FunctionClosures_get_vari_addr(ParserEnv* e, FunctionClosures _self, const char* var_name);
-sint FunctionClosures_get_vari_offs(ParserEnv* e, FunctionClosures _self, const char* var_name, int* vari_type_out);
+esint FunctionClosures_get_vari_offs(ParserEnv* e, FunctionClosures _self, const char* var_name, int* vari_type_out);
 
 EString FunctionClosures_print_out(ParserEnv* e, FunctionClosures _self);
 
@@ -230,7 +230,7 @@ struct _parser_env
     symbol_stack sym_stack;
     FixedStack return_point_stack;
 
-    uint line_count;
+    euint line_count;
     parser_exception* exce_array;
 
     Tree struct_tree;
@@ -269,7 +269,7 @@ FunctionClosures ParserEnv_find_function(ParserEnv* e, const char* _func_name);
 void ParserEnv_print_all_function(ParserEnv* e);
 void ParserEnv_insert_unknown_symbol(ParserEnv* e, const char* str, SymbolValue* result);
 SymbolValue* ParserEnv_new_unknown_symbol(ParserEnv* e, const char* str);
-vptr ParserEnv_get_addr(ParserEnv* e, int mem_type, sint offs);
+vptr ParserEnv_get_addr(ParserEnv* e, int mem_type, esint offs);
 void ParserEnv_push_return_point(ParserEnv* e, int vari_offs, int vari_str_offs, FunctionClosures curt_func, int curt_cmd_cnt);
 void ParserEnv_pop_return_point(ParserEnv* e);
 
@@ -400,8 +400,8 @@ static inline void _value_string_output(ParserEnv* e, SymbolValue value, StringO
     }
     else
     {
-        uint n = array_n(value.data.value_array);
-        for (uint i = 0; i < n; i++)
+        euint n = array_n(value.data.value_array);
+        for (euint i = 0; i < n; i++)
         {
             SymbolValue sv = value.data.value_array[i];
             if (value.type == FuncArgValueArray)
@@ -526,11 +526,11 @@ static inline vptr _get_ptr_print_info(ParserEnv* e, SymbolValue a)
     ///return (vptr)((char*)a.value + a.offs);
     char* mem = e->mems[a.data.mem_addr.mem_type];
     vptr ret = (vptr)((char*)mem + a.data.mem_addr.offs);
-    VPRINT("ADDR %x", (uint)ret);
+    VPRINT("ADDR %x", (euint)ret);
     return ret;
 }
 
-static inline SymbolValue* _symbol_value_array_new(uint n)
+static inline SymbolValue* _symbol_value_array_new(euint n)
 {
     SymbolValue null_value;
     null_value.type = UnknownValue;

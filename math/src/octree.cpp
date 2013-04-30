@@ -79,12 +79,12 @@ void draw_axis_aligned_box(axis_aligned_box* box, LineDrawer drawer, float shrin
             return z_array[0];
     }
 	**/
-    for (uint i = 0; i < 8; i++)
+    for (euint i = 0; i < 8; i++)
     {
-        for (uint j = 0; j < 8; j++)
+        for (euint j = 0; j < 8; j++)
         {
-            uint diff_count = 0;
-            uint diff = i ^ j;
+            euint diff_count = 0;
+            euint diff = i ^ j;
             if (diff & MASK_X)
                 diff_count++;
             if (diff & MASK_Y)
@@ -297,12 +297,12 @@ typedef struct _octree_node_index_pair
     int idx0;
     int idx1;
 } octree_node_index_pair;
-octree_node_index_pair _inner_index(octree_node* node, sfloat3 pt, uint mask)
+octree_node_index_pair _inner_index(octree_node* node, sfloat3 pt, euint mask)
 {
     sfloat3 center = _get_center(node);
     sfloat3_compare_result cmp_ret = SFloat3_greater(pt, center);
     /// 这里存在一个GCC的bug
-    volatile uint i = 0;
+    volatile euint i = 0;
     if (cmp_ret.x_cmp_ret) {
         i |= MASK_X;
     }
@@ -313,9 +313,9 @@ octree_node_index_pair _inner_index(octree_node* node, sfloat3 pt, uint mask)
         i |= MASK_Z;
     }
 
-    uint inv_mask = ~mask;
-    uint index0 = i & inv_mask;
-    uint index1 = i | mask;
+    euint inv_mask = ~mask;
+    euint index0 = i & inv_mask;
+    euint index1 = i | mask;
 
     octree_node_index_pair ret;
     ret.idx0 = index0;
@@ -423,7 +423,7 @@ Octree Octree_new(float min_size, int octree_depth)
 
 void Octree_print(Octree _self)
 {
-    uint count = 0;
+    euint count = 0;
     octree_node* n = _self->trunk;
 
     do
@@ -492,7 +492,7 @@ void _touch(octree_node* node, Ray ray, LineDrawer drawer, crossed_point_info* p
     bool touched[8];
     memset(touched, 0, sizeof(touched));
 
-    uint n = array_n(point_array);
+    euint n = array_n(point_array);
     crossed_point_info null_point = {EFloat3(fexce, fexce, fexce), XPlane};
     crossed_point_info* next_point_array = array_new(crossed_point_info, n, null_point);
 
@@ -508,7 +508,7 @@ void _touch(octree_node* node, Ray ray, LineDrawer drawer, crossed_point_info* p
             apush(next_point_array, point_array[i]); \
         }
 
-    for (uint i = 0; i < n; i++)
+    for (euint i = 0; i < n; i++)
     {
         EFloat3 pt = point_array[i].point;
         crossed_plane plane_type = point_array[i].plane;

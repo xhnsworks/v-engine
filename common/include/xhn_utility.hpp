@@ -4,15 +4,15 @@
 #include "etypes.h"
 #include "hash.h"
 #include "emem.h"
-inline uint _strlen(const char* s)
+inline euint _strlen(const char* s)
 {
-    uint count = 0;
+    euint count = 0;
     while (s[count])
         count++;
     return count;
 }
 #define to_struct_addr(t, member, addr) \
-	(t*)( ((char*)addr) - (sint)(&((t*)0)->member) )
+	(t*)( ((char*)addr) - (esint)(&((t*)0)->member) )
 namespace xhn
 {
 class buffer
@@ -20,7 +20,7 @@ class buffer
 private:
     vptr m_buf;
 public:
-    inline buffer(uint size) {
+    inline buffer(euint size) {
         m_buf = Malloc(size);
     }
     inline ~buffer() {
@@ -31,10 +31,10 @@ public:
     }
 };
 template<typename T>
-uint _real_size()
+euint _real_size()
 {
-    uint num_qwords = sizeof ( T ) / 16;
-    uint mod = sizeof ( T ) % 16;
+    euint num_qwords = sizeof ( T ) / 16;
+    euint mod = sizeof ( T ) % 16;
 
     if ( mod ) {
         num_qwords++;
@@ -43,12 +43,12 @@ uint _real_size()
     return num_qwords * 16;
 }
 
-inline uint _hash ( char *&key )
+inline euint _hash ( char *&key )
 {
     return calc_hashnr ( key, _strlen ( key ) );
 }
 
-inline uint _hash ( wchar_t *&key )
+inline euint _hash ( wchar_t *&key )
 {
     int count = 0;
     while (key[count]) {
@@ -89,9 +89,9 @@ struct FDestProc {
 
 template <typename T>
 struct FGetElementRealSizeProc {
-    uint operator() () {
-        uint num_qwords = sizeof ( T ) / 16;
-        uint mod = sizeof ( T ) % 16;
+    euint operator() () {
+        euint num_qwords = sizeof ( T ) / 16;
+        euint mod = sizeof ( T ) % 16;
 
         if ( mod ) {
             num_qwords++;
@@ -103,7 +103,7 @@ struct FGetElementRealSizeProc {
 
 template <typename CHAR>
 struct FGetCharRealSizeProc {
-    uint operator() () {
+    euint operator() () {
         return sizeof(CHAR);
     }
 };

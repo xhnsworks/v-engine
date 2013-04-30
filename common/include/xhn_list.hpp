@@ -25,7 +25,7 @@ public:
     };
     list_node *m_head;
     list_node *m_tail;
-    uint m_count;
+    euint m_count;
     list() {
         m_head = NULL;
         m_tail = NULL;
@@ -83,13 +83,13 @@ public:
     };
     template<typename N>
     struct FNextProc {
-        void operator() ( N *from, N *&to, uint ele_real_size ) {
+        void operator() ( N *from, N *&to, euint ele_real_size ) {
             to = from->m_iter_next;
         }
     };
     template<typename N>
     struct FPrevProc {
-        void operator() ( N *from, N *&to, uint ele_real_size ) {
+        void operator() ( N *from, N *&to, euint ele_real_size ) {
             to = from->m_iter_prev;
         }
     };
@@ -98,7 +98,7 @@ public:
     {
     public:
         typedef bidirectional_readwrite_iterator<list_node, FReadProc<list_node>, FWriteProc<list_node>, FNextProc<list_node>, FPrevProc<list_node> > base_type;
-        iterator ( list_node *a, uint ele_real_size )
+        iterator ( list_node *a, euint ele_real_size )
             : base_type (
                 a, ele_real_size, FReadProc<list_node>(), FWriteProc<list_node>(), FNextProc<list_node>(), FPrevProc<list_node>() )
         {}
@@ -131,7 +131,7 @@ public:
     {
     public:
         typedef const_bidirectional_readwrite_iterator<list_node, FReadProc<list_node>, FWriteProc<list_node>, FNextProc<list_node>, FPrevProc<list_node> > base_type;
-        const_iterator ( list_node *a, uint ele_real_size )
+        const_iterator ( list_node *a, euint ele_real_size )
             : base_type (
                 a, ele_real_size, FReadProc<list_node>(), FWriteProc<list_node>(), FNextProc<list_node>(), FPrevProc<list_node>() )
         {}
@@ -290,7 +290,7 @@ public:
     const_iterator end() const {
         return const_iterator ( NULL, 0 );
     }
-    uint size() const {
+    euint size() const {
         return m_count;
     }
     list<T>& operator =(const list<T>& rts) {

@@ -63,7 +63,7 @@ public:
 template<typename F>
 inline rbtree_node<F> *to_rbtree_node ( F *f )
 {
-    return ( rbtree_node<F> * ) ( ( ( char * ) f ) - ( sint ) ( & ( ( rbtree_node<F> * ) 0 )->first ) );
+    return ( rbtree_node<F> * ) ( ( ( char * ) f ) - ( esint ) ( & ( ( rbtree_node<F> * ) 0 )->first ) );
 }
 template<typename F, typename S>
 class pair : public rbtree_node<F>

@@ -72,7 +72,7 @@ xhn::static_string Texture2DDetector::Detect(const xhn::string& resName, FileStr
 	xhn::string ecgResName( resName );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), toLower);
 	xhn::string extName = ".png";
-	uint pos = ecgResName.find_last_of(extName);
+	euint pos = ecgResName.find_last_of(extName);
 	if (pos != xhn::string::npos && pos +  extName.size() == ecgResName.size())
 		return xhn::static_string("Texture2D");
 	else
@@ -83,7 +83,7 @@ xhn::static_string Texture2DDetector::Detect(const xhn::string& resName)
 	xhn::string ecgResName( resName );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), toLower);
 	xhn::string extName = ".png";
-	uint pos = ecgResName.find_last_of(extName);
+	euint pos = ecgResName.find_last_of(extName);
 	if (pos != xhn::string::npos && pos +  extName.size() == ecgResName.size())
 		return xhn::static_string("Texture2D");
 	else
@@ -93,7 +93,7 @@ DefaultTexture2DImplement::DefaultTexture2DImplement()
 {
 	Texture2DPtr tex = ENEW Texture2D;
 	uint32 pixels[64 * 64];
-	for (uint i = 0; i < 64 * 64; i++)
+	for (euint i = 0; i < 64 * 64; i++)
 	{
 		pixels[i] = 0xffffffff;
 	}

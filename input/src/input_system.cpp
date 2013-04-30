@@ -28,11 +28,11 @@ void InputListener::Init()
 }
 void InputListener::Listen()
 {
-	uint size = 0;
-    while (RWBuffer_Read(m_input_buffer, (uint*)m_read_buffer, &size))
+	euint size = 0;
+    while (RWBuffer_Read(m_input_buffer, (euint*)m_read_buffer, &size))
 	{
-        uint count = size / sizeof(input_event);
-		for (uint i = 0; i < count; i++)
+        euint count = size / sizeof(input_event);
+		for (euint i = 0; i < count; i++)
 		{
 			ListenImpl(m_read_buffer[i]);
 		}

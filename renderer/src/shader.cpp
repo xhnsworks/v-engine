@@ -41,7 +41,7 @@ uint32 Shader_get_id(Shader _sdr)
     return _sdr.self->id;
 }
 
-void _Shader_load_from_string(const char* _file, uint _line, Shader _sdr, const char* _str, shader_type _type)
+void _Shader_load_from_string(const char* _file, euint _line, Shader _sdr, const char* _str, shader_type _type)
 {
     uint32 p = 0;
     switch (_type)

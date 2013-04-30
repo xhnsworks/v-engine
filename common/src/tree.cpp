@@ -311,7 +311,7 @@ struct tree_node* _search_auxiliary(Tree _tree, var key, struct tree_node* root,
     struct tree_node *node = root, *parent = NULL;
     while (node)
     {
-        uint cmp = 0;
+        euint cmp = 0;
         parent = node;
 
         less_then(_tree, _tree->key_type, key, node->key, cmp);
@@ -539,7 +539,7 @@ Iterator Tree_force_find(Tree _tree, var _key)
 
     if (likely(parent))
     {
-        uint cmp = 0;
+        euint cmp = 0;
         less_then(_tree, _tree->key_type, key, parent->key, cmp)
         if (cmp)
         {
@@ -671,7 +671,7 @@ Iterator Tree_end(Tree _tree)
     return _tree->tail;
 }
 
-uint Tree_count(Tree _tree)
+euint Tree_count(Tree _tree)
 {
     return _tree->count;
 }

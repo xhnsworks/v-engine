@@ -268,7 +268,7 @@ public:
 	inline const EventProcMap& GetEventProcMap() {
 		return m_eventProcs;
 	}
-	inline SpriteLayerPtr GetLayer(uint index) {
+	inline SpriteLayerPtr GetLayer(euint index) {
 		SpriteLayerPtr ret;
 		if (index < m_children.size()) {
 			ret = m_children[index];

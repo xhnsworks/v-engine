@@ -14,7 +14,7 @@ namespace xhn
 	template <typename T>
 	struct FHashProc
 	{
-		uint operator() (const T& v) {
+		euint operator() (const T& v) {
 			return calc_hashnr ( (const char*)v, sizeof(T) );
 		}
 	};
@@ -119,29 +119,29 @@ namespace xhn
 		bucket m_buckets[HASH_BUCKET_COUNT];
 		HASH_PROC m_hash_proc;
 		const pair<K, V> &insert ( const K &key, const V& value ) {
-			uint hash_value = m_hash_proc (key);
-			uint ukey = hash_value & HASH_MASK;
+			euint hash_value = m_hash_proc (key);
+			euint ukey = hash_value & HASH_MASK;
 			typename list< pair<K, V> >::iterator iter = m_buckets[ukey].insert ( key, value );
 			return *iter;
 		}
 		bool test ( const K &key ) {
-			uint hash_value = m_hash_proc(key);
-			uint ukey = hash_value & HASH_MASK;
+			euint hash_value = m_hash_proc(key);
+			euint ukey = hash_value & HASH_MASK;
 			return m_buckets[ukey].test ( key );
 		}
 		V* find( const K &key ) {
-			uint hash_value = m_hash_proc(key);
-			uint ukey = hash_value & HASH_MASK;
+			euint hash_value = m_hash_proc(key);
+			euint ukey = hash_value & HASH_MASK;
 			return m_buckets[ukey].find ( key );
 		}
 		bucket* find_bucket( const K &key ) {
-			uint hash_value = m_hash_proc(key);
-			uint ukey = hash_value & HASH_MASK;
+			euint hash_value = m_hash_proc(key);
+			euint ukey = hash_value & HASH_MASK;
 			return &m_buckets[ukey];
 		}
 		bool erase( const K &key ) {
-			uint hash_value = m_hash_proc(key);
-			uint ukey = hash_value & HASH_MASK;
+			euint hash_value = m_hash_proc(key);
+			euint ukey = hash_value & HASH_MASK;
 			return m_buckets[ukey].erase(key);
 		}
 	};

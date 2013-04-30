@@ -12,24 +12,24 @@ API_EXPORT void Stack_push(Stack _stk, var _data);
 API_EXPORT bool Stack_pop(Stack _stk, var* _to);
 API_EXPORT bool Stack_get_top(Stack _stk, var* _to);
 API_EXPORT void Stack_clear(Stack _stk);
-API_EXPORT void Stack_resize(Stack _stk, uint _size);
-API_EXPORT uint Stack_count(Stack _stk);
-API_EXPORT var* Stack_find(Stack _stk, uint _i);
+API_EXPORT void Stack_resize(Stack _stk, euint _size);
+API_EXPORT euint Stack_count(Stack _stk);
+API_EXPORT var* Stack_find(Stack _stk, euint _i);
 
 struct _fixed_stack;
 typedef struct _fixed_stack* FixedStack;
-API_EXPORT FixedStack FixedStack_new(uint _value_size);
+API_EXPORT FixedStack FixedStack_new(euint _value_size);
 API_EXPORT void FixedStack_Dest(FixedStack _stk);
 API_EXPORT void FixedStack_push(FixedStack _stk, void* _data);
 API_EXPORT bool FixedStack_pop(FixedStack _stk, void* _to);
 API_EXPORT bool FixedStack_get_top(FixedStack _stk, void* _to);
 API_EXPORT void* FixedStack_get_top_ptr(FixedStack _stk);
-API_EXPORT bool FixedStack_walk_begin(FixedStack _stk, void* _to, uint* _top_ptr);
-API_EXPORT bool FixedStack_walk(FixedStack _stk, void* _to, uint* _top_ptr);
+API_EXPORT bool FixedStack_walk_begin(FixedStack _stk, void* _to, euint* _top_ptr);
+API_EXPORT bool FixedStack_walk(FixedStack _stk, void* _to, euint* _top_ptr);
 API_EXPORT void FixedStack_clear(FixedStack _stk);
-API_EXPORT void FixedStack_resize(FixedStack _stk, uint _size);
-API_EXPORT uint FixedStack_count(FixedStack _stk);
-API_EXPORT void* FixedStack_find(FixedStack _stk, uint _i);
+API_EXPORT void FixedStack_resize(FixedStack _stk, euint _size);
+API_EXPORT euint FixedStack_count(FixedStack _stk);
+API_EXPORT void* FixedStack_find(FixedStack _stk, euint _i);
 
 API_EXPORT void FixedStack_test();
 #endif

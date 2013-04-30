@@ -18,7 +18,7 @@ API_EXPORT Iterator List_begin(List _lst);
 API_EXPORT Iterator List_end(List _lst);
 API_EXPORT List List_append(List _head, List _tail);
 API_EXPORT List List_break(List _lst, Iterator _i);
-API_EXPORT uint List_count(List _lst);
+API_EXPORT euint List_count(List _lst);
 API_EXPORT var List_get_value(Iterator _i);
 API_EXPORT void List_throw_front(List _lst, Iterator _i);
 API_EXPORT void List_throw_back(List _lst, Iterator _i);

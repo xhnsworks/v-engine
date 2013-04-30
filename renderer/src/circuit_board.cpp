@@ -10,7 +10,7 @@ void CircuitBoard_Init(CircuitBoard _self)
 }
 void CircuitBoard_Dest(CircuitBoard _self)
 {
-    for (uint i = 0; i < array_n(_self->shader_node_reference_table); i++)
+    for (euint i = 0; i < array_n(_self->shader_node_reference_table); i++)
     {
         ShaderNodeBase_delete((ShaderNodeBase)_self->shader_node_reference_table[i], __FILE__, __LINE__);
     }
@@ -27,7 +27,7 @@ void CircuitBoard_delete(CircuitBoard _self)
     CircuitBoard_Dest(_self);
     Mfree(_self);
 }
-ShaderNode _CircuitBoard_add_reference_node(CircuitBoard _self, ShaderNode _prototype_node, const char* _file, uint _line)
+ShaderNode _CircuitBoard_add_reference_node(CircuitBoard _self, ShaderNode _prototype_node, const char* _file, euint _line)
 {
     ///ShaderNode csn = _ShaderNode_clone(_prototype_node, __FILE__, __LINE__);
     ShaderNodeBase snb = (ShaderNodeBase)_prototype_node;
@@ -43,8 +43,8 @@ char* CircuitBoard_compile(CircuitBoard _self)
     char* str = mbuf;
 	str[0] = 0x00;
     remainder--;
-    uint n = array_n(_self->shader_node_reference_table);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_self->shader_node_reference_table);
+    for (euint i = 0; i < n; i++)
     {
         ShaderNode node = _self->shader_node_reference_table[i];
         ShaderNodeBase base = (ShaderNodeBase)node;
@@ -57,12 +57,12 @@ char* CircuitBoard_compile(CircuitBoard _self)
     }
     return (char*)EString_new(mbuf);
 }
-CircuitBoard CircuitBoard_clone(CircuitBoard _self, const char* _file, uint _line)
+CircuitBoard CircuitBoard_clone(CircuitBoard _self, const char* _file, euint _line)
 {
     CircuitBoard ret = (CircuitBoard)_Malloc(sizeof(s_circuit_board), _file, _line);
-    uint n = array_n(_self->shader_node_reference_table);
+    euint n = array_n(_self->shader_node_reference_table);
     ret->shader_node_reference_table = array_new(ShaderNode, n, NULL);
-    for (uint i = 0; i < n; i++)
+    for (euint i = 0; i < n; i++)
     {
         ShaderNode sn = ShaderNode_clone(_self->shader_node_reference_table[i]);
         apush(ret->shader_node_reference_table, sn);

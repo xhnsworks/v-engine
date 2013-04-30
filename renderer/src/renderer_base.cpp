@@ -100,7 +100,7 @@ ShaderNode default_material_proc3 ( PxlSdrBuf _psb, int _id )
 
 #include "renderer_param_procs.h"
 
-RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, sint _array_size )
+RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint _array_size )
 {
     RendererParamEntry ret = ( RendererParamEntry ) SMalloc ( sizeof ( renderer_param_entry ) );
     ret->get_value_proc = _proc;
@@ -351,7 +351,7 @@ void RendererBase::CommonInit()
 
     elog ( "%s", "########" );
 
-    for ( uint i = 0; i < MaxParamSource; i++ ) {
+    for ( euint i = 0; i < MaxParamSource; i++ ) {
         var key, data;
         key.sint32_var = i;
 

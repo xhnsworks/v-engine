@@ -122,7 +122,7 @@ Image png_load(FILE* file_stream)
     }
 
     ///RecycleBin_audit();
-    for (uint i = 0; i < array_n(g_buffer_array); i++)
+    for (euint i = 0; i < array_n(g_buffer_array); i++)
     {
         void* ptr = array_safe_get(g_buffer_array, i);
         Mfree(ptr);

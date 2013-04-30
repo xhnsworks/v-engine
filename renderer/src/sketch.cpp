@@ -22,7 +22,7 @@ typedef struct _renderable_plane
     IndexBuffer ibf;
 } renderable_plane;
 
-RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char* _file, uint _line)
+RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char* _file, euint _line)
 {
     /**
     _self->dec = VertexDecl_new();
@@ -86,28 +86,28 @@ RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char
     ftex[0] = 1.0;
     ftex[1] = 1.0;
 
-    for (uint i = 0; i < 4; i++)
+    for (euint i = 0; i < 4; i++)
     {
         float* fnor = (float*)VertexBuffer_insert(_self->vbf, Normal, i);
         fnor[0] = 0.0;
         fnor[1] = 0.0;
         fnor[2] = -1.0;
     }
-    for (uint i = 0; i < 4; i++)
+    for (euint i = 0; i < 4; i++)
     {
         float* ftgt = (float*)VertexBuffer_insert(_self->vbf, Tangent, i);
         ftgt[0] = 1.0;
         ftgt[1] = 0.0;
         ftgt[2] = 0.0;
     }
-    for (uint i = 0; i < 4; i++)
+    for (euint i = 0; i < 4; i++)
     {
         float* fbinor = (float*)VertexBuffer_insert(_self->vbf, Binormal, i);
         fbinor[0] = 0.0;
         fbinor[1] = 1.0;
         fbinor[2] = 0.0;
     }
-    for (uint i = 0; i < 4; i++)
+    for (euint i = 0; i < 4; i++)
     {
         float* fcolor = (float*)VertexBuffer_insert(_self->vbf, Color, i);
         fcolor[0] = 1.0;
@@ -131,7 +131,7 @@ RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char
     return ret;
 }
 
-RenderablePlane _RenderablePlane_new(const char* _file, uint _line)
+RenderablePlane _RenderablePlane_new(const char* _file, euint _line)
 {
     renderable_plane* ret = (renderable_plane*)SMalloc(sizeof(renderable_plane));
     return RenderablePlane_Init(ret, _file, _line);
@@ -178,8 +178,8 @@ struct sketch_book : public MemObject
 
 typedef struct _sketch_book_config
 {
-    uint width;
-    uint height;
+    euint width;
+    euint height;
     pixel_format* sketch_format_array;
     bool has_plaster;
     pixel_format plaster_format;
@@ -220,11 +220,11 @@ void SketchBookConfig_delete(SketchBookConfig _self)
     }
     Mfree(_self);
 }
-void SketchBookConfig_set_sketch_format(SketchBookConfig _self, uint _idx, pixel_format _fmt)
+void SketchBookConfig_set_sketch_format(SketchBookConfig _self, euint _idx, pixel_format _fmt)
 {
     if (_self->sketch_format_array)
     {
-        uint n = array_n(_self->sketch_format_array);
+        euint n = array_n(_self->sketch_format_array);
         if (_idx >= n)
         {
             _self->sketch_format_array = array_resize(_self->sketch_format_array, _idx + 1);
@@ -235,7 +235,7 @@ void SketchBookConfig_set_sketch_format(SketchBookConfig _self, uint _idx, pixel
         _self->sketch_format_array = array_new(pixel_format, _idx + 1, RGBA8);
         _self->sketch_format_array = array_resize(_self->sketch_format_array, _idx + 1);
     }
-    uint n = array_n(_self->sketch_format_array);
+    euint n = array_n(_self->sketch_format_array);
     _self->sketch_format_array[_idx] = _fmt;
 }
 
@@ -255,7 +255,7 @@ pixel_format SketchBookConfig_get_plaster_format(SketchBookConfig _self)
     return _self->plaster_format;
 }
 
-void SketchBookConfig_set_size(SketchBookConfig _self, uint _width, uint _height)
+void SketchBookConfig_set_size(SketchBookConfig _self, euint _width, euint _height)
 {
     if (_width > 0 && _height > 0)
     {
@@ -264,7 +264,7 @@ void SketchBookConfig_set_size(SketchBookConfig _self, uint _width, uint _height
     }
 }
 
-uint SketchBookConfig_get_num_sketchs(SketchBookConfig _self)
+euint SketchBookConfig_get_num_sketchs(SketchBookConfig _self)
 {
     if (_self->sketch_format_array)
         return array_n(_self->sketch_format_array);
@@ -272,17 +272,17 @@ uint SketchBookConfig_get_num_sketchs(SketchBookConfig _self)
         return 0;
 }
 
-uint SketchBookConfig_get_width(SketchBookConfig _self)
+euint SketchBookConfig_get_width(SketchBookConfig _self)
 {
     return _self->width;
 }
 
-uint SketchBookConfig_get_height(SketchBookConfig _self)
+euint SketchBookConfig_get_height(SketchBookConfig _self)
 {
     return _self->height;
 }
 
-pixel_format SketchBookConfig_get_sketch_format(SketchBookConfig _self, uint _idx)
+pixel_format SketchBookConfig_get_sketch_format(SketchBookConfig _self, euint _idx)
 {
     return array_safe_get(_self->sketch_format_array, _idx);
 }
@@ -292,15 +292,15 @@ SketchBook SketchBook_new(SketchBookConfig _cfg)
     SketchBook ret = ENEW sketch_book;
     ///ret = (SketchBook)SMalloc(sizeof(sketch_book));
 
-    uint width = SketchBookConfig_get_width(_cfg);
-    uint height = SketchBookConfig_get_height(_cfg);
-    uint n = SketchBookConfig_get_num_sketchs(_cfg);
+    euint width = SketchBookConfig_get_width(_cfg);
+    euint height = SketchBookConfig_get_height(_cfg);
+    euint n = SketchBookConfig_get_num_sketchs(_cfg);
     if (n)
     {
         ///ret->sketchs = array_new(Texture2DPtr, n, NULL);
         ///ret->sketchs = array_resize(ret->sketchs, n);
 		ret->sketchs.resize(n);
-        for (uint i = 0; i < n; i++)
+        for (euint i = 0; i < n; i++)
         {
             ret->sketchs[i] = ENEW Texture2D;
             pixel_format fmt = SketchBookConfig_get_sketch_format(_cfg, i);
@@ -332,7 +332,7 @@ SketchBook SketchBook_new(SketchBookConfig _cfg)
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, g_render_buffer_id);
     ERROR_PROC;
 
-    for (uint i = 0; i < n; i++)
+    for (euint i = 0; i < n; i++)
     {
         glFramebufferTexture2D(GL_FRAMEBUFFER,
                                GL_COLOR_ATTACHMENT0 + i,
@@ -376,7 +376,7 @@ void SketchBook_delete(SketchBook _self)
     delete _self;
 }
 
-void SketchBook_draw_begin(SketchBook _self, uint _use_skhs)
+void SketchBook_draw_begin(SketchBook _self, euint _use_skhs)
 {
     EAssert(!_self->curt_used_skhs, "%s", "SketchBook is binded");
 
@@ -384,7 +384,7 @@ void SketchBook_draw_begin(SketchBook _self, uint _use_skhs)
     glBindRenderbuffer(GL_RENDERBUFFER, g_render_buffer_id);
 
     GLenum buffers[8];
-    for (uint i = 0; i < _use_skhs; i++)
+    for (euint i = 0; i < _use_skhs; i++)
     {
         buffers[i] = GL_COLOR_ATTACHMENT0 + i;
     }
@@ -418,7 +418,7 @@ void SketchBook_unbind_renderbuffer()
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
-Texture2DPtr SketchBook_get_sketch(SketchBook _self, uint _i)
+Texture2DPtr SketchBook_get_sketch(SketchBook _self, euint _i)
 {
     return _self->sketchs[_i];
 }
@@ -428,7 +428,7 @@ Texture2DPtr SketchBook_get_plaster(SketchBook _self)
     return _self->plaster;
 }
 
-SketchCube SketchCube_new(uint size, pixel_format format)
+SketchCube SketchCube_new(euint size, pixel_format format)
 {
     SketchCube ret;
     ret = (SketchCube)SMalloc(sizeof(sketch_cube));
@@ -445,7 +445,7 @@ SketchCube SketchCube_new(uint size, pixel_format format)
     ERROR_PROC;
 
     glGenFramebuffers(6, ret->frame_buffer_ids);
-    for (uint i = 0; i < 6; i++)
+    for (euint i = 0; i < 6; i++)
     {
         glBindFramebuffer(GL_FRAMEBUFFER, ret->frame_buffer_ids[i]);
 

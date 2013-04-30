@@ -5,7 +5,7 @@
 #include "pass.h"
 #include "display_pass.h"
 
-MaterialPrototype MaterialPrototype_new(VertexDecl dec, sint material_id,
+MaterialPrototype MaterialPrototype_new(VertexDecl dec, esint material_id,
                                         SDisplayProc _disp_proc,
                                         e_draw_mode draw_mode, bool double_sided_flag)
 {

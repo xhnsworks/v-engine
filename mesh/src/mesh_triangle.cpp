@@ -45,8 +45,8 @@ MeshTriangleArray MeshTriangleArray_new_from_mesh(Mesh m)
 
 void MeshTriangleArray_delete(MeshTriangleArray self)
 {
-    uint count = array_n(self);
-    for (uint i = 0; i < count; i++)
+    euint count = array_n(self);
+    for (euint i = 0; i < count; i++)
     {
         Mfree(self[i]);
     }
@@ -59,8 +59,8 @@ Tree MeshTriangleArray_make_edge_triangle_tree(MeshTriangleArray self)
     MeshEdge edge0;
     MeshEdge edge1;
     MeshEdge edge2;
-    uint count = array_n(self);
-    for (uint i = 0; i < count; i++)
+    euint count = array_n(self);
+    for (euint i = 0; i < count; i++)
     {
         MeshTriangle tri = self[i];
         MeshTriangle_get_edges(tri, &edge0, &edge1, &edge2);

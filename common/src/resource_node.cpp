@@ -70,7 +70,7 @@ void ResourceNode::Update()
             tmp.push_back(*iter);
 		}
 		s_deletedResNodes.clear();
-		for (uint i = 0; i < tmp.size(); i++)
+		for (euint i = 0; i < tmp.size(); i++)
 		{
 			ResourceNode* node = tmp[i];
 			delete node;

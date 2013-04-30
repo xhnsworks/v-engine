@@ -85,7 +85,7 @@ public:
 	inline void Next() {
 		if (m_actionQueue.size()) {
 			m_curtActionIndex++;
-			if ((uint)m_curtActionIndex >= m_actionQueue.size())
+			if ((euint)m_curtActionIndex >= m_actionQueue.size())
 				m_curtActionIndex = 0;
 		}
 		else
@@ -96,7 +96,7 @@ public:
 		if (m_actionQueue.size()) {
 			if (m_curtActionIndex < 0)
 				m_curtActionIndex = 0;
-			if ((uint)m_curtActionIndex >= m_actionQueue.size())
+			if ((euint)m_curtActionIndex >= m_actionQueue.size())
 				m_curtActionIndex = 0;
 			ret = m_actionQueue[m_curtActionIndex];
 		}

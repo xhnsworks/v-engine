@@ -13,12 +13,12 @@ public:
     rbtree_node<K> *root;
     rbtree_node<K> *head;
     rbtree_node<K> *tail;
-    uint count;
+    euint count;
 
     NodeCreateproc nodeCreateProc;
 
-    uint key_real_size;
-    uint value_real_size;
+    euint key_real_size;
+    euint value_real_size;
 
     rbtree()
         : root ( NULL )
@@ -261,7 +261,7 @@ public:
         return NULL;
     }
 
-    static inline uint _remove ( rbtree *_tree, const K &key ) {
+    static inline euint _remove ( rbtree *_tree, const K &key ) {
         rbtree_node<K> *node, *root = _tree->root;
 
         if ( unlikely ( !_tree->root ) ) {
@@ -275,7 +275,7 @@ public:
         return _erase(_tree, node);
     }
 
-    static inline uint _erase ( rbtree *_tree, rbtree_node<K> *_node ) {
+    static inline euint _erase ( rbtree *_tree, rbtree_node<K> *_node ) {
         rbtree_node<K> *child, *parent, *old, *left, *node, *root = _tree->root;
         node_color color;
 

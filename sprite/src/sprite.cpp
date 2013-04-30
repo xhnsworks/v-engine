@@ -81,7 +81,7 @@ void SpriteLayer::GetScope(SpriteRect& result)
 	GetScopeImpl(result);
 	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator iter = m_children.begin();
 	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator end = m_children.end();
-	uint size = m_children.size();
+	euint size = m_children.size();
 	for (; iter != end; iter++) {
 		SpriteRect rc;
 		(*iter)->GetScope(rc);
@@ -89,7 +89,7 @@ void SpriteLayer::GetScope(SpriteRect& result)
 	}
 }
 
-uint _ToUint(char c)
+euint _ToUint(char c)
 {
 	if (c >= '0' && c <= '9')
 	{
@@ -106,15 +106,15 @@ uint _ToUint(char c)
 	else
 		return 0;
 }
-uint _ToUint(const xhn::string& str)
+euint _ToUint(const xhn::string& str)
 {
-	uint ret = 0;
+	euint ret = 0;
 	int i = (int)(str.size() - 1);
-	uint weight = 1;
+	euint weight = 1;
 	for (; i >= 0; i--)
 	{
-		char c = str[(uint)i];
-		uint t = _ToUint(c);
+		char c = str[(euint)i];
+		euint t = _ToUint(c);
 		ret += t * weight;
 		weight *= 16;
 	}
@@ -125,11 +125,11 @@ EColor _ToColor(const xhn::string& str)
 	EColor ret;
 	xhn::string compStr[4];
 	int i = (int)(str.size() - 1);
-	uint j = 0;
+	euint j = 0;
 	for (; i >= 0 && j < 8; i--, j++)
 	{
-		uint compIdx = j / 2;
-		compStr[compIdx] += str[(uint)i];
+		euint compIdx = j / 2;
+		compStr[compIdx] += str[(euint)i];
 	}
 	ret.alpha = (float)(_ToUint(compStr[0])) / 255.0f;
 	ret.blue = (float)(_ToUint(compStr[1])) / 255.0f;
@@ -277,7 +277,7 @@ void SpriteTextLayer::LoadConfig(const pugi::xml_node& from)
 		float x = 0.0f;
 		float y = 0.0f;
 		float maxHeight = 0.0f;
-		for (uint i = 0; i < wtext.size(); i++)
+		for (euint i = 0; i < wtext.size(); i++)
 		{
 			wchar_t ch = wtext[i];
 			if (ch == (wchar_t)'\n')

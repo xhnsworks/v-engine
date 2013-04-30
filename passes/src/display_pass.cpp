@@ -427,8 +427,8 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     ShaderObject int_mat_id = ShaderObject_float_to_int(mat_id, 255.0f);
 
     ///BranchNode_add_branch();
-    uint n = array_n(_mat_decls);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_mat_decls);
+    for (euint i = 0; i < n; i++)
     {
         material_decl decl = _mat_decls[i];
         ShaderBuffer sb = to_ShaderBuffer(psb);

@@ -36,9 +36,9 @@ ShadowRenderer::~ShadowRenderer()
 void ShadowRenderer::delete_blurred_sketck_books()
 {
     if ( blurred_sketch_books ) {
-        uint n = array_n ( blurred_sketch_books );
+        euint n = array_n ( blurred_sketch_books );
 
-        for ( uint i = 0; i < n; i++ ) {
+        for ( euint i = 0; i < n; i++ ) {
             blurred_sketch_book bskb = blurred_sketch_books[i];
             SketchBook_delete ( bskb.sketch_book );
             SketchBookConfig_delete ( bskb.sketch_cfg );
@@ -66,10 +66,10 @@ void ShadowRenderer::prepare ( RenderablePlane render_plane )
         Pass_delete ( blur_pass );
     }
 
-    uint shadow_map_size = 512;
+    euint shadow_map_size = 512;
 
-    uint width = shadow_map_size;
-    uint height = shadow_map_size;
+    euint width = shadow_map_size;
+    euint height = shadow_map_size;
 
     delete_blurred_sketck_books();
     {
@@ -94,9 +94,9 @@ void ShadowRenderer::prepare ( RenderablePlane render_plane )
     blurred_sketch_book null_blurred_sketch_book = {NULL, NULL};
     blurred_sketch_books = array_new ( blurred_sketch_book, 3, null_blurred_sketch_book );
 
-    uint num_blur_passes = 1;
+    euint num_blur_passes = 1;
 
-    for ( uint i = 0; i < num_blur_passes; i++ ) {
+    for ( euint i = 0; i < num_blur_passes; i++ ) {
         SketchBookConfig cfg = SketchBookConfig_new();
         SketchBookConfig_set_size ( cfg, width, height );
         SketchBookConfig_set_sketch_format ( cfg, 0, RG32F );
@@ -110,13 +110,13 @@ void ShadowRenderer::depth_map_blur ( RendererBase *rdr )
 {
     SketchBook prev_skb = depth_sketch_book;
 
-    uint num_blur_passes = array_n ( blurred_sketch_books );
+    euint num_blur_passes = array_n ( blurred_sketch_books );
 
-    for ( uint i = 0; i < num_blur_passes; i++ ) {
+    for ( euint i = 0; i < num_blur_passes; i++ ) {
         rdr->curt_color_sketch = SketchBook_get_sketch ( prev_skb, 0 );
         blurred_sketch_book bskb = blurred_sketch_books[i];
-        uint width = SketchBookConfig_get_width ( bskb.sketch_cfg );
-        uint height = SketchBookConfig_get_height ( bskb.sketch_cfg );
+        euint width = SketchBookConfig_get_width ( bskb.sketch_cfg );
+        euint height = SketchBookConfig_get_height ( bskb.sketch_cfg );
 
         clear_sketch_book ( bskb.sketch_book );
 
@@ -134,7 +134,7 @@ void ShadowRenderer::depth_map_blur ( RendererBase *rdr )
         prev_skb = bskb.sketch_book;
     }
 }
-void ShadowRenderer::depth_map_blur_to_cube_map ( RendererBase *rdr, uint face )
+void ShadowRenderer::depth_map_blur_to_cube_map ( RendererBase *rdr, euint face )
 {
     /// 这里目前只允许单pass模糊
     SketchBook prev_skb = depth_sketch_book;
@@ -143,8 +143,8 @@ void ShadowRenderer::depth_map_blur_to_cube_map ( RendererBase *rdr, uint face )
     ///blurred_sketch_book bskb = _self->blurred_sketch_books[i];
     SketchCube bskc = blurred_depth_sketch_cube;
 
-    uint width = blurred_depth_sketch_cube_size;
-    uint height = blurred_depth_sketch_cube_size;
+    euint width = blurred_depth_sketch_cube_size;
+    euint height = blurred_depth_sketch_cube_size;
 
     clear_sketch_cube_face ( bskc, ( cube_face_index ) face );
 
@@ -160,10 +160,10 @@ void ShadowRenderer::depth_map_blur_to_cube_map ( RendererBase *rdr, uint face )
     Pass_render_plane ( blur_pass, rdr->get_render_plane() );
     SketchCube_draw_end ( bskc, ( cube_face_index ) face );
 }
-Texture2DPtr ShadowRenderer::get_shadow_map ( uint i )
+Texture2DPtr ShadowRenderer::get_shadow_map ( euint i )
 {
     if ( i == 0 ) {
-        uint num_blur_passes = array_n ( blurred_sketch_books );
+        euint num_blur_passes = array_n ( blurred_sketch_books );
 
         if ( num_blur_passes > 0 ) {
             blurred_sketch_book bskb = blurred_sketch_books[num_blur_passes - 1];

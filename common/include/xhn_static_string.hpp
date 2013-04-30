@@ -41,7 +41,7 @@ public:
     bool operator != ( const static_string &str ) const {
         return m_str != str.m_str;
     }
-    uint size() const {
+    euint size() const {
         return strlen(m_str);
     }
 };

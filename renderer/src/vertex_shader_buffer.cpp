@@ -9,7 +9,7 @@ typedef struct _vertex_shader_buffer
     char* attribute;
 } vertex_shader_buffer;
 ///==============================VtxSdrBuf========================================///
-vertex_shader_buffer* VtxSdrBuf_Init(struct _vertex_shader_buffer* _buf, const char* _file, uint _line)
+vertex_shader_buffer* VtxSdrBuf_Init(struct _vertex_shader_buffer* _buf, const char* _file, euint _line)
 {
     vertex_shader_buffer* ret = (vertex_shader_buffer*)ShaderBuffer_Init((struct _shader_buffer*)_buf, _file, _line);
     ret->attribute = (char*)EString_new("///attribute///\n");
@@ -24,12 +24,12 @@ vertex_shader_buffer* VtxSdrBuf_Init(struct _vertex_shader_buffer* _buf, const c
     return ret;
 }
 
-void VtxSdrBuf_Dest(struct _vertex_shader_buffer* _buf, const char* _file, uint _line)
+void VtxSdrBuf_Dest(struct _vertex_shader_buffer* _buf, const char* _file, euint _line)
 {
     EString_delete(_buf->attribute);
 }
 
-VtxSdrBuf _VtxSdrBuf_new(const char* _file, uint _line)
+VtxSdrBuf _VtxSdrBuf_new(const char* _file, euint _line)
 {
     VtxSdrBuf ret;
     ret = (struct _vertex_shader_buffer*)_Malloc(sizeof(vertex_shader_buffer), _file, _line);
@@ -37,7 +37,7 @@ VtxSdrBuf _VtxSdrBuf_new(const char* _file, uint _line)
     return ret;
 }
 
-void _VtxSdrBuf_delete(VtxSdrBuf _vsb, const char* _file, uint _line)
+void _VtxSdrBuf_delete(VtxSdrBuf _vsb, const char* _file, euint _line)
 {
     VtxSdrBuf_Dest(_vsb, _file, _line);
     ShaderBuffer sb = to_ShaderBuffer(_vsb);

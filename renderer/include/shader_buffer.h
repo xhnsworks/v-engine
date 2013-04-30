@@ -31,16 +31,16 @@ typedef struct shader_buffer_
 **/
 class Renderer;
 typedef struct _shader_buffer* ShaderBuffer;
-API_EXPORT shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, uint _line);
-API_EXPORT void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, uint _line);
+API_EXPORT shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, euint _line);
+API_EXPORT void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, euint _line);
 API_EXPORT void ShaderBuffer_complete(struct _shader_buffer* _buf);
 API_EXPORT ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const char* _vary, sint32 _src);
 API_EXPORT ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, uint32 _array_size, sint32 _src,
-                                                  const char* _file, uint _line);
+                                                  const char* _file, euint _line);
 #define ShaderBuffer_add_uniform(s, t, u, as, ps) _ShaderBuffer_add_uniform(s, t, u, as, ps, __FILE__, __LINE__)
 
 API_EXPORT ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, sint32 _id, const char* _unif,
-                                                                const char* _file, uint _line);
+                                                                const char* _file, euint _line);
 #define ShaderBuffer_add_uniform_from_renderer(s, r, i, u) _ShaderBuffer_add_uniform_from_renderer(s, r, i, u, __FILE__, __LINE__)
 API_EXPORT ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_float_object(ShaderBuffer _sb, float _ft);
@@ -49,9 +49,9 @@ API_EXPORT ShaderObject ShaderBuffer_sample_texture2d_rgba(ShaderBuffer _sb, Sha
 API_EXPORT ShaderObject ShaderBuffer_sample_texture2d_rgb(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);
 API_EXPORT void ShaderBuffer_add_prototype_node(ShaderBuffer _sb, ShaderNode _sn);
 ///API_EXPORT void ShaderBuffer_add_reference_node(ShaderBuffer _sb, ShaderNode _sn);
-API_EXPORT ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name, const char* _file, uint _line);
+API_EXPORT ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name, const char* _file, euint _line);
 #define ShaderBuffer_add_reference_node(s, n) _ShaderBuffer_add_reference_node(s, n, __FILE__, __LINE__)
-API_EXPORT void _ShaderBuffer_add_branch_node(ShaderBuffer _sb, BranchNode _bn, const char* _file, uint _line);
+API_EXPORT void _ShaderBuffer_add_branch_node(ShaderBuffer _sb, BranchNode _bn, const char* _file, euint _line);
 #define ShaderBuffer_add_branch_node(s, b) _ShaderBuffer_add_branch_node(s, b, __FILE__, __LINE__)
 API_EXPORT ShaderObject ShaderBuffer_find_object(ShaderBuffer _sb, const char* _name);
 

@@ -47,7 +47,7 @@ public:
 	virtual void render();
 	virtual void prepare_renderable(Renderable _rbl);
 	virtual bool is_uniform_param_source ( sint32 _src );
-	virtual Texture2DPtr get_shadow_map ( uint i );
+	virtual Texture2DPtr get_shadow_map ( euint i );
 	virtual TextureCube get_shadow_cube_map();
 	virtual renderer_param_value get_shader_object_value ( sint32 _src );
 	Mesh new_widget_mesh(float _x, float _y, float _width, float _height, float _u0, float _u1, float _v0, float _v1,

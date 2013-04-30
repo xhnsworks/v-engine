@@ -55,7 +55,7 @@ void MeshEdgeTriangleTree_insert(Tree self, MeshEdge e, MeshTriangle t)
     data = Tree_get_value(iter);
     if (!data.vptr_var) { tri_array = array_new(MeshTriangle, 5, NULL); }
 	else                { tri_array = (MeshTriangleArray)data.vptr_var; }
-    for (uint i = 0; i < array_n(tri_array); i++)
+    for (euint i = 0; i < array_n(tri_array); i++)
         if (t == tri_array[i])
             return;
     apush(tri_array, t);

@@ -13,11 +13,11 @@ void Matrix4x4_Dest(matrix4x4* _mat)
 {
     printf("matrix4x4 dest\n");
 }
-void _Matrix4x4_delete(matrix4x4* _mat, const char* _file, uint _line)
+void _Matrix4x4_delete(matrix4x4* _mat, const char* _file, euint _line)
 {
     Mfree(_mat);
 }
-matrix4x4* _Matrix4x4_new(const char* _file, uint _line)
+matrix4x4* _Matrix4x4_new(const char* _file, euint _line)
 {
     matrix4x4* ret = (matrix4x4*)_Malloc(sizeof(matrix4x4), _file, _line);
     ///memset(ret, 0, sizeof(matrix4x4));

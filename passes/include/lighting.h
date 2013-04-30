@@ -44,7 +44,7 @@ protected:
 	float outer_cos;
 	float atte_coef;
 	float influence;
-	uint num_shadow_emitters;
+	euint num_shadow_emitters;
 	sketch_type shadow_type;
 	shadow_emitter_param shadow_emitter_param_array[MAX_SHADOW_EMITTERS];
 	/**
@@ -79,20 +79,20 @@ public:
 	inline int get_num_shadow_emitters() {
 		return num_shadow_emitters;
 	}
-	inline matrix4x4* get_proj_matrix(uint i) {
+	inline matrix4x4* get_proj_matrix(euint i) {
 		if (i < num_shadow_emitters)
 			return Camera_get_render_matrix(shadow_emitter_param_array[i].light_cam);
 		else
 			return NULL;
 	}
-	inline matrix4x4* get_world_matrix(uint i)
+	inline matrix4x4* get_world_matrix(euint i)
 	{
 		if (i < num_shadow_emitters)
 			return Camera_get_world_matrix(shadow_emitter_param_array[i].light_cam);
 		else
 			return NULL;
 	}
-	inline Camera get_camera(uint i)
+	inline Camera get_camera(euint i)
 	{
 		update();
 		if (i < num_shadow_emitters) {
@@ -103,7 +103,7 @@ public:
 			return null_cam;
 		}
 	}
-	inline EFloat3 get_shadow_dir(uint i)
+	inline EFloat3 get_shadow_dir(euint i)
 	{
 		update();
 		if (i < num_shadow_emitters)
@@ -167,12 +167,12 @@ API_EXPORT EFloat3 LightBase2_get_dir(LightBase2 _self);
 API_EXPORT EFloat4 LightBase2_get_color(LightBase2 _self);
 API_EXPORT float LightBase2_get_atte_coef(LightBase2 _self);
 API_EXPORT int LightBase2_get_num_shadow_emitters(LightBase2 _self);
-API_EXPORT matrix4x4* LightBase2_get_proj_matrix(LightBase2 _self, uint i);
-API_EXPORT matrix4x4* LightBase2_get_world_matrix(LightBase2 _self, uint i);
+API_EXPORT matrix4x4* LightBase2_get_proj_matrix(LightBase2 _self, euint i);
+API_EXPORT matrix4x4* LightBase2_get_world_matrix(LightBase2 _self, euint i);
 **/
 /**
-API_EXPORT EFloat3 LightBase2_get_shadow_dir(LightBase2 _self, uint i);
-API_EXPORT Camera LightBase2_get_camera(LightBase2 _self, uint i);
+API_EXPORT EFloat3 LightBase2_get_shadow_dir(LightBase2 _self, euint i);
+API_EXPORT Camera LightBase2_get_camera(LightBase2 _self, euint i);
 API_EXPORT void LightBase2_set_position(LightBase2 _self, EFloat3 _pos);
 API_EXPORT void LightBase2_look_at(LightBase2 _self, EFloat3 _pt);
 

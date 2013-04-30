@@ -42,12 +42,12 @@ class ComposingStick : public MemObject
 public:
 	struct GlyphInfo : public MemObject
 	{
-		uint x;
-		uint y;
-		uint width;
-		uint height;
+		euint x;
+		euint y;
+		euint width;
+		euint height;
 		wchar_t letter;
-		uint usageCount;
+		euint usageCount;
 		GlyphInfo()
 			: x(0)
 			, y(0)
@@ -63,7 +63,7 @@ public:
 	private:
         GlyphInfo* glyph;
 		ComposingStick* owner;
-		uint letterWidth;
+		euint letterWidth;
 	public:
 		GlyphHandle()
 			: glyph(NULL)
@@ -105,7 +105,7 @@ public:
 		{
 			return glyph;
 		}
-		inline uint GetWidth() const
+		inline euint GetWidth() const
 		{
 			return letterWidth;
 		}
@@ -116,7 +116,7 @@ public:
 	xhn::map<wchar_t, GlyphInfo*> m_glyphIndex;
 	FontRenderer* m_renderer;
 public:
-	ComposingStick(FontRenderer* renderer, uint numChars);
+	ComposingStick(FontRenderer* renderer, euint numChars);
 	GlyphHandle AllocGlyph(wchar_t ch);
 	bool HasGlyph(wchar_t ch);
 	void IncreaseGlyph(wchar_t ch);
@@ -132,19 +132,19 @@ public:
     FontRenderer(const char* _font_name);
     ~FontRenderer();
     void set_font_size(PixelSize _size);
-	inline uint get_font_size() {
+	inline euint get_font_size() {
 		return m_pixel_size;
 	}
-    void print(const wchar_t* _str, uint _num_chars, vptr _target, uint _x, uint _y, uint _w);
-    void print(const char* _str, vptr _target, uint _x, uint _y, uint _w);
-	uint draw_letter(wchar_t _letter, vptr _target, uint _width);
+    void print(const wchar_t* _str, euint _num_chars, vptr _target, euint _x, euint _y, euint _w);
+    void print(const char* _str, vptr _target, euint _x, euint _y, euint _w);
+	euint draw_letter(wchar_t _letter, vptr _target, euint _width);
 private:
-    uint draw_text(FT_Bitmap* bitmap, vptr _target, uint _x, uint _y, uint _w);
+    euint draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _y, euint _w);
     const char* m_font_name;
     FT_Library  m_ft_lib;
     FT_Face     m_ft_face;
-    uint m_char_ptr;
-    uint m_pixel_size;
+    euint m_char_ptr;
+    euint m_pixel_size;
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///

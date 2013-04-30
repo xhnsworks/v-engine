@@ -12,17 +12,17 @@ struct list_node
 typedef struct _stack
 {
     var* stack;
-    uint stack_length;
-    uint stack_top_ptr;
+    euint stack_length;
+    euint stack_top_ptr;
     etype value_type;
 }stack;
 
 typedef struct _fixed_stack
 {
     void* stack;
-    uint stack_length;
-    uint stack_top_ptr;
-    uint value_size;
+    euint stack_length;
+    euint stack_top_ptr;
+    euint value_size;
 } fixed_stack;
 #include "tree.h"
 
@@ -34,7 +34,7 @@ typedef struct _tree
     struct tree_node* root;
     struct tree_node* head;
     struct tree_node* tail;
-    uint count;
+    euint count;
     etype key_type;
     etype value_type;
 }tree;

@@ -366,7 +366,7 @@ enc = enc*0.5+0.5;
 
     const char* render_target_strings[4];
     const char* render_output_strings[4];
-    for (uint i = 0; i < _status->num_render_pipes; i++)
+    for (euint i = 0; i < _status->num_render_pipes; i++)
     {
         render_target_strings[i] = get_render_target_string(_status->render_pipes[i].tgt);
         switch (_status->render_pipes[i].out)
@@ -395,7 +395,7 @@ enc = enc*0.5+0.5;
     procs[0] = 0x00;
     outputs[0] = 0x00;
 
-    for (uint i = 0; i < _status->num_render_pipes; i++)
+    for (euint i = 0; i < _status->num_render_pipes; i++)
     {
         switch (_status->render_pipes[i].out)
         {
@@ -539,7 +539,7 @@ PxlSdrBuf create_std_pixel_shader_buffer(std_pass_status* _status)
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32x3_Param, CAMERA_DIRECTION, 1, CameraDirection);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, MATERIAL_ID, 1, CurrentMaterialID);
 
-    for (uint i = 0; i < _status->num_render_pipes; i++)
+    for (euint i = 0; i < _status->num_render_pipes; i++)
     {
         if (_status->render_pipes[i].out == PointVSMDepthOutput)
         {

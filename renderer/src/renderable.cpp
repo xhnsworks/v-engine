@@ -44,10 +44,10 @@ void Renderable_add_mesh(Renderable _rabl, MeshPtr _mesh)
 
 void Renderable_process(Renderable _rabl, fn_renderable_proc _proc)
 {
-    uint face_count = IndexBuffer_get_num_faces(_rabl->idx_buf);
-    for (uint i = 0; i < face_count; i++)
+    euint face_count = IndexBuffer_get_num_faces(_rabl->idx_buf);
+    for (euint i = 0; i < face_count; i++)
     {
-        uint idxs[3];
+        euint idxs[3];
         IndexBuffer_read(_rabl->idx_buf, i, idxs);
         float pos0[3];
         float pos1[3];
@@ -97,7 +97,7 @@ void Renderable_prev_render(Renderable _rabl)
 {
     if (_rabl->std_pass_dirty_flag)
     {
-        uint usage_tex_flags = 0;
+        euint usage_tex_flags = 0;
 
         if (_rabl->material->col_tex.get())
             usage_tex_flags |= COLOR_MAP_MASK;
@@ -118,7 +118,7 @@ void Renderable_depth_prev_render(Renderable _rabl)
 {
     if (_rabl->depth_pass_dirty_flag)
     {
-        uint usage_tex_flags = 0;
+        euint usage_tex_flags = 0;
 
         pass_decl p_dec;
         p_dec.dec = _rabl->vtx_dec;

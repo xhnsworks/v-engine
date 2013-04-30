@@ -18,7 +18,7 @@ API_EXPORT VertexElement VertexDecl_find(VertexDecl _dec, uint32 _i);
 
 API_EXPORT const char* VertexDecl_get_decl_string(VertexDecl _dec);
 
-API_EXPORT uint VertexDecl_get_vertex_size(VertexDecl _dec);
+API_EXPORT euint VertexDecl_get_vertex_size(VertexDecl _dec);
 
 API_EXPORT bool VertexDecl_test(VertexDecl _dec);
 API_EXPORT bool VertexDecl_test_element_semantic(VertexDecl _dec, element_semantic _sem);

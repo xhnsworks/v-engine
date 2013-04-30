@@ -20,7 +20,7 @@ void IndexBuffer_Dest(struct _index_buffer* _buf)
     glDeleteBuffers(1, &_buf->id);
     Mfree( (vptr)((index_buffer*)_buf)->index_buffer );
 }
-IndexBuffer _IndexBuffer_new(e_mesh_mode mode, const char* _file, uint _line)
+IndexBuffer _IndexBuffer_new(e_mesh_mode mode, const char* _file, euint _line)
 {
     index_buffer* buffer = (index_buffer*)_Malloc(sizeof(index_buffer), _file, _line);
     buffer->face_size = face_size(mode);
@@ -35,7 +35,7 @@ IndexBuffer _IndexBuffer_new(e_mesh_mode mode, const char* _file, uint _line)
     ret = buffer;
     return ret;
 }
-void _IndexBuffer_delete(IndexBuffer _self, const char* _file, uint _line)
+void _IndexBuffer_delete(IndexBuffer _self, const char* _file, euint _line)
 {
     IndexBuffer_Dest(_self);
     Mfree(_self);
@@ -51,7 +51,7 @@ bool IndexBuffer_read(IndexBuffer _self, unsigned int _i, vptr _result)
     return true;
 }
 
-void _IndexBuffer_grow_up(IndexBuffer _self, uint num_faces);
+void _IndexBuffer_grow_up(IndexBuffer _self, euint num_faces);
 vptr IndexBuffer_insert(IndexBuffer _self, unsigned int _i)
 {
     if (_i >= _self->index_buffer_tail)
@@ -72,9 +72,9 @@ uint32 IndexBuffer_get_buffer_size(IndexBuffer _self)
     return _self->index_buffer_size;
 }
 **/
-void _IndexBuffer_grow_up(IndexBuffer _self, uint num_faces)
+void _IndexBuffer_grow_up(IndexBuffer _self, euint num_faces)
 {
-    uint totel_idx_buf_size = (_self->index_buffer_tail + num_faces) * _self->face_size;
+    euint totel_idx_buf_size = (_self->index_buffer_tail + num_faces) * _self->face_size;
     if (totel_idx_buf_size > _self->index_buffer_size)
     {
         char* tmp = (char*)SMalloc(totel_idx_buf_size * 2);
@@ -88,7 +88,7 @@ void _IndexBuffer_grow_up(IndexBuffer _self, uint num_faces)
 
 uint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf)
 {
-    uint num_faces = Mesh_get_face_count(_mesh);
+    euint num_faces = Mesh_get_face_count(_mesh);
     _IndexBuffer_grow_up(_self, num_faces);
 
     uint32 tail = _self->index_buffer_tail;
@@ -97,7 +97,7 @@ uint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev
     uint32 i = 0;
     if (_self->mesh_mode == Triangular)
     {
-        uint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
+        euint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
         for (; i < Mesh_get_face_count(_mesh); i++)
         {
             ibf[i * 3] = start + idx[i * 3];
@@ -107,7 +107,7 @@ uint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev
     }
     else
     {
-        uint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
+        euint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
         for (; i < Mesh_get_face_count(_mesh); i++)
         {
             ibf[i * 2] = start + idx[i * 2];
@@ -128,12 +128,12 @@ void IndexBuffer_buffer_data(IndexBuffer _self)
     }
 }
 
-uint IndexBuffer_get_num_faces(IndexBuffer _self)
+euint IndexBuffer_get_num_faces(IndexBuffer _self)
 {
     return _self->index_buffer_tail;
 }
 
-uint IndexBuffer_get_face_size(IndexBuffer _self)
+euint IndexBuffer_get_face_size(IndexBuffer _self)
 {
     return _self->face_size;
 }

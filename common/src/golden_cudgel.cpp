@@ -6,14 +6,14 @@ struct _golden_cudgel
 {
     unsigned char* mem;
     unsigned char* tail;
-    uint ele_size;
-    uint ele_count;
+    euint ele_size;
+    euint ele_count;
 };
 
 #define MEMORY_PAGE_SIZE 4 * 1024
 #define MEMORY_RESERVE_SIZE 128 * 1024 * 1024
 ///static unsigned char* mem_begin_addr = (unsigned char*)0x00000000;
-GoldenCudgel GoldenCudgel_new(uint ele_size)
+GoldenCudgel GoldenCudgel_new(euint ele_size)
 {
     if (MEMORY_PAGE_SIZE / ele_size < 16)
         return NULL;
@@ -37,7 +37,7 @@ void GoldenCudgel_delete(GoldenCudgel self)
     Mfree(self);
 }
 
-void GoldenCudgel_grow_up(GoldenCudgel self, vptr eles, uint ele_count)
+void GoldenCudgel_grow_up(GoldenCudgel self, vptr eles, euint ele_count)
 {
     VirtualAlloc(self->tail, self->ele_size * ele_count, MEM_COMMIT, PAGE_READWRITE);
     memcpy(self->tail, eles, self->ele_size * ele_count);
@@ -45,14 +45,14 @@ void GoldenCudgel_grow_up(GoldenCudgel self, vptr eles, uint ele_count)
     self->ele_count += ele_count;
 }
 
-void GoldenCudgel_grow_up_not_fill(GoldenCudgel self, uint ele_count)
+void GoldenCudgel_grow_up_not_fill(GoldenCudgel self, euint ele_count)
 {
     VirtualAlloc(self->tail, self->ele_size * ele_count, MEM_COMMIT, PAGE_READWRITE);
     self->tail += self->ele_size * ele_count;
     self->ele_count += ele_count;
 }
 
-void GoldenCudgel_cut_down(GoldenCudgel self, uint ele_count)
+void GoldenCudgel_cut_down(GoldenCudgel self, euint ele_count)
 {
     if (self->tail - self->ele_size * ele_count >= self->mem)
     {
@@ -62,7 +62,7 @@ void GoldenCudgel_cut_down(GoldenCudgel self, uint ele_count)
     }
 }
 
-vptr GoldenCudgel_get_element_pointer(GoldenCudgel self, uint i)
+vptr GoldenCudgel_get_element_pointer(GoldenCudgel self, euint i)
 {
     if (i < self->ele_count)
     {
@@ -79,7 +79,7 @@ void GoldenCudgel_grow_to(GoldenCudgel self, vptr to)
     if (to > (vptr)self->tail)
     {
         ref_ptr grow = (ref_ptr)to - (ref_ptr)self->tail;
-        uint num_eles = grow / self->ele_size;
+        euint num_eles = grow / self->ele_size;
         if (grow % self->ele_size)
         {
             num_eles++;

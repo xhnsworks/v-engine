@@ -5,6 +5,6 @@
 struct _viewport;
 typedef struct _viewport Viewport;
 #if defined(_WIN32) || defined(_WIN64)
-API_EXPORT void ViewPort_Init(HINSTANCE hInstance, uint _width, uint _height);
+API_EXPORT void ViewPort_Init(HINSTANCE hInstance, euint _width, euint _height);
 #endif
 #endif

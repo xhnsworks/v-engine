@@ -14,10 +14,10 @@
 
 struct Viewport : public RefObject
 {
-	uint x;
-	uint y;
-    uint width;
-	uint height;
+	euint x;
+	euint y;
+    euint width;
+	euint height;
 	xhn::SmartPtr<Viewport> parent;
 	Viewport()
 		: x(0)
@@ -48,7 +48,7 @@ protected:
 	Tree param_proc_tree;
 
 	Tree material_table;
-    sint material_count;
+    esint material_count;
 
 	STD_NAMESPACE::set<Renderable> used_renderable_set;
 	STD_NAMESPACE::set<Renderable> unused_renderable_set;
@@ -59,10 +59,10 @@ protected:
     Pass display_pass;
     Pass clear_sketchbook_pass;
 
-    uint x;
-    uint y;
-    uint width;
-    uint height;
+    euint x;
+    euint y;
+    euint width;
+    euint height;
     Camera camera_base;
 public:
     matrix4x4* curt_rend_world_matrix;
@@ -100,15 +100,15 @@ public:
 	void FORCE_ALIGN_ARG_POINTER get_mouse_ray ( int _x, int _y, EFloat3 *ori, EFloat3 *dir );
     
     virtual bool is_uniform_param_source ( sint32 _src ) = 0;
-	virtual Texture2DPtr get_shadow_map ( uint i ) = 0;
+	virtual Texture2DPtr get_shadow_map ( euint i ) = 0;
     virtual TextureCube get_shadow_cube_map() = 0;
 	virtual renderer_param_value get_shader_object_value ( sint32 _src ) = 0;
 	virtual void prepare_renderable(Renderable _rbl) = 0;
 
-	inline uint get_width() {
+	inline euint get_width() {
 		return width;
 	}
-	inline uint get_height() {
+	inline euint get_height() {
 		return height;
 	}
     inline RenderablePlane get_render_plane() {
@@ -117,6 +117,6 @@ public:
 };
 typedef struct _renderer_param_entry *RendererParamEntry;
 typedef renderer_param_value ( *GetRendererParamProc ) ( RendererBase * );
-API_EXPORT RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, sint _array_size );
+API_EXPORT RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint _array_size );
 API_EXPORT void RendererParamEntry_delete ( RendererParamEntry _self );
 #endif

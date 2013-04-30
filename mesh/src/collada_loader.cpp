@@ -24,9 +24,9 @@ mxml_type_t collada_callback(mxml_node_t * node)
 typedef struct _stream
 {
     float* float_array;
-    uint set;
-    uint count;
-    uint stride;
+    euint set;
+    euint count;
+    euint stride;
     bool is_vertex_stream;
 } stream;
 typedef struct _stream* FloatStream;
@@ -61,7 +61,7 @@ typedef enum _collada_semantic
 typedef struct _index_element
 {
     collada_semantic sem;
-    uint offs;
+    euint offs;
 } index_element;
 
 typedef struct _collada_state
@@ -69,7 +69,7 @@ typedef struct _collada_state
     Tree stream_tree;
     Tree sem_stream_tree;
     index_element* idx_eles;
-    uint num_tri;
+    euint num_tri;
     uint32* idx_stream;
 } collada_state;
 
@@ -98,7 +98,7 @@ void ColladaState_enum_semantics(ColladaState _self, mxml_node_t* node, bool is_
 
         if (sem_str && source)
         {
-            uint count = 0;
+            euint count = 0;
             while (source[count] && source[count] == '#')
                 count++;
 
@@ -171,7 +171,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
 
 		if (semAttr && sourceAttr)
         {
-            uint count = 0;
+            euint count = 0;
 			const char* sem = semAttr.value();
 			const char* source = sourceAttr.value();
             while (source[count] && source[count] == '#')
@@ -208,7 +208,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
                 Tree_insert(_self->sem_stream_tree, key, data);
                 if (offsAttr)
                 {
-					index_element ie = {(collada_semantic)key.uint32_var, (uint)atoi(offsAttr.value())};
+					index_element ie = {(collada_semantic)key.uint32_var, (euint)atoi(offsAttr.value())};
                     apush(_self->idx_eles, ie);
                 }
             }
@@ -218,7 +218,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
                 {
                     var key;
                     key.uint32_var = ColladaVertex;
-                    index_element ie = {(collada_semantic)key.uint32_var, (uint)atoi(offsAttr.value())};
+                    index_element ie = {(collada_semantic)key.uint32_var, (euint)atoi(offsAttr.value())};
                     apush(_self->idx_eles, ie);
                 }
             }
@@ -228,7 +228,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
 
 void _parse_float_array(const char* str, FloatStream result)
 {
-	uint count = 0;
+	euint count = 0;
 	xhn::vector< char, xhn::FGetCharRealSizeProc<char> > tmp;
 	while (str[count])
 	{
@@ -253,7 +253,7 @@ void _parse_float_array(const char* str, FloatStream result)
 
 uint32* _parse_p(const char* str, uint32* result)
 {
-	uint count = 0;
+	euint count = 0;
 	xhn::vector< char, xhn::FGetCharRealSizeProc<char> > tmp;
 	while (str[count])
 	{
@@ -267,7 +267,7 @@ uint32* _parse_p(const char* str, uint32* result)
 			if (tmp.size())
 			{
 				xhn::string s = tmp;
-				uint u = (uint)atoi(s.c_str());
+				euint u = (euint)atoi(s.c_str());
 				apush(result, u);
 			}
 			tmp.clear();
@@ -301,8 +301,8 @@ void ColladaState_load_mesh2(ColladaState _self, const char* filepath)
                     /// count和stride必须从technique_common里面取，真他妈操蛋
                     const char* count_str = mxmlElementGetAttr(accessor, "count");
                     const char* stride_str = mxmlElementGetAttr(accessor, "stride");
-                    uint count = atoi(count_str);
-                    uint stride = atoi(stride_str);
+                    euint count = atoi(count_str);
+                    euint stride = atoi(stride_str);
                     FloatStream s = FloatStream_new();
                     s->count = count;
                     s->stride = stride;
@@ -336,7 +336,7 @@ void ColladaState_load_mesh2(ColladaState _self, const char* filepath)
         {
             ColladaState_enum_semantics(_self, triangles, false);
 
-            uint count = atoi(mxmlElementGetAttr(triangles, "count"));
+            euint count = atoi(mxmlElementGetAttr(triangles, "count"));
             _self->num_tri = count;
             mxml_node_t* p = mxmlFindElement(triangles, triangles, "p", NULL, NULL, MXML_DESCEND);
             if (p)
@@ -409,7 +409,7 @@ void ColladaState_load_mesh(ColladaState _self, const char* filepath)
 			else if (eleName == "triangles")
 			{
 				ColladaState_enum_semantics(_self, ele, false);
-				uint count = ele.attribute("count").as_uint();
+				euint count = ele.attribute("count").as_uint();
 				_self->num_tri = count;
 				pugi::xml_node p = ele.child("p");
 				if (p)
@@ -455,10 +455,10 @@ void ColladaState_log(ColladaState _self)
     }
 }
 
-uint _find_offset(ColladaState _self, collada_semantic sem)
+euint _find_offset(ColladaState _self, collada_semantic sem)
 {
-    uint n = array_n(_self->idx_eles);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_self->idx_eles);
+    for (euint i = 0; i < n; i++)
     {
         if (sem == _self->idx_eles[i].sem)
             return _self->idx_eles[i].offs;
@@ -468,21 +468,21 @@ uint _find_offset(ColladaState _self, collada_semantic sem)
 
 Mesh ColladaState_create_mesh(ColladaState _self)
 {
-    uint num_vtx = 0;
+    euint num_vtx = 0;
     float* pos_src = NULL;
     float* tex_src = NULL;
     float* nor_src = NULL;
-    uint num_pos = 0;
-    uint num_tex = 0;
-    uint num_nor = 0;
-    uint stride_pos = 0;
-    uint stride_tex = 0;
-    uint stride_nor = 0;
-    uint offs_pos = 0;
-    uint offs_tex = 0;
-    uint offs_nor = 0;
+    euint num_pos = 0;
+    euint num_tex = 0;
+    euint num_nor = 0;
+    euint stride_pos = 0;
+    euint stride_tex = 0;
+    euint stride_nor = 0;
+    euint offs_pos = 0;
+    euint offs_tex = 0;
+    euint offs_nor = 0;
     collada_semantic base_sem = ColladaEmptySemantic;
-    uint offs_base = 0;
+    euint offs_base = 0;
     Iterator iter = Tree_begin(_self->sem_stream_tree);
     while (iter)
     {
@@ -554,8 +554,8 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     }
 
     ///uint32* idx_src = _self->idx_stream;
-    uint stride_idx = array_n(_self->idx_eles);
-    ///uint num_tri = _self->num_tri;
+    euint stride_idx = array_n(_self->idx_eles);
+    ///euint num_tri = _self->num_tri;
     ///uint32* idx_stream = SMalloc(sizeof(uint32) * 3 * num_tri);
 
     float* pos_stream = (float*)SMalloc(sizeof(float) * 3 * num_vtx);
@@ -563,7 +563,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     float* nor_stream = (float*)SMalloc(sizeof(float) * 3 * num_vtx);
     uint32* idx_src = _self->idx_stream;
 
-    uint num_tri = _self->num_tri;
+    euint num_tri = _self->num_tri;
     uint32* idx_stream = (uint32*)SMalloc(sizeof(uint32) * 3 * num_tri);
 
     memset(pos_stream, 0, sizeof(float) * 3 * num_vtx);
@@ -579,10 +579,10 @@ Mesh ColladaState_create_mesh(ColladaState _self)
         uint32 idx_nor;
     };
 	/**
-    struct idx_group _get_idx_group(uint i, uint idx_tri_vtx)
+    struct idx_group _get_idx_group(euint i, euint idx_tri_vtx)
     {
         struct idx_group ret;
-        uint base = i * stride_idx * 3 + stride_idx * idx_tri_vtx;
+        euint base = i * stride_idx * 3 + stride_idx * idx_tri_vtx;
         ret.idx_base = idx_src[base + offs_base];
         ret.idx_pos = idx_src[base + offs_pos];
         ret.idx_tex = idx_src[base + offs_tex];
@@ -591,11 +591,11 @@ Mesh ColladaState_create_mesh(ColladaState _self)
         return ret;
     }
 	**/
-    uint max_idx_base = 0;
-    uint max_idx_pos = 0;
-    uint max_idx_tex = 0;
-    uint max_idx_nor = 0;
-    uint idx_count = 0;
+    euint max_idx_base = 0;
+    euint max_idx_pos = 0;
+    euint max_idx_tex = 0;
+    euint max_idx_nor = 0;
+    euint idx_count = 0;
 	/**
     void _stream_copy(struct idx_group* idx_grp)
     {
@@ -622,21 +622,21 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     }
 	**/
     /**
-    uint num_vtx = 0;
+    euint num_vtx = 0;
     float* pos_src = NULL;
     float* tex_src = NULL;
     float* nor_src = NULL;
-    uint num_pos = 0;
-    uint num_tex = 0;
-    uint num_nor = 0;
-    uint stride_pos = 0;
-    uint stride_tex = 0;
-    uint stride_nor = 0;
-    uint offs_pos = 0;
-    uint offs_tex = 0;
-    uint offs_nor = 0;
+    euint num_pos = 0;
+    euint num_tex = 0;
+    euint num_nor = 0;
+    euint stride_pos = 0;
+    euint stride_tex = 0;
+    euint stride_nor = 0;
+    euint offs_pos = 0;
+    euint offs_tex = 0;
+    euint offs_nor = 0;
     collada_semantic base_sem = ColladaEmptySemantic;
-    uint offs_base = 0;
+    euint offs_base = 0;
     **/
     elog("num_vtx %d\n", num_vtx);
     elog("pos_src %x\n", pos_src);
@@ -655,10 +655,10 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     elog("offs_base %d\n", offs_base);
     elog("base_sem %d\n", base_sem);
     elog("num_tri %d\n", num_tri);
-	uint num_idx = array_n(_self->idx_stream);
+	euint num_idx = array_n(_self->idx_stream);
 	elog("real_num_idx %d\n", num_idx);
 
-    for (uint i = 0; i < num_tri; i++)
+    for (euint i = 0; i < num_tri; i++)
     {
         ///struct idx_group idx0 = _get_idx_group(i, 0);
         ///struct idx_group idx1 = _get_idx_group(i, 1);
@@ -668,7 +668,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 		struct idx_group idx2;
 		{
 			struct idx_group ret;
-            uint base = i * stride_idx * 3 + stride_idx * 0;
+            euint base = i * stride_idx * 3 + stride_idx * 0;
             ret.idx_base = idx_src[base + offs_base];
             ret.idx_pos = idx_src[base + offs_pos];
             ret.idx_tex = idx_src[base + offs_tex];
@@ -677,7 +677,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 		}
 		{
 			struct idx_group ret;
-            uint base = i * stride_idx * 3 + stride_idx * 1;
+            euint base = i * stride_idx * 3 + stride_idx * 1;
             ret.idx_base = idx_src[base + offs_base];
             ret.idx_pos = idx_src[base + offs_pos];
             ret.idx_tex = idx_src[base + offs_tex];
@@ -686,7 +686,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 		}
 		{
 			struct idx_group ret;
-            uint base = i * stride_idx * 3 + stride_idx * 2;
+            euint base = i * stride_idx * 3 + stride_idx * 2;
             ret.idx_base = idx_src[base + offs_base];
             ret.idx_pos = idx_src[base + offs_pos];
             ret.idx_tex = idx_src[base + offs_tex];

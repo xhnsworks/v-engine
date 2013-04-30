@@ -9,25 +9,25 @@
 /****************/
 /// fixed me! this function is unsafed
 #ifdef _WIN32
-sint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
+esint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 {
 	// Get the required size of the buffer that receives the Unicode
 	// string.
-	uint _size;
+	euint _size;
 	_size = MultiByteToWideChar (0, 0, _src_str, -1, NULL, 0);
 
 	// Convert headers from ASCII to Unicode.
 	return MultiByteToWideChar (0, 0, _src_str, -1, (WCHAR*)_dst_str, _size);
 }
 #else
-uint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
+euint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 {
-	uint _count;
+	euint _count;
 	while (_src_str[_count])
 	{
 		_count++;
 	}
-	uint i = 0;
+	euint i = 0;
 	for (;i < _count; i++)
 	{
 		_dst_str[i] = (wchar_t)_src_str[i];
@@ -39,20 +39,20 @@ uint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 #endif
 /****************/
 
-ComposingStick::ComposingStick(FontRenderer* renderer, uint numChars)
+ComposingStick::ComposingStick(FontRenderer* renderer, euint numChars)
 : m_renderer(renderer)
 {
 	int numCharsPerRow = (int)sqrtf((float)numChars + 0.5f);
-	uint fontPixelWidth = renderer->get_font_size();
-	uint fontPixelHeight = fontPixelWidth;
-    uint texPixelWidth = (uint)(numCharsPerRow + 1) * fontPixelWidth;
-	uint texPixelHeight = texPixelWidth;
+	euint fontPixelWidth = renderer->get_font_size();
+	euint fontPixelHeight = fontPixelWidth;
+    euint texPixelWidth = (euint)(numCharsPerRow + 1) * fontPixelWidth;
+	euint texPixelHeight = texPixelWidth;
 
-	uint numHoris = numCharsPerRow;
-	uint numVerts = numCharsPerRow;
-	for (uint y = 0; y < numVerts; y++)
+	euint numHoris = numCharsPerRow;
+	euint numVerts = numCharsPerRow;
+	for (euint y = 0; y < numVerts; y++)
 	{
-		for (uint x = 0; x < numHoris; x++)
+		for (euint x = 0; x < numHoris; x++)
 		{
 			GlyphInfo* info = ENEW GlyphInfo();
 			info->x = x * fontPixelWidth;
@@ -99,7 +99,7 @@ ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 		rect.width = m_renderer->get_font_size();
 		rect.height = m_renderer->get_font_size();
 		Tex2DLockedRect* lock = m_texture->Lock(rect);
-		uint letterWidth = m_renderer->draw_letter(ch, lock->GetAt(0, 0), lock->GetWidth());
+		euint letterWidth = m_renderer->draw_letter(ch, lock->GetAt(0, 0), lock->GetWidth());
 		m_texture->Unlock(lock);
 		m_glyphIndex.insert(xhn::make_pair(ch, info));
 		info->letter = ch;
@@ -192,7 +192,7 @@ FontRenderer::FontRenderer(const char* _font_name) : m_font_name(_font_name), m_
 
 void FontRenderer::set_font_size(PixelSize _size)
 {
-    m_pixel_size = (uint)_size;
+    m_pixel_size = (euint)_size;
 
     FT_Error error = FT_Set_Char_Size(
                 m_ft_face,
@@ -213,13 +213,13 @@ FontRenderer::~FontRenderer()
 {
 }
 
-uint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, uint _x, uint _y, uint _w)
+euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _y, euint _w)
 {
     FT_Int i, j, p, q;
     FT_Int x_max = m_char_ptr + bitmap->width;
     FT_Int y_max = bitmap->rows;
 
-    sint _offset_y = m_pixel_size - bitmap->rows + 1;
+    esint _offset_y = m_pixel_size - bitmap->rows + 1;
 	EAssert(_offset_y >= 0 && _offset_y < 65535, "offset out range");
 
     uint8 _gray;
@@ -245,13 +245,13 @@ uint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, uint _x, uint _y, 
 	return bitmap->width;
 }
 
-void FontRenderer::print(const wchar_t* _str, uint _num_chars, vptr _target, uint _x, uint _y, uint _w)
+void FontRenderer::print(const wchar_t* _str, euint _num_chars, vptr _target, euint _x, euint _y, euint _w)
 {
     FT_GlyphSlot slot = m_ft_face->glyph;
     FT_UInt glyph_index;
     FT_UInt error;
 
-    uint n;
+    euint n;
     m_char_ptr = 0;
     for ( n = 0; n < _num_chars; n++ )
     {
@@ -285,7 +285,7 @@ void FontRenderer::print(const wchar_t* _str, uint _num_chars, vptr _target, uin
     }
 }
 
-uint FontRenderer::draw_letter(wchar_t _letter, vptr _target, uint _width)
+euint FontRenderer::draw_letter(wchar_t _letter, vptr _target, euint _width)
 {
 	FT_GlyphSlot slot = m_ft_face->glyph;
 	FT_UInt glyph_index;
@@ -312,9 +312,9 @@ uint FontRenderer::draw_letter(wchar_t _letter, vptr _target, uint _width)
 	return draw_text( &slot->bitmap, _target, 0, 0, _width);
 }
 
-void FontRenderer::print(const char* _str, vptr _target, uint _x, uint _y, uint _w)
+void FontRenderer::print(const char* _str, vptr _target, euint _x, euint _y, euint _w)
 {
     wchar_t _buf[128];
-    sint _count = _MByteToWChar(_str, _buf);
+    esint _count = _MByteToWChar(_str, _buf);
     print(_buf, _count, _target, _x, _y, _w);
 }

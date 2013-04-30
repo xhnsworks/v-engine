@@ -12,13 +12,13 @@ template <typename C, typename STR_CMP_PROC, typename DEFAULT_STR_PROC>
 class string_base
 {
 private:
-    uint m_hash;
-    uint m_size;
+    euint m_hash;
+    euint m_size;
     C *m_str;
     STR_CMP_PROC m_str_cmp_proc;
     DEFAULT_STR_PROC m_default_str_proc;
 public:
-    const static uint npos = ( uint )-1;
+    const static euint npos = ( euint )-1;
     typedef C* iterator;
     typedef const C* const_iterator;
     string_base() {
@@ -43,7 +43,7 @@ public:
         m_hash = _hash ( m_str );
     }
 	string_base ( const vector< C, FGetCharRealSizeProc<C> >& str ) {
-        uint count = str.size();
+        euint count = str.size();
 
         m_str = ( C * ) Malloc ( (count + 1) * sizeof(C) );
 		C* s = str.get();
@@ -100,7 +100,7 @@ public:
         return *this;
     }
     string_base &operator = ( const C *str ) {
-        uint count = 0;
+        euint count = 0;
 
         while ( str[count] ) {
             count++;
@@ -114,7 +114,7 @@ public:
         return *this;
     }
 	string_base &operator = ( const vector< C, FGetCharRealSizeProc<C> >& str ) {
-        uint count = str.size();
+        euint count = str.size();
 
         Mfree ( m_str );
         m_str = ( C * ) Malloc ( (count + 1) * sizeof(C) );
@@ -136,7 +136,7 @@ public:
         return ret;
     }
     string_base operator + ( const C *str ) const {
-        uint count = 0;
+        euint count = 0;
 
         while ( str[count] ) {
             count++;
@@ -172,7 +172,7 @@ public:
         return *this;
     }
     string_base &operator += ( const C *str ) {
-        uint count = 0;
+        euint count = 0;
 
         while ( str[count] ) {
             count++;
@@ -197,14 +197,14 @@ public:
 		m_hash = _hash ( m_str );
 		return *this;
 	}
-    uint find ( const string_base &str, uint pos = 0 ) const {
+    euint find ( const string_base &str, euint pos = 0 ) const {
         if ( m_size <= pos || !m_size || !str.m_size ) {
             return npos;
         }
 
-        uint count = pos;
-        uint match_count = 0;
-        uint match_pos = pos;
+        euint count = pos;
+        euint match_count = 0;
+        euint match_pos = pos;
         bool matching = false;
 
         while ( m_str[count] ) {
@@ -236,7 +236,7 @@ public:
 		else
             return npos;
     }
-    uint rfind ( const string_base &str, uint pos = npos ) const {
+    euint rfind ( const string_base &str, euint pos = npos ) const {
         if ( pos == npos ) {
             pos = m_size - 1;
         }
@@ -253,7 +253,7 @@ public:
         while ( count >= 0 ) {
             if ( matching ) {
                 if ( match_count < 0 ) {
-                    return ( uint ) match_pos - str.m_size + 1;
+                    return ( euint ) match_pos - str.m_size + 1;
                 }
 
                 if ( m_str[count] != str.m_str[match_count] ) {
@@ -279,27 +279,27 @@ public:
 		else
             return npos;
     }
-    uint find ( const C *str, uint pos = 0 ) const {
+    euint find ( const C *str, euint pos = 0 ) const {
         string_base tmp ( str );
         return find ( tmp, pos );
     }
-    uint rfind ( const C *str, uint pos = npos ) const {
+    euint rfind ( const C *str, euint pos = npos ) const {
         string_base tmp ( str );
         return rfind ( tmp, pos );
     }
-    uint find_first_of ( const string_base &str, uint pos = 0 ) const {
+    euint find_first_of ( const string_base &str, euint pos = 0 ) const {
         return find ( str, pos );
     }
-    uint find_first_of ( const C *s, uint pos = 0 ) const {
+    euint find_first_of ( const C *s, euint pos = 0 ) const {
         return find ( s, pos );
     }
-    uint find_last_of ( const string_base &str, uint pos = npos ) const {
+    euint find_last_of ( const string_base &str, euint pos = npos ) const {
         return rfind ( str, pos );
     }
-    uint find_last_of ( const C *s, uint pos = npos ) const {
+    euint find_last_of ( const C *s, euint pos = npos ) const {
         return rfind ( s, pos );
     }
-    string_base substr ( uint pos = 0, uint len = npos ) const {
+    string_base substr ( euint pos = 0, euint len = npos ) const {
         if ( pos >= m_size ) {
             return string_base();
         }
@@ -322,13 +322,13 @@ public:
         ret.m_hash = _hash ( str );
         return ret;
     }
-    uint size() const {
+    euint size() const {
         return m_size;
     }
-    inline uint get_hash() const {
+    inline euint get_hash() const {
         return m_hash;
     }
-    C operator[] (uint pos) const {
+    C operator[] (euint pos) const {
         return m_str[pos];
     }
 	void clear() {
@@ -341,7 +341,7 @@ public:
 };
 
 template <typename C, typename STR_CMP_PROC, typename DEFAULT_STR_PROC>
-inline uint _hash ( const string_base<C, STR_CMP_PROC, DEFAULT_STR_PROC> &key )
+inline euint _hash ( const string_base<C, STR_CMP_PROC, DEFAULT_STR_PROC> &key )
 {
     return key.get_hash();
 }

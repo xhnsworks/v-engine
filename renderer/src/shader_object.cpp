@@ -15,7 +15,7 @@ typedef struct _shader_object
 ///==============================ShaderObject========================================///
 #define ShaderObject_Init(s, t, n, as) _ShaderObject_Init(s, t, n, as, __FILE__, __LINE__)
 shader_object* _ShaderObject_Init(struct _shader_object* _so, shader_object_type _type, const char* _name, uint32 _array_size,
-                                  const char* _file, uint _line)
+                                  const char* _file, euint _line)
 {
     _so->type = _type;
     _so->name_string = _EString_new(_name, _file, _line);
@@ -27,7 +27,7 @@ void ShaderObject_Dest(shader_object* _so)
 {
     EString_delete(_so->name_string);
 }
-ShaderObject _ShaderObject_new(shader_object_type _type, const char* _name, uint32 _array_size, const char* _file, uint _line)
+ShaderObject _ShaderObject_new(shader_object_type _type, const char* _name, uint32 _array_size, const char* _file, euint _line)
 {
     ShaderObject ret;
     ret.self = (struct _shader_object*)_Malloc(sizeof(shader_object), _file, _line);
@@ -36,12 +36,12 @@ ShaderObject _ShaderObject_new(shader_object_type _type, const char* _name, uint
     ret.self = _ShaderObject_Init(ret.self, _type, _name, _array_size, _file, _line);
     return ret;
 }
-void _ShaderObject_delete(ShaderObject _so, const char* _file, uint _line)
+void _ShaderObject_delete(ShaderObject _so, const char* _file, euint _line)
 {
     ShaderObject_Dest(_so.self);
     Mfree(_so.self);
 }
-ShaderObject _ShaderObject_clone(ShaderObject _so, const char* _file, uint _line)
+ShaderObject _ShaderObject_clone(ShaderObject _so, const char* _file, euint _line)
 {
     ShaderObject ret = _ShaderObject_new(_so.self->type, _so.self->name_string, _so.self->array_size, _file, _line);
     ret.self->array_index = _so.self->array_index;
@@ -76,7 +76,7 @@ bool ShaderObject_equal(ShaderObject _so0, ShaderObject _so1)
     }
 }
 
-shader_object_type ShaderObject_get_type(ShaderObject _so, uint* _array_size, uint* _array_index)
+shader_object_type ShaderObject_get_type(ShaderObject _so, euint* _array_size, euint* _array_index)
 {
     *_array_size = _so.self->array_size;
     *_array_index = _so.self->array_index;
@@ -129,7 +129,7 @@ _INLINE_ char _get_comp_char(component _comp)
 _INLINE_ shader_object_type _get_min_type(component_index _comp_idx)
 {
 	shader_object_type t = Float2_Obj;
-	for (uint i = 0; i < _comp_idx.num_comps; i++)
+	for (euint i = 0; i < _comp_idx.num_comps; i++)
 	{
 		switch (_comp_idx.comps[i])
 		{
@@ -175,7 +175,7 @@ ShaderObject ShaderObject_get_component(ShaderObject _so, component_index _comp_
     str += offs;
     remainder -= offs;
 
-    for (uint i = 0; i < _comp_idx.num_comps; i++)
+    for (euint i = 0; i < _comp_idx.num_comps; i++)
     {
         offs = snprintf(str, remainder, "%c", _get_comp_char(_comp_idx.comps[i]));
         str += offs;
@@ -202,7 +202,7 @@ ShaderObject ShaderObject_get_component(ShaderObject _so, component_index _comp_
     }
     ret.self = (struct _shader_object*)SMalloc(sizeof(shader_object));
     ret.self->name_string = EString_new(mbuf);
-    ret.self->type = (shader_object_type)((uint)Float_Obj + _comp_idx.num_comps - 1);
+    ret.self->type = (shader_object_type)((euint)Float_Obj + _comp_idx.num_comps - 1);
     ret.self->array_size = 1;
     ret.self->array_index = INVALID_ARRAY_INDEX;
 
@@ -234,7 +234,7 @@ ShaderObject ShaderObject_float_to_int(ShaderObject _so, float _scale)
     return ret;
 }
 
-ShaderObject ShaderObject_new_from_sint(sint _v)
+ShaderObject ShaderObject_new_from_sint(esint _v)
 {
 	char mbuf[256];
 	snprintf(mbuf, 255, "%d", _v);

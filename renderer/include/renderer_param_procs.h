@@ -191,8 +191,8 @@ renderer_param_value getColorSketchPixelSizeProc(RendererBase* _self)
 {
     renderer_param_value ret;
     EFloat2* tmp = (EFloat2*)SMalloc(sizeof(EFloat2));
-    uint width = _self->curt_color_sketch->GetWidth();
-    uint height = _self->curt_color_sketch->GetHeight();
+    euint width = _self->curt_color_sketch->GetWidth();
+    euint height = _self->curt_color_sketch->GetHeight();
     tmp->x = 1.0f / (float)width;
     tmp->y = 1.0f / (float)height;
     ret.value = tmp;

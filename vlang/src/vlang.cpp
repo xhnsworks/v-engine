@@ -26,9 +26,9 @@ int yyparse(ParserEnv* e);
 void CFuncTest(ParserEnv* e, SymbolValue* sv)
 {
 	elog("##KILL YOU");
-    uint n = array_n(sv);
+    euint n = array_n(sv);
 	elog("num args %d", n);
-	for (uint i = 0; i < n; i++)
+	for (euint i = 0; i < n; i++)
 	{
 		SymbolValue v = sv[i];
 		PrintSymbol(e, v);
@@ -47,7 +47,7 @@ void CFuncTest(ParserEnv* e, SymbolValue* sv)
 
 void CFunctionConfig::_AddParam(ParserEnv* e, const Params& params)
 {
-	for (uint i = 0; i < params.size(); i++)
+	for (euint i = 0; i < params.size(); i++)
 	{
 		const xhn::pair<xhn::string, ValueType>& p = params[i];
 		SymbolValue type;
@@ -78,7 +78,7 @@ void CFunctionConfig::AttachToParseEnv(ParserEnv* e, const xhn::string& funcName
 }
 void CFunctionConfig::AttachToParseEnvTest()
 {
-	for (uint i = 0; i < m_input_params.size(); i++)
+	for (euint i = 0; i < m_input_params.size(); i++)
 	{
 		const xhn::pair<xhn::string, ValueType>& p = m_input_params[i];
 		elog("param name %s", p.first.c_str());
@@ -99,7 +99,7 @@ void vlang_run(const char* buffer)
 	if (array_n(e.exce_array))
 	{
 		elog("error line %d char count %d\n", e.line_count, e.char_count);
-		for (uint i = 0; i < array_n(e.exce_array); i++)
+		for (euint i = 0; i < array_n(e.exce_array); i++)
 		{
 			parser_exception exce = e.exce_array[i];
 			elog("EXCE:%s\n", exce.exce_desc);

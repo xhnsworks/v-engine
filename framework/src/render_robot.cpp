@@ -547,13 +547,13 @@ void ResourceAction::DoImpl()
 					CreateAnimCommand* cac = ENEW CreateAnimCommand(m_guiButton->GetScaleHandle(), Attribute::Float2);
 					cac->m_animFileName = "anim.xml";
 					cac->m_animName = "scale";
-					RWBuffer_Write(channel, (const uint*)&cac, sizeof(cac));
+					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
 				{
 					CreateAnimCommand* cac = ENEW CreateAnimCommand(m_guiButton->GetPivotHandle(), Attribute::Float2);
 					cac->m_animFileName = "anim.xml";
 					cac->m_animName = "offset";
-					RWBuffer_Write(channel, (const uint*)&cac, sizeof(cac));
+					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
 				s_isCreateAnimed = true;
 			}

@@ -36,7 +36,7 @@ typedef char sint8;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned char* uptr8;
-///typedef uint* uptr;
+///typedef euint* uptr;
 typedef uint32* uptr32;
 typedef uint64* uptr64;
 
@@ -45,16 +45,16 @@ typedef const char* EString;
 typedef int sint32;
 typedef short sint16;
 #if BIT_WIDTH == 64
-typedef uint64 uint;
-typedef sint64 sint;
+typedef uint64 euint;
+typedef sint64 esint;
 #else
-typedef uint32 uint;
-typedef sint32 sint;
+typedef uint32 euint;
+typedef sint32 esint;
 #endif
 typedef void* vptr;
-typedef uint pptr;
-typedef sint* sptr;
-typedef uint* uptr;
+typedef euint pptr;
+typedef esint* sptr;
+typedef euint* uptr;
 
 #define _32BIT_PIXEL_SIZE_ 4
 enum PixelSize
@@ -65,7 +65,7 @@ enum PixelSize
 	Pixel60 = 60,
 };
 
-typedef uint ref_ptr;
+typedef euint ref_ptr;
 
 typedef char* byte_ptr;
 typedef enum _etype
@@ -194,12 +194,12 @@ typedef struct rw_buffer* RWBuffer;
 /**
 typedef struct _inter_rw_buffer
 {
-    bool (*read)(RWBuffer _self, uint* result, uint* read_size);
-    bool (*write)(RWBuffer _self, const uint* from, const uint write_size);
+    bool (*read)(RWBuffer _self, euint* result, euint* read_size);
+    bool (*write)(RWBuffer _self, const euint* from, const euint write_size);
 } InterRWBuffer;
 **/
-typedef bool (*rw_buf_read)(RWBuffer _self, uint* result, uint* read_size);
-typedef bool (*rw_buf_write)(RWBuffer _self, const uint* from, const uint write_size);
+typedef bool (*rw_buf_read)(RWBuffer _self, euint* result, euint* read_size);
+typedef bool (*rw_buf_write)(RWBuffer _self, const euint* from, const euint write_size);
 struct InterRWBuffer
 {
 	rw_buf_read read;
@@ -269,7 +269,7 @@ typedef int (*KEY_COMPARE)(vptr, vptr);
 
 typedef struct _vertex_decl
 {
-    uint num_elements;
+    euint num_elements;
     VertexElement* elements;
     const char* decl_string;
 } vertex_decl;
@@ -309,7 +309,7 @@ typedef union _mouse_event_info
     s_mouse_abs_pos mouse_abs_pos;
 } mouse_event_info;
 
-typedef uint key_code;
+typedef euint key_code;
 
 typedef union _input_event_info
 {
@@ -440,9 +440,9 @@ typedef enum _compare_operation
 
 typedef struct _shader_node_base* ShaderNodeBase;
 typedef const char* (*shader_node_compile_proc)(ShaderNodeBase);
-typedef void (*shader_node_init_proc)(ShaderNodeBase, const char*, uint);
-typedef void (*shader_node_dest_proc)(ShaderNodeBase, const char*, uint);
-typedef ShaderNodeBase (*shader_node_clone_proc)(ShaderNodeBase, const char*, uint);
+typedef void (*shader_node_init_proc)(ShaderNodeBase, const char*, euint);
+typedef void (*shader_node_dest_proc)(ShaderNodeBase, const char*, euint);
+typedef ShaderNodeBase (*shader_node_clone_proc)(ShaderNodeBase, const char*, euint);
 
 typedef struct _string_buffer
 {

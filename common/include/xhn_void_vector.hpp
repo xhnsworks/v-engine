@@ -13,8 +13,8 @@ namespace xhn
     class void_vector : public RefObject
 	{
 	public:
-		uint m_ele_size;
-		uint m_totel_ele_count;
+		euint m_ele_size;
+		euint m_totel_ele_count;
 		char* m_begin_addr;
 		char* m_barrier;
 		void_vector()
@@ -28,24 +28,24 @@ namespace xhn
 		{
             Mfree(m_begin_addr);
 		}
-		inline uint _get_size() const {
+		inline euint _get_size() const {
 			if (m_ele_size)
 			    return ( m_barrier - m_begin_addr ) / m_ele_size;
 			else
 				return 0;
 		}
-		inline uint size() const {
+		inline euint size() const {
 			return _get_size();
 		}
-		inline void reserve(uint n) {
+		inline void reserve(euint n) {
 			if ( n > m_totel_ele_count ) {
-				uint curt_count = _get_size();
+				euint curt_count = _get_size();
 				char *tmp = ( char * ) SMalloc ( m_ele_size * n );
 				if (m_begin_addr) {
 					char *dst_ptr = tmp;
 					char *src_ptr = m_begin_addr;
 
-					for ( uint i = 0; i < curt_count; i++ ) {
+					for ( euint i = 0; i < curt_count; i++ ) {
 						memcpy(dst_ptr, src_ptr, m_ele_size);
 						dst_ptr += m_ele_size;
 						src_ptr += m_ele_size;
@@ -59,7 +59,7 @@ namespace xhn
 			}
 		}
 		inline void push_back(vptr _ele) {
-			uint curt_count = _get_size();
+			euint curt_count = _get_size();
 
 			if ( curt_count + 1 > m_totel_ele_count ) {
 				reserve(m_totel_ele_count * 8);
@@ -68,10 +68,10 @@ namespace xhn
 			memcpy(m_barrier, _ele, m_ele_size);
 		    m_barrier += m_ele_size;
 		}
-		inline void resize(uint n) {
+		inline void resize(euint n) {
 			reserve(n);
-			uint curt_count = _get_size();
-			uint d = n - curt_count;
+			euint curt_count = _get_size();
+			euint d = n - curt_count;
 			m_barrier += m_ele_size * d;
 		}
 		inline void flush(vptr pxl) {
@@ -81,21 +81,21 @@ namespace xhn
 				ptr += m_ele_size;
 			}
 		}
-		inline vptr operator [] ( uint i ) {
-			uint offs = m_ele_size * i;
+		inline vptr operator [] ( euint i ) {
+			euint offs = m_ele_size * i;
 			char *ptr = m_begin_addr + offs;
 			return (vptr)ptr;
 		}
 		template <typename CONVERT_PROC>
-		void convert(uint _ele_size) {
+		void convert(euint _ele_size) {
             CONVERT_PROC conv_proc;
-			uint curt_count = _get_size();
+			euint curt_count = _get_size();
 			char* tmp = (char*)SMalloc(_ele_size * m_totel_ele_count);
 			if (m_begin_addr) {
-				for (uint i = 0; i < curt_count; i++) {
-					uint src_offs = m_ele_size * i;
+				for (euint i = 0; i < curt_count; i++) {
+					euint src_offs = m_ele_size * i;
 					char* src_ptr = m_begin_addr + src_offs;
-					uint dst_offs = _ele_size * i;
+					euint dst_offs = _ele_size * i;
 					char* dst_ptr = tmp + dst_offs;
 					conv_proc(dst_ptr, src_ptr);
 				}

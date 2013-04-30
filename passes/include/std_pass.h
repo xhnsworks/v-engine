@@ -25,7 +25,7 @@
 struct std_pass_status
 {
     pass_decl dec;
-    uint num_render_pipes;
+    euint num_render_pipes;
     bool use_proj_mat;
     bool use_world_mat;
     bool use_gausscian_blur;

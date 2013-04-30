@@ -67,7 +67,7 @@ void StructPrototype_add_elem(ParserEnv* e, StructPrototype _self, const char* n
         ParserEnv_push_exce(e, exce);
         return;
     }
-    uint elem_size = _get_symbol_type_size(e, type);
+    euint elem_size = _get_symbol_type_size(e, type);
     if (elem_size < 0)
     {
         parser_exception exce = s_exce_table[Unknown_data_type];
@@ -140,8 +140,8 @@ FunctionClosures FunctionClosures_new(ParserEnv* e)
 }
 void FunctionClosures_delete(FunctionClosures _self)
 {
-    uint n = array_n(_self->cmds);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_self->cmds);
+    for (euint i = 0; i < n; i++)
     {
         CommandClosures_delete(_self->cmds[i]);
     }
@@ -272,9 +272,9 @@ void FunctionClosures_complete(ParserEnv* e, FunctionClosures _self)
             VPRINT("VARI STR STACK SIZE %d\n", *ip);
             VPRINT("\n");
 
-            uint n = 0;
+            euint n = 0;
             n = array_n(_self->func_arg_op_cmds_type_a_1);
-            for (uint i = 0; i < n; i++) {
+            for (euint i = 0; i < n; i++) {
                 CommandClosures cc = _self->func_arg_op_cmds_type_a_1[i];
                 ///
                 if (FloatAssignFloatCommand == cc->cmd)
@@ -284,7 +284,7 @@ void FunctionClosures_complete(ParserEnv* e, FunctionClosures _self)
                 _grow(e, sv);
             }
             n = array_n(_self->func_arg_op_cmds_type_b_1);
-            for (uint i = 0; i < n; i++) {
+            for (euint i = 0; i < n; i++) {
                 CommandClosures cc = _self->func_arg_op_cmds_type_b_1[i];
                 ///
                 if (FloatAssignFloatCommand == cc->cmd)
@@ -294,7 +294,7 @@ void FunctionClosures_complete(ParserEnv* e, FunctionClosures _self)
                 _grow(e, sv);
             }
             n = array_n(_self->func_arg_op_cmds_type_c_1);
-            for (uint i = 0; i < n; i++) {
+            for (euint i = 0; i < n; i++) {
                 CommandClosures cc = _self->func_arg_op_cmds_type_c_1[i];
                 ///
                 if (FloatAssignFloatCommand == cc->cmd)
@@ -311,7 +311,7 @@ void FunctionClosures_complete(ParserEnv* e, FunctionClosures _self)
             }
 
             n = array_n(_self->func_arg_op_cmds_type_a_2);
-            for (uint i = 0; i < n; i++) {
+            for (euint i = 0; i < n; i++) {
                 CommandClosures cc = _self->func_arg_op_cmds_type_a_2[i];
                 ///
                 if (FloatAssignFloatCommand == cc->cmd)
@@ -327,7 +327,7 @@ void FunctionClosures_complete(ParserEnv* e, FunctionClosures _self)
                 }
             }
             n = array_n(_self->func_arg_op_cmds_type_b_2);
-            for (uint i = 0; i < n; i++) {
+            for (euint i = 0; i < n; i++) {
                 CommandClosures cc = _self->func_arg_op_cmds_type_b_2[i];
                 ///
                 if (FloatAssignFloatCommand == cc->cmd)
@@ -343,7 +343,7 @@ void FunctionClosures_complete(ParserEnv* e, FunctionClosures _self)
                 }
             }
             n = array_n(_self->func_arg_op_cmds_type_c_2);
-            for (uint i = 0; i < n; i++) {
+            for (euint i = 0; i < n; i++) {
                 CommandClosures cc = _self->func_arg_op_cmds_type_c_2[i];
                 ///
                 if (FloatAssignFloatCommand == cc->cmd)
@@ -418,7 +418,7 @@ vptr FunctionClosures_get_vari_addr(ParserEnv* e, FunctionClosures _self, const 
     }
     return NULL;
 }
-sint FunctionClosures_get_vari_offs(ParserEnv* e, FunctionClosures _self, const char* var_name, int* vari_type_out)
+esint FunctionClosures_get_vari_offs(ParserEnv* e, FunctionClosures _self, const char* var_name, int* vari_type_out)
 {
     var key, data;
     key.str_var = (EString)var_name;
@@ -644,7 +644,7 @@ SymbolValue* ParserEnv_new_unknown_symbol(ParserEnv* e, const char* str)
 {
 	return SymbolStack_insert_unknown_symbol(&e->sym_stack, str);
 }
-vptr ParserEnv_get_addr(ParserEnv* e, int mem_type, sint offs)
+vptr ParserEnv_get_addr(ParserEnv* e, int mem_type, esint offs)
 {
     return e->mems[mem_type] + offs;
 }

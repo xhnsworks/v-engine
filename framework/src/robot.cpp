@@ -44,9 +44,9 @@ void Robot::CommandProc()
     for (; iter != end; iter++)
 	{
 		RobotCommandBase* cmdBase[2];
-		uint size = 0;
+		euint size = 0;
 		RWBuffer channel = iter->second;
-		while (RWBuffer_Read(channel, (uint*)cmdBase, &size))
+		while (RWBuffer_Read(channel, (euint*)cmdBase, &size))
 		{
 			if (size >= sizeof(RobotCommandBase*)) {
 				RobotCommand* cmd = cmdBase[0]->DynamicCast<RobotCommand>();
@@ -111,9 +111,9 @@ void RobotManager::BreakChannel(xhn::static_string sender, xhn::static_string re
 		xhn::map<xhn::static_string, RWBuffer>::iterator iter = sRob->m_commandTransmissionChannels.find(receiver);
 		if (iter != sRob->m_commandTransmissionChannels.end()) {
 			RobotCommand* cmd[2];
-			uint size = 0;
+			euint size = 0;
 			RWBuffer channel = iter->second;
-			while (RWBuffer_Read(channel, (uint*)cmd, &size)) {
+			while (RWBuffer_Read(channel, (euint*)cmd, &size)) {
 				if (size >= sizeof(RobotCommand*))
 					delete cmd[0];
 			}

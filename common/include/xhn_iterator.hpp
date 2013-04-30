@@ -104,10 +104,10 @@ class forward_readwrite_iterator : public readwrite_iterator<T, Readproc, Writep
 {
 public:
     typedef readwrite_iterator<T, Readproc, Writeproc> base_type;
-    uint m_ele_real_size;
+    euint m_ele_real_size;
     Nextproc m_nextProc;
 public:
-    forward_readwrite_iterator ( T *ptr, uint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc )
+    forward_readwrite_iterator ( T *ptr, euint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc )
         : base_type ( ptr, readProc, writeProc )
         , m_ele_real_size ( ele_real_size )
         , m_nextProc ( nextProc )
@@ -125,10 +125,10 @@ class const_forward_readwrite_iterator : public const_readwrite_iterator<T, Read
 {
 public:
     typedef const_readwrite_iterator<T, Readproc, Writeproc> base_type;
-    uint m_ele_real_size;
+    euint m_ele_real_size;
     Nextproc m_nextProc;
 public:
-    const_forward_readwrite_iterator ( T *ptr, uint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc )
+    const_forward_readwrite_iterator ( T *ptr, euint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc )
         : base_type ( ptr, readProc, writeProc )
         , m_ele_real_size ( ele_real_size )
         , m_nextProc ( nextProc )
@@ -148,7 +148,7 @@ public:
     typedef forward_readwrite_iterator<T, Readproc, Writeproc, Nextproc> base_type;
     Prevproc m_prevProc;
 public:
-    bidirectional_readwrite_iterator ( T *ptr, uint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc )
+    bidirectional_readwrite_iterator ( T *ptr, euint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc )
         : base_type ( ptr, ele_real_size, readProc, writeProc, nextProc )
         , m_prevProc ( prevProc )
     {}
@@ -167,7 +167,7 @@ public:
     typedef const_forward_readwrite_iterator<T, Readproc, Writeproc, Nextproc> base_type;
     Prevproc m_prevProc;
 public:
-    const_bidirectional_readwrite_iterator ( T *ptr, uint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc )
+    const_bidirectional_readwrite_iterator ( T *ptr, euint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc )
         : base_type ( ptr, ele_real_size, readProc, writeProc, nextProc )
         , m_prevProc ( prevProc )
     {}
@@ -187,12 +187,12 @@ public:
     Redirectproc m_redirectProc;
     Owner *m_owner;
 public:
-    random_readwrite_iterator ( T *ptr, uint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc, Redirectproc redirectProc, Owner *owner )
+    random_readwrite_iterator ( T *ptr, euint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc, Redirectproc redirectProc, Owner *owner )
         : base_type ( ptr, ele_real_size, readProc, writeProc, nextProc, prevProc )
         , m_redirectProc ( redirectProc )
         , m_owner ( owner )
     {}
-    inline void redirect ( sint offset ) {
+    inline void redirect ( esint offset ) {
         m_redirectProc (
             base_type::m_owner,
             base_type::m_ptr,
@@ -209,12 +209,12 @@ public:
     Redirectproc m_redirectProc;
     Owner *m_owner;
 public:
-    const_random_readwrite_iterator ( T *ptr, uint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc, Redirectproc redirectProc, Owner *owner )
+    const_random_readwrite_iterator ( T *ptr, euint ele_real_size, Readproc readProc, Writeproc writeProc, Nextproc nextProc, Prevproc prevProc, Redirectproc redirectProc, Owner *owner )
         : base_type ( ptr, ele_real_size, readProc, writeProc, nextProc )
         , m_redirectProc ( redirectProc )
         , m_owner ( owner )
     {}
-    inline void redirect ( sint offset ) {
+    inline void redirect ( esint offset ) {
         m_redirectProc ( m_owner,
                          base_type::m_ptr,
                          base_type::m_ptr,

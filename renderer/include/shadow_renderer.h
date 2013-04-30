@@ -26,10 +26,10 @@ public:
     inline TextureCube get_shadow_cube_map() {
         return SketchCube_get_sketch ( blurred_depth_sketch_cube );
     }
-    Texture2DPtr get_shadow_map ( uint i );
+    Texture2DPtr get_shadow_map ( euint i );
     void prepare ( RenderablePlane render_plane );
     void delete_blurred_sketck_books();
     void depth_map_blur ( RendererBase *rdr );
-    void depth_map_blur_to_cube_map ( RendererBase *rdr, uint face );
+    void depth_map_blur_to_cube_map ( RendererBase *rdr, euint face );
 };
 #endif

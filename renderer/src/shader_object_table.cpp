@@ -59,6 +59,6 @@ shader_object_type _get_semantic_object_type(element_semantic _sem)
 #define MAX_SHADER_OBJECTS 16
 typedef struct _shader_table
 {
-    uint num_shader_object;
+    euint num_shader_object;
     element_semantic table[16];
 } shader_table;

@@ -15,9 +15,9 @@ class mesh : public RefObject
 public:
     uint32 version;
     const char* file;
-    uint line;
+    euint line;
     struct version_0007_data data;
-	mesh(const char* _file, uint _line);
+	mesh(const char* _file, euint _line);
 	~mesh();
 };
 typedef mesh* Mesh;
@@ -56,7 +56,7 @@ typedef struct _mesh_triangle
     mesh_edge edge2;
 } mesh_triangle;
 
-///API_EXPORT Mesh _Mesh_new(const char* _file, uint _line);
+///API_EXPORT Mesh _Mesh_new(const char* _file, euint _line);
 #define Mesh_new() ENEW mesh(__FILE__, __LINE__)
 /**
 API_EXPORT void Mesh_delete(Mesh _mesh);
@@ -76,13 +76,13 @@ API_EXPORT uint32 Mesh_get_face_count(Mesh _mesh);
 API_EXPORT e_mesh_mode Mesh_get_mode(Mesh _mesh);
 API_EXPORT uint32 face_size(e_mesh_mode mesh_mode);
 API_EXPORT void Mesh_build(Mesh _mesh,
-                           float* pos_stream, float* uv_stream, float* nor_stream, uint num_vtxs,
-                           uint32* idx_stream, uint num_faces,
+                           float* pos_stream, float* uv_stream, float* nor_stream, euint num_vtxs,
+                           uint32* idx_stream, euint num_faces,
                            e_mesh_mode mesh_mode);
 API_EXPORT void Mesh_build2(Mesh _mesh,
                            float* pos_stream, float* uv_stream, float* nor_stream, float* col_stream,
-                           uint num_vtxs,
-                           uint32* idx_stream, uint num_faces,
+                           euint num_vtxs,
+                           uint32* idx_stream, euint num_faces,
                            e_mesh_mode mesh_mode);
 API_EXPORT void Mesh_fill_epw(Mesh _mesh, float* _epw_stream);
 API_EXPORT Mesh Mesh_build_volume(Mesh _mesh);

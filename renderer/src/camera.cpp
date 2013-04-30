@@ -22,8 +22,8 @@ typedef struct _camera
 
 	bool is_orthogonal;
 
-    uint pixel_width;
-    uint pixel_height;
+    euint pixel_width;
+    euint pixel_height;
     matrix4x4* cam_rota_mat;
     matrix4x4* cam_tran_mat;
     matrix4x4* cam_proj_mat;
@@ -57,7 +57,7 @@ void Camera_Dest(struct _camera* _self)
     Mfree(_self);
 }
 
-Camera Camera_Init(struct _camera* _self, uint _width, uint _height)
+Camera Camera_Init(struct _camera* _self, euint _width, euint _height)
 {
     _self->ratio = (float)_width / (float)_height;
     _self->plane_far = 50.0;
@@ -90,7 +90,7 @@ Camera Camera_Init(struct _camera* _self, uint _width, uint _height)
     return ret;
 }
 
-Camera Camera_new(uint _width, uint _height)
+Camera Camera_new(euint _width, euint _height)
 {
     camera* cam = (camera*)SMalloc(sizeof(camera));
     cam->cam_tran_mat = Matrix4x4_new();
@@ -452,7 +452,7 @@ void Camera_set_FOV(Camera _self, float degrees)
     Camera_set_radian(_self, radian);
 }
 
-void Camera_refresh(Camera _self, uint _width, uint _height)
+void Camera_refresh(Camera _self, euint _width, euint _height)
 {
     Camera_Init(_self.self, _width, _height);
 }

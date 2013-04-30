@@ -20,7 +20,7 @@ struct FGarbageCollectProc
 		garbagePool.push_back(garbage);
 	}
 	~FGarbageCollectProc() {
-		for (uint i = 0; i < garbagePool.size(); i++) {
+		for (euint i = 0; i < garbagePool.size(); i++) {
 			delete garbagePool[i];
 		}
 	}

@@ -31,7 +31,7 @@ _INLINE_ uint32 _string_length(const char* _str)
     }
     return count;
 }
-EString _EString_new(const char* _str, const char* _file_name, uint _file_line)
+EString _EString_new(const char* _str, const char* _file_name, euint _file_line)
 {
     uint32 length = _string_length(_str);
     estring* ret = (estring*)_Malloc(sizeof(estring) + length + 1, _file_name, _file_line);
@@ -42,14 +42,14 @@ EString _EString_new(const char* _str, const char* _file_name, uint _file_line)
     return &ret->str[0];
 }
 
-void _EString_delete(EString _str, const char* _file_name, uint _file_line)
+void _EString_delete(EString _str, const char* _file_name, euint _file_line)
 {
     ///estring* estr = (estring*)((ref_ptr)_str - (ref_ptr)sizeof(estring));
     estring* estr = _get_estring(_str);
     Mfree(estr);
 }
 
-EString _EString_add(EString _str0, const char* _str1, const char* _file_name, uint _file_line)
+EString _EString_add(EString _str0, const char* _str1, const char* _file_name, euint _file_line)
 {
     /**
     estring* estr = (estring*)((ref_ptr)_str0 - (ref_ptr)sizeof(estring));
@@ -75,27 +75,27 @@ EString _EString_add(EString _str0, const char* _str1, const char* _file_name, u
     return &ret->str[0];
 }
 
-uint EString_size(EString _str)
+euint EString_size(EString _str)
 {
     estring* estr = _get_estring(_str);
     return estr->length;
 }
 
-EString _EString_add_sint(EString _str, sint _si, const char* _file_name, uint _file_line)
+EString _EString_add_sint(EString _str, esint _si, const char* _file_name, euint _file_line)
 {
     char mbuf[STRING_BUFFER_SIZE];
     snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%d", _si);
     return EString_add(_str, mbuf);
 }
 
-EString _EString_add_uint(EString _str, uint _ui, const char* _file_name, uint _file_line)
+EString _EString_add_uint(EString _str, euint _ui, const char* _file_name, euint _file_line)
 {
     char mbuf[STRING_BUFFER_SIZE];
     snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%d", _ui);
     return EString_add(_str, mbuf);
 }
 
-EString _EString_add_float(EString _str, float _f, const char* _file_name, uint _file_line)
+EString _EString_add_float(EString _str, float _f, const char* _file_name, euint _file_line)
 {
     char mbuf[STRING_BUFFER_SIZE];
     snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%f", _f);
@@ -118,7 +118,7 @@ bool EString_less(EString _str0, EString _str1)
         }
         else
         {
-			uint i = 0;
+			euint i = 0;
             for (; i < estr0->length; i++)
             {
                 if (estr0->str[i] != estr1->str[i])
@@ -145,7 +145,7 @@ bool EString_greater(EString _str0, EString _str1)
         }
         else
         {
-			uint i = 0;
+			euint i = 0;
             for (; i < estr0->length; i++)
             {
                 if (estr0->str[i] != estr1->str[i])

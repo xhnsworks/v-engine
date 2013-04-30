@@ -148,7 +148,7 @@ const char* convertInternalFormatToString(GLenum format)
         printf("format %x\n", format);
     }
 
-    uint len = 0;
+    euint len = 0;
     while (formatName[len])
     {
         len++;
@@ -166,7 +166,7 @@ const char* getRenderbufferParameters(GLuint id)
     if(glIsRenderbuffer(id) == GL_FALSE)
     {
         char* str = "Not Renderbuffer object";
-        uint len = 0;
+        euint len = 0;
         while (str[len])
         {
             len++;
@@ -189,7 +189,7 @@ const char* getRenderbufferParameters(GLuint id)
 
     char sbuf[256];
     snprintf(sbuf, 255, "%dx%d, %s", width, height, formatName);
-    uint len = 0;
+    euint len = 0;
     while (sbuf[len])
     {
         len++;
@@ -209,7 +209,7 @@ const char* getTextureParameters(GLuint id)
     if(glIsTexture(id) == GL_FALSE)
     {
         char* str = "Not texture object";
-        uint len = 0;
+        euint len = 0;
         while (str[len])
         {
             len++;
@@ -231,7 +231,7 @@ const char* getTextureParameters(GLuint id)
 
     char sbuf[256];
     snprintf(sbuf, 255, "%dx%d, %s", width, height, formatName);
-    uint len = 0;
+    euint len = 0;
     while (sbuf[len])
     {
         len++;
@@ -414,7 +414,7 @@ bool checkFramebufferStatus()
     }
 }
 
-void _error_proc(const char* _file, uint _line)
+void _error_proc(const char* _file, euint _line)
 {
 	/**
     GLenum error_info = glGetError();
@@ -449,7 +449,7 @@ void _error_proc(const char* _file, uint _line)
 	**/
 }
 
-void _shader_log(const char* _file, uint _line, uint32 _id)
+void _shader_log(const char* _file, euint _line, uint32 _id)
 {
     int log_length = 0xffffffff;
     glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &log_length);
@@ -462,7 +462,7 @@ void _shader_log(const char* _file, uint _line, uint32 _id)
 	Mfree(log_buffer);
 }
 
-void _program_log(const char* _file, uint _line, uint32 _id)
+void _program_log(const char* _file, euint _line, uint32 _id)
 {
     int log_length = 0xffffffff;
     glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &log_length);

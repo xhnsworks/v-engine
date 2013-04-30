@@ -13,7 +13,7 @@ void version_0004_tangent_calculate(struct version_0004_data* data)
 
     uint32 i0, i1, i2;
     float x0, x1, y0, y1, z0, z1, s0, s1, t0, t1;
-    for (uint a = 0; a < data->face_count; a++)
+    for (euint a = 0; a < data->face_count; a++)
     {
         if ( &data->indexs[a * 3 + 2] >= idx_end )
             return;
@@ -68,7 +68,7 @@ void version_0004_tangent_calculate(struct version_0004_data* data)
     }
     ///Float_Init();
     data->vtx_binor = (float*)SMalloc(sizeof(float) * 3 * data->vtx_count);
-    for (uint a = 0; a < data->vtx_count; a++)
+    for (euint a = 0; a < data->vtx_count; a++)
     {
         float x = data->vtx_tgt[a * 3];
         float y = data->vtx_tgt[a * 3 + 1];
@@ -138,7 +138,7 @@ void version_0004_load(FILE* fp, struct version_0004_data* data)
 
     data->indexs = (uint32*)SMalloc(sizeof(uint32) * data->indexed_vtx_count);
 
-    uint i = 0;
+    euint i = 0;
     for (; i < data->face_count; i++)
     {
         fread(&word, sizeof(uint32), 1, fp);
@@ -234,7 +234,7 @@ void version_0004_apply_transform(struct version_0004_data* data, const matrix4x
     matrix4x4 rot_mat;
 	Matrix4x4_assign(&rot_mat, trans);
 	Matrix4x4_set_as_translate(&rot_mat, 0.0f, 0.0f, 0.0f);
-	for (uint i = 0; i < data->vtx_count; i++)
+	for (euint i = 0; i < data->vtx_count; i++)
 	{
 		sfloat3 pos = SFloat3_assign_from_float_array(&data->vtx_pos[i * 3]);
 		pos = Matrix4x4_mul_float3(trans, pos);

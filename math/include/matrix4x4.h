@@ -64,8 +64,8 @@ struct matrix4x4
 };
 
 typedef matrix4x4* Matrix4x4;
-matrix4x4* _Matrix4x4_new(const char* _file, uint _line);
-void _Matrix4x4_delete(matrix4x4* _mat, const char* _file, uint _line);
+matrix4x4* _Matrix4x4_new(const char* _file, euint _line);
+void _Matrix4x4_delete(matrix4x4* _mat, const char* _file, euint _line);
 #define Matrix4x4_new() _Matrix4x4_new(__FILE__, __LINE__)
 #define Matrix4x4_delete(m) _Matrix4x4_delete(m, __FILE__, __LINE__)
 void Matrix4x4_Dest(matrix4x4* _mat);

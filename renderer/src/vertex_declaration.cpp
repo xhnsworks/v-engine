@@ -90,11 +90,11 @@ element_type _get_ele_type(const char* str, char** next)
     return (element_type)ret;
 }
 
-uint _get_vtx_eles(char* str, vertex_element* eles, uint max_eles)
+euint _get_vtx_eles(char* str, vertex_element* eles, euint max_eles)
 {
     if (!max_eles)
         max_eles = 1;
-    uint count = 0;
+    euint count = 0;
     char* s = str;
     while (*s)
     {
@@ -118,7 +118,7 @@ uint _get_vtx_eles(char* str, vertex_element* eles, uint max_eles)
 
 void VertexDecl_Dest(VertexElement* _eles)
 {
-    for (uint i = 0; i < array_n(_eles); i++)
+    for (euint i = 0; i < array_n(_eles); i++)
     {
         VertexElement element = _eles[i];
         VertexElement_delete(element);
@@ -139,7 +139,7 @@ VertexDecl VertexDecl_new_from_string(const char* str)
 {
     VertexElement null_ele = {EmptyType, EmptySemantic};
     vertex_element eles[16];
-    uint n = _get_vtx_eles((char*)str, eles, 16);
+    euint n = _get_vtx_eles((char*)str, eles, 16);
     vertex_decl tmp;
     tmp.num_elements = n;
     tmp.elements = eles;
@@ -160,7 +160,7 @@ void _VertexDecl_delete(VertexDecl _dec)
 
 void VertexDecl_add_element(VertexDecl _dec, VertexElement _ele)
 {
-    for (uint i = 0; i < array_n(_dec->elements); i++)
+    for (euint i = 0; i < array_n(_dec->elements); i++)
     {
         VertexElement element = _dec->elements[i];
         if (VertexElement_get_semantic(element) == VertexElement_get_semantic(_ele))
@@ -187,10 +187,10 @@ const char* VertexDecl_get_decl_string(VertexDecl _dec)
     return _dec->decl_string;
 }
 
-uint VertexDecl_get_vertex_size(VertexDecl _dec)
+euint VertexDecl_get_vertex_size(VertexDecl _dec)
 {
-    uint ret = 0;
-    for (uint i = 0; i < array_n(_dec->elements); i++)
+    euint ret = 0;
+    for (euint i = 0; i < array_n(_dec->elements); i++)
     {
         VertexElement ele = _dec->elements[i];
         ret += get_element_size(VertexElement_get_type(ele));
@@ -201,7 +201,7 @@ uint VertexDecl_get_vertex_size(VertexDecl _dec)
 bool VertexDecl_test(VertexDecl _dec)
 {
     bool find_pos_sem_flag = false;
-    for (uint i = 0; i < array_n(_dec->elements); i++)
+    for (euint i = 0; i < array_n(_dec->elements); i++)
     {
         VertexElement ele = _dec->elements[i];
         if (VertexElement_get_semantic(ele) == Position)
@@ -216,7 +216,7 @@ bool VertexDecl_test(VertexDecl _dec)
 bool VertexDecl_test_element_semantic(VertexDecl _dec, element_semantic _sem)
 {
     bool find_pos_sem_flag = false;
-    for (uint i = 0; i < array_n(_dec->elements); i++)
+    for (euint i = 0; i < array_n(_dec->elements); i++)
     {
         VertexElement ele = _dec->elements[i];
         if (VertexElement_get_semantic(ele) == _sem)
@@ -231,7 +231,7 @@ bool VertexDecl_test_element_semantic(VertexDecl _dec, element_semantic _sem)
 VertexDecl VertexDecl_clone(VertexDecl _dec)
 {
     VertexDecl ret = VertexDecl_new();
-    for (uint i = 0; i < _dec->num_elements; i++)
+    for (euint i = 0; i < _dec->num_elements; i++)
     {
         VertexElement ele = _dec->elements[i];
         VertexDecl_add_element(ret, ele);
@@ -244,11 +244,11 @@ VertexDecl VertexDecl_clone(VertexDecl _dec)
 
 int VertexDecl_compare(VertexDecl d0, VertexDecl d1)
 {
-    uint num0 = d0->num_elements;
-    uint num1 = d1->num_elements;
+    euint num0 = d0->num_elements;
+    euint num1 = d1->num_elements;
     if (num0 < num1)
     {
-        for (uint i = 0; i < num0; i++)
+        for (euint i = 0; i < num0; i++)
         {
             if      ( VertexElement_compare(d0->elements[i], d1->elements[i]) < 0 )
                 return -1;
@@ -259,7 +259,7 @@ int VertexDecl_compare(VertexDecl d0, VertexDecl d1)
     }
     else
     {
-        for (uint i = 0; i < num1; i++)
+        for (euint i = 0; i < num1; i++)
         {
             if      ( VertexElement_compare(d0->elements[i], d1->elements[i]) < 0 )
                 return -1;

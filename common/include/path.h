@@ -14,8 +14,8 @@ _INLINE_ EStringArray EStringArray_new()
 }
 _INLINE_ void EStringArray_delete(EStringArray _self)
 {
-    uint n = array_n(_self);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_self);
+    for (euint i = 0; i < n; i++)
     {
         EString_delete(_self[i]);
     }

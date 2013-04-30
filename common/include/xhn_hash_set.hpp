@@ -56,14 +56,14 @@ public:
 public:
     bucket m_buckets[HASH_BUCKET_COUNT];
     const T &insert ( const T &value ) {
-        uint hash_value = _hash(value);
-        uint key = hash_value & HASH_MASK;
+        euint hash_value = _hash(value);
+        euint key = hash_value & HASH_MASK;
         typename list<T>::iterator iter = m_buckets[key].insert ( value );
         return *iter;
     }
 	bool test ( const T &value ) {
-		uint hash_value = _hash(value);
-		uint key = hash_value & HASH_MASK;
+		euint hash_value = _hash(value);
+		euint key = hash_value & HASH_MASK;
 		return m_buckets[key].test ( value );
 	}
 };

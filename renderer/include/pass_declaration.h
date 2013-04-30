@@ -20,14 +20,14 @@
 struct pass_decl
 {
     VertexDecl dec;
-    uint usage_tex_flags;
+    euint usage_tex_flags;
     vertex_color_function vtx_color_func;
 	pass_decl()
 		: dec(NULL)
 		, usage_tex_flags(0)
 		, vtx_color_func(Multiply)
 	{}
-	pass_decl(VertexDecl _dec, uint _usage_tex_flags, vertex_color_function _vtx_color_func)
+	pass_decl(VertexDecl _dec, euint _usage_tex_flags, vertex_color_function _vtx_color_func)
 		: dec(_dec)
 		, usage_tex_flags(_usage_tex_flags)
 		, vtx_color_func(_vtx_color_func)

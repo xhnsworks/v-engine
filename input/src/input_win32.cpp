@@ -181,10 +181,10 @@ void input_Proc(const xhn::vector<input_buffer>& buffer)
                 }
                 else
                     continue;
-				for (uint i = 0; i < buffer.size(); i++) {
+				for (euint i = 0; i < buffer.size(); i++) {
 					RWBuffer input_buffer = buffer[i].input_buffer;
 					InterRWBuffer inter_input_buffer = buffer[i].inter_input_buffer;
-					inter_input_buffer.write(input_buffer, (const uint*)&event, sizeof(event));
+					inter_input_buffer.write(input_buffer, (const euint*)&event, sizeof(event));
 				}
             }
             POINT curPos;
@@ -194,11 +194,11 @@ void input_Proc(const xhn::vector<input_buffer>& buffer)
             event.type = MouseAbsolutePositionEvent;
             event.info.mouse_info.mouse_abs_pos.x = curPos.x;
             event.info.mouse_info.mouse_abs_pos.y = curPos.y;
-            ///inter_input_buffer.write(input_buffer, (const uint*)&event, sizeof(event));
-			for (uint i = 0; i < buffer.size(); i++) {
+            ///inter_input_buffer.write(input_buffer, (const euint*)&event, sizeof(event));
+			for (euint i = 0; i < buffer.size(); i++) {
 				RWBuffer input_buffer = buffer[i].input_buffer;
 				InterRWBuffer inter_input_buffer = buffer[i].inter_input_buffer;
-				inter_input_buffer.write(input_buffer, (const uint*)&event, sizeof(event));
+				inter_input_buffer.write(input_buffer, (const euint*)&event, sizeof(event));
 			}
         }
 
@@ -250,11 +250,11 @@ void input_Proc(const xhn::vector<input_buffer>& buffer)
                 else
                     event.type = KeyUpEvent;
                 event.info.key_info = didod[i].dwOfs & 0xff;
-                ///inter_input_buffer.write(input_buffer, (const uint*)&event, sizeof(event));
-				for (uint i = 0; i < buffer.size(); i++) {
+                ///inter_input_buffer.write(input_buffer, (const euint*)&event, sizeof(event));
+				for (euint i = 0; i < buffer.size(); i++) {
 					RWBuffer input_buffer = buffer[i].input_buffer;
 					InterRWBuffer inter_input_buffer = buffer[i].inter_input_buffer;
-					inter_input_buffer.write(input_buffer, (const uint*)&event, sizeof(event));
+					inter_input_buffer.write(input_buffer, (const euint*)&event, sizeof(event));
 				}
             }
         }

@@ -10,7 +10,7 @@ void VertexElement_Dest(VertexElement _ele)
     printf("vertex element dest\n");
 }
 
-VertexElement _VertexElement_new(element_type _typ, element_semantic _sem, const char* _file, uint _line)
+VertexElement _VertexElement_new(element_type _typ, element_semantic _sem, const char* _file, euint _line)
 {
     vertex_element tmp = {_typ, _sem};
     VertexElement ret = tmp;

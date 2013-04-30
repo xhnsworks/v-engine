@@ -70,7 +70,7 @@ void VectorTest()
 	xhn::vector<int>::iterator iter = test.begin();
 	iter++;
 	test.insert(iter, 15);
-	for (uint i = 0; i < test.size(); i++)
+	for (euint i = 0; i < test.size(); i++)
 	{
 		elog("test %d", test[i]);
 	}
@@ -80,7 +80,7 @@ void VectorTest()
 	tt.a = 300;
 	ttt.push_back(tt);
 	ttt.resize(1000);
-	for (uint i = 0; i < ttt.size(); i++)
+	for (euint i = 0; i < ttt.size(); i++)
 	{
         test_struct t = ttt[i];
 		printf("test_struct.a %d\n", t.a);

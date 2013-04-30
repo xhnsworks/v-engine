@@ -4,7 +4,7 @@
 #include "emem.h"
 #include "clamp.h"
 
-Tex2DLockedRect::Tex2DLockedRect(uint _x, uint _y, uint _width, uint _height, pixel_format _fmt)
+Tex2DLockedRect::Tex2DLockedRect(euint _x, euint _y, euint _width, euint _height, pixel_format _fmt)
 : x(_x)
 , y(_y)
 , width(_width)
@@ -19,10 +19,10 @@ Tex2DLockedRect::Tex2DLockedRect(uint _x, uint _y, uint _width, uint _height, pi
 Tex2DLockedRect::~Tex2DLockedRect()
 {
 }
-vptr Tex2DLockedRect::GetAt(uint _x, uint _y)
+vptr Tex2DLockedRect::GetAt(euint _x, euint _y)
 {
-    _x = clamp<uint>(_x, 0, width - 1);
-	_y = clamp<uint>(_y, 0, height - 1);
+    _x = clamp<euint>(_x, 0, width - 1);
+	_y = clamp<euint>(_y, 0, height - 1);
 	char* ret = (char*)pxl_buffer.get();
 	return (vptr)(ret + (height * _y + _x) * _get_pixel_size(format));
 }
@@ -258,7 +258,7 @@ Tex2DLockedRect* Texture2D::Lock(const Tex2DRect& rect)
         Tex2DLockedRect* ret = ENEW Tex2DLockedRect(rect.x, rect.y, rect.width, rect.height, format);
 		char* dst = (char*)ret->pxl_buffer.get();
         char* src = (char*)pxl_buffer.get();
-		for (uint y = 0; y < rect.height; y++)
+		for (euint y = 0; y < rect.height; y++)
 		{
 			char* dst_line = &dst[y * rect.width * _get_pixel_size(format)];
 			char* src_line = &src[( (y + rect.y) * rect.width + rect.x ) * _get_pixel_size(format)];
@@ -277,7 +277,7 @@ void Texture2D::Unlock(Tex2DLockedRect* rect)
 
 		unsigned char* src = (unsigned char*)rect->pxl_buffer.get();
 		unsigned char* dst = (unsigned char*)pxl_buffer.get();
-		for (uint y = 0; y < rect->height; y++)
+		for (euint y = 0; y < rect->height; y++)
 		{
 			unsigned char* dst_line = &dst[( (y + rect->y) * width + rect->x ) * _get_pixel_size(format)];
 			unsigned char* src_line = &src[y * rect->width * _get_pixel_size(format)];

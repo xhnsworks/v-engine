@@ -68,7 +68,7 @@ void SpriteRenderer::render()
 	renderable_sorter->Sort(used_renderable_set, sorted_renderable_list);
 	STD_NAMESPACE::list<Renderable>::iterator r_iter = sorted_renderable_list.begin();
 	STD_NAMESPACE::list<Renderable>::iterator r_iter_end = sorted_renderable_list.end();
-    uint count = 0;
+    euint count = 0;
 
 	for (; r_iter != r_iter_end; r_iter++) {
         var key, data;
@@ -120,7 +120,7 @@ void SpriteRenderer::render()
         curt_mat_inst = rbl->material;
         Pass_auto_set_uniform_params ( std_pass, this, false );
 
-        uint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
+        euint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
         e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
         if ( mode == Triangular ) {
@@ -178,7 +178,7 @@ bool SpriteRenderer::is_uniform_param_source ( sint32 _src )
 	}
 }
 
-Texture2DPtr SpriteRenderer::get_shadow_map ( uint i )
+Texture2DPtr SpriteRenderer::get_shadow_map ( euint i )
 {
 	return NULL;
 }

@@ -25,27 +25,27 @@ typedef struct _shader_node_generator* SdrNdGen;
 
 SdrNdGen SdrNdGen_new();
 void SdrNdGen_delete(SdrNdGen _self);
-void SdrNdGen_register_shader_node(SdrNdGen _self, uint _node_id, CreateShaderNodeProc _create_node_proc);
-ShaderNode SdrNdGen_generate_shader_node(SdrNdGen _self, uint _node_id);
+void SdrNdGen_register_shader_node(SdrNdGen _self, euint _node_id, CreateShaderNodeProc _create_node_proc);
+ShaderNode SdrNdGen_generate_shader_node(SdrNdGen _self, euint _node_id);
 void SdrNdGen_destroy_all_generated_shader_node(SdrNdGen _self);
 
 void SdrNdGen_register_default_nodes(SdrNdGen _self);
 void SdrNdGen_attach_all_prototype_nodes(SdrNdGen _self, ShaderBuffer _sb);
 
-ShaderNode SdrNdGen_add_reference_node(SdrNdGen _self, uint _node_id);
-ShaderNode SdrNdGen_add_reference_node2(SdrNdGen _self, CircuitBoard _cb, uint _node_id);
+ShaderNode SdrNdGen_add_reference_node(SdrNdGen _self, euint _node_id);
+ShaderNode SdrNdGen_add_reference_node2(SdrNdGen _self, CircuitBoard _cb, euint _node_id);
 
 struct _i_sdr_nd_gen
 {
     SdrNdGen (*New)();
     void (*Delete)(SdrNdGen _self);
-    void (*register_shader_node)(SdrNdGen _self, uint _node_id, CreateShaderNodeProc _create_node_proc);
-    ShaderNode (*generate_shader_node)(SdrNdGen _self, uint _node_id);
+    void (*register_shader_node)(SdrNdGen _self, euint _node_id, CreateShaderNodeProc _create_node_proc);
+    ShaderNode (*generate_shader_node)(SdrNdGen _self, euint _node_id);
     void (*destroy_all_generated_shader_node)(SdrNdGen _self);
     void (*register_default_nodes)(SdrNdGen _self);
     void (*attach_all_prototype_nodes)(SdrNdGen _self, ShaderBuffer _sb);
-    ShaderNode (*add_reference_node_1)(SdrNdGen _self, uint _node_id);
-    ShaderNode (*add_reference_node_2)(SdrNdGen _self, CircuitBoard _cb, uint _node_id);
+    ShaderNode (*add_reference_node_1)(SdrNdGen _self, euint _node_id);
+    ShaderNode (*add_reference_node_2)(SdrNdGen _self, CircuitBoard _cb, euint _node_id);
 };
 
 static struct _i_sdr_nd_gen ISdrNdGen = {

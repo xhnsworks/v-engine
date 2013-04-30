@@ -8,7 +8,7 @@
 typedef struct _vertex_buffer
 {
     uint32 id;
-    uint* vtx_ele_offs;
+    euint* vtx_ele_offs;
     VertexDecl vertex_declaration;
     char* vertex_buffer;
     uint32 vertex_size;
@@ -23,12 +23,12 @@ void VertexBuffer_Dest(struct _vertex_buffer* _buf)
     array_delete(_buf->vtx_ele_offs);
     Mfree(_buf->vertex_buffer);
 }
-VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, uint _line)
+VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, euint _line)
 {
     if (VertexDecl_count(_dec))
     {
         vertex_buffer* buffer = (vertex_buffer*)_Malloc(sizeof(vertex_buffer), _file, _line);
-        buffer->vtx_ele_offs = array_new(uint, VertexDecl_count(_dec), 0xffffffff);
+        buffer->vtx_ele_offs = array_new(euint, VertexDecl_count(_dec), 0xffffffff);
         uint32 vertex_size = 0;
         uint32 i = 0;
         for (; i < VertexDecl_count(_dec); i++)
@@ -68,9 +68,9 @@ VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, uint _line)
     }
 }
 
-void _VertexBuffer_grow_up(VertexBuffer _self, uint num_vtxs)
+void _VertexBuffer_grow_up(VertexBuffer _self, euint num_vtxs)
 {
-    uint totel_vtx_buf_size = (_self->vertex_buffer_tail + num_vtxs) * _self->vertex_size;
+    euint totel_vtx_buf_size = (_self->vertex_buffer_tail + num_vtxs) * _self->vertex_size;
     if (totel_vtx_buf_size > _self->vertex_buffer_size)
     {
         char* tmp = (char*)SMalloc(totel_vtx_buf_size * 2);
@@ -82,7 +82,7 @@ void _VertexBuffer_grow_up(VertexBuffer _self, uint num_vtxs)
     }
 }
 
-void _VertexBuffer_delete(VertexBuffer _self, const char* _file, uint _line)
+void _VertexBuffer_delete(VertexBuffer _self, const char* _file, euint _line)
 {
     VertexBuffer_Dest(_self);
     Mfree(_self);
@@ -90,7 +90,7 @@ void _VertexBuffer_delete(VertexBuffer _self, const char* _file, uint _line)
 
 bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _i, vptr _result)
 {
-    uint* offs = _self->vtx_ele_offs;
+    euint* offs = _self->vtx_ele_offs;
     if (_i >= _self->vertex_buffer_tail)
     {
         return false;
@@ -122,7 +122,7 @@ bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _
 
 vptr VertexBuffer_insert(VertexBuffer _self, element_semantic _sem, unsigned int _i)
 {
-    uint* offs = _self->vtx_ele_offs;
+    euint* offs = _self->vtx_ele_offs;
     if (_i >= _self->vertex_buffer_tail)
     {
         _VertexBuffer_grow_up(_self, _i - _self->vertex_buffer_tail);
@@ -176,7 +176,7 @@ uint32 VertexBuffer_get_buffer_tail(VertexBuffer _self)
     return _self->vertex_buffer_tail;
 }
 
-void _fill_vertex_data(VertexBuffer _self, uint _offs, VertexElement _ele, uint32 _ptr, float* _data, uint32 _n)
+void _fill_vertex_data(VertexBuffer _self, euint _offs, VertexElement _ele, uint32 _ptr, float* _data, uint32 _n)
 {
     float* vbf = (float*)((ref_ptr)_self->vertex_buffer + (ref_ptr)(_ptr * _self->vertex_size) + (ref_ptr)_offs);
     switch (VertexElement_get_type(_ele))
@@ -247,8 +247,8 @@ void _fill_vertex_data(VertexBuffer _self, uint _offs, VertexElement _ele, uint3
 
 uint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh)
 {
-    uint* offs = _self->vtx_ele_offs;
-    uint num_vtxs = Mesh_get_vertex_count(_mesh);
+    euint* offs = _self->vtx_ele_offs;
+    euint num_vtxs = Mesh_get_vertex_count(_mesh);
     _VertexBuffer_grow_up(_self, num_vtxs);
     if (VertexDecl_count(_self->vertex_declaration))
     {
@@ -326,7 +326,7 @@ void VertexBuffer_buffer_data(VertexBuffer _self)
     }
 }
 
-uint* VertexBuffer_get_ele_offs(VertexBuffer _self)
+euint* VertexBuffer_get_ele_offs(VertexBuffer _self)
 {
     return _self->vtx_ele_offs;
 }

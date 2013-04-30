@@ -375,7 +375,7 @@ void ParamTable_add_entry(ParamTable _self, const char* _name, sint32 _src)
 void ParamTable_get_all_entrys(ParamTable _self, param_entry* _result)
 {
     Iterator iter = Tree_begin(_self.param_entries);
-    uint i = 0;
+    euint i = 0;
     while (iter)
     {
         var key = Tree_get_key(iter);

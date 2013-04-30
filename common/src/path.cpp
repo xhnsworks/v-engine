@@ -38,7 +38,7 @@ void GetAllFileNamesInDir(const char* dir, const char* filter_rule, EStringArray
     array_n(*result) = 0;
 
     EString fulldir = EString_new(dir);
-    uint size = EString_size(fulldir);
+    euint size = EString_size(fulldir);
     if (size)
     {
         char end_char = fulldir[size - 1];

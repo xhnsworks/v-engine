@@ -121,7 +121,7 @@ void CompleteOutputDef(ParserEnv* e)
     FunctionClosures_complete(e, e->curt_func);
 }
 
-static inline uint _value_size(ParserEnv* e, SymbolValue src)
+static inline euint _value_size(ParserEnv* e, SymbolValue src)
 {
     switch (src.type)
     {
@@ -156,7 +156,7 @@ static inline uint _value_size(ParserEnv* e, SymbolValue src)
     case StringValue:
     {
         char* str = e->mems[src.data.mem_addr.mem_type];
-        uint len = strlen(str);
+        euint len = strlen(str);
         return len + 1;
     }
     case Function:
@@ -174,7 +174,7 @@ static inline SymbolValue _init_value_assign(ParserEnv* e, SymbolValue dst, Symb
         /// error
     }
 
-    uint size = _value_size(e, src);
+    euint size = _value_size(e, src);
     if (!size)
     {
         /// error
@@ -273,15 +273,15 @@ SymbolValue MultSymbolOperator(ParserEnv* e, OperatorType op, SymbolValue dst, S
     }
     else if ( (dst.type == ValueArray || dst.type == FuncArgValueArray) && (src.type == ValueArray || src.type == FuncArgValueArray) )
     {
-        uint dst_n = array_n(dst.data.value_array);
-        uint src_n = array_n(src.data.value_array);
-        uint n = dst_n;
+        euint dst_n = array_n(dst.data.value_array);
+        euint src_n = array_n(src.data.value_array);
+        euint n = dst_n;
         if (n < src_n)
             n = src_n;
 
         ///CommandClosures ccs[n];
 		CommandClosures* ccs = (CommandClosures*)SMalloc(sizeof(CommandClosures) * n);
-        for (uint i = 0; i < n; i++)
+        for (euint i = 0; i < n; i++)
         {
             SymbolValue dst_sv = array_safe_get(dst.data.value_array, i);
             SymbolValue src_sv = array_safe_get(src.data.value_array, i);
@@ -293,7 +293,7 @@ SymbolValue MultSymbolOperator(ParserEnv* e, OperatorType op, SymbolValue dst, S
         ///null_value.type = Unknown;
         ///memset(&null_value.data, 0, sizeof(null_value.data));
         ret.data.value_array = _symbol_value_array_new(n);
-        for (uint i = 0; i < n; i++)
+        for (euint i = 0; i < n; i++)
         {
             apush(ret.data.value_array, CommandClosures_get_last_arg(ccs[i]));
         }
@@ -423,9 +423,9 @@ SymbolValue FuncCall(ParserEnv* e, SymbolValue func)
     ///ret.data.value_array = _symbol_value_array_new(Tree_count(fc->output_param_tree));
     ///Iterator iter = Tree_begin(fc->output_param_tree);
     ///while (iter)
-    uint n = array_n(fc->output_param_array);
+    euint n = array_n(fc->output_param_array);
     ret.data.value_array = _symbol_value_array_new(n);
-    for (uint i = 0; i < n; i++)
+    for (euint i = 0; i < n; i++)
     {
         ///var data = Tree_get_value(iter);
         ///SymbolValue* sv = (SymbolValue*)data.vptr_var;
@@ -435,7 +435,7 @@ SymbolValue FuncCall(ParserEnv* e, SymbolValue func)
     }
     VPRINT("@@@@@@@\n");
     VPRINT("@@@@@@@\n");
-    for (uint i = 0; i < array_n(ret.data.value_array); i++)
+    for (euint i = 0; i < array_n(ret.data.value_array); i++)
     {
         char mbuf[256];
         snprintf(mbuf, 255, "FUNC RET ARRAY %d: ", i);
@@ -456,8 +456,8 @@ SymbolValue FuncCall2(ParserEnv* e, SymbolValue func, SymbolValue a)
     ///apush(e->exce_array, exce);
     ///printf("FuncCall2\n");
     FunctionClosures fc = func.data.func;
-    ///uint n = Tree_count(fc->input_param_tree);
-    uint n = array_n(fc->input_param_array);
+    ///euint n = Tree_count(fc->input_param_tree);
+    euint n = array_n(fc->input_param_array);
 
     SymbolValue input;
     input.type = FuncArgValueArray;
@@ -468,7 +468,7 @@ SymbolValue FuncCall2(ParserEnv* e, SymbolValue func, SymbolValue a)
     input.data.value_array = _symbol_value_array_new(n);
     ///Iterator iter = Tree_begin(fc->input_param_tree);
     ///while (iter)
-    for (uint i = 0; i < n; i++)
+    for (euint i = 0; i < n; i++)
     {
         ///var data = Tree_get_value(iter);
         ///SymbolValue* sv = data.vptr_var;
@@ -498,8 +498,8 @@ SymbolValue PrintProc(ParserEnv* e, SymbolValue value)
         break;
     case ValueArray:
     {
-        uint n = array_n(value.data.value_array);
-        for (uint i = 0; i < n; i++)
+        euint n = array_n(value.data.value_array);
+        for (euint i = 0; i < n; i++)
         {
             SymbolValue v = value.data.value_array[i];
             PrintProc(e, v);
@@ -567,7 +567,7 @@ SymbolValue MarkIf(ParserEnv* e, SymbolValue bool_value)
     CommandClosures_add_arg(cc, offs);
     CommandClosures_add_arg(cc, bool_value);
 
-    uint n = array_n(e->curt_func->cmds);
+    euint n = array_n(e->curt_func->cmds);
     branch_mark mark = {(int)n, cc, NULL};
     apush(block->branch_marks, mark);
     block->braces_count++;
@@ -606,8 +606,8 @@ void MarkEnd(ParserEnv* e)
 
     /// 对所有的跳转到出口命令进行重定向
     int block_export = (int)array_n(e->curt_func->cmds);
-    uint n = array_n(block->branch_marks);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(block->branch_marks);
+    for (euint i = 0; i < n; i++)
     {
         branch_mark* mark = &block->branch_marks[i];
         if (mark->end_cmd)

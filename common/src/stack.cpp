@@ -23,11 +23,11 @@ void Stack_Dest(Stack _stk)
 }
 void _stack_realloc(Stack _stk)
 {
-    uint _pre_stack_length = _stk->stack_length;
+    euint _pre_stack_length = _stk->stack_length;
     _stk->stack_length *= 2;
     {
         var* _buf = (var*)SMalloc(sizeof(var) * _stk->stack_length);
-        uint i = 0;
+        euint i = 0;
         for (; i < _pre_stack_length; i++)
         {
             _buf[i] = _stk->stack[i];
@@ -71,7 +71,7 @@ void Stack_clear(Stack _stk)
 {
     _stk->stack_top_ptr = 0;
 }
-void Stack_resize(Stack _stk, uint _size)
+void Stack_resize(Stack _stk, euint _size)
 {
     var* new_stack = (var*)SMalloc(sizeof(var) * _size);
     if (_stk->stack_length > _size)
@@ -86,11 +86,11 @@ void Stack_resize(Stack _stk, uint _size)
     Mfree(_stk->stack);
     _stk->stack = new_stack;
 }
-uint Stack_count(Stack _stk)
+euint Stack_count(Stack _stk)
 {
     return _stk->stack_top_ptr;
 }
-var* Stack_find(Stack _stk, uint _i)
+var* Stack_find(Stack _stk, euint _i)
 {
     if (_i < _stk->stack_top_ptr)
     {
@@ -102,7 +102,7 @@ var* Stack_find(Stack _stk, uint _i)
     }
 }
 
-FixedStack FixedStack_Init(FixedStack _stk, uint _value_size)
+FixedStack FixedStack_Init(FixedStack _stk, euint _value_size)
 {
     _stk->stack = Malloc(_value_size * STACK_INITIAL_LENGTH);
     _stk->stack_length = STACK_INITIAL_LENGTH;
@@ -110,7 +110,7 @@ FixedStack FixedStack_Init(FixedStack _stk, uint _value_size)
     _stk->value_size = _value_size;
     return _stk;
 }
-FixedStack FixedStack_new(uint _value_size)
+FixedStack FixedStack_new(euint _value_size)
 {
     FixedStack ret = (FixedStack)SMalloc(sizeof(fixed_stack));
     FixedStack_Init(ret, _value_size);
@@ -122,7 +122,7 @@ void FixedStack_Dest(FixedStack _stk)
 }
 void _fixed_stack_realloc(FixedStack _stk)
 {
-    uint _pre_stack_length = _stk->stack_length;
+    euint _pre_stack_length = _stk->stack_length;
     _stk->stack_length *= 2;
     {
         void* _buf = Malloc(_stk->value_size * _stk->stack_length);
@@ -169,7 +169,7 @@ void* FixedStack_get_top_ptr(FixedStack _stk)
         return (void*)((char*)_stk->stack + (_stk->stack_top_ptr - 1) * _stk->value_size);
     }
 }
-bool FixedStack_walk_begin(FixedStack _stk, void* _to, uint* _top_ptr)
+bool FixedStack_walk_begin(FixedStack _stk, void* _to, euint* _top_ptr)
 {
     if (unlikely(!_stk->stack_top_ptr))
         return false;
@@ -179,7 +179,7 @@ bool FixedStack_walk_begin(FixedStack _stk, void* _to, uint* _top_ptr)
         return true;
     }
 }
-bool FixedStack_walk(FixedStack _stk, void* _to, uint* _top_ptr)
+bool FixedStack_walk(FixedStack _stk, void* _to, euint* _top_ptr)
 {
     if (unlikely(!*_top_ptr))
         return false;
@@ -193,7 +193,7 @@ void FixedStack_clear(FixedStack _stk)
 {
     _stk->stack_top_ptr = 0;
 }
-void FixedStack_resize(FixedStack _stk, uint _size)
+void FixedStack_resize(FixedStack _stk, euint _size)
 {
     void* new_stack = SMalloc(_stk->value_size * _size);
     if (_stk->stack_length > _size)
@@ -208,11 +208,11 @@ void FixedStack_resize(FixedStack _stk, uint _size)
     Mfree(_stk->stack);
     _stk->stack = new_stack;
 }
-uint FixedStack_count(FixedStack _stk)
+euint FixedStack_count(FixedStack _stk)
 {
     return _stk->stack_top_ptr;
 }
-void* FixedStack_find(FixedStack _stk, uint _i)
+void* FixedStack_find(FixedStack _stk, euint _i)
 {
     if (_i < _stk->stack_top_ptr)
     {

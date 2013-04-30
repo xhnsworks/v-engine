@@ -16,7 +16,7 @@ typedef struct _param
 {
     char* name;
     param_type type;
-    uint array_size;
+    euint array_size;
     vptr param_ptr;
 } param;
 
@@ -48,7 +48,7 @@ void Param_set_name(Param _self, const char* _name)
     memcpy(_self->name, _name, count + 1);
 }
 
-uint _single_param_size(param_type _type)
+euint _single_param_size(param_type _type)
 {
     switch (_type)
     {
@@ -78,13 +78,13 @@ uint _single_param_size(param_type _type)
 void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
 {
     char* mem = (char*)_mem;
-    uint ele_size = _single_param_size(_type);
+    euint ele_size = _single_param_size(_type);
     switch (_type)
     {
     case Matrix4x4_Param:
     {
         matrix4x4** mats = (matrix4x4**)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             matrix4x4* m = mats[i];
             Matrix4x4_export(m, (float*)mem);
@@ -95,7 +95,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case Float32_Param:
     {
         EFloat* fts = (EFloat*)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             EFloat f = fts[i];
             *((EFloat*)mem) = f;
@@ -106,7 +106,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case Float32x2_Param:
     {
         EFloat2* ft2s = (EFloat2*)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             EFloat2 f = ft2s[i];
             *((EFloat2*)mem) = f;
@@ -117,7 +117,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case Float32x3_Param:
     {
         EFloat3* ft3s = (EFloat3*)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             EFloat3 f = ft3s[i];
             *((EFloat3*)mem) = f;
@@ -128,7 +128,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case Float32x4_Param:
     {
         EFloat4* ft4s = (EFloat4*)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             EFloat4 f = ft4s[i];
             *((EFloat4*)mem) = f;
@@ -139,7 +139,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case Texture2D_Param:
     {
         Texture2D** texs = (Texture2D**)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             Texture2D* t = texs[i];
             *((Texture2D**)mem) = t;
@@ -149,7 +149,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case TextureCube_Param:
     {
         TextureCube* texs = (TextureCube*)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             TextureCube t = texs[i];
             *((TextureCube*)mem) = t;
@@ -159,7 +159,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     case Int_Param:
     {
         int* ns = (int*)_objs;
-        for (uint i = 0; i < _cnt; i++)
+        for (euint i = 0; i < _cnt; i++)
         {
             int n = ns[i];
             *((int*)mem) = n;
@@ -431,7 +431,7 @@ uint32 Pass_get_attr_loc(Pass _self, const char* _attr_sem)
     }
 }
 
-void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_idxs, e_mesh_mode _mode, const char* _file, uint _line)
+void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_idxs, e_mesh_mode _mode, const char* _file, euint _line)
 {
     if (to_ptr(_self))
     {
@@ -448,7 +448,7 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_i
     }
 
     VertexDecl dec = VertexBuffer_get_vertex_declaration(_vbf);
-    uint* vtx_ele_offs = VertexBuffer_get_ele_offs(_vbf);
+    euint* vtx_ele_offs = VertexBuffer_get_ele_offs(_vbf);
     uint32 pos_loc = UINT32_EXCE;
     uint32 nor_loc = UINT32_EXCE;
     uint32 col_loc = UINT32_EXCE;
@@ -704,7 +704,7 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_i
     }
 }
 
-void _Pass_render_plane(Pass _self, RenderablePlane _pln, const char* _file, uint _line)
+void _Pass_render_plane(Pass _self, RenderablePlane _pln, const char* _file, euint _line)
 {
     VertexBuffer vbf = RenderablePlane_get_vertex_buffer(_pln);
     IndexBuffer ibf = RenderablePlane_get_index_buffer(_pln);
@@ -766,37 +766,37 @@ void Pass_set_uniform_param_int(Pass _self, const char* _name, int _n)
     Pass_push_param(_self, pam);
 }
 
-void Pass_set_uniform_param_ints(Pass _self, const char* _name, int* _ns, uint _cnt)
+void Pass_set_uniform_param_ints(Pass _self, const char* _name, int* _ns, euint _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ns, Int_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_floats(Pass _self, const char* _name, EFloat* _fts, uint _cnt)
+void Pass_set_uniform_param_floats(Pass _self, const char* _name, EFloat* _fts, euint _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _fts, Float32_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_float2s(Pass _self, const char* _name, EFloat2* _ft2s, uint _cnt)
+void Pass_set_uniform_param_float2s(Pass _self, const char* _name, EFloat2* _ft2s, euint _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ft2s, Float32x2_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_float3s(Pass _self, const char* _name, EFloat3* _ft3s, uint _cnt)
+void Pass_set_uniform_param_float3s(Pass _self, const char* _name, EFloat3* _ft3s, euint _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ft3s, Float32x3_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_float4s(Pass _self, const char* _name, EFloat4* _ft4s, uint _cnt)
+void Pass_set_uniform_param_float4s(Pass _self, const char* _name, EFloat4* _ft4s, euint _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ft4s, Float32x4_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_mat4x4s(Pass _self, const char* _name, matrix4x4** _mats, uint _cnt)
+void Pass_set_uniform_param_mat4x4s(Pass _self, const char* _name, matrix4x4** _mats, euint _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _mats, Matrix4x4_Param, _cnt);
@@ -828,7 +828,7 @@ void _auto_set_uniform_params(Tree _param_source_tree, Pass _self, RendererBase*
 			{
 				renderer_param_value shader_object_value = _rdr->get_shader_object_value(src);
 				ShaderObject obj = {(struct _shader_object*)data.vptr_var};
-				uint array_size, array_index;
+				euint array_size, array_index;
 				shader_object_type type = ShaderObject_get_type(obj, &array_size, &array_index);
 				EAssert(array_size > 0, "%s", "param array size less equal zero!");
 				const char* name = ShaderObject_get_name(obj);

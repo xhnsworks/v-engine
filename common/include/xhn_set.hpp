@@ -41,7 +41,7 @@ public:
     };
     template<typename T>
     struct FNextProc {
-        void operator() ( T *from, T *&to, uint ele_real_size ) {
+        void operator() ( T *from, T *&to, euint ele_real_size ) {
             rbnode_type *node = to_rbtree_node ( from );
             rbnode_type *next_node = node->iter_next;
             to = &next_node->first;
@@ -49,7 +49,7 @@ public:
     };
     template<typename T>
     struct FPrevProc {
-        void operator() ( T *from, T *&to, uint ele_real_size ) {
+        void operator() ( T *from, T *&to, euint ele_real_size ) {
             rbnode_type *node = to_rbtree_node ( from );
             rbnode_type *prev_node = node->iter_prev;
             to = &prev_node->first;
@@ -60,7 +60,7 @@ public:
     {
     public:
         typedef bidirectional_readwrite_iterator<K, FReadProc<rbnode_type>, FWriteProc<rbnode_type>, FNextProc<K>, FPrevProc<K> > base_type;
-        iterator ( K *a, uint ele_real_size )
+        iterator ( K *a, euint ele_real_size )
             : base_type (
                 a, ele_real_size, FReadProc<rbnode_type>(), FWriteProc<rbnode_type>(), FNextProc<K>(), FPrevProc<K>() )
         {}
@@ -88,7 +88,7 @@ public:
     {
     public:
         typedef const_bidirectional_readwrite_iterator<K, FReadProc<rbnode_type>, FWriteProc<rbnode_type>, FNextProc<K>, FPrevProc<K> > base_type;
-        const_iterator ( K *a, uint ele_real_size )
+        const_iterator ( K *a, euint ele_real_size )
             : base_type (
                 a, ele_real_size, FReadProc<rbnode_type>(), FWriteProc<rbnode_type>(), FNextProc<K>(), FPrevProc<K>() )
         {}
@@ -134,10 +134,10 @@ public:
         K *k = &node->first;
         return const_iterator ( k, 0 );
     }
-    uint erase ( const K &key ) {
+    euint erase ( const K &key ) {
         return rbtree_type::_remove ( &m_rbtree, key );
     }
-    uint erase ( iterator &iter ) {
+    euint erase ( iterator &iter ) {
         return rbtree_type::_remove ( &m_rbtree, *iter.m_ptr );
     }
     iterator erase ( const_iterator &iter ) {
@@ -159,7 +159,7 @@ public:
     const_iterator end() const {
         return const_iterator ( NULL, 0 );
     }
-    uint size() const {
+    euint size() const {
         return m_rbtree.count;
     }
     void clear() {

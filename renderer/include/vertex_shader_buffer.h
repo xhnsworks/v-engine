@@ -13,8 +13,8 @@ typedef struct vertex_shader_buffer_
 **/
 class Renderer;
 typedef struct _vertex_shader_buffer* VtxSdrBuf;
-API_EXPORT VtxSdrBuf _VtxSdrBuf_new(const char* _file, uint _line);
-API_EXPORT void _VtxSdrBuf_delete(VtxSdrBuf _vsb, const char* _file, uint _line);
+API_EXPORT VtxSdrBuf _VtxSdrBuf_new(const char* _file, euint _line);
+API_EXPORT void _VtxSdrBuf_delete(VtxSdrBuf _vsb, const char* _file, euint _line);
 #define VtxSdrBuf_new() _VtxSdrBuf_new(__FILE__, __LINE__)
 #define VtxSdrBuf_delete(p) _VtxSdrBuf_delete(p, __FILE__, __LINE__)
 API_EXPORT ShaderObject VtxSdrBuf_add_attribute(VtxSdrBuf _vsb, element_semantic _sem, element_type _type);
@@ -23,23 +23,23 @@ API_EXPORT void VtxSdrBuf_print(VtxSdrBuf _vsb);
 
 struct _i_vtx_sdr_buf
 {
-    VtxSdrBuf (*__New)(const char* _file, uint _line);
-    void (*__Delete)(VtxSdrBuf _vsb, const char* _file, uint _line);
+    VtxSdrBuf (*__New)(const char* _file, euint _line);
+    void (*__Delete)(VtxSdrBuf _vsb, const char* _file, euint _line);
     ShaderObject (*add_attribute)(VtxSdrBuf _vsb, element_semantic _sem, element_type _type);
     void (*complete)(VtxSdrBuf _vsb);
     void (*print)(VtxSdrBuf _vsb);
 
     ShaderObject (*add_varying)(ShaderBuffer _sb, param_type _type, const char* _vary, sint32 _src);
     ShaderObject (*_add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, uint32 _array_size, sint32 _src,
-                                                  const char* _file, uint _line);
+                                                  const char* _file, euint _line);
     ShaderObject (*_add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, sint32 _id, const char* _unif,
-                                                                const char* _file, uint _line);
+                                                                const char* _file, euint _line);
     ShaderObject (*new_object)(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size);
     ShaderObject (*new_immediate_float_object)(ShaderBuffer _sb, float _ft);
     ShaderObject (*new_immediate_int_object)(ShaderBuffer _sb, int _i);
     void (*add_prototype_node)(ShaderBuffer _sb, ShaderNode _sn);
-    ShaderNode (*_add_reference_node)(ShaderBuffer _sb, const char* _name, const char* _file, uint _line);
-    void (*_add_branch_node)(ShaderBuffer _sb, BranchNode _bn, const char* _file, uint _line);
+    ShaderNode (*_add_reference_node)(ShaderBuffer _sb, const char* _name, const char* _file, euint _line);
+    void (*_add_branch_node)(ShaderBuffer _sb, BranchNode _bn, const char* _file, euint _line);
     ShaderObject (*find_object)(ShaderBuffer _sb, const char* _name);
     void (*print_shader_object)(ShaderBuffer _sb);
     void (*push_shader_object)(ShaderBuffer _sb, ShaderObject _so);

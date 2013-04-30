@@ -14,14 +14,14 @@ typedef struct _switch_node
     Tree switch_tree;
 } switch_node;
 
-void SwitchNode_Dest(SwitchNode _self, const char* _file, uint _line)
+void SwitchNode_Dest(SwitchNode _self, const char* _file, euint _line)
 {
     Iterator iter = Tree_begin(_self->switch_tree);
     while (iter)
     {
         var key = Tree_get_key(iter);
         var data = Tree_get_value(iter);
-        sint* tags = (sint*)key.vptr_var;
+        esint* tags = (esint*)key.vptr_var;
         array_delete(tags);
         CircuitBoard board = (CircuitBoard)data.vptr_var;
         CircuitBoard_delete(board);
@@ -42,9 +42,9 @@ char* SwitchNode_compile(SwitchNode _self)
     {
         var key = Tree_get_key(iter);
         var data = Tree_get_value(iter);
-        sint* tags = (sint*)key.vptr_var;
-        uint n = array_n(tags);
-        for (uint i = 0; i < n; i++)
+        esint* tags = (esint*)key.vptr_var;
+        euint n = array_n(tags);
+        for (euint i = 0; i < n; i++)
         {
             sbuf_printf("case %d:\n", tags[i]);
         }
@@ -59,8 +59,8 @@ char* SwitchNode_compile(SwitchNode _self)
     sbuf_printf("%s", "}\n");
     return (char*)EString_new(get_string_buffer);
 }
-void SwitchNode_Init(SwitchNode _self, const char* _file, uint _line);
-SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, uint _line)
+void SwitchNode_Init(SwitchNode _self, const char* _file, euint _line);
+SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, euint _line)
 {
     SwitchNode ret = (SwitchNode)SMalloc(sizeof(switch_node));
     ret->base.init_proc = (shader_node_init_proc)SwitchNode_Init;
@@ -75,10 +75,10 @@ SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, uint _line)
         var key = Tree_get_key(iter);
         var data = Tree_get_value(iter);
 
-        sint* src_tags = (sint*)key.vptr_var;
-        uint n = array_n(src_tags);
-        sint* dst_tags = array_new(sint, n, -1);
-        for (uint i = 0; i < n; i++)
+        esint* src_tags = (esint*)key.vptr_var;
+        euint n = array_n(src_tags);
+        esint* dst_tags = array_new(esint, n, -1);
+        for (euint i = 0; i < n; i++)
         {
             ///dst_tags[i] = src_tags[i];
             apush(dst_tags, src_tags[i]);
@@ -100,7 +100,7 @@ SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, uint _line)
 
     return ret;
 }
-void SwitchNode_Init(SwitchNode _self, const char* _file, uint _line)
+void SwitchNode_Init(SwitchNode _self, const char* _file, euint _line)
 {
     _self->base.init_proc = (shader_node_init_proc)SwitchNode_Init;
     _self->base.dest_proc = (shader_node_dest_proc)SwitchNode_Dest;
@@ -111,21 +111,21 @@ void SwitchNode_Init(SwitchNode _self, const char* _file, uint _line)
     _self->switch_obj.self = NULL;
 }
 
-SwitchNode _SwitchNode_new(const char* _file, uint _line)
+SwitchNode _SwitchNode_new(const char* _file, euint _line)
 {
     SwitchNode ret = (SwitchNode)SMalloc(sizeof(switch_node));
     SwitchNode_Init(ret, _file, _line);
     return ret;
 }
-void _SwitchNode_delete(SwitchNode _self, const char* _file, uint _line)
+void _SwitchNode_delete(SwitchNode _self, const char* _file, euint _line)
 {
     ShaderNodeBase_delete((ShaderNodeBase)_self, _file, _line);
 }
-CircuitBoard SwitchNode_add_branch_block(SwitchNode _self, sint* _tags)
+CircuitBoard SwitchNode_add_branch_block(SwitchNode _self, esint* _tags)
 {
-    uint n = array_n(_tags);
-    sint* tags = array_new(sint, n, -1);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(_tags);
+    esint* tags = array_new(esint, n, -1);
+    for (euint i = 0; i < n; i++)
     {
         apush(tags, _tags[i]);
     }
@@ -140,7 +140,7 @@ void SwitchNode_set_switch_object(SwitchNode _self, ShaderObject _so)
 {
     if (to_ptr(_self->switch_obj))
         return;
-    uint array_size, array_index;
+    euint array_size, array_index;
     shader_object_type type = ShaderObject_get_type(_so, &array_size, &array_index);
     EAssert(type == Int_Obj, "shader object %s is not int!", ShaderObject_get_name(_so));
     EAssert(array_size == 1 || array_index != INVALID_ARRAY_INDEX, "shader object %s is array!", ShaderObject_get_name(_so));

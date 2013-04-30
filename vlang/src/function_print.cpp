@@ -76,13 +76,13 @@ command_entry s_command_table[] = {
 void PrintSymbolValue(ParserEnv* e, const char* str, SymbolValue value);
 void _print_command(ParserEnv* e, CommandClosures cc)
 {
-    uint n = sizeof(s_command_table) / sizeof(s_command_table[0]);
-    for (uint i = 0; i < n; i++)
+    euint n = sizeof(s_command_table) / sizeof(s_command_table[0]);
+    for (euint i = 0; i < n; i++)
     {
         if (cc->cmd == s_command_table[i].cmd) {
             VPRINT("%s\n", s_command_table[i].desc);
-            uint n = array_n(cc->args);
-            for (uint i = 0; i < n; i++)
+            euint n = array_n(cc->args);
+            for (euint i = 0; i < n; i++)
             {
                 PrintSymbolValue(e, "", cc->args[i]);
             }
@@ -94,8 +94,8 @@ void _print_command(ParserEnv* e, CommandClosures cc)
 }
 void FunctionPrint(ParserEnv* e, FunctionClosures func)
 {
-    uint n = array_n(func->cmds);
-    for (uint i = 0; i < n; i++)
+    euint n = array_n(func->cmds);
+    for (euint i = 0; i < n; i++)
     {
         VPRINT("ADDR: %d, ", i);
         _print_command(e, func->cmds[i]);
