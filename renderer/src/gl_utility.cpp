@@ -449,7 +449,7 @@ void _error_proc(const char* _file, euint _line)
 	**/
 }
 
-void _shader_log(const char* _file, euint _line, uint32 _id)
+void _shader_log(const char* _file, euint _line, euint32 _id)
 {
     int log_length = 0xffffffff;
     glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &log_length);
@@ -462,7 +462,7 @@ void _shader_log(const char* _file, euint _line, uint32 _id)
 	Mfree(log_buffer);
 }
 
-void _program_log(const char* _file, euint _line, uint32 _id)
+void _program_log(const char* _file, euint _line, euint32 _id)
 {
     int log_length = 0xffffffff;
     glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &log_length);

@@ -22,7 +22,7 @@ MeshTriangleArray MeshTriangleArray_new_from_mesh(Mesh m)
     struct version_0004_data* data = _Mesh_get_data_0004(m);
 
     MeshTriangleArray ret = array_new(MeshTriangle, data->face_count, NULL);
-    for (uint32 i = 0; i < data->face_count; i++)
+    for (euint32 i = 0; i < data->face_count; i++)
     {
         MeshTriangle tri = (MeshTriangle)SMalloc(sizeof(mesh_triangle));
         tri->edge0.vtx0 = data->indexs[i * 3 + 0];

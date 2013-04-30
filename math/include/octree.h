@@ -6,6 +6,7 @@
 #include "sfloat4.h"
 #include "line_utility.h"
 #include "plane.h"
+///#define OCTREE_DRAW_ENABLE
 struct _axis_aligned_box;
 struct _octree_node;
 typedef struct _axis_aligned_box
@@ -13,7 +14,9 @@ typedef struct _axis_aligned_box
     sfloat3 min_xyz;
     sfloat3 max_xyz;
 } axis_aligned_box;
+#ifdef OCTREE_DRAW_ENABLE
 API_EXPORT void draw_axis_aligned_box(axis_aligned_box* box, LineDrawer drawer, float shrink, EFloat4* color);
+#endif
 typedef union _octree_branch
 {
     struct _branch_type0

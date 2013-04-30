@@ -62,7 +62,7 @@ const char* _compile_params(ShaderNode _sn)
 
     if (array_n(_sn->input_param_table))
     {
-        for (uint32 i = 0; i < array_n(_sn->input_param_table); i++)
+        for (euint32 i = 0; i < array_n(_sn->input_param_table); i++)
         {
             ShaderObject so = array_safe_get(_sn->input_param_table, i);
 
@@ -110,7 +110,7 @@ const char* _compile_params(ShaderNode _sn)
 			remainder -= offs;
         }
 
-        for (uint32 i = 0; i < array_n(_sn->output_param_table); i++)
+        for (euint32 i = 0; i < array_n(_sn->output_param_table); i++)
         {
             ShaderObject so = array_safe_get(_sn->output_param_table, i);
 
@@ -161,7 +161,7 @@ const char* _compile_links(ShaderNode _sn)
 
     if (array_n(_sn->input_links))
     {
-        for (uint32 i = 0; i < array_n(_sn->input_links); i++)
+        for (euint32 i = 0; i < array_n(_sn->input_links); i++)
         {
             ShaderObject so = array_safe_get(_sn->input_links, i);
 
@@ -208,7 +208,7 @@ const char* _compile_links(ShaderNode _sn)
 			tmp += offs;
 			remainder -= offs;
         }
-        for (uint32 i = 0; i < array_n(_sn->output_links); i++)
+        for (euint32 i = 0; i < array_n(_sn->output_links); i++)
         {
             ShaderObject so = array_safe_get(_sn->output_links, i);
 
@@ -261,7 +261,7 @@ void ShaderNode_Dest(shader_node* _sn, const char* _file, euint _line)
     if ( to_ptr(_sn->result_link) != NULL )
         ShaderObject_delete(_sn->result_link);
 **/
-    for (uint32 i = 0; i < array_n(_sn->input_param_table); i++)
+    for (euint32 i = 0; i < array_n(_sn->input_param_table); i++)
     {
         ShaderObject so = array_safe_get(_sn->input_param_table, i);
         if ( to_ptr(so) != NULL )
@@ -269,7 +269,7 @@ void ShaderNode_Dest(shader_node* _sn, const char* _file, euint _line)
     }
     array_delete(_sn->input_param_table);
 
-    for (uint32 i = 0; i < array_n(_sn->output_param_table); i++)
+    for (euint32 i = 0; i < array_n(_sn->output_param_table); i++)
     {
         ShaderObject so = array_safe_get(_sn->output_param_table, i);
         if ( to_ptr(so) != NULL )
@@ -277,7 +277,7 @@ void ShaderNode_Dest(shader_node* _sn, const char* _file, euint _line)
     }
     array_delete(_sn->output_param_table);
 
-    for (uint32 i = 0; i < array_n(_sn->input_links); i++)
+    for (euint32 i = 0; i < array_n(_sn->input_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->input_links, i);
         if ( to_ptr(so) != NULL )
@@ -285,7 +285,7 @@ void ShaderNode_Dest(shader_node* _sn, const char* _file, euint _line)
     }
     array_delete(_sn->input_links);
 
-    for (uint32 i = 0; i < array_n(_sn->output_links); i++)
+    for (euint32 i = 0; i < array_n(_sn->output_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->output_links, i);
         if ( to_ptr(so) != NULL )
@@ -325,19 +325,19 @@ void _ShaderNode_delete(ShaderNode _sn, const char* _file, euint _line)
     ShaderNodeBase_delete((ShaderNodeBase)_sn, _file, _line);
 }
 /**
-void ShaderNode_set_return_type(ShaderNode _sn, shader_object_type _type, uint32 _array_size)
+void ShaderNode_set_return_type(ShaderNode _sn, shader_object_type _type, euint32 _array_size)
 {
     ShaderObject_set_type(_sn->result, _type, _array_size, INVALID_ARRAY_INDEX);
 }
 **/
-void _ShaderNode_add_input_param(ShaderNode _sn, shader_object_type _type, const char* _pam_name, uint32 _array_size,
+void _ShaderNode_add_input_param(ShaderNode _sn, shader_object_type _type, const char* _pam_name, euint32 _array_size,
                                  const char* _file, euint _line)
 {
     ShaderObject so = _ShaderObject_new(_type, _pam_name, _array_size, _file, _line);
     _sn->input_param_table = array_push(_sn->input_param_table, so);
 }
 
-void ShaderNode_add_output_param(ShaderNode _sn, shader_object_type _type, const char* _pam_name, uint32 _array_size)
+void ShaderNode_add_output_param(ShaderNode _sn, shader_object_type _type, const char* _pam_name, euint32 _array_size)
 {
     ShaderObject so = ShaderObject_new(_type, _pam_name, _array_size);
     _sn->output_param_table = array_push(_sn->output_param_table, so);
@@ -362,7 +362,7 @@ bool _ShaderNode_test_input_link(const char* _file, euint _line, ShaderNode _sn,
     }
 }
 
-void _ShaderNode_add_input_link(const char* _file, euint _line, ShaderNode _sn, ShaderObject _so, uint32 _array_index)
+void _ShaderNode_add_input_link(const char* _file, euint _line, ShaderNode _sn, ShaderObject _so, euint32 _array_index)
 {
     ShaderObject so = ShaderObject_clone(_so);
     ShaderObject_set_index(so, _array_index);
@@ -370,14 +370,14 @@ void _ShaderNode_add_input_link(const char* _file, euint _line, ShaderNode _sn, 
     _sn->input_links = array_push(_sn->input_links, so);
 }
 
-void ShaderNode_add_output_link(ShaderNode _sn, ShaderObject _so, uint32 _array_index)
+void ShaderNode_add_output_link(ShaderNode _sn, ShaderObject _so, euint32 _array_index)
 {
     ShaderObject so = ShaderObject_clone(_so);
     ShaderObject_set_index(so, _array_index);
     _sn->output_links = array_push(_sn->output_links, so);
 }
 /**
-void ShaderNode_set_result_link(ShaderNode _sn, ShaderObject _so, uint32 _array_index)
+void ShaderNode_set_result_link(ShaderNode _sn, ShaderObject _so, euint32 _array_index)
 {
     if ( to_ptr(_sn->result_link) != NULL )
     {
@@ -403,7 +403,7 @@ void ShaderNode_clear_links(ShaderNode _sn)
         _sn->result_link = exec_so;
     }
 **/
-    for (uint32 i = 0; i < array_n(_sn->input_links); i++)
+    for (euint32 i = 0; i < array_n(_sn->input_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->input_links, i);
         if ( to_ptr(so) != NULL )
@@ -412,7 +412,7 @@ void ShaderNode_clear_links(ShaderNode _sn)
     array_delete(_sn->input_links);
     _sn->input_links = array_new(ShaderObject, 5, exec_so);
 
-    for (uint32 i = 0; i < array_n(_sn->output_links); i++)
+    for (euint32 i = 0; i < array_n(_sn->output_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->output_links, i);
         if ( to_ptr(so) != NULL )
@@ -448,7 +448,7 @@ const char* ShaderNode_compile_function_declaration(ShaderNode _sn)
     ///sprintf(mbuf, "");
     mbuf[0] = 0x00;
     char* tmp = mbuf;
-    ///uint32 array_size, array_index;
+    ///euint32 array_size, array_index;
     ///const char* obj_type = get_shader_object_string( ShaderObject_get_type(_sn->result, &array_size, &array_index) );
     const char* node_name = _sn->node_name;
     const char* params = _compile_params(_sn);
@@ -488,7 +488,7 @@ ShaderNode _ShaderNode_clone(ShaderNode _sn, const char* _file, euint _line)
     {
         ret->function = (char*)EString_new(_sn->function);
     }
-    for (uint32 i = 0; i < array_n(_sn->input_param_table); i++)
+    for (euint32 i = 0; i < array_n(_sn->input_param_table); i++)
     {
         ///ShaderObject so = array_safe_get(_sn->input_param_table, i);
         ShaderObject so  = _sn->input_param_table[i];
@@ -496,7 +496,7 @@ ShaderNode _ShaderNode_clone(ShaderNode _sn, const char* _file, euint _line)
         EAssert (to_ptr(so) && to_ptr(cso), "%s", "clone null shader object");
         ret->input_param_table = array_push(ret->input_param_table, cso);
     }
-    for (uint32 i = 0; i < array_n(_sn->output_param_table); i++)
+    for (euint32 i = 0; i < array_n(_sn->output_param_table); i++)
     {
         ///ShaderObject so = array_safe_get(_sn->output_param_table, i);
         ShaderObject so  = _sn->output_param_table[i];
@@ -504,12 +504,12 @@ ShaderNode _ShaderNode_clone(ShaderNode _sn, const char* _file, euint _line)
         EAssert (to_ptr(so) && to_ptr(cso), "%s", "clone null shader object");
         ret->output_param_table = array_push(ret->output_param_table, cso);
     }
-    for (uint32 i = 0; i < array_n(_sn->input_links); i++)
+    for (euint32 i = 0; i < array_n(_sn->input_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->input_links, i);
         ret->input_links = array_push(ret->input_links, ShaderObject_clone(so));
     }
-    for (uint32 i = 0; i < array_n(_sn->output_links); i++)
+    for (euint32 i = 0; i < array_n(_sn->output_links); i++)
     {
         ShaderObject so = array_safe_get(_sn->output_links, i);
         ret->output_links = array_push(ret->output_links, ShaderObject_clone(so));

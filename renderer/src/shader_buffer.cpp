@@ -117,26 +117,26 @@ shader_object_entry shader_object_table[] =
     { Void_Obj,        "void" },
 };
 ///==============================ShaderBuffer========================================///
-extern inline uint32 _get_element_type_entry_count()
+extern inline euint32 _get_element_type_entry_count()
 {
     return sizeof(element_type_table) / sizeof(element_type_entry);
 }
-extern inline uint32 _get_element_semantic_entry_count()
+extern inline euint32 _get_element_semantic_entry_count()
 {
     return sizeof(element_semantic_table) / sizeof(element_semantic_entry);
 }
-extern inline uint32 _get_param_type_entry_count()
+extern inline euint32 _get_param_type_entry_count()
 {
     return sizeof(param_type_table) / sizeof(param_type_entry);
 }
-extern inline uint32 _get_shader_object_entry_count()
+extern inline euint32 _get_shader_object_entry_count()
 {
     return sizeof(shader_object_table) / sizeof(shader_object_entry);
 }
 ///==============================ShaderBuffer========================================///
 const char* get_element_type_string(element_type _type)
 {
-    for (uint32 i = 0; i < _get_element_type_entry_count(); i++)
+    for (euint32 i = 0; i < _get_element_type_entry_count(); i++)
     {
         if (element_type_table[i].type == _type)
             return element_type_table[i].type_string;
@@ -146,7 +146,7 @@ const char* get_element_type_string(element_type _type)
 
 const char* get_element_semantic_string(element_semantic _sem)
 {
-    for (uint32 i = 0; i < _get_element_semantic_entry_count(); i++)
+    for (euint32 i = 0; i < _get_element_semantic_entry_count(); i++)
     {
         if (element_semantic_table[i].sem == _sem)
             return element_semantic_table[i].sem_string;
@@ -156,7 +156,7 @@ const char* get_element_semantic_string(element_semantic _sem)
 
 element_type get_element_semantic_type(element_semantic _sem)
 {
-    for (uint32 i = 0; i < _get_element_semantic_entry_count(); i++)
+    for (euint32 i = 0; i < _get_element_semantic_entry_count(); i++)
     {
         if (element_semantic_table[i].sem == _sem)
             return element_semantic_table[i].sem_type;
@@ -166,7 +166,7 @@ element_type get_element_semantic_type(element_semantic _sem)
 
 param_type get_element_param_type(element_semantic _sem)
 {
-    for (uint32 i = 0; i < _get_element_semantic_entry_count(); i++)
+    for (euint32 i = 0; i < _get_element_semantic_entry_count(); i++)
     {
         if (element_semantic_table[i].sem == _sem)
             return element_semantic_table[i].pam_type;
@@ -176,7 +176,7 @@ param_type get_element_param_type(element_semantic _sem)
 
 const char* get_param_type_string(param_type _type)
 {
-    for (uint32 i = 0; i < _get_param_type_entry_count(); i++)
+    for (euint32 i = 0; i < _get_param_type_entry_count(); i++)
     {
         if (param_type_table[i].type == _type)
             return param_type_table[i].param_string;
@@ -186,7 +186,7 @@ const char* get_param_type_string(param_type _type)
 
 const char* get_shader_object_string(shader_object_type _type)
 {
-    for (uint32 i = 0; i < _get_shader_object_entry_count(); i++)
+    for (euint32 i = 0; i < _get_shader_object_entry_count(); i++)
     {
         if (shader_object_table[i].type == _type)
             return shader_object_table[i].shader_objectr_string;
@@ -361,7 +361,7 @@ void ShaderBuffer_complete(struct _shader_buffer* _buf)
     _buf->output = (char*)EString_new(get_string_buffer);
 }
 
-ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const char* _vary, sint32 _src)
+ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const char* _vary, esint32 _src)
 {
     const char* type = get_param_type_string(_type);
     ShaderObject ret = {NULL};
@@ -424,7 +424,7 @@ ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const 
     return ret;
 }
 
-ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, uint32 _array_size, sint32 _src,
+ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
                                        const char* _file, euint _line)
 {
     const char* type = get_param_type_string(_type);
@@ -498,7 +498,7 @@ ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const
     return ret;
 }
 
-ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, sint32 _id, const char* _unif,
+ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
                                                      const char* _file, euint _line)
 {
     RendererParamEntry ent = _rdr->get_param_entry(_id);
@@ -510,7 +510,7 @@ ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Rendere
     return _ShaderBuffer_add_uniform(_self, ent->type, _unif, ent->array_size, _id, _file, _line);
 }
 
-ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size)
+ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size)
 {
     /**
     char mbuf[STRING_BUFFER_SIZE];

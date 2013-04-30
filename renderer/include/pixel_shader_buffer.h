@@ -36,12 +36,12 @@ struct _i_pxl_sdr_buf
     void (*__Delete)(PxlSdrBuf _vsb, const char* _file, euint _line);
     void (*complete)(PxlSdrBuf _vsb);
 
-    ShaderObject (*add_varying)(ShaderBuffer _sb, param_type _type, const char* _vary, sint32 _src);
-    ShaderObject (*_add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, uint32 _array_size, sint32 _src,
+    ShaderObject (*add_varying)(ShaderBuffer _sb, param_type _type, const char* _vary, esint32 _src);
+    ShaderObject (*_add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
                                                   const char* _file, euint _line);
-    ShaderObject (*_add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, sint32 _id, const char* _unif,
+    ShaderObject (*_add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
                                                                 const char* _file, euint _line);
-    ShaderObject (*new_object)(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size);
+    ShaderObject (*new_object)(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size);
     ShaderObject (*new_immediate_float_object)(ShaderBuffer _sb, float _ft);
     ShaderObject (*new_immediate_int_object)(ShaderBuffer _sb, int _i);
 	ShaderObject (*sample_texture2d_rgba)(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);

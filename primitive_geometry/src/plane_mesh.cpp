@@ -43,7 +43,7 @@ Mesh create_plane_mesh(float x, float y, float z, float width, float height, flo
     EFloat2 uv[4];
 	EColor col[4];
 
-    uint32 idx[6];
+    euint32 idx[6];
 
 	make_plane_points<EFloat3, MakeEFloat3>(x, y, z, width, height, pos);
 

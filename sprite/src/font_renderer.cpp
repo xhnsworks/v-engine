@@ -222,9 +222,9 @@ euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _
     esint _offset_y = m_pixel_size - bitmap->rows + 1;
 	EAssert(_offset_y >= 0 && _offset_y < 65535, "offset out range");
 
-    uint8 _gray;
+    euint8 _gray;
 
-    uint8* _c;
+    euint8* _c;
     ///uint8 _r, _g, _b, _a;
     for ( i = 0, p = 0; i < y_max; i++, p++ )
     {
@@ -233,7 +233,7 @@ euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _
             _gray = bitmap->buffer[p * bitmap->width + q];
             if (_gray)
             {
-                _c = (uint8*)( ( (i + _y + _offset_y) * _w + j + _x ) * _32BIT_PIXEL_SIZE_ + (ref_ptr)_target );
+                _c = (euint8*)( ( (i + _y + _offset_y) * _w + j + _x ) * _32BIT_PIXEL_SIZE_ + (ref_ptr)_target );
 	
 				_c[3] = _gray;
 				_c[2] = 255;

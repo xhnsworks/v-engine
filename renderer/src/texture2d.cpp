@@ -13,7 +13,7 @@ Tex2DLockedRect::Tex2DLockedRect(euint _x, euint _y, euint _width, euint _height
 {
     pxl_buffer.convert<PixelConvertProc>(_get_pixel_size(_fmt));
 	pxl_buffer.resize(_width * _height);
-	uint32 pxl = 0xffffffff;
+	euint32 pxl = 0xffffffff;
 	pxl_buffer.flush(&pxl);
 }
 Tex2DLockedRect::~Tex2DLockedRect()
@@ -42,7 +42,7 @@ Texture2D::~Texture2D()
 	glDeleteTextures(1, &id);
 }
 
-void Texture2D::Create(pixel_format _fmt, uint32 _w, uint32 _h)
+void Texture2D::Create(pixel_format _fmt, euint32 _w, euint32 _h)
 {
 	format = _fmt;
 	width = _w;
@@ -51,7 +51,7 @@ void Texture2D::Create(pixel_format _fmt, uint32 _w, uint32 _h)
 	Update(false);
 }
 
-void Texture2D::LoadFromMem(vptr _mem, pixel_format _fmt, uint32 _w, uint32 _h, uint32 _size_in_byte, bool is_compressed)
+void Texture2D::LoadFromMem(vptr _mem, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _size_in_byte, bool is_compressed)
 {
 	format = _fmt;
 	width = _w;

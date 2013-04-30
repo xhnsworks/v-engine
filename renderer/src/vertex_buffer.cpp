@@ -7,14 +7,14 @@
 #include "renderable_base.h"
 typedef struct _vertex_buffer
 {
-    uint32 id;
+    euint32 id;
     euint* vtx_ele_offs;
     VertexDecl vertex_declaration;
     char* vertex_buffer;
-    uint32 vertex_size;
-    uint32 vertex_buffer_size;
-    uint32 vertex_buffer_tail;
-    uint32 dirty_flag;
+    euint32 vertex_size;
+    euint32 vertex_buffer_size;
+    euint32 vertex_buffer_tail;
+    euint32 dirty_flag;
 } vertex_buffer;
 
 void VertexBuffer_Dest(struct _vertex_buffer* _buf)
@@ -29,8 +29,8 @@ VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, euint _line)
     {
         vertex_buffer* buffer = (vertex_buffer*)_Malloc(sizeof(vertex_buffer), _file, _line);
         buffer->vtx_ele_offs = array_new(euint, VertexDecl_count(_dec), 0xffffffff);
-        uint32 vertex_size = 0;
-        uint32 i = 0;
+        euint32 vertex_size = 0;
+        euint32 i = 0;
         for (; i < VertexDecl_count(_dec); i++)
         {
             VertexElement element = VertexDecl_find(_dec, i);
@@ -97,7 +97,7 @@ bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _
     }
     if (VertexDecl_count(_self->vertex_declaration))
     {
-        uint32 i = 0;
+        euint32 i = 0;
         for (; i < VertexDecl_count(_self->vertex_declaration); i++)
         {
             VertexElement ele = VertexDecl_find(_self->vertex_declaration, i);
@@ -105,7 +105,7 @@ bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _
             {
                 if (VertexElement_get_semantic(ele) == _sem)
                 {
-                    uint32 offset = _self->vertex_size * _i + offs[i];
+                    euint32 offset = _self->vertex_size * _i + offs[i];
                     vptr src = (vptr)((ref_ptr)_self->vertex_buffer + (ref_ptr)offset);
                     memcpy(_result, src, VertexElement_get_size(ele));
                     return true;
@@ -130,7 +130,7 @@ vptr VertexBuffer_insert(VertexBuffer _self, element_semantic _sem, unsigned int
     }
     if (VertexDecl_count(_self->vertex_declaration))
     {
-        uint32 i = 0;
+        euint32 i = 0;
         for (; i < VertexDecl_count(_self->vertex_declaration); i++)
         {
             VertexElement ele = VertexDecl_find(_self->vertex_declaration, i);
@@ -138,7 +138,7 @@ vptr VertexBuffer_insert(VertexBuffer _self, element_semantic _sem, unsigned int
             {
                 if (VertexElement_get_semantic(ele) == _sem)
                 {
-                    uint32 offset = _self->vertex_size * _i + offs[i];
+                    euint32 offset = _self->vertex_size * _i + offs[i];
                     return (vptr)((ref_ptr)_self->vertex_buffer + (ref_ptr)offset);
                 }
             }
@@ -156,27 +156,27 @@ VertexDecl VertexBuffer_get_vertex_declaration(VertexBuffer _self)
     return _self->vertex_declaration;
 }
 
-uint32 VertexBuffer_get_id(VertexBuffer _self)
+euint32 VertexBuffer_get_id(VertexBuffer _self)
 {
     return _self->id;
 }
 
-uint32 VertexBuffer_get_vertex_size(VertexBuffer _self)
+euint32 VertexBuffer_get_vertex_size(VertexBuffer _self)
 {
     return _self->vertex_size;
 }
 
-uint32 VertexBuffer_get_buffer_size(VertexBuffer _self)
+euint32 VertexBuffer_get_buffer_size(VertexBuffer _self)
 {
     return _self->vertex_buffer_tail * _self->vertex_size;
 }
 
-uint32 VertexBuffer_get_buffer_tail(VertexBuffer _self)
+euint32 VertexBuffer_get_buffer_tail(VertexBuffer _self)
 {
     return _self->vertex_buffer_tail;
 }
 
-void _fill_vertex_data(VertexBuffer _self, euint _offs, VertexElement _ele, uint32 _ptr, float* _data, uint32 _n)
+void _fill_vertex_data(VertexBuffer _self, euint _offs, VertexElement _ele, euint32 _ptr, float* _data, euint32 _n)
 {
     float* vbf = (float*)((ref_ptr)_self->vertex_buffer + (ref_ptr)(_ptr * _self->vertex_size) + (ref_ptr)_offs);
     switch (VertexElement_get_type(_ele))
@@ -245,7 +245,7 @@ void _fill_vertex_data(VertexBuffer _self, euint _offs, VertexElement _ele, uint
     }
 }
 
-uint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh)
+euint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh)
 {
     euint* offs = _self->vtx_ele_offs;
     euint num_vtxs = Mesh_get_vertex_count(_mesh);
@@ -259,13 +259,13 @@ uint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh)
         float* fbin = Mesh_get_binormal(_mesh);
         float* fepw = Mesh_get_edge_proj_weight(_mesh);
         float* fcol = Mesh_get_color(_mesh);
-        uint32 tail = _self->vertex_buffer_tail;
-        uint32 i = 0;
+        euint32 tail = _self->vertex_buffer_tail;
+        euint32 i = 0;
         for (; i < VertexDecl_count(_self->vertex_declaration); i++)
         {
             VertexElement ele = VertexDecl_find(_self->vertex_declaration, i);
             {
-                uint32 j = 0;
+                euint32 j = 0;
                 for (; j < Mesh_get_vertex_count(_mesh); j++)
                 {
                     switch (VertexElement_get_semantic(ele))

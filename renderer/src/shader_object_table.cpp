@@ -4,7 +4,7 @@
 #include "shader_object_table.h"
 #include "shader_buffer.h"
 #include "shader_object.h"
-sint32 get_param_source(element_semantic sem)
+esint32 get_param_source(element_semantic sem)
 {
     switch (sem)
     {
@@ -23,7 +23,7 @@ sint32 get_param_source(element_semantic sem)
     }
 }
 
-ShaderObject get_param_source_shader_object(ShaderBuffer _sb, sint32 _src)
+ShaderObject get_param_source_shader_object(ShaderBuffer _sb, esint32 _src)
 {
     ShaderObject ret = {NULL};
     var key, data;

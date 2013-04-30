@@ -11,8 +11,8 @@
 API_EXPORT void TestInit();
 API_EXPORT void MInit();
 
-API_EXPORT vptr _Malloc(uint _size, const char* _file, uint32 _line);
-API_EXPORT void _Mfree(vptr _ptr, const char* _file, uint32 _line);
+API_EXPORT vptr _Malloc(uint _size, const char* _file, euint32 _line);
+API_EXPORT void _Mfree(vptr _ptr, const char* _file, euint32 _line);
 
 void* TestAlloc(uint _size);
 void TestFree(void* _ptr);

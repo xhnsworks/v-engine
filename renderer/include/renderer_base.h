@@ -99,10 +99,10 @@ public:
 
 	void FORCE_ALIGN_ARG_POINTER get_mouse_ray ( int _x, int _y, EFloat3 *ori, EFloat3 *dir );
     
-    virtual bool is_uniform_param_source ( sint32 _src ) = 0;
+    virtual bool is_uniform_param_source ( esint32 _src ) = 0;
 	virtual Texture2DPtr get_shadow_map ( euint i ) = 0;
     virtual TextureCube get_shadow_cube_map() = 0;
-	virtual renderer_param_value get_shader_object_value ( sint32 _src ) = 0;
+	virtual renderer_param_value get_shader_object_value ( esint32 _src ) = 0;
 	virtual void prepare_renderable(Renderable _rbl) = 0;
 
 	inline euint get_width() {

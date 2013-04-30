@@ -104,19 +104,19 @@ LightBase2 point_light_prototype::new_light()
 }
 void dir_light_prototype::prepare_lighting_passes ( Renderer *rdr, VertexDecl vtx_decl, ARRAY lighting_decl *decls )
 {
-    light_state state = {Direction, DirectionLightingNode, 1};
+    light_state state = {DirectionType, DirectionLightingNode, 1};
     first_lighting_pass = create_lighting_pass_ex3 ( rdr, vtx_decl, &state, decls, false );
     lighting_pass = create_lighting_pass_ex3 ( rdr, vtx_decl, &state, decls, true );
 }
 void spot_light_prototype::prepare_lighting_passes ( Renderer *rdr, VertexDecl vtx_decl, ARRAY lighting_decl *decls )
 {
-    light_state state = {Spot, SpotLightingNode, 1};
+    light_state state = {SpotType, SpotLightingNode, 1};
     first_lighting_pass = create_lighting_pass_ex3 ( rdr, vtx_decl, &state, decls, false );
     lighting_pass = create_lighting_pass_ex3 ( rdr, vtx_decl, &state, decls, true );
 }
 void point_light_prototype::prepare_lighting_passes ( Renderer *rdr, VertexDecl vtx_decl, ARRAY lighting_decl *decls )
 {
-    light_state state = {Point, PointLightingNode, 1};
+    light_state state = {PointType, PointLightingNode, 1};
     first_lighting_pass = create_lighting_pass_ex3 ( rdr, vtx_decl, &state, decls, false );
     lighting_pass = create_lighting_pass_ex3 ( rdr, vtx_decl, &state, decls, true );
 }
@@ -1081,7 +1081,7 @@ void shader_object_value_Dest ( renderer_param_value _obj )
     }
 }
 
-bool Renderer::is_uniform_param_source ( sint32 _src )
+bool Renderer::is_uniform_param_source ( esint32 _src )
 {
     var key, data;
     key.sint32_var = _src;
@@ -1094,7 +1094,7 @@ bool Renderer::is_uniform_param_source ( sint32 _src )
     }
 }
 
-renderer_param_value Renderer::get_shader_object_value ( RendererBase* rdr, sint32 _src )
+renderer_param_value Renderer::get_shader_object_value ( RendererBase* rdr, esint32 _src )
 {
 	var key, data;
     key.sint32_var = _src;
@@ -1109,19 +1109,19 @@ renderer_param_value Renderer::get_shader_object_value ( RendererBase* rdr, sint
     }
 }
 
-renderer_param_value Renderer::get_shader_object_value ( sint32 _src )
+renderer_param_value Renderer::get_shader_object_value ( esint32 _src )
 {
     return get_shader_object_value(this, _src);
 }
 
-void Renderer::register_renderer_param ( sint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc )
+void Renderer::register_renderer_param ( esint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc )
 {
     var key, data;
     key.sint32_var = _id;
     data.vptr_var = RendererParamEntry_new ( _proc, _type, _array_size );
     Tree_insert ( param_proc_tree, key, data );
 }
-RendererParamEntry Renderer::get_param_entry ( sint32 _id )
+RendererParamEntry Renderer::get_param_entry ( esint32 _id )
 {
     var key, data;
     key.sint32_var = _id;

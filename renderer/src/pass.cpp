@@ -10,7 +10,7 @@
 #include "eassert.h"
 #include "renderer.h"
 
-static uint32 g_max_texture_units = 0;
+static euint32 g_max_texture_units = 0;
 
 typedef struct _param
 {
@@ -39,7 +39,7 @@ void Param_delete(Param _self)
 
 void Param_set_name(Param _self, const char* _name)
 {
-    uint32 count = 0;
+    euint32 count = 0;
     while (_name[count])
     {
         count++;
@@ -75,7 +75,7 @@ euint _single_param_size(param_type _type)
     }
 }
 
-void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
+void _export_to_memory(vptr _objs, param_type _type, euint32 _cnt, vptr _mem)
 {
     char* mem = (char*)_mem;
     euint ele_size = _single_param_size(_type);
@@ -172,7 +172,7 @@ void _export_to_memory(vptr _objs, param_type _type, uint32 _cnt, vptr _mem)
     }
 }
 
-void Param_set(Param _self, const char* _name, vptr _pams, param_type _type, uint32 _cnt)
+void Param_set(Param _self, const char* _name, vptr _pams, param_type _type, euint32 _cnt)
 {
     Param_set_name(_self, _name);
     _self->type = _type;
@@ -183,7 +183,7 @@ void Param_set(Param _self, const char* _name, vptr _pams, param_type _type, uin
 
 typedef struct _pass
 {
-    uint32 id;
+    euint32 id;
     Shader vertex_shader;
     Shader pixel_shader;
     Stack param_table;
@@ -191,7 +191,7 @@ typedef struct _pass
     Tree attr_tree;
     Tree vertex_param_source_tree;
     Tree pixel_param_source_tree;
-    uint32 linked;
+    euint32 linked;
 } pass;
 
 void Pass_clear_param(Pass _self);
@@ -265,17 +265,17 @@ void Pass_apply_param(Pass _self)
     {
         GLint num_tex_units;
         glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &num_tex_units);
-        g_max_texture_units = (uint32)num_tex_units;
+        g_max_texture_units = (euint32)num_tex_units;
     }
     ERROR_PROC;
-    uint32 tid = 0;
-    for (uint32 i = 0; i < Stack_count(_self->param_table); i++)
+    euint32 tid = 0;
+    for (euint32 i = 0; i < Stack_count(_self->param_table); i++)
     {
         var* v = Stack_find(_self->param_table, i);
         if (v)
         {
             Param pam = (Param)v->vptr_var;
-            uint32 p = UINT32_EXCE;
+            euint32 p = UINT32_EXCE;
             var key;
             var data;
             key.str_var = (EString)pam->name;
@@ -413,7 +413,7 @@ void Pass_set_pixel_shader(Pass _self, Shader _sdr)
     }
 }
 
-uint32 Pass_get_attr_loc(Pass _self, const char* _attr_sem)
+euint32 Pass_get_attr_loc(Pass _self, const char* _attr_sem)
 {
     var key;
     var data;
@@ -424,14 +424,14 @@ uint32 Pass_get_attr_loc(Pass _self, const char* _attr_sem)
     }
     else
     {
-        uint32 ret = glGetAttribLocation(_self->id, _attr_sem);
+        euint32 ret = glGetAttribLocation(_self->id, _attr_sem);
         data.uint32_var = ret;
         Tree_insert(_self->attr_tree, key, data);
         return ret;
     }
 }
 
-void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_idxs, e_mesh_mode _mode, const char* _file, euint _line)
+void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_idxs, e_mesh_mode _mode, const char* _file, euint _line)
 {
     if (to_ptr(_self))
     {
@@ -449,14 +449,14 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_i
 
     VertexDecl dec = VertexBuffer_get_vertex_declaration(_vbf);
     euint* vtx_ele_offs = VertexBuffer_get_ele_offs(_vbf);
-    uint32 pos_loc = UINT32_EXCE;
-    uint32 nor_loc = UINT32_EXCE;
-    uint32 col_loc = UINT32_EXCE;
-    uint32 tex_loc = UINT32_EXCE;
-    uint32 tgt_loc = UINT32_EXCE;
-    uint32 bin_loc = UINT32_EXCE;
-    uint32 epw_loc = UINT32_EXCE;
-    for (uint32 i = 0; i < VertexDecl_count(dec); i++)
+    euint32 pos_loc = UINT32_EXCE;
+    euint32 nor_loc = UINT32_EXCE;
+    euint32 col_loc = UINT32_EXCE;
+    euint32 tex_loc = UINT32_EXCE;
+    euint32 tgt_loc = UINT32_EXCE;
+    euint32 bin_loc = UINT32_EXCE;
+    euint32 epw_loc = UINT32_EXCE;
+    for (euint32 i = 0; i < VertexDecl_count(dec); i++)
     {
         VertexElement element = VertexDecl_find(dec, i);
         if (!VertexElement_is_null(element))
@@ -523,7 +523,7 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_i
         }
     }
     glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer_get_id(_vbf));
-    for (uint32 i = 0; i < VertexDecl_count(dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(dec); i++)
     {
         VertexElement element = VertexDecl_find(dec, i);
         if (!VertexElement_is_null(element))
@@ -649,7 +649,7 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_i
         Pass_clear_param(_self);
     }
 
-    for (uint32 i = 0; i < VertexDecl_count(dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(dec); i++)
     {
         VertexElement element = VertexDecl_find(dec, i);
         {

@@ -8,13 +8,13 @@ typedef struct _shader_object
 {
     shader_object_type type;
     const char* name_string;
-    uint32 array_size;
-    uint32 array_index;
+    euint32 array_size;
+    euint32 array_index;
 } shader_object;
 
 ///==============================ShaderObject========================================///
 #define ShaderObject_Init(s, t, n, as) _ShaderObject_Init(s, t, n, as, __FILE__, __LINE__)
-shader_object* _ShaderObject_Init(struct _shader_object* _so, shader_object_type _type, const char* _name, uint32 _array_size,
+shader_object* _ShaderObject_Init(struct _shader_object* _so, shader_object_type _type, const char* _name, euint32 _array_size,
                                   const char* _file, euint _line)
 {
     _so->type = _type;
@@ -27,7 +27,7 @@ void ShaderObject_Dest(shader_object* _so)
 {
     EString_delete(_so->name_string);
 }
-ShaderObject _ShaderObject_new(shader_object_type _type, const char* _name, uint32 _array_size, const char* _file, euint _line)
+ShaderObject _ShaderObject_new(shader_object_type _type, const char* _name, euint32 _array_size, const char* _file, euint _line)
 {
     ShaderObject ret;
     ret.self = (struct _shader_object*)_Malloc(sizeof(shader_object), _file, _line);
@@ -87,13 +87,13 @@ const char* ShaderObject_get_name(ShaderObject _so)
 {
     return _so.self->name_string;
 }
-void ShaderObject_set_type(ShaderObject _so, shader_object_type _type, uint32 _array_size, uint32 _array_index)
+void ShaderObject_set_type(ShaderObject _so, shader_object_type _type, euint32 _array_size, euint32 _array_index)
 {
     _so.self->array_size = _array_size;
     _so.self->array_index = _array_index;
     _so.self->type = _type;
 }
-void ShaderObject_set_index(ShaderObject _so, uint32 _array_index)
+void ShaderObject_set_index(ShaderObject _so, euint32 _array_index)
 {
     _so.self->array_index = _array_index;
 }
@@ -149,7 +149,7 @@ _INLINE_ shader_object_type _get_min_type(component_index _comp_idx)
 	}
 	return t;
 }
-ShaderObject ShaderObject_get_component(ShaderObject _so, component_index _comp_idx, uint32 _array_idx)
+ShaderObject ShaderObject_get_component(ShaderObject _so, component_index _comp_idx, euint32 _array_idx)
 {
     ShaderObject ret = {NULL};
     

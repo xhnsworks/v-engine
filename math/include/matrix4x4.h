@@ -111,8 +111,8 @@ Matrix4x4Array Matrix4x4Array_new();
 void Matrix4x4Array_delete(Matrix4x4Array _m4_array);
 void Matrix4x4Array_push(Matrix4x4Array _m4_array, matrix4x4* _mt4);
 matrix4x4* Matrix4x4Array_pop(Matrix4x4Array _m4_array);
-matrix4x4* Matrix4x4Array_get(Matrix4x4Array _m4_array, uint32 _i);
-uint32 Matrix4x4Array_get_size(Matrix4x4Array _m4_array);
+matrix4x4* Matrix4x4Array_get(Matrix4x4Array _m4_array, euint32 _i);
+euint32 Matrix4x4Array_get_size(Matrix4x4Array _m4_array);
 float* Matrix4x4Array_get_ptr(Matrix4x4Array _m4_array);
 void Matrix4x4Array_export(Matrix4x4Array _m4_array, float* _ret);
 **/

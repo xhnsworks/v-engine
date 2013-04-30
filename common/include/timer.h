@@ -22,7 +22,7 @@ inline double s_to_us(double s)
 #ifdef  __GNUC__
 __inline__ uint64 perf_counter(void)
 {
-	uint32 lo, hi;
+	euint32 lo, hi;
 	// take time stamp counter, rdtscp does serialize by itself, and is much cheaper than using CPUID
 	__asm__ __volatile__ (
 		"rdtscp" : "=a"(lo), "=d"(hi)
@@ -68,7 +68,6 @@ struct TimeCheckpoint
 	}
 };
 #elif defined (__APPLE__)
-#define _POSIX_C_SOURCE
 #include <CoreServices/CoreServices.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>

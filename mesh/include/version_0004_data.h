@@ -5,16 +5,16 @@
 #include "matrix4x4.h"
 struct version_0004_data
 {
-    uint32 face_count;
-    uint32 indexed_vtx_count;
-    uint32* indexs;
-    uint32 vtx_count;
+    euint32 face_count;
+    euint32 indexed_vtx_count;
+    euint32* indexs;
+    euint32 vtx_count;
     float* vtx_pos;
     float* vtx_nor;
     float* vtx_uv;
     float* vtx_tgt;
     float* vtx_binor;
-    uint32 has_uv;
+    euint32 has_uv;
 };
 void version_0004_Dest(struct version_0004_data* data);
 void version_0004_load(FILE* fp, struct version_0004_data* data);

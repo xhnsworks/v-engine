@@ -2,5 +2,5 @@
 #define HASH_H
 #include "common.h"
 #include "etypes.h"
-uint32 calc_hashnr(const char *key, uint32 length);
+euint32 calc_hashnr(const char *key, euint32 length);
 #endif

@@ -22,8 +22,8 @@ API_EXPORT void printFramebufferInfo();
 API_EXPORT bool checkFramebufferStatus();
 API_EXPORT void _error_proc(const char* _file, euint _line);
 #define ERROR_PROC _error_proc(__FILE__, __LINE__)
-API_EXPORT void _shader_log(const char* _file, euint _line, uint32 _id);
-API_EXPORT void _program_log(const char* _file, euint _line, uint32 _id);
+API_EXPORT void _shader_log(const char* _file, euint _line, euint32 _id);
+API_EXPORT void _program_log(const char* _file, euint _line, euint32 _id);
 #define shader_log(id) _shader_log(__FILE__, __LINE__, id)
 #define program_log(id) _program_log(__FILE__, __LINE__, id)
 #endif

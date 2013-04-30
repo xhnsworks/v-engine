@@ -89,7 +89,7 @@ ShaderNode create_lighting_vertex_shader_node(VertexDecl _dec)
                                       "    gl_Position = pos;\n"
                                       "    vPosition = pos;\n");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
@@ -146,7 +146,7 @@ VtxSdrBuf create_lighting_vertex_shader_buffer(VertexDecl _dec)
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
 
@@ -159,7 +159,7 @@ VtxSdrBuf create_lighting_vertex_shader_buffer(VertexDecl _dec)
         {
             IVtxSdrBuf.add_attribute(ret, sem, sem_type);
             const char* vary_str = EString_add(prefix, sem_str);
-            sint32 src = get_param_source(sem);
+            esint32 src = get_param_source(sem);
             IVtxSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
             EString_delete(vary_str);
         }
@@ -182,14 +182,14 @@ PxlSdrBuf create_lighting_pixel_shader_buffer(Renderer _rdr, VertexDecl _dec, bo
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
         const char* sem_str = get_element_semantic_string(sem);
         param_type pam_type = get_element_param_type(sem);
         const char* vary_str = EString_add(prefix, sem_str);
-        sint32 src = get_param_source(sem);
+        esint32 src = get_param_source(sem);
         IPxlSdrBuf.add_varying(ret, pam_type, vary_str, src);
         EString_delete(vary_str);
     }
@@ -365,7 +365,7 @@ void ParamTable_delete(ParamTable _self)
     Tree_Dest(_self.param_entries);
     ///Efree(_self.param_entries);
 }
-void ParamTable_add_entry(ParamTable _self, const char* _name, sint32 _src)
+void ParamTable_add_entry(ParamTable _self, const char* _name, esint32 _src)
 {
     var key, data;
     key.str_var = _name;

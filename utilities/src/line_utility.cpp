@@ -94,7 +94,7 @@ void LineDrawer_update(LineDrawer _self)
 	EFloat3* pos_stream = ENEW_ARRAY EFloat3[n * 2];
 	EFloat4* col_stream = ENEW_ARRAY EFloat4[n * 2];
 	EFloat3* nor_stream = ENEW_ARRAY EFloat3[n * 2];
-    uint32* idx_stream = (uint32*)SMalloc(sizeof(uint32) * n * 2);
+    euint32* idx_stream = (euint32*)SMalloc(sizeof(euint32) * n * 2);
     euint count = 0;
     MeshPtr m = Mesh_new();
     for (euint i = 0; i < n; i++)

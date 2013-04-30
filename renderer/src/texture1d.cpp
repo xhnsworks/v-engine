@@ -5,10 +5,10 @@
 #include "emem.h"
 typedef struct _texture1d
 {
-    uint32 id;
+    euint32 id;
     pixel_format format;
-    uint32 width;
-    uint32 have_image;
+    euint32 width;
+    euint32 have_image;
     vptr pxl_buffer;
 } texture1d;
 
@@ -106,7 +106,7 @@ void Texture1D_updata(Texture1D _tex)
     }
 }
 
-void Texture1D_create(Texture1D _tex, pixel_format _fmt, uint32 _w)
+void Texture1D_create(Texture1D _tex, pixel_format _fmt, euint32 _w)
 {
     _tex->format = _fmt;
     _tex->width = _w;
@@ -114,7 +114,7 @@ void Texture1D_create(Texture1D _tex, pixel_format _fmt, uint32 _w)
     Texture1D_updata(_tex);
 }
 
-void Texture1D_load_from_mem(Texture1D _tex, vptr _mem, pixel_format _fmt, uint32 _w)
+void Texture1D_load_from_mem(Texture1D _tex, vptr _mem, pixel_format _fmt, euint32 _w)
 {
     _tex->format = _fmt;
     _tex->width = _w;
@@ -132,7 +132,7 @@ void Texture1D_unbind()
     glBindTexture(GL_TEXTURE_1D, 0);
 }
 
-uint32 Texture1D_get_id(Texture1D _tex)
+euint32 Texture1D_get_id(Texture1D _tex)
 {
     return _tex->id;
 }

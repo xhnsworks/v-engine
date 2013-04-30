@@ -70,7 +70,7 @@ typedef struct _collada_state
     Tree sem_stream_tree;
     index_element* idx_eles;
     euint num_tri;
-    uint32* idx_stream;
+    euint32* idx_stream;
 } collada_state;
 
 ColladaState ColladaState_new()
@@ -81,7 +81,7 @@ ColladaState ColladaState_new()
     index_element null_idx_ele = {ColladaEmptySemantic, 0};
     ret->idx_eles = array_new(index_element, 5, null_idx_ele);
     ret->num_tri = 0;
-    ret->idx_stream = array_new(uint32, 100, 0xffffffff);
+    ret->idx_stream = array_new(euint32, 100, 0xffffffff);
     return ret;
 }
 /**
@@ -251,7 +251,7 @@ void _parse_float_array(const char* str, FloatStream result)
 	}
 }
 
-uint32* _parse_p(const char* str, uint32* result)
+euint32* _parse_p(const char* str, euint32* result)
 {
 	euint count = 0;
 	xhn::vector< char, xhn::FGetCharRealSizeProc<char> > tmp;
@@ -344,7 +344,7 @@ void ColladaState_load_mesh2(ColladaState _self, const char* filepath)
                 mxml_node_t* child = p->child;
                 while (child)
                 {
-					uint32 v = atoi(child->value.text.string);
+					euint32 v = atoi(child->value.text.string);
                     apush(_self->idx_stream, v);
                     child = mxmlWalkNext(child, p, MXML_DESCEND);
                 }
@@ -422,7 +422,7 @@ void ColladaState_load_mesh(ColladaState _self, const char* filepath)
 	}
 }
 
-const char* _get_collada_sem_str(uint32 sem)
+const char* _get_collada_sem_str(euint32 sem)
 {
     switch (sem)
     {
@@ -447,7 +447,7 @@ void ColladaState_log(ColladaState _self)
     {
         var key = Tree_get_key(iter);
         var data = Tree_get_value(iter);
-        uint32 sem = key.uint32_var;
+        euint32 sem = key.uint32_var;
         FloatStream s = (FloatStream)data.vptr_var;
         elog("%s", _get_collada_sem_str(sem));
         FloatStream_log(s);
@@ -553,30 +553,30 @@ Mesh ColladaState_create_mesh(ColladaState _self)
         break;
     }
 
-    ///uint32* idx_src = _self->idx_stream;
+    ///euint32* idx_src = _self->idx_stream;
     euint stride_idx = array_n(_self->idx_eles);
     ///euint num_tri = _self->num_tri;
-    ///uint32* idx_stream = SMalloc(sizeof(uint32) * 3 * num_tri);
+    ///euint32* idx_stream = SMalloc(sizeof(euint32) * 3 * num_tri);
 
     float* pos_stream = (float*)SMalloc(sizeof(float) * 3 * num_vtx);
     float* tex_stream = (float*)SMalloc(sizeof(float) * 2 * num_vtx);
     float* nor_stream = (float*)SMalloc(sizeof(float) * 3 * num_vtx);
-    uint32* idx_src = _self->idx_stream;
+    euint32* idx_src = _self->idx_stream;
 
     euint num_tri = _self->num_tri;
-    uint32* idx_stream = (uint32*)SMalloc(sizeof(uint32) * 3 * num_tri);
+    euint32* idx_stream = (euint32*)SMalloc(sizeof(euint32) * 3 * num_tri);
 
     memset(pos_stream, 0, sizeof(float) * 3 * num_vtx);
     memset(tex_stream, 0, sizeof(float) * 2 * num_vtx);
     memset(nor_stream, 0, sizeof(float) * 3 * num_vtx);
-    memset(idx_stream, 0, sizeof(sizeof(uint32) * 3 * num_tri));
+    memset(idx_stream, 0, sizeof(sizeof(euint32) * 3 * num_tri));
 
     struct idx_group
     {
-        uint32 idx_base;
-        uint32 idx_pos;
-        uint32 idx_tex;
-        uint32 idx_nor;
+        euint32 idx_base;
+        euint32 idx_pos;
+        euint32 idx_tex;
+        euint32 idx_nor;
     };
 	/**
     struct idx_group _get_idx_group(euint i, euint idx_tri_vtx)

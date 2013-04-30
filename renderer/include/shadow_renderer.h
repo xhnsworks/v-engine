@@ -17,7 +17,7 @@ public:
     SketchBook depth_sketch_book;
     SketchBookConfig depth_sketch_cfg;
     SketchCube blurred_depth_sketch_cube;
-    uint32 blurred_depth_sketch_cube_size;
+    euint32 blurred_depth_sketch_cube_size;
     Pass blur_pass;
 
     blurred_sketch_book *blurred_sketch_books;

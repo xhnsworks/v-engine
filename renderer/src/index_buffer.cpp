@@ -6,12 +6,12 @@
 
 typedef struct _index_buffer
 {
-    uint32 id;
+    euint32 id;
     char* index_buffer;
-    uint32 face_size;
-    uint32 index_buffer_size;
-    uint32 index_buffer_tail;
-    uint32 dirty_flag;
+    euint32 face_size;
+    euint32 index_buffer_size;
+    euint32 index_buffer_tail;
+    euint32 dirty_flag;
     e_mesh_mode mesh_mode;
 } index_buffer;
 
@@ -62,12 +62,12 @@ vptr IndexBuffer_insert(IndexBuffer _self, unsigned int _i)
     return _self->index_buffer + _self->face_size * _i;
 }
 
-uint32 IndexBuffer_get_id(IndexBuffer _self)
+euint32 IndexBuffer_get_id(IndexBuffer _self)
 {
     return _self->id;
 }
 /**
-uint32 IndexBuffer_get_buffer_size(IndexBuffer _self)
+euint32 IndexBuffer_get_buffer_size(IndexBuffer _self)
 {
     return _self->index_buffer_size;
 }
@@ -86,15 +86,15 @@ void _IndexBuffer_grow_up(IndexBuffer _self, euint num_faces)
     }
 }
 
-uint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf)
+euint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf)
 {
     euint num_faces = Mesh_get_face_count(_mesh);
     _IndexBuffer_grow_up(_self, num_faces);
 
-    uint32 tail = _self->index_buffer_tail;
-    uint32* idx = Mesh_get_index(_mesh);
-    uint32* ibf = (uint32*)((ref_ptr)_self->index_buffer + (ref_ptr)(tail * _self->face_size));
-    uint32 i = 0;
+    euint32 tail = _self->index_buffer_tail;
+    euint32* idx = Mesh_get_index(_mesh);
+    euint32* ibf = (euint32*)((ref_ptr)_self->index_buffer + (ref_ptr)(tail * _self->face_size));
+    euint32 i = 0;
     if (_self->mesh_mode == Triangular)
     {
         euint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);

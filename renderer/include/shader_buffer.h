@@ -15,7 +15,7 @@ typedef struct _shader_buffer
     Tree shader_object_tree;
     ShaderObject* imme_shader_objects;
     s_circuit_board circuit_board;
-    /// key: sint32, data: ShaderObject
+    /// key: esint32, data: ShaderObject
     Tree param_src_obj_tree;
     char* function;
     char* main;
@@ -34,15 +34,15 @@ typedef struct _shader_buffer* ShaderBuffer;
 API_EXPORT shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, euint _line);
 API_EXPORT void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, euint _line);
 API_EXPORT void ShaderBuffer_complete(struct _shader_buffer* _buf);
-API_EXPORT ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const char* _vary, sint32 _src);
-API_EXPORT ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, uint32 _array_size, sint32 _src,
+API_EXPORT ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const char* _vary, esint32 _src);
+API_EXPORT ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
                                                   const char* _file, euint _line);
 #define ShaderBuffer_add_uniform(s, t, u, as, ps) _ShaderBuffer_add_uniform(s, t, u, as, ps, __FILE__, __LINE__)
 
-API_EXPORT ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, sint32 _id, const char* _unif,
+API_EXPORT ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
                                                                 const char* _file, euint _line);
 #define ShaderBuffer_add_uniform_from_renderer(s, r, i, u) _ShaderBuffer_add_uniform_from_renderer(s, r, i, u, __FILE__, __LINE__)
-API_EXPORT ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, uint32 _array_size);
+API_EXPORT ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_float_object(ShaderBuffer _sb, float _ft);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_int_object(ShaderBuffer _sb, int _i);
 API_EXPORT ShaderObject ShaderBuffer_sample_texture2d_rgba(ShaderBuffer _sb, ShaderObject _tex, ShaderObject _uv);

@@ -64,24 +64,24 @@ public:
 class Texture2D : public RefObject
 {
 public:
-	uint32 id;
+	euint32 id;
 	pixel_format format;
-	uint32 width;
-	uint32 height;
+	euint32 width;
+	euint32 height;
 	xhn::void_vector pxl_buffer;
-	uint32 is_locked;
+	euint32 is_locked;
 	static bool s_sub_update_enable;
 public:
 	Texture2D();
 	~Texture2D();
-	void Create(pixel_format _fmt, uint32 _w, uint32 _h);
-	void LoadFromMem(vptr _mem, pixel_format _fmt, uint32 _w, uint32 _h, uint32 _size_in_byte, bool is_compressed);
+	void Create(pixel_format _fmt, euint32 _w, euint32 _h);
+	void LoadFromMem(vptr _mem, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _size_in_byte, bool is_compressed);
 	void LoadFromColor(const EColor& _color);
 	void Bind();
 	static void Unbind();
 	void Update(bool is_compressed);
 	void SubUpdate(Tex2DLockedRect* rect);
-	inline uint32 GetID() const {
+	inline euint32 GetID() const {
 		return id;
 	}
 	inline euint GetWidth() const {

@@ -75,7 +75,7 @@ MeshTriangleArray MeshEdgeTriangleTree_find_triangles(Tree self, MeshEdge e)
     return tri_array;
 }
 
-void MeshEdge_get_vertexs(MeshEdge self, uint32* vtx0, uint32* vtx1)
+void MeshEdge_get_vertexs(MeshEdge self, euint32* vtx0, euint32* vtx1)
 {
     *vtx0 = self->vtx0;
     *vtx1 = self->vtx1;

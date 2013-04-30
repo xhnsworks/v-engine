@@ -28,7 +28,7 @@ API_EXPORT void Pass_delete(Pass _self);
 API_EXPORT void Pass_set_vertex_shader(Pass _self, Shader _sdr);
 API_EXPORT void Pass_set_pixel_shader(Pass _self, Shader _sdr);
 
-API_EXPORT void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, uint32 _num_idxs, e_mesh_mode _mode, const char* _file, euint _line);
+API_EXPORT void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_idxs, e_mesh_mode _mode, const char* _file, euint _line);
 #define Pass_render(s, v, i, n, m) _Pass_render(s, v, i, n, m, __FILE__, __LINE__)
 API_EXPORT void _Pass_render_plane(Pass _self, RenderablePlane _pln, const char* _file, euint _line);
 #define Pass_render_plane(s, p) _Pass_render_plane(s, p, __FILE__, __LINE__)

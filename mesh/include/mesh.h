@@ -13,7 +13,7 @@
 class mesh : public RefObject
 {
 public:
-    uint32 version;
+    euint32 version;
     const char* file;
     euint line;
     struct version_0007_data data;
@@ -40,8 +40,8 @@ _INLINE_ struct version_0007_data* _Mesh_get_data_0007(Mesh _mesh)
 
 typedef struct _mesh_edge
 {
-    uint32 vtx0;
-    uint32 vtx1;
+    euint32 vtx0;
+    euint32 vtx1;
 } mesh_edge;
 
 /// 每个三角形包括三条边，每条边包括key和非key两个部分
@@ -70,19 +70,19 @@ API_EXPORT float* Mesh_get_tangent(Mesh _mesh);
 API_EXPORT float* Mesh_get_binormal(Mesh _mesh);
 API_EXPORT float* Mesh_get_edge_proj_weight(Mesh _mesh);
 API_EXPORT float* Mesh_get_color(Mesh _mesh);
-API_EXPORT uint32* Mesh_get_index(Mesh _mesh);
-API_EXPORT uint32 Mesh_get_vertex_count(Mesh _mesh);
-API_EXPORT uint32 Mesh_get_face_count(Mesh _mesh);
+API_EXPORT euint32* Mesh_get_index(Mesh _mesh);
+API_EXPORT euint32 Mesh_get_vertex_count(Mesh _mesh);
+API_EXPORT euint32 Mesh_get_face_count(Mesh _mesh);
 API_EXPORT e_mesh_mode Mesh_get_mode(Mesh _mesh);
-API_EXPORT uint32 face_size(e_mesh_mode mesh_mode);
+API_EXPORT euint32 face_size(e_mesh_mode mesh_mode);
 API_EXPORT void Mesh_build(Mesh _mesh,
                            float* pos_stream, float* uv_stream, float* nor_stream, euint num_vtxs,
-                           uint32* idx_stream, euint num_faces,
+                           euint32* idx_stream, euint num_faces,
                            e_mesh_mode mesh_mode);
 API_EXPORT void Mesh_build2(Mesh _mesh,
                            float* pos_stream, float* uv_stream, float* nor_stream, float* col_stream,
                            euint num_vtxs,
-                           uint32* idx_stream, euint num_faces,
+                           euint32* idx_stream, euint num_faces,
                            e_mesh_mode mesh_mode);
 API_EXPORT void Mesh_fill_epw(Mesh _mesh, float* _epw_stream);
 API_EXPORT Mesh Mesh_build_volume(Mesh _mesh);

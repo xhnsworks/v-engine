@@ -32,7 +32,7 @@ element_semantic _get_ele_sem(char c)
 }
 element_type _get_ele_type(const char* str, char** next)
 {
-    uint32 ret = 0;
+    euint32 ret = 0;
     switch (str[0])
     {
     case 'f':
@@ -172,12 +172,12 @@ void VertexDecl_add_element(VertexDecl _dec, VertexElement _ele)
     _dec->num_elements = array_n(_dec->elements);
 }
 
-uint32 VertexDecl_count(VertexDecl _dec)
+euint32 VertexDecl_count(VertexDecl _dec)
 {
     return array_n(_dec->elements);
 }
 
-VertexElement VertexDecl_find(VertexDecl _dec, uint32 _i)
+VertexElement VertexDecl_find(VertexDecl _dec, euint32 _i)
 {
     return array_safe_get(_dec->elements, _i);
 }

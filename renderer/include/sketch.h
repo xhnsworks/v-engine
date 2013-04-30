@@ -41,7 +41,7 @@ API_EXPORT euint SketchBookConfig_get_width(SketchBookConfig _self);
 API_EXPORT euint SketchBookConfig_get_height(SketchBookConfig _self);
 API_EXPORT pixel_format SketchBookConfig_get_sketch_format(SketchBookConfig _self, euint _idx);
 
-///API_EXPORT SketchBook SketchBook_new(uint32 _width, uint32 _height);
+///API_EXPORT SketchBook SketchBook_new(euint32 _width, euint32 _height);
 API_EXPORT SketchBook SketchBook_new(SketchBookConfig _cfg);
 API_EXPORT void SketchBook_delete(SketchBook _self);
 API_EXPORT void SketchBook_draw_begin(SketchBook _self, euint _use_skhs);

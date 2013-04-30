@@ -47,8 +47,8 @@ Texture2DPtr _create_texture_from_file(FILE* file_stream)
 
     if (to_ptr(img))
     {
-        uint32 h = Image_get_num_rows(img);
-        uint32 w = Image_get_row_width(img);
+        euint32 h = Image_get_num_rows(img);
+        euint32 w = Image_get_row_width(img);
         pixel_format fmt = Image_get_pixel_format(img);
         Texture2DPtr tex = ENEW Texture2D;
         vptr pxls = Image_get_row(img, 0);

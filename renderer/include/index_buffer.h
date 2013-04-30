@@ -25,9 +25,9 @@ API_EXPORT void _IndexBuffer_delete(IndexBuffer _self, const char* _file, euint 
 #define IndexBuffer_delete(b) _IndexBuffer_delete(b, __FILE__, __LINE__)
 API_EXPORT bool IndexBuffer_read(IndexBuffer _self, unsigned int _i, vptr _result);
 API_EXPORT vptr IndexBuffer_insert(IndexBuffer _self, unsigned int _i);
-API_EXPORT uint32 IndexBuffer_get_id(IndexBuffer _self);
-///API_EXPORT uint32 IndexBuffer_get_buffer_size(IndexBuffer _self);
-API_EXPORT uint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf);
+API_EXPORT euint32 IndexBuffer_get_id(IndexBuffer _self);
+///API_EXPORT euint32 IndexBuffer_get_buffer_size(IndexBuffer _self);
+API_EXPORT euint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf);
 API_EXPORT void IndexBuffer_buffer_data(IndexBuffer _self);
 API_EXPORT euint IndexBuffer_get_num_faces(IndexBuffer _self);
 API_EXPORT euint IndexBuffer_get_face_size(IndexBuffer _self);

@@ -13,7 +13,7 @@
 #include "eassert.h"
 #include "xhn_vector.hpp"
 
-static uint32 g_render_buffer_id = 0xffffffff;
+static euint32 g_render_buffer_id = 0xffffffff;
 
 typedef struct _renderable_plane
 {
@@ -116,13 +116,13 @@ RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char
         fcolor[3] = 1.0;
     }
 
-    ///uint32* idx = IndexBuffer_get_buffer(_self->ibf);
-    uint32* idx = (uint32*)IndexBuffer_insert(_self->ibf, 0);
+    ///euint32* idx = IndexBuffer_get_buffer(_self->ibf);
+    euint32* idx = (euint32*)IndexBuffer_insert(_self->ibf, 0);
     idx[0] = 0;
     idx[1] = 1;
     idx[2] = 2;
 
-    idx = (uint32*)IndexBuffer_insert(_self->ibf, 1);
+    idx = (euint32*)IndexBuffer_insert(_self->ibf, 1);
     idx[0] = 0;
     idx[1] = 2;
     idx[2] = 3;
@@ -165,15 +165,15 @@ struct sketch_book : public MemObject
 {
 	~sketch_book();
     ///RenderablePlane screen_plane;
-    uint32 frame_buffer_id;
+    euint32 frame_buffer_id;
 
     ///Texture2DPtr* sketchs;
 	xhn::vector<Texture2DPtr> sketchs;
     Texture2DPtr plaster;
 
-    uint32 curt_used_skhs;
-    uint32 width;
-    uint32 height;
+    euint32 curt_used_skhs;
+    euint32 width;
+    euint32 height;
 };
 
 typedef struct _sketch_book_config
@@ -188,12 +188,12 @@ typedef struct _sketch_book_config
 typedef struct _sketch_cube
 {
     ///RenderablePlane screen_plane;
-    ///uint32 frame_buffer_id;
-    uint32 frame_buffer_ids[6];
+    ///euint32 frame_buffer_id;
+    euint32 frame_buffer_ids[6];
 
     TextureCube sketch;
 
-    uint32 size;
+    euint32 size;
 } sketch_cube;
 
 void SketchBookConfig_Init(SketchBookConfig _self)

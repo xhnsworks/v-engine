@@ -57,6 +57,6 @@ namespace GLSL
 	int yylex(GLSLSymbolValue *lvalp, GLSLParserEnv* e);
 	void yyerror(GLSLParserEnv* e, const char* error);
 	void test();
-}
+};
 
 #endif

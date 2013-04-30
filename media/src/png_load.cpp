@@ -5,6 +5,8 @@
 static FILE* g_file_ptr = NULL;
 static void** g_buffer_array = NULL;
 
+#ifndef __APPLE__
+#include "png.h"
 void png_chunk_dest(vptr _p)
 {
     printf("png_chunk_dest\n");
@@ -47,13 +49,13 @@ Image png_load(FILE* file_stream)
 {
 	g_file_ptr = file_stream;
     g_buffer_array = array_new(void*, 100, NULL);
-    uint32 width;
-    uint32 height;
-    sint32 bit_depth;
-    sint32 color_type;
-    sint32 interlace_type;
-    sint32 compression_type;
-    sint32 filter_type;
+    euint32 width;
+    euint32 height;
+    esint32 bit_depth;
+    esint32 color_type;
+    esint32 interlace_type;
+    esint32 compression_type;
+    esint32 filter_type;
 
     png_structp png_ptr = png_create_read_struct_2
                   (PNG_LIBPNG_VER_STRING, (png_voidp)NULL,
@@ -69,7 +71,7 @@ Image png_load(FILE* file_stream)
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type,
                  &interlace_type, &compression_type, &filter_type);
 
-    uint8** rows = (uint8**)png_get_rows(png_ptr, info_ptr);
+    euint8** rows = (euint8**)png_get_rows(png_ptr, info_ptr);
 
     fclose(g_file_ptr);
     g_file_ptr = NULL;
@@ -83,12 +85,12 @@ Image png_load(FILE* file_stream)
         case PNG_COLOR_TYPE_RGB:
             {
                 ret = Image_new(RGB8, width, height);
-                for (uint32 y = 0; y < height; y++)
+                for (euint32 y = 0; y < height; y++)
                 {
-                    uint8* row = rows[y];
-                    for (uint32 x = 0; x < width; x++)
+                    euint8* row = rows[y];
+                    for (euint32 x = 0; x < width; x++)
                     {
-                        uint8* pxl = (uint8*)Image_get_pixel(ret, x, y);
+                        euint8* pxl = (euint8*)Image_get_pixel(ret, x, y);
                         pxl[0] = row[x * 3];
                         pxl[1] = row[x * 3 + 1];
                         pxl[2] = row[x * 3 + 2];
@@ -99,12 +101,12 @@ Image png_load(FILE* file_stream)
         case PNG_COLOR_TYPE_RGB_ALPHA:
             {
                 ret = Image_new(RGBA8, width, height);
-                for (uint32 y = 0; y < height; y++)
+                for (euint32 y = 0; y < height; y++)
                 {
-                    uint8* row = rows[y];
-                    for (uint32 x = 0; x < width; x++)
+                    euint8* row = rows[y];
+                    for (euint32 x = 0; x < width; x++)
                     {
-                        uint8* pxl = (uint8*)Image_get_pixel(ret, x, y);
+                        euint8* pxl = (euint8*)Image_get_pixel(ret, x, y);
                         pxl[0] = row[x * 4];
                         pxl[1] = row[x * 4 + 1];
                         pxl[2] = row[x * 4 + 2];
@@ -138,3 +140,15 @@ Image png_load(const char* _file_name)
 	FILE* fp = SafeFOpen(_file_name, "rb");
 	return png_load(fp);
 }
+#else
+Image png_load(FILE* file_stream)
+{
+    Image ret;
+    return ret;
+}
+Image png_load(const char* _file_name)
+{
+    Image ret;
+    return ret;
+}
+#endif

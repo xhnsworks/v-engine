@@ -94,15 +94,15 @@ float* Mesh_get_color(Mesh _mesh)
 {
     return _Mesh_get_data_0007(_mesh)->vtx_col;
 }
-uint32* Mesh_get_index(Mesh _mesh)
+euint32* Mesh_get_index(Mesh _mesh)
 {
     return _Mesh_get_data_0004(_mesh)->indexs;
 }
-uint32 Mesh_get_vertex_count(Mesh _mesh)
+euint32 Mesh_get_vertex_count(Mesh _mesh)
 {
     return _Mesh_get_data_0004(_mesh)->vtx_count;
 }
-uint32 Mesh_get_face_count(Mesh _mesh)
+euint32 Mesh_get_face_count(Mesh _mesh)
 {
     return _Mesh_get_data_0004(_mesh)->face_count;
 }
@@ -110,15 +110,15 @@ e_mesh_mode Mesh_get_mode(Mesh _mesh)
 {
     return _Mesh_get_data_0005(_mesh)->mesh_mode;
 }
-uint32 face_size(e_mesh_mode mesh_mode)
+euint32 face_size(e_mesh_mode mesh_mode)
 {
     if (mesh_mode == Triangular)
     {
-        return sizeof(uint32) * 3;
+        return sizeof(euint32) * 3;
     }
     else
     {
-        return sizeof(uint32) * 2;
+        return sizeof(euint32) * 2;
     }
 }
 
@@ -135,13 +135,13 @@ void Mesh_load_form_file(Mesh _mesh, const char* _file_name)
         return;
     }
 
-    uint32 word;
+    euint32 word;
     /// Version
 
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     _mesh->version = word;
     printf("ogl version %d\n", _mesh->version);
-    if ((uint16)word == 0x0004)
+    if ((euint16)word == 0x0004)
     {
         version_0004_load(fp, _Mesh_get_data_0004(_mesh));
         if (_Mesh_get_data_0004(_mesh)->has_uv)
@@ -150,11 +150,11 @@ void Mesh_load_form_file(Mesh _mesh, const char* _file_name)
         }
         _Mesh_get_data_0005(_mesh)->mesh_mode = Triangular;
     }
-    else if ((uint16)word == 0x0005)
+    else if ((euint16)word == 0x0005)
     {
         version_0005_load(fp, _Mesh_get_data_0005(_mesh));
     }
-    else if ((uint16)word == 0x0006)
+    else if ((euint16)word == 0x0006)
     {
         version_0006_load(fp, _Mesh_get_data_0006(_mesh));
     }
@@ -180,7 +180,7 @@ void _alloc_and_copy(void** p, void* s, euint size)
 
 void Mesh_build(Mesh _mesh,
                 float* pos_stream, float* uv_stream, float* nor_stream, euint num_vtxs,
-                uint32* idx_stream, euint num_faces,
+                euint32* idx_stream, euint num_faces,
                 e_mesh_mode mesh_mode)
 {
     TRY(0)
@@ -217,11 +217,11 @@ void Mesh_build(Mesh _mesh,
     switch (mesh_mode)
     {
     case Triangular:
-        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(uint32) * 3 * num_faces);
+        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(euint32) * 3 * num_faces);
         _Mesh_get_data_0004(_mesh)->indexed_vtx_count = num_faces * 3;
         break;
     case Segment:
-        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(uint32) * 2 * num_faces);
+        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(euint32) * 2 * num_faces);
         _Mesh_get_data_0004(_mesh)->indexed_vtx_count = num_faces * 2;
         break;
     }
@@ -256,7 +256,7 @@ void Mesh_build(Mesh _mesh,
 void Mesh_build2(Mesh _mesh,
                 float* pos_stream, float* uv_stream, float* nor_stream, float* col_stream,
                 euint num_vtxs,
-                uint32* idx_stream, euint num_faces,
+                euint32* idx_stream, euint num_faces,
                 e_mesh_mode mesh_mode)
 {
     _free_and_set_null((vptr*)&_Mesh_get_data_0004(_mesh)->vtx_pos);
@@ -286,11 +286,11 @@ void Mesh_build2(Mesh _mesh,
     switch (mesh_mode)
     {
     case Triangular:
-        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(uint32) * 3 * num_faces);
+        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(euint32) * 3 * num_faces);
         _Mesh_get_data_0004(_mesh)->indexed_vtx_count = num_faces * 3;
         break;
     case Segment:
-        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(uint32) * 2 * num_faces);
+        _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(euint32) * 2 * num_faces);
         _Mesh_get_data_0004(_mesh)->indexed_vtx_count = num_faces * 2;
         break;
     }
@@ -327,7 +327,7 @@ float* _stream_doubling(float* _stream, euint _cnt, euint _num_comp)
     return ret;
 }
 
-static inline void _fill_ext_idxs(euint i, uint32 e0, euint e1, euint vtx_cnt, uint32* idxs0, uint32* idxs1)
+static inline void _fill_ext_idxs(euint i, euint32 e0, euint e1, euint vtx_cnt, euint32* idxs0, euint32* idxs1)
 {
     idxs0[i * 3 + 0] = e1;
     idxs0[i * 3 + 1] = e0;
@@ -361,19 +361,19 @@ Mesh Mesh_build_volume(Mesh _mesh)
             base_epw_ptr1[i] = 1.0f;
         }
 
-        uint32* idx_buf = (uint32*)SMalloc(sizeof(uint32) * idx_count * 7);
-        uint32* base_idx_ptr0 = idx_buf;
+        euint32* idx_buf = (euint32*)SMalloc(sizeof(euint32) * idx_count * 7);
+        euint32* base_idx_ptr0 = idx_buf;
 
-        uint32* base_idx_ptr1 = &idx_buf[idx_count * 1];
-        uint32* base_idx_ptr2 = &idx_buf[idx_count * 2];
+        euint32* base_idx_ptr1 = &idx_buf[idx_count * 1];
+        euint32* base_idx_ptr2 = &idx_buf[idx_count * 2];
 
-        uint32* base_idx_ptr3 = &idx_buf[idx_count * 3];
-        uint32* base_idx_ptr4 = &idx_buf[idx_count * 4];
+        euint32* base_idx_ptr3 = &idx_buf[idx_count * 3];
+        euint32* base_idx_ptr4 = &idx_buf[idx_count * 4];
 
-        uint32* base_idx_ptr5 = &idx_buf[idx_count * 5];
-        uint32* base_idx_ptr6 = &idx_buf[idx_count * 6];
+        euint32* base_idx_ptr5 = &idx_buf[idx_count * 5];
+        euint32* base_idx_ptr6 = &idx_buf[idx_count * 6];
 
-        memcpy(base_idx_ptr0, _Mesh_get_data_0004(_mesh)->indexs, sizeof(uint32) * idx_count);
+        memcpy(base_idx_ptr0, _Mesh_get_data_0004(_mesh)->indexs, sizeof(euint32) * idx_count);
 
         EAssert( _Mesh_get_data_0004(_mesh)->face_count == _Mesh_get_data_0004(_mesh)->indexed_vtx_count / 3, "%s", "index count error!" );
         EAssert( 0 == _Mesh_get_data_0004(_mesh)->indexed_vtx_count % 3, "%s", "index count error!" );
@@ -381,9 +381,9 @@ Mesh Mesh_build_volume(Mesh _mesh)
         euint face_count = _Mesh_get_data_0004(_mesh)->face_count;
         for (euint i = 0; i < face_count; i++)
         {
-            uint32 vtx0 = base_idx_ptr0[i * 3 + 0];
-            uint32 vtx1 = base_idx_ptr0[i * 3 + 1];
-            uint32 vtx2 = base_idx_ptr0[i * 3 + 2];
+            euint32 vtx0 = base_idx_ptr0[i * 3 + 0];
+            euint32 vtx1 = base_idx_ptr0[i * 3 + 1];
+            euint32 vtx2 = base_idx_ptr0[i * 3 + 2];
 
             _fill_ext_idxs(i, vtx0, vtx1, vtx_count, base_idx_ptr1, base_idx_ptr2);
             _fill_ext_idxs(i, vtx1, vtx2, vtx_count, base_idx_ptr3, base_idx_ptr4);

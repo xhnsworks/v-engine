@@ -210,14 +210,14 @@ PxlSdrBuf create_display_pixel_shader_buffer(VertexDecl _dec)
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
         const char* sem_str = get_element_semantic_string(sem);
         param_type pam_type = get_element_param_type(sem);
         const char* vary_str = EString_add(prefix, sem_str);
-        sint32 src = get_param_source(sem);
+        esint32 src = get_param_source(sem);
         IPxlSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
         EString_delete(vary_str);
     }
@@ -245,14 +245,14 @@ PxlSdrBuf create_display_texture_pixel_shader_buffer(VertexDecl _dec)
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
         const char* sem_str = get_element_semantic_string(sem);
         param_type pam_type = get_element_param_type(sem);
         const char* vary_str = EString_add(prefix, sem_str);
-        sint32 src = get_param_source(sem);
+        esint32 src = get_param_source(sem);
         IPxlSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
         EString_delete(vary_str);
     }
@@ -273,14 +273,14 @@ PxlSdrBuf create_clear_buffer_buffer(VertexDecl _dec)
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
         const char* sem_str = get_element_semantic_string(sem);
         param_type pam_type = get_element_param_type(sem);
         const char* vary_str = EString_add(prefix, sem_str);
-        sint32 src = get_param_source(sem);
+        esint32 src = get_param_source(sem);
         IPxlSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
         EString_delete(vary_str);
     }

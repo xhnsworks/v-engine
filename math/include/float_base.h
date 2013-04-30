@@ -176,8 +176,8 @@ API_EXPORT void Float_Dest();
 
 API_EXPORT v128 __m128_alloc();
 
-API_EXPORT uint16 float32_to_float16(float f);
-API_EXPORT float float16_to_float32(uint16 f);
+API_EXPORT euint16 float32_to_float16(float f);
+API_EXPORT float float16_to_float32(euint16 f);
 
 ///typedef float EFloat;
 

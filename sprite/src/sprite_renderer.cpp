@@ -165,7 +165,7 @@ void SpriteRenderer::prepare_renderable(Renderable _rbl)
 	}
 }
 
-bool SpriteRenderer::is_uniform_param_source ( sint32 _src )
+bool SpriteRenderer::is_uniform_param_source ( esint32 _src )
 {
 	var key, data;
 	key.sint32_var = _src;
@@ -186,7 +186,7 @@ TextureCube SpriteRenderer::get_shadow_cube_map()
 {
 	return NULL;
 }
-renderer_param_value SpriteRenderer::get_shader_object_value ( sint32 _src )
+renderer_param_value SpriteRenderer::get_shader_object_value ( esint32 _src )
 {
 	var key, data;
 	key.sint32_var = _src;

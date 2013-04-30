@@ -158,11 +158,11 @@ public:
 		return curt_render_cam;
 	}
 
-    renderer_param_value get_shader_object_value ( sint32 _src );
-	renderer_param_value get_shader_object_value ( RendererBase* rdr, sint32 _src );
-    void register_renderer_param ( sint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc );
-    bool is_uniform_param_source ( sint32 _src );
-    RendererParamEntry get_param_entry ( sint32 _id );
+    renderer_param_value get_shader_object_value ( esint32 _src );
+	renderer_param_value get_shader_object_value ( RendererBase* rdr, esint32 _src );
+    void register_renderer_param ( esint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc );
+    bool is_uniform_param_source ( esint32 _src );
+    RendererParamEntry get_param_entry ( esint32 _id );
 
 	virtual Texture2DPtr get_shadow_map ( euint i ) {
         return shadow_state.get_shadow_map ( i );

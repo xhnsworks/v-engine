@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "hash.h"
-uint32 ELFHash( char   * str)
+euint32 ELFHash( char   * str)
 {
-    uint32  hash  =   0 ;
-    uint32  x     =   0 ;
+    euint32  hash  =   0 ;
+    euint32  x     =   0 ;
 
     while  ( * str)
     {
@@ -18,15 +18,15 @@ uint32 ELFHash( char   * str)
     return  (hash  &   0x7FFFFFFF );
 }
 
-uint32 calc_hashnr(const char *key, uint32 length)
+euint32 calc_hashnr(const char *key, euint32 length)
 {
 	if (!length)
 		return 0;
-    register uint32 nr=1, nr2=4;
+    register euint32 nr=1, nr2=4;
     while (length--)
     {
-        nr^= (((nr & 63)+nr2)*((uint32) (uint8) *key++))+ (nr << 8);
+        nr^= (((nr & 63)+nr2)*((euint32) (euint8) *key++))+ (nr << 8);
         nr2+=3;
     }
-    return((uint32) nr);
+    return((euint32) nr);
 }

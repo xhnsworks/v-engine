@@ -227,7 +227,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
     ShaderObject light_proj_mats[6];
     ShaderObject shadow_dirs[6];
 
-    if (_lt_state->type != Point)
+    if (_lt_state->type != PointType)
     {
         for (euint i = 0; i < _num_shadow_map; i++)
         {
@@ -326,7 +326,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 		ShaderNode_add_output_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
     }
     {
-        if (_lt_state->type != Point)
+        if (_lt_state->type != PointType)
         {
             if (_num_shadow_map == 1)
             {
@@ -379,7 +379,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderObject spe = ShaderObject_get_component(nor, idx, 0);
 
         ShaderNode lighting_node = ISdrNdGen.add_reference_node_2(_sng, _cb, _lt_state->lighting_node_id);
-        if (_lt_state->type == Direction)
+        if (_lt_state->type == DirectionType)
         {
             /**
             ShaderNode_add_input_param(ret, Float3_Obj, "InDiffuse", 1);
@@ -412,7 +412,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
             ShaderNode_add_output_link(lighting_node, diffuse, INVALID_ARRAY_INDEX);
             ShaderNode_add_output_link(lighting_node, specular, INVALID_ARRAY_INDEX);
         }
-        else if (_lt_state->type == Spot)
+        else if (_lt_state->type == SpotType)
         {
             /**
             ShaderNode_add_input_param(ret, Float3_Obj, "InDiffuse", 1);
@@ -455,7 +455,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
             ShaderNode_add_output_link(lighting_node, diffuse, INVALID_ARRAY_INDEX);
             ShaderNode_add_output_link(lighting_node, specular, INVALID_ARRAY_INDEX);
         }
-        else if (_lt_state->type == Point)
+        else if (_lt_state->type == PointType)
         {
             /**
             ShaderNode_add_input_param(ret, Float3_Obj, "InDiffuse", 1);
@@ -520,14 +520,14 @@ PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, 
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
         const char* sem_str = get_element_semantic_string(sem);
         param_type pam_type = get_element_param_type(sem);
         const char* vary_str = EString_add(prefix, sem_str);
-        sint32 src = get_param_source(sem);
+        esint32 src = get_param_source(sem);
         IPxlSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
         EString_delete(vary_str);
     }
@@ -560,7 +560,7 @@ PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, 
         IPxlSdrBuf.add_uniform_from_renderer((ShaderBuffer)ret, _rdr, SpecularLightingSketch, SPECULAR_LIGHTING_MAP);
     }
 
-    if (type != Point)
+    if (type != PointType)
     {
         for (euint i = 0; i < _num_shadow_map; i++)
         {

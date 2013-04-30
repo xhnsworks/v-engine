@@ -6,7 +6,7 @@
 
 typedef struct _shader
 {
-    uint32 id;
+    euint32 id;
     shader_type type;
 } shader;
 
@@ -36,14 +36,14 @@ shader_type Shader_get_type(Shader _sdr)
 {
     return _sdr.self->type;
 }
-uint32 Shader_get_id(Shader _sdr)
+euint32 Shader_get_id(Shader _sdr)
 {
     return _sdr.self->id;
 }
 
 void _Shader_load_from_string(const char* _file, euint _line, Shader _sdr, const char* _str, shader_type _type)
 {
-    uint32 p = 0;
+    euint32 p = 0;
     switch (_type)
     {
     case VertexShader:

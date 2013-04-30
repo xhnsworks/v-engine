@@ -82,7 +82,7 @@ ShaderNode create_std_vertex_shader_node(VertexDecl _dec, VtxSdrBuf _vsb,
     char* str = mbuf + count;
     int remainder = BUFFER_SIZE - 1 - count;
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
@@ -464,7 +464,7 @@ VtxSdrBuf create_std_vertex_shader_buffer(VertexDecl _dec, bool _use_proj_mat, b
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
     {
         VertexElement ele = VertexDecl_find(_dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
@@ -476,7 +476,7 @@ VtxSdrBuf create_std_vertex_shader_buffer(VertexDecl _dec, bool _use_proj_mat, b
         {
             IVtxSdrBuf.add_attribute(ret, sem, sem_type);
             const char* vary_str = EString_add(prefix, sem_str);
-            sint32 src = get_param_source(sem);
+            esint32 src = get_param_source(sem);
             ///ShaderBuffer_add_varying(sb, pam_type, vary_str, src);
             IVtxSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
             EString_delete(vary_str);
@@ -509,14 +509,14 @@ PxlSdrBuf create_std_pixel_shader_buffer(std_pass_status* _status)
 
     const char* prefix = EString_new("v");
 
-    for (uint32 i = 0; i < VertexDecl_count(_status->dec.dec); i++)
+    for (euint32 i = 0; i < VertexDecl_count(_status->dec.dec); i++)
     {
         VertexElement ele = VertexDecl_find(_status->dec.dec, i);
         element_semantic sem = VertexElement_get_semantic(ele);
         const char* sem_str = get_element_semantic_string(sem);
         param_type pam_type = get_element_param_type(sem);
         const char* vary_str = EString_add(prefix, sem_str);
-        sint32 src = get_param_source(sem);
+        esint32 src = get_param_source(sem);
         IPxlSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
         EString_delete(vary_str);
         if (sem == Position)

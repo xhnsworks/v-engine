@@ -6,15 +6,15 @@
 #include "etypes.h"
 
 API_EXPORT void VertexElement_Dest(VertexElement _ele);
-API_EXPORT VertexElement _VertexElement_new(element_type _typ, element_semantic _sem, const char* _file, uint32 _line);
-API_EXPORT void _VertexElement_delete(VertexElement _ele, const char* _file, uint32 _line);
+API_EXPORT VertexElement _VertexElement_new(element_type _typ, element_semantic _sem, const char* _file, euint32 _line);
+API_EXPORT void _VertexElement_delete(VertexElement _ele, const char* _file, euint32 _line);
 
-API_EXPORT uint32 get_element_size(element_type _type);
-API_EXPORT uint32 VertexElement_get_size(VertexElement _ele);
+API_EXPORT euint32 get_element_size(element_type _type);
+API_EXPORT euint32 VertexElement_get_size(VertexElement _ele);
 API_EXPORT element_type VertexElement_get_type(VertexElement _ele);
 API_EXPORT element_semantic VertexElement_get_semantic(VertexElement _ele);
-///API_EXPORT uint32 VertexElement_get_offset(VertexElement _ele);
-///API_EXPORT void VertexElement_set_offset(VertexElement _ele, uint32 _offset);
+///API_EXPORT euint32 VertexElement_get_offset(VertexElement _ele);
+///API_EXPORT void VertexElement_set_offset(VertexElement _ele, euint32 _offset);
 API_EXPORT bool VertexElement_is_null(VertexElement _ele);
 API_EXPORT VertexElement VertexElement_null();
 /// privite

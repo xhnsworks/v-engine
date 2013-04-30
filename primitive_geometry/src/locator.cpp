@@ -26,7 +26,7 @@ Mesh create_locator(EFloat3* pos, float radius)
     tmp = SFloat3_add(center, z_axis_disp);  SFloat3_export(tmp, &pos_stream[5 * 3]);
     tmp = SFloat3_sub(center, z_axis_disp);  SFloat3_export(tmp, &pos_stream[6 * 3]);
 
-    uint32 idx_stream[6 * 2];
+    euint32 idx_stream[6 * 2];
 
     idx_stream[0] = 0; idx_stream[1] = 1;
     idx_stream[2] = 0; idx_stream[3] = 2;
@@ -82,7 +82,7 @@ Mesh create_locator2(EFloat3* pos, float radius)
     tmp = SFloat3_add(center, z_axis_disp);  SFloat3_export(tmp, &pos_stream[5 * 3]);
     tmp = SFloat3_sub(center, z_axis_disp);  SFloat3_export(tmp, &pos_stream[6 * 3]);
 
-    uint32 idx_stream[6 * 2];
+    euint32 idx_stream[6 * 2];
 
     idx_stream[0] = 0; idx_stream[1] = 1;
     idx_stream[2] = 0; idx_stream[3] = 2;

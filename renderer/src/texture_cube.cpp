@@ -4,11 +4,11 @@
 typedef struct _texture_cube
 {
     volatile euint ref_count;
-    uint32 id;
+    euint32 id;
     pixel_format format;
-    uint32 width;
-    uint32 height;
-    uint32 have_image;
+    euint32 width;
+    euint32 height;
+    euint32 have_image;
     vptr pxl_buffer;
 } texture_cube;
 
@@ -37,7 +37,7 @@ TextureCube _TextureCube_new(const char* _file, euint _line)
 }
 
 void TextureCube_updata(TextureCube _self);
-void TextureCube_create(TextureCube _self, pixel_format _fmt, uint32 _size)
+void TextureCube_create(TextureCube _self, pixel_format _fmt, euint32 _size)
 {
     _self->format = _fmt;
     _self->width = _size;
@@ -46,7 +46,7 @@ void TextureCube_create(TextureCube _self, pixel_format _fmt, uint32 _size)
     TextureCube_updata(_self);
 }
 
-uint32 TextureCube_get_id(TextureCube _self)
+euint32 TextureCube_get_id(TextureCube _self)
 {
     return _self->id;
 }

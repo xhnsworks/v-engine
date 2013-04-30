@@ -43,7 +43,7 @@ API_EXPORT ShaderNode create_lighting_vertex_shader_node(VertexDecl _dec);
 typedef struct _param_entry
 {
     const char* name;
-    sint32 source;
+    esint32 source;
 } param_entry;
 typedef struct _param_table
 {
@@ -52,6 +52,6 @@ typedef struct _param_table
 
 API_EXPORT ParamTable ParamTable_new();
 API_EXPORT void ParamTable_delete(ParamTable _self);
-API_EXPORT void ParamTable_add_entry(ParamTable _self, const char* _name, sint32 _src);
+API_EXPORT void ParamTable_add_entry(ParamTable _self, const char* _name, esint32 _src);
 API_EXPORT void ParamTable_get_all_entrys(ParamTable _self, param_entry* _result);
 #endif

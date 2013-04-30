@@ -822,10 +822,10 @@ void Matrix4x4_inverse(matrix4x4* _mat)
     idm = _mm_setr_ps(-1.0, 1.0, -1.0, 1.0);
     one = _mm_set1_ps(1.0);
 
-    ((uint32*)&ffffffff)[0] = 0xffffffff;
-    ((uint32*)&ffffffff)[1] = 0x00000000;
-    ((uint32*)&ffffffff)[2] = 0x00000000;
-    ((uint32*)&ffffffff)[3] = 0x00000000;
+    ((euint32*)&ffffffff)[0] = 0xffffffff;
+    ((euint32*)&ffffffff)[1] = 0x00000000;
+    ((euint32*)&ffffffff)[2] = 0x00000000;
+    ((euint32*)&ffffffff)[3] = 0x00000000;
 
     tmp0 = _mm_shuffle_ps(_mat->m2, _mat->m2, _MM_SHUFFLE(1, 0, 0 ,0));
     tmp1 = _mm_shuffle_ps(_mat->m3, _mat->m3, _MM_SHUFFLE(2, 3, 2 ,1));
@@ -1353,12 +1353,12 @@ matrix4x4* Matrix4x4Array_pop(Matrix4x4Array _m4_array)
     return ret;
 }
 
-matrix4x4* Matrix4x4Array_get(Matrix4x4Array _m4_array, uint32 _i)
+matrix4x4* Matrix4x4Array_get(Matrix4x4Array _m4_array, euint32 _i)
 {
     return array_safe_get_ptr(_m4_array.self, _i);
 }
 
-uint32 Matrix4x4Array_get_size(Matrix4x4Array _m4_array)
+euint32 Matrix4x4Array_get_size(Matrix4x4Array _m4_array)
 {
     return array_n(_m4_array.self);
 }

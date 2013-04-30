@@ -343,7 +343,7 @@ List ListFunc(break)(List _lst, Iterator _i)
 	if (prev)
 	{
 		List ret = NULL;
-		uint32 count = 0;
+		euint32 count = 0;
 		struct list_node* iter = (struct list_node*)_i;
 		while (iter)
 		{

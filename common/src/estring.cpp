@@ -9,8 +9,8 @@
 #endif
 typedef struct _estring
 {
-    uint32 length;
-    uint32 hash;
+    euint32 length;
+    euint32 hash;
     char str[0];
 } estring;
 #ifdef _MSC_VER
@@ -22,9 +22,9 @@ _INLINE_ estring* _get_estring(const char* _str)
     return (estring*)ret;
 }
 
-_INLINE_ uint32 _string_length(const char* _str)
+_INLINE_ euint32 _string_length(const char* _str)
 {
-    uint32 count = 0;
+    euint32 count = 0;
     while(_str[count])
     {
         count++;
@@ -33,7 +33,7 @@ _INLINE_ uint32 _string_length(const char* _str)
 }
 EString _EString_new(const char* _str, const char* _file_name, euint _file_line)
 {
-    uint32 length = _string_length(_str);
+    euint32 length = _string_length(_str);
     estring* ret = (estring*)_Malloc(sizeof(estring) + length + 1, _file_name, _file_line);
 
     ret->length = length;
@@ -53,7 +53,7 @@ EString _EString_add(EString _str0, const char* _str1, const char* _file_name, e
 {
     /**
     estring* estr = (estring*)((ref_ptr)_str0 - (ref_ptr)sizeof(estring));
-    uint32 length = strlen(_str1);
+    euint32 length = strlen(_str1);
     estring* ret = _Malloc(sizeof(estring) + estr->length + length + 1, _file_name, _file_line);
     memcpy(&ret->str[0], &estr->str[0], estr->length);
     memcpy((vptr)((ref_ptr)&ret->str[0] + (ref_ptr)estr->length), _str1, length + 1);
@@ -62,7 +62,7 @@ EString _EString_add(EString _str0, const char* _str1, const char* _file_name, e
     return &ret->str[0];
     **/
     estring* estr = _get_estring(_str0);
-    uint32 length = strlen(_str1);
+    euint32 length = strlen(_str1);
     estring* ret = (estring*)_Malloc(sizeof(estring) + estr->length + length + 1, _file_name, _file_line);
 
     char* dest = &ret->str[0];

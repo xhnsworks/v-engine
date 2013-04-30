@@ -405,7 +405,7 @@ typedef struct _alloc_info
 	Iterator iter;
 } alloc_info;
 
-void* align_malloc_16(uint32 size)
+void* align_malloc_16(euint size)
 {
 #ifndef __APPLE__
 	return __mingw_aligned_malloc(size, 16);
@@ -546,7 +546,7 @@ void MInit()
 #endif
 }
 
-vptr _Malloc(euint _size, const char* _file, uint32 _line)
+vptr _Malloc(euint _size, const char* _file, euint32 _line)
 {
 	vptr ret = Ealloc(_size);
 #ifndef USE_C_MALLOC
@@ -558,7 +558,7 @@ vptr _Malloc(euint _size, const char* _file, uint32 _line)
 	return ret;
 }
 
-vptr _SMalloc(euint _size, const char* _file, uint32 _line)
+vptr _SMalloc(euint _size, const char* _file, euint32 _line)
 {
     vptr ret = SEalloc(_size);
 #ifndef USE_C_MALLOC
@@ -570,7 +570,7 @@ vptr _SMalloc(euint _size, const char* _file, uint32 _line)
     return ret;
 }
 
-void _Mfree(vptr _ptr, const char* _file, uint32 _line)
+void _Mfree(vptr _ptr, const char* _file, euint32 _line)
 {
     Efree(_ptr);
 #ifdef USE_C_MALLOC

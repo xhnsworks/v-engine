@@ -29,7 +29,7 @@ Mesh create_cylinder_mesh(float height, float radius, int num_segments)
 	EFloat3* pos_buf = ENEW_ARRAY EFloat3[num_segments * 2];
 	EFloat3* nor_buf = ENEW_ARRAY EFloat3[num_segments * 2];
 	EFloat2* uv_buf = ENEW_ARRAY EFloat2[num_segments * 2];
-	uint32* idx_buf = (uint32*)SMalloc(sizeof(uint32) * num_segments * 6);
+	euint32* idx_buf = (euint32*)SMalloc(sizeof(euint32) * num_segments * 6);
     for (int i = 0; i < num_segments; i++)
     {
         sfloat4 tmp = Matrix4x4_mul_float4(axis_rot_mat, vec);

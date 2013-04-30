@@ -8,11 +8,11 @@ void version_0005_Dest(struct version_0005_data* data)
 void version_0005_load(FILE* fp, struct version_0005_data* data)
 {
     version_0004_load(fp, &data->base_data);
-    uint32 word;
+    euint32 word;
     /// vertex count
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     ///for (mesh_mode m = Triangular; m < MeshModeMax; m++)
-	for (uint32 m = (uint32)Triangular; m < (uint32)MeshModeMax; m++)
+	for (euint32 m = (euint32)Triangular; m < (euint32)MeshModeMax; m++)
     {
         if (m == word)
         {

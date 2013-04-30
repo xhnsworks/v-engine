@@ -61,8 +61,7 @@ public:
 		, m_timer(NULL)
 	{}
 	Animation(Attribute::Type attrType, AnimTimer* timer)
-		: m_target(NULL)
-		, m_attrType(attrType)
+		: m_attrType(attrType)
 		, m_prevFrame(NULL, 0)
 		, m_beginTime(0.0)
 		, m_curtTime(0.0)

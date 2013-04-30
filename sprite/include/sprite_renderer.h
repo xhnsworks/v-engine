@@ -46,10 +46,10 @@ public:
 	SpriteRenderer(SpriteRenderer* prevRdr);
 	virtual void render();
 	virtual void prepare_renderable(Renderable _rbl);
-	virtual bool is_uniform_param_source ( sint32 _src );
+	virtual bool is_uniform_param_source ( esint32 _src );
 	virtual Texture2DPtr get_shadow_map ( euint i );
 	virtual TextureCube get_shadow_cube_map();
-	virtual renderer_param_value get_shader_object_value ( sint32 _src );
+	virtual renderer_param_value get_shader_object_value ( esint32 _src );
 	Mesh new_widget_mesh(float _x, float _y, float _width, float _height, float _u0, float _u1, float _v0, float _v1,
 		                 const EColor& color_u0v0, const EColor& color_u1v0, const EColor& color_u1v1, const EColor& color_u0v1);
 	void get_four_borders(float _x, float _y, float _width, float _height, FourBorders& fourBorders);

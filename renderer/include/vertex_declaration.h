@@ -13,8 +13,8 @@ API_EXPORT void _VertexDecl_delete(VertexDecl _dec);
 #define VertexDecl_delete(d) _VertexDecl_delete(d);
 
 API_EXPORT void VertexDecl_add_element(VertexDecl _dec, VertexElement _ele);
-API_EXPORT uint32 VertexDecl_count(VertexDecl _dec);
-API_EXPORT VertexElement VertexDecl_find(VertexDecl _dec, uint32 _i);
+API_EXPORT euint32 VertexDecl_count(VertexDecl _dec);
+API_EXPORT VertexElement VertexDecl_find(VertexDecl _dec, euint32 _i);
 
 API_EXPORT const char* VertexDecl_get_decl_string(VertexDecl _dec);
 

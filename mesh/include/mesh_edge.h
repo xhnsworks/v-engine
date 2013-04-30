@@ -10,5 +10,5 @@ API_EXPORT void MeshEdgeTriangleTree_delete(Tree self);
 API_EXPORT void MeshEdgeTriangleTree_insert(Tree self, MeshEdge e, MeshTriangle t);
 API_EXPORT MeshTriangleArray MeshEdgeTriangleTree_find_triangles(Tree self, MeshEdge e);
 
-API_EXPORT void MeshEdge_get_vertexs(MeshEdge self, uint32* vtx0, uint32* vtx1);
+API_EXPORT void MeshEdge_get_vertexs(MeshEdge self, euint32* vtx0, euint32* vtx1);
 #endif

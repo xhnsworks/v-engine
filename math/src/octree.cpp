@@ -1,6 +1,7 @@
 #include "octree.h"
 #include "emem.h"
 #include "array.h"
+
 #define MASK_X 0x00000001
 #define MASK_Y 0x00000002
 #define MASK_Z 0x00000004
@@ -33,6 +34,7 @@ static inline float get_z(float* z_array, int index)
         else
             return z_array[0];
     }
+#ifdef OCTREE_DRAW_ENABLE
 void draw_axis_aligned_box(axis_aligned_box* box, LineDrawer drawer, float shrink, EFloat4* color)
 {
     sfloat3 half = SFloat3_assign_from_float(0.5f);
@@ -120,6 +122,7 @@ void draw_axis_aligned_box(axis_aligned_box* box, LineDrawer drawer, float shrin
         }
     }
 }
+#endif
 typedef void (*DoIt)(struct _octree_node_proc*, octree_node*, int, int, int);
 typedef struct _octree_node_proc
 {
@@ -615,12 +618,14 @@ void Octree_touch(Octree _self, Ray ray, LineDrawer drawer)
 
 void _draw_octree_node(octree_node* node, LineDrawer drawer, float shrink)
 {
+#ifdef OCTREE_DRAW_ENABLE
     draw_axis_aligned_box(&node->bounding_box, drawer, shrink, &node->color);
     for (int i = 0; i < 8; i++)
     {
         if (node->branch.type1[i])
             _draw_octree_node(node->branch.type1[i], drawer, shrink + 0.0025f);
     }
+#endif
 }
 
 void _set_octree_node_color(octree_node* node, EFloat4* color)

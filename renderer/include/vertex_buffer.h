@@ -16,11 +16,11 @@ API_EXPORT void _VertexBuffer_delete(VertexBuffer _self, const char* _file, euin
 API_EXPORT bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _i, vptr _result);
 API_EXPORT vptr VertexBuffer_insert(VertexBuffer _self, element_semantic _sem, unsigned int _i);
 API_EXPORT VertexDecl VertexBuffer_get_vertex_declaration(VertexBuffer _self);
-API_EXPORT uint32 VertexBuffer_get_id(VertexBuffer _self);
-API_EXPORT uint32 VertexBuffer_get_vertex_size(VertexBuffer _self);
-API_EXPORT uint32 VertexBuffer_get_buffer_size(VertexBuffer _self);
-API_EXPORT uint32 VertexBuffer_get_buffer_tail(VertexBuffer _self);
-API_EXPORT uint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh);
+API_EXPORT euint32 VertexBuffer_get_id(VertexBuffer _self);
+API_EXPORT euint32 VertexBuffer_get_vertex_size(VertexBuffer _self);
+API_EXPORT euint32 VertexBuffer_get_buffer_size(VertexBuffer _self);
+API_EXPORT euint32 VertexBuffer_get_buffer_tail(VertexBuffer _self);
+API_EXPORT euint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh);
 API_EXPORT void VertexBuffer_reset(VertexBuffer _self);
 API_EXPORT void VertexBuffer_buffer_data(VertexBuffer _self);
 

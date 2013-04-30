@@ -56,29 +56,29 @@ v128 __m128_alloc()
     return (v128)ret;
 }
 
-uint16 float32_to_float16(float f)
+euint16 float32_to_float16(float f)
 {
-    uint32 *i = (uint32 *)&f;
-    uint32 sign = (*i >> 31) & 0x1;
-    uint32 exponent = ((*i >> 23) & 0xff) - 0x7f;
-    uint32 mantissa = (*i) & 0x7fffff;
+    euint32 *i = (euint32 *)&f;
+    euint32 sign = (*i >> 31) & 0x1;
+    euint32 exponent = ((*i >> 23) & 0xff) - 0x7f;
+    euint32 mantissa = (*i) & 0x7fffff;
 
     exponent += 0x7;
-    uint16 ret = ((sign & 0x1) << 15);
+    euint16 ret = ((sign & 0x1) << 15);
     ret |= (exponent & 0xf) << 11;
     ret |= (mantissa  >> 13) & 0x7ff;
     return ret;
 }
 
-float float16_to_float32(uint16 f)
+float float16_to_float32(euint16 f)
 {
-    uint16 *i = (uint16 *)&f;
-    uint32 sign = (*i >> 15) & 0x1;
-    uint32 exponent = ((*i >> 11) & 0xf) - 0x7;
-    uint32 mantissa = (*i) & 0x7ff;
+    euint16 *i = (euint16 *)&f;
+    euint32 sign = (*i >> 15) & 0x1;
+    euint32 exponent = ((*i >> 11) & 0xf) - 0x7;
+    euint32 mantissa = (*i) & 0x7ff;
 
     exponent += 0x7f;
-    uint32 ret = ((sign & 0x1) << 31);
+    euint32 ret = ((sign & 0x1) << 31);
     ret |= (exponent & 0xff) << 23;
     ret |= (mantissa << 13) & 0x7fffff;
     return *((float*)&ret);

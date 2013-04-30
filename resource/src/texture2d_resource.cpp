@@ -14,8 +14,8 @@ Texture2DPtr Texture2DImplement::create_texture_from_file(FILE* file_stream)
 
     if (to_ptr(img))
     {
-        uint32 h = Image_get_num_rows(img);
-        uint32 w = Image_get_row_width(img);
+        euint32 h = Image_get_num_rows(img);
+        euint32 w = Image_get_row_width(img);
         pixel_format fmt = Image_get_pixel_format(img);
         Texture2DPtr tex = ENEW Texture2D;
         vptr pxls = Image_get_row(img, 0);
@@ -92,7 +92,7 @@ xhn::static_string Texture2DDetector::Detect(const xhn::string& resName)
 DefaultTexture2DImplement::DefaultTexture2DImplement()
 {
 	Texture2DPtr tex = ENEW Texture2D;
-	uint32 pixels[64 * 64];
+	euint32 pixels[64 * 64];
 	for (euint i = 0; i < 64 * 64; i++)
 	{
 		pixels[i] = 0xffffffff;

@@ -9,9 +9,9 @@ void version_0004_tangent_calculate(struct version_0004_data* data)
     float* tex_end = data->vtx_uv  + data->vtx_count * 2;
     float* nor_end = data->vtx_nor + data->vtx_count * 3;
     float* tgt_end = data->vtx_tgt + data->vtx_count * 3;
-    uint32* idx_end = data->indexs + data->indexed_vtx_count;
+    euint32* idx_end = data->indexs + data->indexed_vtx_count;
 
-    uint32 i0, i1, i2;
+    euint32 i0, i1, i2;
     float x0, x1, y0, y1, z0, z1, s0, s1, t0, t1;
     for (euint a = 0; a < data->face_count; a++)
     {
@@ -107,8 +107,8 @@ void version_0004_Dest(struct version_0004_data* data)
 
 void version_0004_load(FILE* fp, struct version_0004_data* data)
 {
-    uint32 word;
-    fread(&word, sizeof(uint32), 1, fp);
+    euint32 word;
+    fread(&word, sizeof(euint32), 1, fp);
 
     /// Object count
     if (!word)
@@ -118,47 +118,47 @@ void version_0004_load(FILE* fp, struct version_0004_data* data)
 
     /// Object radius (actually just fill with zero
 
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
 
     /// OGL_OBJECT_INDEXED
 
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     /// OGL_OBJECT_COORDINATEINDEX
 
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     /// vertex count
 
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     data->face_count = word / 3;
     data->indexed_vtx_count = word;
 
     /// GL_TRIANGLES and Material Id;
 
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
 
-    data->indexs = (uint32*)SMalloc(sizeof(uint32) * data->indexed_vtx_count);
+    data->indexs = (euint32*)SMalloc(sizeof(euint32) * data->indexed_vtx_count);
 
     euint i = 0;
     for (; i < data->face_count; i++)
     {
-        fread(&word, sizeof(uint32), 1, fp);
+        fread(&word, sizeof(euint32), 1, fp);
         data->indexs[i * 3] = word;
-        fread(&word, sizeof(uint32), 1, fp);
+        fread(&word, sizeof(euint32), 1, fp);
         data->indexs[i * 3 + 1] = word;
-        fread(&word, sizeof(uint32), 1, fp);
+        fread(&word, sizeof(euint32), 1, fp);
         data->indexs[i * 3 + 2] = word;
     }
 
     /// OGL_OBJECT_INDEXED
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     /// OGL_OBJECT_COORDINATES
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
 
     /// vertex count
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     data->vtx_count = word;
     /// GL_TRIANGLES and Material Id;
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
 
     double dbword;
     data->vtx_pos = (float*)SMalloc(sizeof(float) * 3 * data->vtx_count);
@@ -173,13 +173,13 @@ void version_0004_load(FILE* fp, struct version_0004_data* data)
     }
 
     /// OGL_OBJECT_INDEXED
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     /// OGL_OBJECT_NORMALS
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     /// vertex count
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     /// GL_TRIANGLES and Material Id;
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
 
     data->vtx_nor = (float*)SMalloc(sizeof(float) * 3 * data->vtx_count);
     for (i = 0; i < data->vtx_count; i++)
@@ -194,13 +194,13 @@ void version_0004_load(FILE* fp, struct version_0004_data* data)
 
     data->has_uv = 1;
     /// OGL_OBJECT_INDEXED
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     if (word != 0x21)
     {
         data->has_uv = 0;
     }
     /// OGL_OBJECT_TEXTURE
-    fread(&word, sizeof(uint32), 1, fp);
+    fread(&word, sizeof(euint32), 1, fp);
     if (word != 0x3a)
     {
         data->has_uv = 0;
@@ -209,9 +209,9 @@ void version_0004_load(FILE* fp, struct version_0004_data* data)
     if (data->has_uv)
     {
         /// vertex count
-        fread(&word, sizeof(uint32), 1, fp);
+        fread(&word, sizeof(euint32), 1, fp);
         /// GL_TRIANGLES and Material Id;
-        fread(&word, sizeof(uint32), 1, fp);
+        fread(&word, sizeof(euint32), 1, fp);
         data->vtx_uv = (float*)SMalloc(sizeof(float) * 2 * data->vtx_count);
         for (i = 0; i < data->vtx_count; i++)
         {

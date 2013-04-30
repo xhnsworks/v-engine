@@ -2,7 +2,7 @@
 #include "texture2d_array.h"
 ///#include <GL/gl.h>
 #include "emem.h"
-void create_tex_array(uint32* _id)
+void create_tex_array(euint32* _id)
 {
     glGenTextures(1, _id);
     glBindTexture(GL_TEXTURE_2D_ARRAY, *_id);
@@ -30,12 +30,12 @@ uniform sampler2DArray texarray;
 
 typedef struct _texture2d_array
 {
-    uint32 id;
+    euint32 id;
     pixel_format format;
-    uint32 width;
-    uint32 height;
-    uint32 count;
-    uint32 have_image;
+    euint32 width;
+    euint32 height;
+    euint32 count;
+    euint32 have_image;
     vptr pxl_buffer;
 } texture2d_array;
 
@@ -126,7 +126,7 @@ void Texture2DArray_updata(Texture2DArray _self)
     }
 }
 
-void Texture2DArray_create(Texture2DArray _self, pixel_format _fmt, uint32 _w, uint32 _h, uint32 _c)
+void Texture2DArray_create(Texture2DArray _self, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _c)
 {
     _self.self->format = _fmt;
     _self.self->width = _w;
@@ -146,20 +146,20 @@ void Texture2DArray_unbind()
     glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }
 
-uint32 Texture2DArray_get_id(Texture2DArray _self)
+euint32 Texture2DArray_get_id(Texture2DArray _self)
 {
     return _self.self->id;
 }
 
-uint32 Texture2DArray_get_count(Texture2DArray _self)
+euint32 Texture2DArray_get_count(Texture2DArray _self)
 {
     return _self.self->count;
 }
-uint32 Texture2DArray_get_width(Texture2DArray _self)
+euint32 Texture2DArray_get_width(Texture2DArray _self)
 {
     return _self.self->width;
 }
-uint32 Texture2DArray_get_height(Texture2DArray _self)
+euint32 Texture2DArray_get_height(Texture2DArray _self)
 {
     return _self.self->height;
 }

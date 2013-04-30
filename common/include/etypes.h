@@ -27,29 +27,29 @@
 #define USE_MATERIAL_ID_ARRAY
 #undef USE_MATERIAL_ID_ARRAY
 
-typedef unsigned int uint32;
-typedef unsigned long long uint64;
-typedef long long sint64;
+typedef unsigned int euint32;
+typedef unsigned long long euint64;
+typedef long long esint64;
 
-typedef char sint8;
+typedef char esint8;
 ///typedef char byte;
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned char* uptr8;
+typedef unsigned char euint8;
+typedef unsigned short euint16;
+typedef unsigned char* euptr8;
 ///typedef euint* uptr;
-typedef uint32* uptr32;
-typedef uint64* uptr64;
+typedef euint32* euptr32;
+typedef euint64* euptr64;
 
 typedef const char* EString;
 
-typedef int sint32;
-typedef short sint16;
+typedef int esint32;
+typedef short esint16;
 #if BIT_WIDTH == 64
-typedef uint64 euint;
-typedef sint64 esint;
+typedef euint64 euint;
+typedef esint64 esint;
 #else
-typedef uint32 euint;
-typedef sint32 esint;
+typedef euint32 euint;
+typedef esint32 esint;
 #endif
 typedef void* vptr;
 typedef euint pptr;
@@ -84,14 +84,14 @@ typedef enum _etype
 
 typedef union
 {
-    sint8 sint8_var;
-    sint16 sint16_var;
-    sint32 sint32_var;
-    sint64 sint64_var;
-    uint8 uint8_var;
-    uint16 uint16_var;
-    uint32 uint32_var;
-    uint64 uint64_var;
+    esint8 sint8_var;
+    esint16 sint16_var;
+    esint32 sint32_var;
+    esint64 sint64_var;
+    euint8 uint8_var;
+    euint16 uint16_var;
+    euint32 uint32_var;
+    euint64 uint64_var;
     vptr vptr_var;
     EString str_var;
 } var;
@@ -163,7 +163,7 @@ typedef enum _pixel_format
 	RGBA16 =   0x9000,
 	RGB16 =    0x9900,
 }pixel_format;
-typedef uint16 float16;
+typedef euint16 float16;
 
 typedef enum _shader_object_type
 {
@@ -182,12 +182,12 @@ typedef enum _shader_object_type
 
 typedef enum _light_type
 {
-    Direction,
-    Spot,
-    Point,
+    DirectionType,
+    SpotType,
+    PointType,
 } light_type;
 
-typedef void* (*MALLOC)(uint32);
+typedef void* (*MALLOC)(euint);
 typedef void (*MFREE)(void*);
 
 typedef struct rw_buffer* RWBuffer;
@@ -321,7 +321,7 @@ typedef struct _input_event
 {
     input_event_type type;
     input_event_info info;
-    uint64 time_stamp;
+    euint64 time_stamp;
 } input_event;
 
 typedef struct _input_thread_param

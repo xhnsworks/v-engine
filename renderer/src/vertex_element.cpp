@@ -17,11 +17,11 @@ VertexElement _VertexElement_new(element_type _typ, element_semantic _sem, const
     return ret;
 }
 
-void _VertexElement_delete(VertexElement _ele, const char* _file, uint32 _line)
+void _VertexElement_delete(VertexElement _ele, const char* _file, euint32 _line)
 {
 }
 
-uint32 get_element_size(element_type _type)
+euint32 get_element_size(element_type _type)
 {
     switch (_type)
     {
@@ -47,7 +47,7 @@ uint32 get_element_size(element_type _type)
     }
 }
 
-uint32 VertexElement_get_size(VertexElement _ele)
+euint32 VertexElement_get_size(VertexElement _ele)
 {
     return get_element_size(_ele.type);
 }
