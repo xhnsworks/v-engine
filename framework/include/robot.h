@@ -10,7 +10,6 @@
 #include "emem.hpp"
 #include "xhn_smart_ptr.hpp"
 #include "rtti.hpp"
-#include "pthread.h"
 #include "rwbuffer.h"
 #include "timer.h"
 class Robot;

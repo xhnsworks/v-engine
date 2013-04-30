@@ -67,5 +67,35 @@ struct TimeCheckpoint
         return cale_elapsed_time(prevCheckpoint.timeStamp, curtCheckpoint.timeStamp, avFreq);
 	}
 };
+#elif defined (__APPLE__)
+#define _POSIX_C_SOURCE
+#include <CoreServices/CoreServices.h>
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#include <unistd.h>
+
+struct TimeCheckpoint
+{
+	uint64 timeStamp;
+	
+	TimeCheckpoint()
+    : timeStamp(0)
+	{}
+	static inline TimeCheckpoint Tick() {
+        TimeCheckpoint ret;
+		ret.timeStamp = mach_absolute_time();
+		return ret;
+	}
+	static inline double CaleElapsedTime(TimeCheckpoint& prevCheckpoint, TimeCheckpoint& curtCheckpoint) {
+		uint64        elapsed;
+        elapsed = curtCheckpoint.timeStamp - prevCheckpoint.timeStamp;
+        Nanoseconds   elapsedNano;
+        elapsedNano = AbsoluteToNanoseconds( *(AbsoluteTime *) &elapsed );
+        
+        uint64 ret = * (uint64 *) &elapsedNano;
+        ret *= 1000;
+        return (double)ret;
+	}
+};
 #endif
 #endif
