@@ -66,235 +66,235 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     _CONST = 258,
-     _BOOL = 259,
-     _FLOAT = 260,
-     _DOUBLE = 261,
-     _INT = 262,
-     _UINT = 263,
-     _BREAK = 264,
-     _CONTINUE = 265,
-     _DO = 266,
-     _ELSE = 267,
-     _FOR = 268,
-     _IF = 269,
-     _DISCARD = 270,
-     _RETURN = 271,
-     _SWITCH = 272,
-     _CASE = 273,
-     _DEFAULT = 274,
-     _SUBROUTINE = 275,
-     _SMOOTH = 276,
-     _FLAT = 277,
-     _NOPERSPECTIVE = 278,
-     _LAYOUT = 279,
-     _VEC2 = 280,
-     _VEC3 = 281,
-     _VEC4 = 282,
-     _MAT2 = 283,
-     _MAT3 = 284,
-     _MAT4 = 285,
-     _CENTROID = 286,
-     _IN = 287,
-     _OUT = 288,
-     _INOUT = 289,
-     _UNIFORM = 290,
-     _PATCH = 291,
-     _SAMPLE = 292,
-     _MAT2X2 = 293,
-     _MAT2X3 = 294,
-     _MAT2X4 = 295,
-     _MAT3X2 = 296,
-     _MAT3X3 = 297,
-     _MAT3X4 = 298,
-     _MAT4X2 = 299,
-     _MAT4X3 = 300,
-     _MAT4X4 = 301,
-     _SAMPLER1D = 302,
-     _SAMPLER2D = 303,
-     _SAMPLER3D = 304,
-     _SAMPLERCUBE = 305,
-     _SAMPLER1DARRAY = 306,
-     _SAMPLER2DARRAY = 307,
-     _SAMPLERCUBEARRAY = 308,
-     _STRUCT = 309,
-     _VOID = 310,
-     _WHILE = 311,
-     _IDENTIFIER = 312,
-     _TYPE_NAME = 313,
-     _FLOATCONSTANT = 314,
-     _DOUBLECONSTANT = 315,
-     _INTCONSTANT = 316,
-     _UINTCONSTANT = 317,
-     _BOOLCONSTANT = 318,
-     _FIELD_SELECTION = 319,
-     _LEFT_OP = 320,
-     _RIGHT_OP = 321,
-     _INC_OP = 322,
-     _DEC_OP = 323,
-     _LE_OP = 324,
-     _GE_OP = 325,
-     _EQ_OP = 326,
-     _NE_OP = 327,
-     _AND_OP = 328,
-     _OR_OP = 329,
-     _XOR_OP = 330,
-     _MUL_ASSIGN = 331,
-     _DIV_ASSIGN = 332,
-     _ADD_ASSIGN = 333,
-     _MOD_ASSIGN = 334,
-     _LEFT_ASSIGN = 335,
-     _RIGHT_ASSIGN = 336,
-     _AND_ASSIGN = 337,
-     _XOR_ASSIGN = 338,
-     _OR_ASSIGN = 339,
-     _SUB_ASSIGN = 340,
-     _LEFT_PAREN = 341,
-     _RIGHT_PAREN = 342,
-     _LEFT_BRACKET = 343,
-     _RIGHT_BRACKET = 344,
-     _LEFT_BRACE = 345,
-     _RIGHT_BRACE = 346,
-     _DOT = 347,
-     _COMMA = 348,
-     _COLON = 349,
-     _EQUAL = 350,
-     _SEMICOLON = 351,
-     _BANG = 352,
-     _DASH = 353,
-     _TILDE = 354,
-     _PLUS = 355,
-     _STAR = 356,
-     _SLASH = 357,
-     _PERCENT = 358,
-     _LEFT_ANGLE = 359,
-     _RIGHT_ANGLE = 360,
-     _VERTICAL_BAR = 361,
-     _CARET = 362,
-     _AMPERSAND = 363,
-     _QUESTION = 364,
-     _INVARIANT = 365,
-     _PRECISE = 366,
-     _HIGH_PRECISION = 367,
-     _MEDIUM_PRECISION = 368,
-     _LOW_PRECISION = 369,
-     _PRECISION = 370
+     __CONST = 258,
+     __BOOL = 259,
+     __FLOAT = 260,
+     __DOUBLE = 261,
+     __INT = 262,
+     __UINT = 263,
+     __BREAK = 264,
+     __CONTINUE = 265,
+     __DO = 266,
+     __ELSE = 267,
+     __FOR = 268,
+     __IF = 269,
+     __DISCARD = 270,
+     __RETURN = 271,
+     __SWITCH = 272,
+     __CASE = 273,
+     __DEFAULT = 274,
+     __SUBROUTINE = 275,
+     __SMOOTH = 276,
+     __FLAT = 277,
+     __NOPERSPECTIVE = 278,
+     __LAYOUT = 279,
+     __VEC2 = 280,
+     __VEC3 = 281,
+     __VEC4 = 282,
+     __MAT2 = 283,
+     __MAT3 = 284,
+     __MAT4 = 285,
+     __CENTROID = 286,
+     __IN = 287,
+     __OUT = 288,
+     __INOUT = 289,
+     __UNIFORM = 290,
+     __PATCH = 291,
+     __SAMPLE = 292,
+     __MAT2X2 = 293,
+     __MAT2X3 = 294,
+     __MAT2X4 = 295,
+     __MAT3X2 = 296,
+     __MAT3X3 = 297,
+     __MAT3X4 = 298,
+     __MAT4X2 = 299,
+     __MAT4X3 = 300,
+     __MAT4X4 = 301,
+     __SAMPLER1D = 302,
+     __SAMPLER2D = 303,
+     __SAMPLER3D = 304,
+     __SAMPLERCUBE = 305,
+     __SAMPLER1DARRAY = 306,
+     __SAMPLER2DARRAY = 307,
+     __SAMPLERCUBEARRAY = 308,
+     __STRUCT = 309,
+     __VOID = 310,
+     __WHILE = 311,
+     __IDENTIFIER = 312,
+     __TYPE_NAME = 313,
+     __FLOATCONSTANT = 314,
+     __DOUBLECONSTANT = 315,
+     __INTCONSTANT = 316,
+     __UINTCONSTANT = 317,
+     __BOOLCONSTANT = 318,
+     __FIELD_SELECTION = 319,
+     __LEFT_OP = 320,
+     __RIGHT_OP = 321,
+     __INC_OP = 322,
+     __DEC_OP = 323,
+     __LE_OP = 324,
+     __GE_OP = 325,
+     __EQ_OP = 326,
+     __NE_OP = 327,
+     __AND_OP = 328,
+     __OR_OP = 329,
+     __XOR_OP = 330,
+     __MUL_ASSIGN = 331,
+     __DIV_ASSIGN = 332,
+     __ADD_ASSIGN = 333,
+     __MOD_ASSIGN = 334,
+     __LEFT_ASSIGN = 335,
+     __RIGHT_ASSIGN = 336,
+     __AND_ASSIGN = 337,
+     __XOR_ASSIGN = 338,
+     __OR_ASSIGN = 339,
+     __SUB_ASSIGN = 340,
+     __LEFT_PAREN = 341,
+     __RIGHT_PAREN = 342,
+     __LEFT_BRACKET = 343,
+     __RIGHT_BRACKET = 344,
+     __LEFT_BRACE = 345,
+     __RIGHT_BRACE = 346,
+     __DOT = 347,
+     __COMMA = 348,
+     __COLON = 349,
+     __EQUAL = 350,
+     __SEMICOLON = 351,
+     __BANG = 352,
+     __DASH = 353,
+     __TILDE = 354,
+     __PLUS = 355,
+     __STAR = 356,
+     __SLASH = 357,
+     __PERCENT = 358,
+     __LEFT_ANGLE = 359,
+     __RIGHT_ANGLE = 360,
+     __VERTICAL_BAR = 361,
+     __CARET = 362,
+     __AMPERSAND = 363,
+     __QUESTION = 364,
+     __INVARIANT = 365,
+     __PRECISE = 366,
+     __HIGH_PRECISION = 367,
+     __MEDIUM_PRECISION = 368,
+     __LOW_PRECISION = 369,
+     __PRECISION = 370
    };
 #endif
 /* Tokens.  */
-#define _CONST 258
-#define _BOOL 259
-#define _FLOAT 260
-#define _DOUBLE 261
-#define _INT 262
-#define _UINT 263
-#define _BREAK 264
-#define _CONTINUE 265
-#define _DO 266
-#define _ELSE 267
-#define _FOR 268
-#define _IF 269
-#define _DISCARD 270
-#define _RETURN 271
-#define _SWITCH 272
-#define _CASE 273
-#define _DEFAULT 274
-#define _SUBROUTINE 275
-#define _SMOOTH 276
-#define _FLAT 277
-#define _NOPERSPECTIVE 278
-#define _LAYOUT 279
-#define _VEC2 280
-#define _VEC3 281
-#define _VEC4 282
-#define _MAT2 283
-#define _MAT3 284
-#define _MAT4 285
-#define _CENTROID 286
-#define _IN 287
-#define _OUT 288
-#define _INOUT 289
-#define _UNIFORM 290
-#define _PATCH 291
-#define _SAMPLE 292
-#define _MAT2X2 293
-#define _MAT2X3 294
-#define _MAT2X4 295
-#define _MAT3X2 296
-#define _MAT3X3 297
-#define _MAT3X4 298
-#define _MAT4X2 299
-#define _MAT4X3 300
-#define _MAT4X4 301
-#define _SAMPLER1D 302
-#define _SAMPLER2D 303
-#define _SAMPLER3D 304
-#define _SAMPLERCUBE 305
-#define _SAMPLER1DARRAY 306
-#define _SAMPLER2DARRAY 307
-#define _SAMPLERCUBEARRAY 308
-#define _STRUCT 309
-#define _VOID 310
-#define _WHILE 311
-#define _IDENTIFIER 312
-#define _TYPE_NAME 313
-#define _FLOATCONSTANT 314
-#define _DOUBLECONSTANT 315
-#define _INTCONSTANT 316
-#define _UINTCONSTANT 317
-#define _BOOLCONSTANT 318
-#define _FIELD_SELECTION 319
-#define _LEFT_OP 320
-#define _RIGHT_OP 321
-#define _INC_OP 322
-#define _DEC_OP 323
-#define _LE_OP 324
-#define _GE_OP 325
-#define _EQ_OP 326
-#define _NE_OP 327
-#define _AND_OP 328
-#define _OR_OP 329
-#define _XOR_OP 330
-#define _MUL_ASSIGN 331
-#define _DIV_ASSIGN 332
-#define _ADD_ASSIGN 333
-#define _MOD_ASSIGN 334
-#define _LEFT_ASSIGN 335
-#define _RIGHT_ASSIGN 336
-#define _AND_ASSIGN 337
-#define _XOR_ASSIGN 338
-#define _OR_ASSIGN 339
-#define _SUB_ASSIGN 340
-#define _LEFT_PAREN 341
-#define _RIGHT_PAREN 342
-#define _LEFT_BRACKET 343
-#define _RIGHT_BRACKET 344
-#define _LEFT_BRACE 345
-#define _RIGHT_BRACE 346
-#define _DOT 347
-#define _COMMA 348
-#define _COLON 349
-#define _EQUAL 350
-#define _SEMICOLON 351
-#define _BANG 352
-#define _DASH 353
-#define _TILDE 354
-#define _PLUS 355
-#define _STAR 356
-#define _SLASH 357
-#define _PERCENT 358
-#define _LEFT_ANGLE 359
-#define _RIGHT_ANGLE 360
-#define _VERTICAL_BAR 361
-#define _CARET 362
-#define _AMPERSAND 363
-#define _QUESTION 364
-#define _INVARIANT 365
-#define _PRECISE 366
-#define _HIGH_PRECISION 367
-#define _MEDIUM_PRECISION 368
-#define _LOW_PRECISION 369
-#define _PRECISION 370
+#define __CONST 258
+#define __BOOL 259
+#define __FLOAT 260
+#define __DOUBLE 261
+#define __INT 262
+#define __UINT 263
+#define __BREAK 264
+#define __CONTINUE 265
+#define __DO 266
+#define __ELSE 267
+#define __FOR 268
+#define __IF 269
+#define __DISCARD 270
+#define __RETURN 271
+#define __SWITCH 272
+#define __CASE 273
+#define __DEFAULT 274
+#define __SUBROUTINE 275
+#define __SMOOTH 276
+#define __FLAT 277
+#define __NOPERSPECTIVE 278
+#define __LAYOUT 279
+#define __VEC2 280
+#define __VEC3 281
+#define __VEC4 282
+#define __MAT2 283
+#define __MAT3 284
+#define __MAT4 285
+#define __CENTROID 286
+#define __IN 287
+#define __OUT 288
+#define __INOUT 289
+#define __UNIFORM 290
+#define __PATCH 291
+#define __SAMPLE 292
+#define __MAT2X2 293
+#define __MAT2X3 294
+#define __MAT2X4 295
+#define __MAT3X2 296
+#define __MAT3X3 297
+#define __MAT3X4 298
+#define __MAT4X2 299
+#define __MAT4X3 300
+#define __MAT4X4 301
+#define __SAMPLER1D 302
+#define __SAMPLER2D 303
+#define __SAMPLER3D 304
+#define __SAMPLERCUBE 305
+#define __SAMPLER1DARRAY 306
+#define __SAMPLER2DARRAY 307
+#define __SAMPLERCUBEARRAY 308
+#define __STRUCT 309
+#define __VOID 310
+#define __WHILE 311
+#define __IDENTIFIER 312
+#define __TYPE_NAME 313
+#define __FLOATCONSTANT 314
+#define __DOUBLECONSTANT 315
+#define __INTCONSTANT 316
+#define __UINTCONSTANT 317
+#define __BOOLCONSTANT 318
+#define __FIELD_SELECTION 319
+#define __LEFT_OP 320
+#define __RIGHT_OP 321
+#define __INC_OP 322
+#define __DEC_OP 323
+#define __LE_OP 324
+#define __GE_OP 325
+#define __EQ_OP 326
+#define __NE_OP 327
+#define __AND_OP 328
+#define __OR_OP 329
+#define __XOR_OP 330
+#define __MUL_ASSIGN 331
+#define __DIV_ASSIGN 332
+#define __ADD_ASSIGN 333
+#define __MOD_ASSIGN 334
+#define __LEFT_ASSIGN 335
+#define __RIGHT_ASSIGN 336
+#define __AND_ASSIGN 337
+#define __XOR_ASSIGN 338
+#define __OR_ASSIGN 339
+#define __SUB_ASSIGN 340
+#define __LEFT_PAREN 341
+#define __RIGHT_PAREN 342
+#define __LEFT_BRACKET 343
+#define __RIGHT_BRACKET 344
+#define __LEFT_BRACE 345
+#define __RIGHT_BRACE 346
+#define __DOT 347
+#define __COMMA 348
+#define __COLON 349
+#define __EQUAL 350
+#define __SEMICOLON 351
+#define __BANG 352
+#define __DASH 353
+#define __TILDE 354
+#define __PLUS 355
+#define __STAR 356
+#define __SLASH 357
+#define __PERCENT 358
+#define __LEFT_ANGLE 359
+#define __RIGHT_ANGLE 360
+#define __VERTICAL_BAR 361
+#define __CARET 362
+#define __AMPERSAND 363
+#define __QUESTION 364
+#define __INVARIANT 365
+#define __PRECISE 366
+#define __HIGH_PRECISION 367
+#define __MEDIUM_PRECISION 368
+#define __LOW_PRECISION 369
+#define __PRECISION 370
 
 
 
@@ -762,28 +762,30 @@ static const yytype_uint16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "_CONST", "_BOOL", "_FLOAT", "_DOUBLE",
-  "_INT", "_UINT", "_BREAK", "_CONTINUE", "_DO", "_ELSE", "_FOR", "_IF",
-  "_DISCARD", "_RETURN", "_SWITCH", "_CASE", "_DEFAULT", "_SUBROUTINE",
-  "_SMOOTH", "_FLAT", "_NOPERSPECTIVE", "_LAYOUT", "_VEC2", "_VEC3",
-  "_VEC4", "_MAT2", "_MAT3", "_MAT4", "_CENTROID", "_IN", "_OUT", "_INOUT",
-  "_UNIFORM", "_PATCH", "_SAMPLE", "_MAT2X2", "_MAT2X3", "_MAT2X4",
-  "_MAT3X2", "_MAT3X3", "_MAT3X4", "_MAT4X2", "_MAT4X3", "_MAT4X4",
-  "_SAMPLER1D", "_SAMPLER2D", "_SAMPLER3D", "_SAMPLERCUBE",
-  "_SAMPLER1DARRAY", "_SAMPLER2DARRAY", "_SAMPLERCUBEARRAY", "_STRUCT",
-  "_VOID", "_WHILE", "_IDENTIFIER", "_TYPE_NAME", "_FLOATCONSTANT",
-  "_DOUBLECONSTANT", "_INTCONSTANT", "_UINTCONSTANT", "_BOOLCONSTANT",
-  "_FIELD_SELECTION", "_LEFT_OP", "_RIGHT_OP", "_INC_OP", "_DEC_OP",
-  "_LE_OP", "_GE_OP", "_EQ_OP", "_NE_OP", "_AND_OP", "_OR_OP", "_XOR_OP",
-  "_MUL_ASSIGN", "_DIV_ASSIGN", "_ADD_ASSIGN", "_MOD_ASSIGN",
-  "_LEFT_ASSIGN", "_RIGHT_ASSIGN", "_AND_ASSIGN", "_XOR_ASSIGN",
-  "_OR_ASSIGN", "_SUB_ASSIGN", "_LEFT_PAREN", "_RIGHT_PAREN",
-  "_LEFT_BRACKET", "_RIGHT_BRACKET", "_LEFT_BRACE", "_RIGHT_BRACE", "_DOT",
-  "_COMMA", "_COLON", "_EQUAL", "_SEMICOLON", "_BANG", "_DASH", "_TILDE",
-  "_PLUS", "_STAR", "_SLASH", "_PERCENT", "_LEFT_ANGLE", "_RIGHT_ANGLE",
-  "_VERTICAL_BAR", "_CARET", "_AMPERSAND", "_QUESTION", "_INVARIANT",
-  "_PRECISE", "_HIGH_PRECISION", "_MEDIUM_PRECISION", "_LOW_PRECISION",
-  "_PRECISION", "$accept", "translation_unit", "external_declaration",
+  "$end", "error", "$undefined", "__CONST", "__BOOL", "__FLOAT",
+  "__DOUBLE", "__INT", "__UINT", "__BREAK", "__CONTINUE", "__DO", "__ELSE",
+  "__FOR", "__IF", "__DISCARD", "__RETURN", "__SWITCH", "__CASE",
+  "__DEFAULT", "__SUBROUTINE", "__SMOOTH", "__FLAT", "__NOPERSPECTIVE",
+  "__LAYOUT", "__VEC2", "__VEC3", "__VEC4", "__MAT2", "__MAT3", "__MAT4",
+  "__CENTROID", "__IN", "__OUT", "__INOUT", "__UNIFORM", "__PATCH",
+  "__SAMPLE", "__MAT2X2", "__MAT2X3", "__MAT2X4", "__MAT3X2", "__MAT3X3",
+  "__MAT3X4", "__MAT4X2", "__MAT4X3", "__MAT4X4", "__SAMPLER1D",
+  "__SAMPLER2D", "__SAMPLER3D", "__SAMPLERCUBE", "__SAMPLER1DARRAY",
+  "__SAMPLER2DARRAY", "__SAMPLERCUBEARRAY", "__STRUCT", "__VOID",
+  "__WHILE", "__IDENTIFIER", "__TYPE_NAME", "__FLOATCONSTANT",
+  "__DOUBLECONSTANT", "__INTCONSTANT", "__UINTCONSTANT", "__BOOLCONSTANT",
+  "__FIELD_SELECTION", "__LEFT_OP", "__RIGHT_OP", "__INC_OP", "__DEC_OP",
+  "__LE_OP", "__GE_OP", "__EQ_OP", "__NE_OP", "__AND_OP", "__OR_OP",
+  "__XOR_OP", "__MUL_ASSIGN", "__DIV_ASSIGN", "__ADD_ASSIGN",
+  "__MOD_ASSIGN", "__LEFT_ASSIGN", "__RIGHT_ASSIGN", "__AND_ASSIGN",
+  "__XOR_ASSIGN", "__OR_ASSIGN", "__SUB_ASSIGN", "__LEFT_PAREN",
+  "__RIGHT_PAREN", "__LEFT_BRACKET", "__RIGHT_BRACKET", "__LEFT_BRACE",
+  "__RIGHT_BRACE", "__DOT", "__COMMA", "__COLON", "__EQUAL", "__SEMICOLON",
+  "__BANG", "__DASH", "__TILDE", "__PLUS", "__STAR", "__SLASH",
+  "__PERCENT", "__LEFT_ANGLE", "__RIGHT_ANGLE", "__VERTICAL_BAR",
+  "__CARET", "__AMPERSAND", "__QUESTION", "__INVARIANT", "__PRECISE",
+  "__HIGH_PRECISION", "__MEDIUM_PRECISION", "__LOW_PRECISION",
+  "__PRECISION", "$accept", "translation_unit", "external_declaration",
   "function_definition", "declaration", "type_specifier",
   "array_specifier", "init_declarator_list", "single_declaration",
   "fully_specified_type", "type_qualifier", "variable_identifier",
