@@ -588,16 +588,26 @@ Pass create_std_pass_from_dec(std_pass_status* _status, bool write_log)
     Shader auto_vs = Shader_new();
     Shader auto_ps = Shader_new();
     sb = to_ShaderBuffer(vsb);
+#ifdef MARK_GLSL_VERSION
     snprintf(mbuf, STRING_BUFFER_SIZE - 1,
         "#version %d%d0\n %s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     if (write_log)
         slog(StdPassLog, "%s", mbuf);
 
     sb = to_ShaderBuffer(psb);
     ///sprintf(mbuf, "#version 140\n#extension GL_ARB_gpu_shader5 : enable\n%s", sb.self->output);
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n %s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
     if (write_log)
         slog(StdPassLog, "%s", mbuf);

@@ -332,9 +332,13 @@ Pass create_display_texture_pass(VertexDecl _dec)
                   "#extension GL_EXT_texture_integer  : enable\n"
                   "%s", sb.self->output);
                   **/
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
-
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     sb = to_ShaderBuffer(psb);
     /**
@@ -343,9 +347,13 @@ Pass create_display_texture_pass(VertexDecl _dec)
                   "#extension GL_EXT_texture_integer  : enable\n"
                   "%s", sb.self->output);
                   **/
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
-
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
 
     Pass ret = create_pass_from_shader(auto_vs, auto_ps);
@@ -470,9 +478,13 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
                   "#extension GL_EXT_texture_integer  : enable\n"
                   "%s", sb.self->output);
                   **/
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
-
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
 
     sb = to_ShaderBuffer(psb);
@@ -480,10 +492,13 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
 
     ///sprintf(mbuf, "#extension GL_EXT_gpu_shader4      : require\n"
     ///              "%s", sb.self->output);
-
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
-
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
 	slog(PostPassLog, "%s", mbuf);
 
@@ -527,16 +542,23 @@ Pass create_clear_buffer_pass(VertexDecl _dec, SdrNdGen _shader_node_gen)
     sb = to_ShaderBuffer(vsb);
 
     char mbuf[STRING_BUFFER_SIZE];
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
-
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
 
     sb = to_ShaderBuffer(psb);
-
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
-
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
 
     Pass ret = create_pass_from_shader(auto_vs, auto_ps);

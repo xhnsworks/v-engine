@@ -738,16 +738,26 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
     sb = to_ShaderBuffer(vsb);
 
     ///snprintf(mbuf, STRING_BUFFER_SIZE - 1, "#version 400\n%s", sb.self->output);
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     slog(LightingPassLog, "%s", mbuf);
 
     sb = to_ShaderBuffer(psb);
 
     ///snprintf(mbuf, STRING_BUFFER_SIZE - 1, "#version 400\n%s", sb.self->output);
+#ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
     slog(LightingPassLog, "%s", mbuf);
 

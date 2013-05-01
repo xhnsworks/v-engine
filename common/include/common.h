@@ -123,6 +123,8 @@ or
 #define GLSL_MAIN_VERSION 1
 #define GLSL_SUB_VERSION  2
 
+#define MARK_GLSL_VERSION
+
 #define NEG_NAN 0xffc00000
 #define POS_NAN 0x7fc00000
 
