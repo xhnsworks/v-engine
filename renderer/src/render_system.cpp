@@ -205,7 +205,11 @@ void RenderSystem_Init(euint32 viewWidth, euint32 viewHeight)
 	g_resource_system = ENEW ResourceSystem;
 	
 	ResourceGroup* grp = g_resource_system->GetResourceGroup("BaseGroup");
+#if defined(_WIN32) || defined(_WIN64)
 	grp->RegisterResourceDirectory("..\\test_scene", Public);
+#elif defined(__APPLE__)
+    grp->RegisterResourceDirectory("..\\..\\..\\..\\..\\test_scene", Public);
+#endif
 	g_resource_system->NewResourceGroup("Texture", "BaseGroup", Public);
 	g_resource_system->NewResourceGroup("GUIConfig", "BaseGroup", Public);
 	///g_resource_system->NewResourceGroup("FontTexture", "BaseGroup", Public);
