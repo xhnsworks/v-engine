@@ -109,7 +109,6 @@
 		68A36073172FE2B5007D0C45 /* switch_node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F46172FE2B5007D0C45 /* switch_node.cpp */; };
 		68A36075172FE2B5007D0C45 /* texture1d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F48172FE2B5007D0C45 /* texture1d.cpp */; };
 		68A36077172FE2B5007D0C45 /* texture2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F4A172FE2B5007D0C45 /* texture2d.cpp */; };
-		68A36079172FE2B5007D0C45 /* texture2d_array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F4C172FE2B5007D0C45 /* texture2d_array.cpp */; };
 		68A3607A172FE2B5007D0C45 /* texture_cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F4D172FE2B5007D0C45 /* texture_cube.cpp */; };
 		68A3607C172FE2B5007D0C45 /* vertex_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F4F172FE2B5007D0C45 /* vertex_buffer.cpp */; };
 		68A3607E172FE2B5007D0C45 /* vertex_declaration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35F51172FE2B5007D0C45 /* vertex_declaration.cpp */; };
@@ -692,7 +691,6 @@
 		68A35F46172FE2B5007D0C45 /* switch_node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = switch_node.cpp; sourceTree = "<group>"; };
 		68A35F48172FE2B5007D0C45 /* texture1d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture1d.cpp; sourceTree = "<group>"; };
 		68A35F4A172FE2B5007D0C45 /* texture2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture2d.cpp; sourceTree = "<group>"; };
-		68A35F4C172FE2B5007D0C45 /* texture2d_array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture2d_array.cpp; sourceTree = "<group>"; };
 		68A35F4D172FE2B5007D0C45 /* texture_cube.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture_cube.cpp; sourceTree = "<group>"; };
 		68A35F4F172FE2B5007D0C45 /* vertex_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_buffer.cpp; sourceTree = "<group>"; };
 		68A35F51172FE2B5007D0C45 /* vertex_declaration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vertex_declaration.cpp; sourceTree = "<group>"; };
@@ -2525,7 +2523,6 @@
 				68A35F46172FE2B5007D0C45 /* switch_node.cpp */,
 				68A35F48172FE2B5007D0C45 /* texture1d.cpp */,
 				68A35F4A172FE2B5007D0C45 /* texture2d.cpp */,
-				68A35F4C172FE2B5007D0C45 /* texture2d_array.cpp */,
 				68A35F4D172FE2B5007D0C45 /* texture_cube.cpp */,
 				68A35F4F172FE2B5007D0C45 /* vertex_buffer.cpp */,
 				68A35F51172FE2B5007D0C45 /* vertex_declaration.cpp */,
@@ -2819,7 +2816,6 @@
 				68A36073172FE2B5007D0C45 /* switch_node.cpp in Sources */,
 				68A36075172FE2B5007D0C45 /* texture1d.cpp in Sources */,
 				68A36077172FE2B5007D0C45 /* texture2d.cpp in Sources */,
-				68A36079172FE2B5007D0C45 /* texture2d_array.cpp in Sources */,
 				68A3607A172FE2B5007D0C45 /* texture_cube.cpp in Sources */,
 				68A3607C172FE2B5007D0C45 /* vertex_buffer.cpp in Sources */,
 				68A3607E172FE2B5007D0C45 /* vertex_declaration.cpp in Sources */,

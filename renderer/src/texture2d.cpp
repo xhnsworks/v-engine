@@ -188,11 +188,19 @@ void Texture2D::Update(bool is_compressed)
 		    height, 0, GL_RGB, GL_UNSIGNED_BYTE,
 			pxl_buffer.get());
 		break;
+#if defined(GL_RGBA32F)
 	case RGBA32F:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width,
 			height, 0, GL_RGBA, GL_FLOAT,
 			pxl_buffer.get());
 		break;
+#elif defined(GL_RGBA32F_ARB)
+    case RGBA32F:
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width,
+                     height, 0, GL_RGBA, GL_FLOAT,
+                     pxl_buffer.get());
+        break;
+#endif
 	case RG32F:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32F, width,
 			height, 0, GL_RG, GL_FLOAT,
@@ -203,21 +211,45 @@ void Texture2D::Update(bool is_compressed)
 			height, 0, GL_RG, GL_UNSIGNED_BYTE,
 			pxl_buffer.get());
 		break;
+#if defined(GL_RGB32F)
 	case RGB32F:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width,
 			height, 0, GL_RGB, GL_FLOAT,
 			pxl_buffer.get());
 		break;
+#elif defined(GL_RGB32F_ARB)
+    case RGB32F:
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F_ARB, width,
+            height, 0, GL_RGB, GL_FLOAT,
+            pxl_buffer.get());
+        break;
+#endif
+#if defined(GL_RGBA16F)
 	case RGBA16F:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width,
 			height, 0, GL_RGBA, GL_HALF_FLOAT,
 			pxl_buffer.get());
 		break;
+#elif defined(GL_RGBA16F_ARB)
+    case RGBA16F:
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, width,
+            height, 0, GL_RGBA, GL_HALF_FLOAT,
+            pxl_buffer.get());
+        break;
+#endif
+#if defined(GL_RGB16F)
 	case RGB16F:
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width,
 			height, 0, GL_RGB, GL_HALF_FLOAT,
 			pxl_buffer.get());
 		break;
+#elif defined(GL_RGB16F_ARB)
+    case RGB16F:
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F_ARB, width,
+            height, 0, GL_RGB, GL_HALF_FLOAT,
+            pxl_buffer.get());
+        break;
+#endif
 	case DEPTH32F:
 		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, width,

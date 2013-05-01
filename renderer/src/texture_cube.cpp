@@ -75,11 +75,19 @@ void TextureCube_updata(TextureCube _self)
                          _self->height, 0, GL_RGB, GL_UNSIGNED_BYTE,
                          _self->pxl_buffer);
             break;
+#if defined(GL_RGBA32F)
         case RGBA32F:
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA32F, _self->width,
                          _self->height, 0, GL_RGBA, GL_FLOAT,
                          _self->pxl_buffer);
             break;
+#elif defined(GL_RGBA32F_ARB)
+        case RGBA32F:
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA32F_ARB, _self->width,
+                         _self->height, 0, GL_RGBA, GL_FLOAT,
+                         _self->pxl_buffer);
+            break;
+#endif
         case RG32F:
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RG32F, _self->width,
                          _self->height, 0, GL_RG, GL_FLOAT,
@@ -90,21 +98,45 @@ void TextureCube_updata(TextureCube _self)
                          _self->height, 0, GL_RG, GL_UNSIGNED_BYTE,
                          _self->pxl_buffer);
             break;
+#if defined (GL_RGB32F)
         case RGB32F:
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGB32F, _self->width,
                          _self->height, 0, GL_RGB, GL_FLOAT,
                          _self->pxl_buffer);
             break;
+#elif defined(GL_RGB32F_ARB)
+        case RGB32F:
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGB32F_ARB, _self->width,
+                         _self->height, 0, GL_RGB, GL_FLOAT,
+                         _self->pxl_buffer);
+            break;
+#endif
+#if defined(GL_RGBA16F)
         case RGBA16F:
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA16F, _self->width,
                          _self->height, 0, GL_RGBA, GL_HALF_FLOAT,
                          _self->pxl_buffer);
             break;
+#elif defined(GL_RGBA16F_ARB)
+        case RGBA16F:
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA16F_ARB, _self->width,
+                         _self->height, 0, GL_RGBA, GL_HALF_FLOAT,
+                         _self->pxl_buffer);
+            break;
+#endif
+#if defined(GL_RGB16F)
         case RGB16F:
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGB16F, _self->width,
                          _self->height, 0, GL_RGB, GL_HALF_FLOAT,
                          _self->pxl_buffer);
             break;
+#elif defined(GL_RGB16F_ARB)
+        case RGB16F:
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGB16F_ARB, _self->width,
+                         _self->height, 0, GL_RGB, GL_HALF_FLOAT,
+                         _self->pxl_buffer);
+            break;
+#endif
         case DEPTH32F:
             glTexParameteri(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_DEPTH_COMPONENT32F, _self->width,

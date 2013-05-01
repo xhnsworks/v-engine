@@ -106,7 +106,7 @@ or
 #elif defined(__APPLE__)
 #define BIT_WIDTH 64
 ///#include <OpenGL/gl.h>
-#include <OpenGL/gl3.h>
+///#include <OpenGL/gl3.h>
 #include <OpenGL/gl.h>
 #endif
 

@@ -53,10 +53,18 @@ void Texture1D_updata(Texture1D _tex)
                      0, GL_RGB, GL_UNSIGNED_BYTE,
                      _tex->pxl_buffer);
         break;
+#if defined(GL_RGBA32F)
     case RGBA32F:
         glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F, _tex->width,
                      0, GL_RGBA, GL_FLOAT,
                      _tex->pxl_buffer);
+#elif defined(GL_RGBA32F_ARB)
+    case RGBA32F:
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA32F_ARB, _tex->width,
+                     0, GL_RGBA, GL_FLOAT,
+                     _tex->pxl_buffer);
+
+#endif
         break;
     case RG32F:
         glTexImage1D(GL_TEXTURE_1D, 0, GL_RG32F, _tex->width,
@@ -68,21 +76,45 @@ void Texture1D_updata(Texture1D _tex)
                      0, GL_RG, GL_UNSIGNED_BYTE,
                      _tex->pxl_buffer);
         break;
+#if defined(GL_RGB32F)
     case RGB32F:
         glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F, _tex->width,
                      0, GL_RGB, GL_FLOAT,
                      _tex->pxl_buffer);
         break;
+#elif defined(GL_RGB32F_ARB)
+    case RGB32F:
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F_ARB, _tex->width,
+                     0, GL_RGB, GL_FLOAT,
+                     _tex->pxl_buffer);
+        break;
+#endif
+#if defined(GL_RGBA16F)
     case RGBA16F:
         glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA16F, _tex->width,
                      0, GL_RGBA, GL_HALF_FLOAT,
                      _tex->pxl_buffer);
         break;
+#elif defined(GL_RGBA16F_ARB)
+    case RGBA16F:
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGBA16F_ARB, _tex->width,
+                     0, GL_RGBA, GL_HALF_FLOAT,
+                     _tex->pxl_buffer);
+        break;
+#endif
+#if defined(GL_RGB16F)
     case RGB16F:
         glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB16F, _tex->width,
                      0, GL_RGB, GL_HALF_FLOAT,
                      _tex->pxl_buffer);
         break;
+#elif defined(GL_RGB16F_ARB)
+    case RGB16F:
+        glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB16F_ARB, _tex->width,
+                     0, GL_RGB, GL_HALF_FLOAT,
+                     _tex->pxl_buffer);
+        break;
+#endif
     case DEPTH32F:
         glTexImage1D(GL_TEXTURE_1D, 0, GL_DEPTH_COMPONENT32F, _tex->width,
                      0, GL_DEPTH_COMPONENT, GL_FLOAT,
