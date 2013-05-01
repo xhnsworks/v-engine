@@ -5,7 +5,7 @@
 static FILE* g_file_ptr = NULL;
 static void** g_buffer_array = NULL;
 
-#ifndef __APPLE__
+///#ifndef __APPLE__
 #include "png.h"
 void png_chunk_dest(vptr _p)
 {
@@ -140,6 +140,7 @@ Image png_load(const char* _file_name)
 	FILE* fp = SafeFOpen(_file_name, "rb");
 	return png_load(fp);
 }
+/**
 #else
 Image png_load(FILE* file_stream)
 {
@@ -152,3 +153,4 @@ Image png_load(const char* _file_name)
     return ret;
 }
 #endif
+**/

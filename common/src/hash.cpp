@@ -18,7 +18,7 @@ euint32 ELFHash( char   * str)
     return  (hash  &   0x7FFFFFFF );
 }
 
-euint32 calc_hashnr(const char *key, euint32 length)
+euint32 calc_hashnr(const char *key, euint length)
 {
 	if (!length)
 		return 0;

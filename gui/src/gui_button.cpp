@@ -68,7 +68,11 @@ void GUIButton::Init(const xhn::static_string configName)
 			pugi::xml_node textlayer = layers.child("text");
 			if (!textlayer)
 				return;
+#if defined(_WIN32) || defined(_WIN64)
 			FontRenderer* fr = ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
+#else
+            FontRenderer* fr = ENEW FontRenderer("../../../../../test_scene/Earthbound-Condensed-Bold.otf");
+#endif
 			fr->set_font_size(Pixel30);
 			ComposingStick* cs = ENEW ComposingStick(fr, 256);
 			SpriteLayerPtr layer = ENEW GUIButtonTextLayer(cs);

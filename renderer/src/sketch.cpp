@@ -462,19 +462,19 @@ SketchCube SketchCube_new(euint size, pixel_format format)
                                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                                TextureCube_get_id(ret->sketch),
                                0);
-
         ///glDrawBuffer(GL_NONE);
         ///glReadBuffer(GL_NONE);
 
         ///printFramebufferInfo();
         ERROR_PROC;
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
     ERROR_PROC;
     bool status = checkFramebufferStatus();
 
     EAssert(status, "%s", "OGL status error");
     ERROR_PROC;
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     return ret;
 }

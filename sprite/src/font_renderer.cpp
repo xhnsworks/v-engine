@@ -22,7 +22,7 @@ esint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 #else
 euint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 {
-	euint _count;
+	euint _count = 0;
 	while (_src_str[_count])
 	{
 		_count++;
@@ -155,7 +155,7 @@ void FontRenderer::Init(const char* _font_name)
     error = FT_Set_Pixel_Sizes(
                 m_ft_face,
                 0,
-                m_pixel_size );
+                (FT_UInt)m_pixel_size );
     error = FT_Select_Charmap(
                 m_ft_face, /* 目标face对象 */
                 FT_ENCODING_UNICODE ); /* 编码 */
@@ -182,7 +182,7 @@ FontRenderer::FontRenderer(const char* _font_name) : m_font_name(_font_name), m_
     error = FT_Set_Pixel_Sizes(
                 m_ft_face,
                 0,
-                m_pixel_size );
+                (FT_UInt)m_pixel_size );
     error = FT_Select_Charmap(
                 m_ft_face, /* 目标face对象 */
                 FT_ENCODING_UNICODE ); /* 编码 */
@@ -202,9 +202,9 @@ void FontRenderer::set_font_size(PixelSize _size)
                 300 );
     error = FT_Set_Pixel_Sizes(
                 m_ft_face,
-                0,
-                m_pixel_size );
-    error = FT_Select_Charmap(
+                (FT_UInt)0,
+                (FT_UInt)m_pixel_size );
+    error = (FT_UInt)FT_Select_Charmap(
                 m_ft_face, /* 目标face对象 */
                 FT_ENCODING_UNICODE ); /* 编码 */
 }
@@ -216,7 +216,7 @@ FontRenderer::~FontRenderer()
 euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _y, euint _w)
 {
     FT_Int i, j, p, q;
-    FT_Int x_max = m_char_ptr + bitmap->width;
+    FT_Int x_max = (FT_Int)m_char_ptr + bitmap->width;
     FT_Int y_max = bitmap->rows;
 
     esint _offset_y = m_pixel_size - bitmap->rows + 1;
@@ -228,7 +228,7 @@ euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _
     ///uint8 _r, _g, _b, _a;
     for ( i = 0, p = 0; i < y_max; i++, p++ )
     {
-        for ( j = m_char_ptr, q = 0; j < x_max; j++, q++ )
+        for ( j = (FT_Int)m_char_ptr, q = 0; j < x_max; j++, q++ )
         {
             _gray = bitmap->buffer[p * bitmap->width + q];
             if (_gray)

@@ -119,7 +119,11 @@ bool ResourceGroup::__Load(const xhn::string& resName, xhn::set<xhn::static_stri
 	for (; iter != end; iter++)
 	{
 		xhn::string dir = iter->c_str();
+#if defined(_WIN32) || defined(_WIN64)
 		dir += "\\";
+#else
+        dir += "/";
+#endif
 		xhn::string path = dir + resName;
 		FileStream stream = m_fileImpl->Open(path);
 		{

@@ -74,8 +74,8 @@ public:
 public:
 	Texture2D();
 	~Texture2D();
-	void Create(pixel_format _fmt, euint32 _w, euint32 _h);
-	void LoadFromMem(vptr _mem, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _size_in_byte, bool is_compressed);
+	void Create(pixel_format _fmt, euint _w, euint _h);
+	void LoadFromMem(vptr _mem, pixel_format _fmt, euint _w, euint _h, euint _size_in_byte, bool is_compressed);
 	void LoadFromColor(const EColor& _color);
 	void Bind();
 	static void Unbind();

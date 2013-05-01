@@ -208,7 +208,7 @@ void RenderSystem_Init(euint32 viewWidth, euint32 viewHeight)
 #if defined(_WIN32) || defined(_WIN64)
 	grp->RegisterResourceDirectory("..\\test_scene", Public);
 #elif defined(__APPLE__)
-    grp->RegisterResourceDirectory("..\\..\\..\\..\\..\\test_scene", Public);
+    grp->RegisterResourceDirectory("../../../../../test_scene", Public);
 #endif
 	g_resource_system->NewResourceGroup("Texture", "BaseGroup", Public);
 	g_resource_system->NewResourceGroup("GUIConfig", "BaseGroup", Public);

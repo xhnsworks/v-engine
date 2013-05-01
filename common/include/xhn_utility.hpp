@@ -43,12 +43,12 @@ euint _real_size()
     return num_qwords * 16;
 }
 
-inline euint _hash ( char *&key )
+inline euint32 _hash ( char *&key )
 {
     return calc_hashnr ( key, _strlen ( key ) );
 }
 
-inline euint _hash ( wchar_t *&key )
+inline euint32 _hash ( wchar_t *&key )
 {
     int count = 0;
     while (key[count]) {

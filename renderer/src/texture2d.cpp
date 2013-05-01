@@ -42,7 +42,7 @@ Texture2D::~Texture2D()
 	glDeleteTextures(1, &id);
 }
 
-void Texture2D::Create(pixel_format _fmt, euint32 _w, euint32 _h)
+void Texture2D::Create(pixel_format _fmt, euint _w, euint _h)
 {
 	format = _fmt;
 	width = _w;
@@ -51,7 +51,7 @@ void Texture2D::Create(pixel_format _fmt, euint32 _w, euint32 _h)
 	Update(false);
 }
 
-void Texture2D::LoadFromMem(vptr _mem, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _size_in_byte, bool is_compressed)
+void Texture2D::LoadFromMem(vptr _mem, pixel_format _fmt, euint _w, euint _h, euint _size_in_byte, bool is_compressed)
 {
 	format = _fmt;
 	width = _w;

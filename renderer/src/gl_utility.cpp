@@ -373,6 +373,8 @@ bool checkFramebufferStatus()
     ERROR_PROC;
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     ERROR_PROC;
+    char mbuf[256];
+    snprintf(mbuf, 255, "status %x", status);
     switch(status)
     {
     case GL_FRAMEBUFFER_COMPLETE:
@@ -405,6 +407,10 @@ bool checkFramebufferStatus()
         return false;
 
     case GL_FRAMEBUFFER_UNSUPPORTED:
+        printf("[ERROR] Unsupported by FBO implementation.\n");
+        return false;
+            
+    case GL_FRAMEBUFFER_UNDEFINED:
         printf("[ERROR] Unsupported by FBO implementation.\n");
         return false;
 

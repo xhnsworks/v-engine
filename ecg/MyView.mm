@@ -95,6 +95,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     MInit();
     ELog_Init();
     ShaderLog_Init();
+    
     renderRobot = ENEW RenderRobot;
     
     return self;
