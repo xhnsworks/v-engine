@@ -337,14 +337,15 @@ ImplementRTTI(ResourceAction, Action);
 ImplementRTTI(InputAction, Action);
 ImplementRTTI(LogicAction, Action);
 ImplementRTTI(RenderAction, Action);
+#if defined(_WIN32) || defined(_WIN64)
 ImplementRTTI(SwapBuffersAction, Action);
-
+#endif
 void ResourceAction::DoImpl()
 {
 	if (!m_isInited)
 	{
 		m_isInited = true;
-
+#if defined(_WIN32) || defined(_WIN64)
 		HWND hwnd = (HWND)m_window;
 		HDC hdc;
 		HGLRC hglrc;
@@ -352,12 +353,16 @@ void ResourceAction::DoImpl()
 
 		RenderSystem_Init(hwnd);
 
+        m_swpAct->Init(hdc);
+        m_inputSys->Init(hwnd);
+#else
+        RenderSystem_Init(W_Width, W_Height);
+        m_inputSys->Init(NULL);
+#endif
+
 		m_rendererChain->Init();
 		m_guiRendererChain->Init();
 
-		m_inputSys->Init(hwnd);
-
-		m_swpAct->Init(hdc);
 		m_inputAct->Init();
 
 		Renderer* mainRdr = m_rendererChain->GetRenderer("MainRenderer");
@@ -425,8 +430,8 @@ void ResourceAction::DoImpl()
                 m = ColladaState_create_mesh(colSt);
             }
 
-            char path[MAX_PATH];
-            snprintf(path, MAX_PATH, "%s%s", BASE_DIR, "test_scene\\mesh_pos_unit1.ogl");
+            char path[260];
+            snprintf(path, 259, "%s%s", BASE_DIR, "test_scene\\mesh_pos_unit1.ogl");
 
 			m_mat0 = MaterialInstance_new("pure_lighting", NULL, NULL, "Texture");
 			Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat0, Triangular);
@@ -563,7 +568,9 @@ void ResourceAction::DoImpl()
 
 ResourceAction::~ResourceAction()
 {
+#if defined(_WIN32) || defined(_WIN64)
 	DestroyWindow((HWND)m_window);
+#endif
 }
 
 InputAction::InputAction(InputSystem* inputSys, RendererChain* rendererChain, GUIRendererChain* guiRendererChain)
@@ -650,16 +657,16 @@ void RenderAction::DoImpl()
 RenderAction::~RenderAction()
 {
 }
-
+#if defined(_WIN32) || defined(_WIN64)
 void SwapBuffersAction::DoImpl()
 {
 	///glFinish();
     SwapBuffers((HDC)m_renderDevice);
 	m_fps++;
 }
-
+#endif
 ImplementRTTI(RenderRobot, Robot);
-
+#if defined(_WIN32) || defined(_WIN64)
 RenderRobot::RenderRobot(vptr window)
 : m_window(window)
 {
@@ -681,7 +688,24 @@ RenderRobot::RenderRobot(vptr window)
 	AddAction(swpActPtr);
 	m_swpAct = swpAct;
 }
-
+#else
+RenderRobot::RenderRobot()
+{
+	InputSystem* inputSys = ENEW InputSystem;
+    
+	InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
+	ActionPtr inputActPtr = inputAct;
+	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain, inputAct, inputSys);
+	ActionPtr resActPtr = resAct;
+	ActionPtr logicActPtr = ENEW LogicAction(resAct, inputAct);
+	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain, &m_guiRendererChain);
+	
+	AddAction(resActPtr);
+	AddAction(inputActPtr);
+	AddAction(logicActPtr);
+	AddAction(renderActPtr);
+}
+#endif
 RenderRobot::~RenderRobot()
 {
 }

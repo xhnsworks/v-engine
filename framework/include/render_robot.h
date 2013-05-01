@@ -171,9 +171,11 @@ private:
 	EFloat3 m_lightPos;
 	LightBase2 m_light;
 
-	SwapBuffersAction* m_swpAct;
-	InputAction* m_inputAct;
+    InputAction* m_inputAct;
+#if defined(_WIN32) ||defined(_WIN64)
 	vptr m_window;
+    SwapBuffersAction* m_swpAct;
+#endif
 	InputSystem* m_inputSys;
 
 	GUIButtonFactory* m_buttonFactory;
@@ -186,6 +188,7 @@ private:
 
 	bool m_isInited;
 public:
+#if defined(_WIN32) || defined(_WIN64)
 	ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, SwapBuffersAction* swpAct, InputAction* inputAct, vptr window, InputSystem* inputSys)
 		: m_mouseRay(NULL)
 		, m_mat0(NULL)
@@ -211,6 +214,31 @@ public:
 		, m_guiPanel(NULL)
 		, m_isInited(false)
 	{}
+#else
+    ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, InputAction* inputAct, InputSystem* inputSys)
+    : m_mouseRay(NULL)
+    , m_mat0(NULL)
+    , m_mat1(NULL)
+    , m_pureLightingMat(NULL)
+    , m_coverMat(NULL)
+    , m_locator(NULL)
+    , m_guiMat(NULL)
+    , m_defaultVtxDec(NULL)
+    , m_rendererChain(rdrChain)
+    , m_guiRendererChain(guiRdrChain)
+    , m_lightMatrix(NULL)
+    , m_lightPos(2.0f, 0.0f, 2.0f)
+    , m_light(NULL)
+    , m_inputAct(inputAct)
+    , m_inputSys(inputSys)
+    , m_buttonFactory(NULL)
+    , m_cursorFactory(NULL)
+    , m_guiButton(NULL)
+    , m_guiCursor(NULL)
+    , m_guiPanel(NULL)
+    , m_isInited(false)
+	{}
+#endif
 	~ResourceAction();
 	virtual void DoImpl();
 };
@@ -283,6 +311,7 @@ public:
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///
 ///*************************************************************************************************************************///
+#if defined(_WIN32) || defined(_WIN64)
 ///*************************************************************************************************************************///
 ///                                                  class define begin                                                     ///
 ///*************************************************************************************************************************///
@@ -304,6 +333,7 @@ public:
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///
 ///*************************************************************************************************************************///
+#endif
 ///*************************************************************************************************************************///
 ///                                                  class define begin                                                     ///
 ///*************************************************************************************************************************///
@@ -311,19 +341,23 @@ class RenderRobot : public Robot
 {
 	DeclareRTTI;
 public:
-	vptr m_window;
-	RendererChain m_rendererChain;
+    RendererChain m_rendererChain;
 	GUIRendererChain m_guiRendererChain;
-	SwapBuffersAction* m_swpAct;
 	xhn::map<int, AnimationStatus> m_attrStatusMap;
-public:
-	RenderRobot(vptr window);
-	~RenderRobot();
-	inline int GetAndClearFPS() {
+#if defined(_WIN32) || defined(_WIN64)
+	vptr m_window;
+    SwapBuffersAction* m_swpAct;
+    RenderRobot(vptr window);
+    inline int GetAndClearFPS() {
 		int fps = m_swpAct->m_fps;
 		m_swpAct->m_fps = 0;
 		return fps;
 	}
+#else
+    RenderRobot();
+    ~RenderRobot();
+#endif
+public:
 	virtual void InitChannels();
 	virtual xhn::static_string GetName();
 	virtual void CommandProcImpl(xhn::static_string sender, RobotCommand* command);

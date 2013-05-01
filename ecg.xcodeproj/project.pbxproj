@@ -14,7 +14,7 @@
 		689B12D7172F8E6500972582 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 689B12D5172F8E6500972582 /* Credits.rtf */; };
 		689B12DA172F8E6500972582 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 689B12D9172F8E6500972582 /* AppDelegate.m */; };
 		689B12DD172F8E6500972582 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689B12DB172F8E6500972582 /* MainMenu.xib */; };
-		689B12E5172F8EA800972582 /* MyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 689B12E4172F8EA800972582 /* MyView.m */; };
+		689B12E5172F8EA800972582 /* MyView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 689B12E4172F8EA800972582 /* MyView.mm */; };
 		689B12E7172F8F0800972582 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12E6172F8F0700972582 /* OpenGL.framework */; };
 		689B12E9172F8F0F00972582 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12E8172F8F0F00972582 /* GLUT.framework */; };
 		68A35D7A172FE166007D0C45 /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A35D79172FE166007D0C45 /* libpng.dylib */; };
@@ -131,6 +131,10 @@
 		68A360B4172FE2B5007D0C45 /* camera_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35FC9172FE2B5007D0C45 /* camera_utility.cpp */; };
 		68A360B5172FE2B5007D0C45 /* line_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35FCA172FE2B5007D0C45 /* line_utility.cpp */; };
 		68A360B6172FE2B5007D0C45 /* texture_utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35FCB172FE2B5007D0C45 /* texture_utility.cpp */; };
+		68B4964B17302B8700AAB72D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B4964A17302B8700AAB72D /* QuartzCore.framework */; };
+		68B4964D1730D91500AAB72D /* render_robot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4964C1730D91500AAB72D /* render_robot.cpp */; };
+		68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4965F1730EC0800AAB72D /* input_system.cpp */; };
+		68B4966F1730EC7E00AAB72D /* input_system_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4966D1730EC7E00AAB72D /* input_system_osx.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -151,7 +155,7 @@
 		689B12D9172F8E6500972582 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		689B12DC172F8E6500972582 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		689B12E3172F8EA800972582 /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
-		689B12E4172F8EA800972582 /* MyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyView.m; sourceTree = "<group>"; };
+		689B12E4172F8EA800972582 /* MyView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyView.mm; sourceTree = "<group>"; };
 		689B12E6172F8F0700972582 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		689B12E8172F8F0F00972582 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		68A35BE2172FE129007D0C45 /* ecg.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = ecg.app; sourceTree = "<group>"; };
@@ -725,6 +729,12 @@
 		68A35FC9172FE2B5007D0C45 /* camera_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera_utility.cpp; sourceTree = "<group>"; };
 		68A35FCA172FE2B5007D0C45 /* line_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = line_utility.cpp; sourceTree = "<group>"; };
 		68A35FCB172FE2B5007D0C45 /* texture_utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture_utility.cpp; sourceTree = "<group>"; };
+		68B4964A17302B8700AAB72D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		68B4964C1730D91500AAB72D /* render_robot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = render_robot.cpp; sourceTree = "<group>"; };
+		68B496571730EC0800AAB72D /* input_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_system.h; sourceTree = "<group>"; };
+		68B4965F1730EC0800AAB72D /* input_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_system.cpp; sourceTree = "<group>"; };
+		68B4966D1730EC7E00AAB72D /* input_system_osx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_system_osx.cpp; sourceTree = "<group>"; };
+		68B496701730ECA900AAB72D /* input_system_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_system_osx.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -732,6 +742,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68B4964B17302B8700AAB72D /* QuartzCore.framework in Frameworks */,
 				68A35D7C172FE25A007D0C45 /* libfreetype.a in Frameworks */,
 				68A35D7A172FE166007D0C45 /* libpng.dylib in Frameworks */,
 				689B12E9172F8F0F00972582 /* GLUT.framework in Frameworks */,
@@ -775,6 +786,7 @@
 		689B12C5172F8E6500972582 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				68B4964A17302B8700AAB72D /* QuartzCore.framework */,
 				68A35D7B172FE25A007D0C45 /* libfreetype.a */,
 				68A35D79172FE166007D0C45 /* libpng.dylib */,
 				689B12E6172F8F0700972582 /* OpenGL.framework */,
@@ -798,6 +810,7 @@
 		689B12CC172F8E6500972582 /* ecg */ = {
 			isa = PBXGroup;
 			children = (
+				68B4964E1730EC0800AAB72D /* input */,
 				6815E766172FE5A400463B2A /* pugi-1.0 */,
 				68A35E0E172FE2B4007D0C45 /* framework */,
 				68A35E1B172FE2B4007D0C45 /* glsl_compiler */,
@@ -836,7 +849,7 @@
 				689B12DB172F8E6500972582 /* MainMenu.xib */,
 				689B12D9172F8E6500972582 /* AppDelegate.m */,
 				689B12D8172F8E6500972582 /* AppDelegate.h */,
-				689B12E4172F8EA800972582 /* MyView.m */,
+				689B12E4172F8EA800972582 /* MyView.mm */,
 				689B12E3172F8EA800972582 /* MyView.h */,
 			);
 			name = cocoa;
@@ -2160,6 +2173,7 @@
 		68A35E16172FE2B4007D0C45 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				68B4964C1730D91500AAB72D /* render_robot.cpp */,
 				68A35E17172FE2B4007D0C45 /* animation.cpp */,
 				68A35E19172FE2B4007D0C45 /* robot.cpp */,
 				68A35E1A172FE2B4007D0C45 /* robot_thread.cpp */,
@@ -2621,6 +2635,33 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		68B4964E1730EC0800AAB72D /* input */ = {
+			isa = PBXGroup;
+			children = (
+				68B496561730EC0800AAB72D /* include */,
+				68B4965D1730EC0800AAB72D /* src */,
+			);
+			path = input;
+			sourceTree = SOURCE_ROOT;
+		};
+		68B496561730EC0800AAB72D /* include */ = {
+			isa = PBXGroup;
+			children = (
+				68B496701730ECA900AAB72D /* input_system_osx.h */,
+				68B496571730EC0800AAB72D /* input_system.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		68B4965D1730EC0800AAB72D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				68B4965F1730EC0800AAB72D /* input_system.cpp */,
+				68B4966D1730EC7E00AAB72D /* input_system_osx.cpp */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2687,7 +2728,7 @@
 			files = (
 				689B12D3172F8E6500972582 /* main.m in Sources */,
 				689B12DA172F8E6500972582 /* AppDelegate.m in Sources */,
-				689B12E5172F8EA800972582 /* MyView.m in Sources */,
+				689B12E5172F8EA800972582 /* MyView.mm in Sources */,
 				68A35DEB172FE26E007D0C45 /* apple_file_manager.mm in Sources */,
 				68A35DED172FE26E007D0C45 /* eassert.cpp in Sources */,
 				68A35DEF172FE26E007D0C45 /* elog.cpp in Sources */,
@@ -2801,6 +2842,9 @@
 				68A360B5172FE2B5007D0C45 /* line_utility.cpp in Sources */,
 				68A360B6172FE2B5007D0C45 /* texture_utility.cpp in Sources */,
 				6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */,
+				68B4964D1730D91500AAB72D /* render_robot.cpp in Sources */,
+				68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */,
+				68B4966F1730EC7E00AAB72D /* input_system_osx.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2924,6 +2968,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/dependencies/freetype-2.4.11\"",
+					"\"$(SRCROOT)/input/bin/Debug\"",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2961,6 +3006,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/dependencies/freetype-2.4.11\"",
+					"\"$(SRCROOT)/input/bin/Debug\"",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

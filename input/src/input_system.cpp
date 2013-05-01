@@ -3,7 +3,10 @@
 #include "tree.h"
 #include "emem.h"
 #include <pthread.h>
+#if defined(_WIN32) || defined(_WIN64)
 #include "input_win32.h"
+#elif defined(__APPLE__)
+#endif
 #include "xhn_vector.hpp"
 /**
 static RWBuffer g_input_buffer = {NULL};
@@ -45,7 +48,10 @@ InputSystem::InputSystem()
 
 void InputSystem::Init(vptr platform_param)
 {
+#if defined(_WIN32) || defined(_WIN64)
     input_Init((HWND)platform_param);
+#elif defined(__APPLE__)
+#endif
     m_input_listen_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
 }
 
@@ -71,5 +77,8 @@ void InputSystem::update()
 
 		iter = Tree_next(iter);
 	}
+#if defined(_WIN32) || defined(_WIN64)
 	input_Proc(buffer);
+#elif defined(__APPLE__)
+#endif
 }

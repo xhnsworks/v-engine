@@ -67,7 +67,7 @@ Texture2DPtr _create_texture_from_file(const char* _file_name)
     FILE* file_stream = SafeFOpen(_file_name, "rb");
 	return _create_texture_from_file(file_stream);
 }
-#ifndef __APPLE__
+#if defined(_WIN32) || defined(_WIN64)
 void EnableOpenGL(HWND hwnd, HDC* hDC, HGLRC* hRC)
 {
     PIXELFORMATDESCRIPTOR pfd;
@@ -166,6 +166,56 @@ void RenderSystem_Init(HWND h)
 **/
 }
 
+void RenderSystem_SwapBuffers(HDC hDC)
+{
+    SwapBuffers(hDC);
+}
+#else
+void RenderSystem_Init(euint32 viewWidth, euint32 viewHeight)
+{
+    ///RECT rc;
+    ///GetWindowRect(h, &rc);
+    
+    g_window_width = viewWidth;
+    g_window_height = viewHeight;
+    
+    ERROR_PROC;
+    Float_Init();
+    
+    g_vtx_dec_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree_set_key_compare_proc(g_vtx_dec_tree, (KEY_COMPARE)VertexDecl_compare);
+    
+    g_depth_pass_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree_set_key_compare_proc(g_depth_pass_tree, (KEY_COMPARE)PassDecl_compare);
+    
+    g_point_depth_pass_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree_set_key_compare_proc(g_depth_pass_tree, (KEY_COMPARE)PassDecl_compare);
+    /**
+     g_shadow_pass_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+     Tree_set_data_compare_proc(g_shadow_pass_tree, VertexDecl_compare);
+     **/
+    g_blur_pass_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree_set_key_compare_proc(g_blur_pass_tree, (KEY_COMPARE)VertexDecl_compare);
+    
+    g_std_pass_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
+    Tree_set_key_compare_proc(g_std_pass_tree, (KEY_COMPARE)PassDecl_compare);
+    
+    ///g_tex_tree = Tree_new(String, Vptr, Ealloc, Efree);
+    
+	g_resource_system = ENEW ResourceSystem;
+	
+	ResourceGroup* grp = g_resource_system->GetResourceGroup("BaseGroup");
+	grp->RegisterResourceDirectory("..\\test_scene", Public);
+	g_resource_system->NewResourceGroup("Texture", "BaseGroup", Public);
+	g_resource_system->NewResourceGroup("GUIConfig", "BaseGroup", Public);
+	///g_resource_system->NewResourceGroup("FontTexture", "BaseGroup", Public);
+	grp = g_resource_system->GetResourceGroup("Texture");
+	grp->RegisterResourceImplement(ENEW Texture2DImplement);
+	grp->RegisterResourceImplement(ENEW DefaultTexture2DImplement);
+    grp = g_resource_system->GetResourceGroup("GUIConfig");
+	grp->RegisterResourceImplement(ENEW XMLImplement);
+}
+#endif
 void RenderSystem_Dest()
 {
     Iterator iter = Tree_begin(g_vtx_dec_tree);
@@ -176,7 +226,7 @@ void RenderSystem_Dest()
         iter = Tree_next(iter);
     }
     Tree_Dest(g_vtx_dec_tree);
-
+    
     iter = Tree_begin(g_depth_pass_tree);
     while (iter)
     {
@@ -185,7 +235,7 @@ void RenderSystem_Dest()
         iter = Tree_next(iter);
     }
     Tree_Dest(g_depth_pass_tree);
-
+    
     iter = Tree_begin(g_point_depth_pass_tree);
     while (iter)
     {
@@ -194,16 +244,16 @@ void RenderSystem_Dest()
         iter = Tree_next(iter);
     }
     Tree_Dest(g_point_depth_pass_tree);
-/**
-    iter = Tree_begin(g_shadow_pass_tree);
-    while (iter)
-    {
-        var data = Tree_get_value(iter);
-        Pass_delete(data.vptr_var);
-        iter = Tree_next(iter);
-    }
-    Tree_Dest(g_shadow_pass_tree);
-**/
+    /**
+     iter = Tree_begin(g_shadow_pass_tree);
+     while (iter)
+     {
+     var data = Tree_get_value(iter);
+     Pass_delete(data.vptr_var);
+     iter = Tree_next(iter);
+     }
+     Tree_Dest(g_shadow_pass_tree);
+     **/
     iter = Tree_begin(g_std_pass_tree);
     while (iter)
     {
@@ -212,19 +262,18 @@ void RenderSystem_Dest()
         iter = Tree_next(iter);
     }
     Tree_Dest(g_std_pass_tree);
-/**
-    iter = Tree_begin(g_tex_tree);
-    while (iter)
-    {
-        var data = Tree_get_value(iter);
-        Texture2D_delete((Texture2D)data.vptr_var);
-        iter = Tree_next(iter);
-    }
-    Tree_Dest(g_tex_tree);
-	**/
+    /**
+     iter = Tree_begin(g_tex_tree);
+     while (iter)
+     {
+     var data = Tree_get_value(iter);
+     Texture2D_delete((Texture2D)data.vptr_var);
+     iter = Tree_next(iter);
+     }
+     Tree_Dest(g_tex_tree);
+     **/
 	g_tex_map.clear();
 }
-
 void gl_Init(void)
 {
     ERROR_PROC;
@@ -233,7 +282,7 @@ void gl_Init(void)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);      // 4-byte pixel alignment
     // enable /disable features
     ERROR_PROC;
-
+    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     ERROR_PROC;
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -265,13 +314,6 @@ void gl_Init(void)
     glDepthMask(GL_TRUE);
     ERROR_PROC;
 }
-
-void RenderSystem_SwapBuffers(HDC hDC)
-{
-    SwapBuffers(hDC);
-}
-#endif
-
 VertexDecl RenderSystem_register_vertex_declaration(VertexDecl dec)
 {
     var key, data;

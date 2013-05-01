@@ -11,7 +11,7 @@
 
 //codefragmentbegin,myView_include
 #import <Cocoa/Cocoa.h>
-
+/**
 @interface MyView : NSView
 {
 @private
@@ -23,5 +23,22 @@
 - (void) prepareOpenGL;
 
 @end
+**/
+// for display link
+#import <QuartzCore/QuartzCore.h>
+#include "render_robot.h"
 
+@interface MyView : NSOpenGLView
+{
+    CVDisplayLinkRef displayLink;
+    
+    double    deltaTime;
+    double    outputTime;
+    float    viewWidth;
+    float    viewHeight;
+    
+    RenderRobot* renderRobot;
+}
+
+@end
 #endif
