@@ -7,7 +7,8 @@
 #include "sprite_event_hub.h"
 #include "locator.h"
 #include "animation.hpp"
-
+#include "xhn_string.hpp"
+#include "pass_console.h"
 #define BASE_DIR "D:\\"
 
 ImplementRTTI(ModifyAttrCommand, RobotCommand);
@@ -59,7 +60,10 @@ void RendererChain::Init()
 	m_viewport = view;
 
 	AddRenderer("MainRenderer");
-	AddRenderer("CoverRenderer");
+	///AddRenderer("CoverRenderer");
+
+	Renderer* rdr = GetRenderer("MainRenderer");
+	rdr->set_debug_output(NormalDebug);
 
 	gl_Init();
 	ERROR_PROC;
@@ -129,56 +133,28 @@ ShaderNode pure_normal_material_proc(PxlSdrBuf _psb, int _id)
     snprintf(mbuf, STRING_BUFFER_SIZE - 1, "PixelProc%d", _id);
     ShaderNode_set_name(psn, mbuf);
 
-    ShaderNode_set_function(psn,
-                            "{\n"
+	xhn::string strBuf;
+	strBuf += "{\n";
 #if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
-                            "    vec4 lmap = texture(NormalTangentMap, vTexCoord).rgba;\n"
+	strBuf += "    vec4 lmap = texture(";
 #else
-							"    vec4 lmap = texture2D(NormalTangentMap, vTexCoord).rgba;\n"
+	strBuf += "    vec4 lmap = texture2D(";
 #endif
-							"    vec3 ret;"
-                            ///"    NormalDecode(lmap, ret);\n"
-							"{\n"
-							///"    ret.xy = Enc.xy * 2.0 - 1.0;\n"
-							///"    ret.z = sqrt(1.0 - dot(ret.xy, ret.xy));\n"
-							"    vec2 fenc = lmap.xy * 2.0 - 1.0;\n"
-							"    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
-							"    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
-							"}\n"
-                            "    gl_FragData[0] = vec4( ret, 1.0 );"
-                            "}\n");
-
-    ShaderBuffer_add_prototype_node(sb, psn);
-    return psn;
-}
-
-ShaderNode pure_tangent_material_proc(PxlSdrBuf _psb, int _id)
-{
-    ShaderBuffer sb = to_ShaderBuffer(_psb);
-    ShaderNode psn = ShaderNode_new();
-    char mbuf[STRING_BUFFER_SIZE];
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1, "PixelProc%d", _id);
-    ShaderNode_set_name(psn, mbuf);
-
-    ShaderNode_set_function(psn,
-                            "{\n"
-#if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
-                            "    vec4 lmap = texture(NormalTangentMap, vTexCoord).rgba;\n"
-#else
-							"    vec4 lmap = texture2D(NormalTangentMap, vTexCoord).rgba;\n"
-#endif
-                            "    lmap.xy = lmap.zw;\n"
-                            "    vec3 ret;"
-							///"    NormalDecode(lmap, ret);\n"
-							"{\n"
-							///"    ret.xy = Enc.xy * 2.0 - 1.0;\n"
-							///"    ret.z = sqrt(1.0 - dot(ret.xy, ret.xy));\n"
-							"    vec2 fenc = lmap.xy * 2.0 - 1.0;\n"
-							"    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
-							"    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
-							"}\n"
-                            "    gl_FragData[0] = vec4( ret, 1.0 );"
-                            "}\n");
+	strBuf += NORMAL_MAP;
+	strBuf += ", vTexCoord).rgba;\n";
+	strBuf += 
+		"    vec3 ret;"
+		///"    NormalDecode(lmap, ret);\n"
+		"{\n"
+		///"    ret.xy = Enc.xy * 2.0 - 1.0;\n"
+		///"    ret.z = sqrt(1.0 - dot(ret.xy, ret.xy));\n"
+		"    vec2 fenc = lmap.xy * 2.0 - 1.0;\n"
+		"    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
+		"    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
+		"}\n"
+		"    gl_FragData[0] = vec4( ret, 1.0 );"
+		"}\n";
+    ShaderNode_set_function(psn, strBuf.c_str());
 
     ShaderBuffer_add_prototype_node(sb, psn);
     return psn;
@@ -401,8 +377,6 @@ void ResourceAction::DoImpl()
 			mainRdr->register_material("pure_lighting", s, Shaded, false);
 			s.proc = pure_normal_material_proc;
 			mainRdr->register_material("pure_normal", s, Shaded, false);
-			s.proc = pure_tangent_material_proc;
-			mainRdr->register_material("pure_tangent", s, Shaded, false);
 		}
 		if (coverRdr) {
 			s.proc = red_material_proc;
@@ -416,7 +390,7 @@ void ResourceAction::DoImpl()
             "nf3"
             "Tf3"
             "Bf3");
-		{
+		if (coverRdr) {
 			m_coverMat = MaterialInstance_new("red_material", NULL, NULL, "Texture");
 			m_locator = coverRdr->new_renderable(m_defaultVtxDec, m_coverMat, Segment);
             coverRdr->use_renderable(m_locator);
@@ -634,20 +608,22 @@ void LogicAction::DoImpl()
 	DefaultMouseListener2* list = m_inputAct->m_mouseListener->DynamicCast<DefaultMouseListener2>();
 	rdr->get_mouse_ray(list->m_mouseX, list->m_mouseY, &mouseRay.origin, &mouseRay.direction);
 
-	Renderable_clear(m_resAct->m_locator);
+	if (m_resAct->m_locator) {
+	    Renderable_clear(m_resAct->m_locator);
+		sfloat3 ori = SFloat3_assign_from_efloat3(&mouseRay.origin);
+		sfloat3 dir = SFloat3_assign_from_efloat3(&mouseRay.direction);
+		dir = SFloat3_mul_float(-2.5f, dir);
+		ori = SFloat3_add(ori, dir);
+		EFloat3 center = SFloat3_convert(ori);
+		MeshPtr m = create_locator(&center, 0.2f);
+		Renderable_add_mesh(m_resAct->m_locator, m);
+	}
 
-    sfloat3 ori = SFloat3_assign_from_efloat3(&mouseRay.origin);
-    sfloat3 dir = SFloat3_assign_from_efloat3(&mouseRay.direction);
-    dir = SFloat3_mul_float(-2.5f, dir);
-    ori = SFloat3_add(ori, dir);
-    EFloat3 center = SFloat3_convert(ori);
-    MeshPtr m = create_locator(&center, 0.2f);
-    Renderable_add_mesh(m_resAct->m_locator, m);
-	
 	guiRdr->get_mouse_ray(list->m_mouseX, list->m_mouseY, &mouseRay.origin, &mouseRay.direction);
 	///Ray_log(&mouseRay);
 
-	ILnDwr.update(m_resAct->m_lineDrawer);
+	if (m_resAct->m_lineDrawer)
+	    ILnDwr.update(m_resAct->m_lineDrawer);
 }
 
 void RenderAction::DoImpl()

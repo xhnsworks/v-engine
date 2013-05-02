@@ -222,11 +222,20 @@ PxlSdrBuf create_display_pixel_shader_buffer(VertexDecl _dec)
         EString_delete(vary_str);
     }
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, COLOR_MAP, 1, ColorSketch);
-    IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "NormalTangentMap", 1, NormalSketch);
+    IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, NORMAL_MAP, 1, NormalSketch);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "MaterialIDMap", 1, MaterialIDSketch);
+    IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, DEPTH_MAP, 1, Plaster);
     ///IPxlSdrBuf.add_uniform(ret, Texture2D_Param, "LightingMap", 1, LightingSketch);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "DiffuseLightingMap", 1, DiffuseLightingSketch);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "SpecularLightingMap", 1, SpecularLightingSketch);
+
+	IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, CAMERA_PLANE_WIDTH, 1, CameraPlaneWidth);
+	IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, CAMERA_PLANE_HEIGHT, 1, CameraPlaneHeight);
+	IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, CAMERA_PLANE_NEAR, 1, CameraPlaneNear);
+	IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, CAMERA_PLANE_FAR, 1, CameraPlaneFar);
+
+	IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Matrix4x4_Param, INVERT_CAMERA_WORLD_MATRIX, 1, InvertCameraWorldMatrix);
+	IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Matrix4x4_Param, INVERT_CAMERA_PROJECTION_MATRIX, 1, InvertCameraProjectionMatrix);
 
     EString_delete(prefix);
 
@@ -391,6 +400,164 @@ void default_material_proc_ex(PxlSdrBuf _psb, BranchNode _bn)
     CircuitBoard_add_reference_node(cb, psn);
 
     ShaderNode_delete(psn);
+}
+
+Pass create_debug_display_pass(VertexDecl _dec, DebugRenderOutput _db_rdr_out)
+{
+    VtxSdrBuf vsb = create_std_vertex_shader_buffer(_dec, false, false);
+    PxlSdrBuf psb = create_display_pixel_shader_buffer(_dec);
+    ShaderNode vsn = create_std_vertex_shader_node(_dec, vsb, false, false);
+
+    ShaderBuffer sb = to_ShaderBuffer(psb);
+    SdrNdGen sng = ISdrNdGen.New();
+    ISdrNdGen.register_default_nodes(sng);
+    ISdrNdGen.attach_all_prototype_nodes(sng, sb);
+
+	ShaderObject tex;
+    
+	ShaderObject tex_crd = IPxlSdrBuf.find_object(to_ShaderBuffer(psb), TEXCOORD);
+	switch (_db_rdr_out) 
+	{
+    case ColorDebug:
+		tex = ShaderBuffer_find_object(to_ShaderBuffer(psb), COLOR_MAP);
+		{
+			ShaderObject pixel = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float3_Obj, "Pixel", 1);
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, MapSampleNode);
+				ShaderNode_add_input_link(node, tex, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, tex_crd, INVALID_ARRAY_INDEX);
+				ShaderNode_add_output_link(node, pixel, INVALID_ARRAY_INDEX);
+			}
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, LightingOutputNode);
+				ShaderNode_add_input_link(node, pixel, INVALID_ARRAY_INDEX);
+			}
+		}
+		break;
+	case NormalDebug:
+		tex = IPxlSdrBuf.find_object(to_ShaderBuffer(psb), NORMAL_MAP);
+		{
+			ShaderObject pixel_rgba = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float4_Obj, "PixelRGBA", 1);
+			ShaderObject pixel_rgb = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float3_Obj, "PixelRGB", 1);
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, MapSampleNodeRGBA);
+				ShaderNode_add_input_link(node, tex, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, tex_crd, INVALID_ARRAY_INDEX);
+				ShaderNode_add_output_link(node, pixel_rgba, INVALID_ARRAY_INDEX);
+			}
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, NormalDecodeNode);
+				ShaderNode_add_input_link(node, pixel_rgba, INVALID_ARRAY_INDEX);
+                ShaderNode_add_output_link(node, pixel_rgb, INVALID_ARRAY_INDEX);
+			}
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, LightingOutputNode);
+				ShaderNode_add_input_link(node, pixel_rgb, INVALID_ARRAY_INDEX);
+			}
+		}
+		break;
+	case PositionDebug:
+		tex = IPxlSdrBuf.find_object(to_ShaderBuffer(psb), DEPTH_MAP);
+		{
+			ShaderObject pixel_rgba = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float4_Obj, "PixelRGBA", 1);
+			ShaderObject tgt_pos = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float3_Obj, "PixelRGB", 1);
+			ShaderObject width =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_WIDTH);
+			ShaderObject height =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_HEIGHT);
+			ShaderObject near_plane =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_NEAR);
+			ShaderObject far_plane =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_FAR);
+			ShaderObject inv_cam_world_mat =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), INVERT_CAMERA_WORLD_MATRIX);
+			ShaderObject inv_cam_proj_mat =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), INVERT_CAMERA_PROJECTION_MATRIX);
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, MapSampleNodeRGBA);
+				ShaderNode_add_input_link(node, tex, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, tex_crd, INVALID_ARRAY_INDEX);
+				ShaderNode_add_output_link(node, pixel_rgba, INVALID_ARRAY_INDEX);
+			}
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, PositionDecodeNode);
+				ShaderNode_add_input_link(node, tex_crd, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, pixel_rgba, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, near_plane, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, far_plane, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, width, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, height, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, inv_cam_world_mat, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, inv_cam_proj_mat, INVALID_ARRAY_INDEX);
+				///ShaderNode_set_result_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
+				ShaderNode_add_output_link(node, tgt_pos, INVALID_ARRAY_INDEX);
+			}
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, LightingOutputNode);
+				ShaderNode_add_input_link(node, tgt_pos, INVALID_ARRAY_INDEX);
+			}
+		}
+		break;
+	case DepthDebug:
+		tex = IPxlSdrBuf.find_object(to_ShaderBuffer(psb), DEPTH_MAP);
+		{
+			ShaderObject pixel = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float3_Obj, "Pixel", 1);
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, MapSampleNode);
+				ShaderNode_add_input_link(node, tex, INVALID_ARRAY_INDEX);
+				ShaderNode_add_input_link(node, tex_crd, INVALID_ARRAY_INDEX);
+				ShaderNode_add_output_link(node, pixel, INVALID_ARRAY_INDEX);
+			}
+			{
+				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, LightingOutputNode);
+				ShaderNode_add_input_link(node, pixel, INVALID_ARRAY_INDEX);
+			}
+		}
+		break;
+	default:
+		return NULL;
+	}
+	
+
+    IVtxSdrBuf.add_prototype_node((ShaderBuffer)vsb, vsn);
+    IVtxSdrBuf.add_reference_node((ShaderBuffer)vsb, ShaderNode_get_name(vsn));
+
+    IVtxSdrBuf.complete(vsb);
+    IPxlSdrBuf.complete(psb);
+    Shader auto_vs = Shader_new();
+    Shader auto_ps = Shader_new();
+
+    char mbuf[STRING_BUFFER_SIZE];
+    sb = to_ShaderBuffer(vsb);
+
+#ifdef MARK_GLSL_VERSION
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
+    Shader_load_from_string(auto_vs, mbuf, VertexShader);
+
+    sb = to_ShaderBuffer(psb);
+
+#ifdef MARK_GLSL_VERSION
+	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+#else
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
+             "%s", sb->output);
+#endif
+    Shader_load_from_string(auto_ps, mbuf, PixelShader);
+	slog(PostPassLog, "%s", mbuf);
+
+    Pass ret = create_pass_from_shader(auto_vs, auto_ps);
+
+    ShaderNode_delete(vsn);
+
+    Tree vtx_param_src_tree = IVtxSdrBuf.sell_param_source_object_tree((ShaderBuffer)vsb);
+    Tree pxl_param_src_tree = IPxlSdrBuf.sell_param_source_object_tree((ShaderBuffer)psb);
+    Pass_buy_vertex_param_source_tree(ret, vtx_param_src_tree);
+    Pass_buy_pixel_param_source_tree(ret, pxl_param_src_tree);
+
+    IVtxSdrBuf._Delete(vsb);
+    IPxlSdrBuf._Delete(psb);
+	ISdrNdGen.Delete(sng);
+    return ret;
 }
 
 Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)

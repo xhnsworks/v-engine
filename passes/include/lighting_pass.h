@@ -34,6 +34,7 @@ API_EXPORT ShaderNode create_to_camera_space_node();
 API_EXPORT ShaderNode create_point_array_lighting_node();
 API_EXPORT ShaderNode create_lighting_accumulator_node();
 API_EXPORT ShaderNode create_lighting_output_node();
+API_EXPORT ShaderNode create_lighting_output_node_rgba();
 API_EXPORT ShaderNode create_lighting_vertex_shader_node(VertexDecl _dec);
 
 ///API_EXPORT void default_point_lighting_proc(PxlSdrBuf _pxl_sdr_buf, SdrNdGen _sdr_node_gtr, bool _has_lighting_map);

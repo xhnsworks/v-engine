@@ -1,0 +1,186 @@
+# depslib dependency file v1.0
+1350350757 source:f:\ecg\common\src\eassert.c
+	"eassert.h"
+	"elog.h"
+
+1350350756 f:\ecg\common\include\eassert.h
+	"common.h"
+	"etypes.h"
+	<assert.h>
+
+1350350756 f:\ecg\common\include\common.h
+
+1351486490 f:\ecg\common\include\etypes.h
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<stdbool.h>
+	<stdint.h>
+
+1350350756 f:\ecg\common\include\elog.h
+	"common.h"
+	"etypes.h"
+
+1350350757 source:f:\ecg\common\src\elog.c
+	"elog.h"
+
+1350350757 source:f:\ecg\common\src\esignal.c
+	"esignal.h"
+	<stdio.h>
+	<signal.h>
+	<setjmp.h>
+
+1350350756 f:\ecg\common\include\esignal.h
+
+1350350757 source:f:\ecg\common\src\estring.c
+	"estring.h"
+	"hash.h"
+	"mem.h"
+
+1350350756 f:\ecg\common\include\estring.h
+	"common.h"
+	"etypes.h"
+
+1350350756 f:\ecg\common\include\hash.h
+	"common.h"
+	"etypes.h"
+
+1350350756 f:\ecg\common\include\mem.h
+	<stdio.h>
+	<stdlib.h>
+	"etypes.h"
+	"common.h"
+
+1350350757 source:f:\ecg\common\src\golden_cudgel.c
+	"golden_cudgel.h"
+	"mem.h"
+	<windows.h>
+
+1350350756 f:\ecg\common\include\golden_cudgel.h
+	"common.h"
+	"etypes.h"
+
+1350350757 source:f:\ecg\common\src\hash.c
+	"hash.h"
+
+1350350757 source:f:\ecg\common\src\list.c
+	"list.h"
+	"container.h"
+
+1350350756 f:\ecg\common\include\list.h
+	"etypes.h"
+	"common.h"
+
+1350350756 f:\ecg\common\include\container.h
+	"common.h"
+	"etypes.h"
+	<pthread.h>
+	"tree.h"
+
+1350350756 f:\ecg\common\include\tree.h
+	"etypes.h"
+	"common.h"
+	"comparison_algorithm.h"
+
+1350350756 f:\ecg\common\include\comparison_algorithm.h
+
+1350350757 source:f:\ecg\common\src\mem.c
+	"mem.h"
+	"elog.h"
+	"eassert.h"
+	<malloc.h>
+	"list.h"
+	<xmmintrin.h>
+	<emmintrin.h>
+	<pmmintrin.h>
+
+1350350757 source:f:\ecg\common\src\parser.c
+	"parser.h"
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+
+1350350756 f:\ecg\common\include\parser.h
+	"etypes.h"
+	"common.h"
+
+1350350757 source:f:\ecg\common\src\rwbuffer.c
+	"rwbuffer.h"
+	"mem.h"
+
+1350350756 f:\ecg\common\include\rwbuffer.h
+	"common.h"
+	"etypes.h"
+
+1351572201 source:f:\ecg\common\src\stack.c
+	"stack.h"
+	"mem.h"
+	"container.h"
+
+1351227846 f:\ecg\common\include\stack.h
+	"etypes.h"
+	"common.h"
+
+1351472415 source:f:\ecg\common\src\tree.c
+	"tree.h"
+	"container.h"
+	"estring.h"
+	"elog.h"
+	"eassert.h"
+
+1351573243 source:f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\lex.c
+	"etypes.h"
+	"common.h"
+	"tree.h"
+	"test.tab.h"
+	"parser_env.h"
+	"symbol_stack.h"
+	"estring.h"
+
+1351558962 f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\test.tab.h
+
+1351558962 source:f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\test.tab.c
+	"common.h"
+	"etypes.h"
+	"parser_env.h"
+	<stddef.h>
+	<libintl.h>
+	<alloca.h>
+	<malloc.h>
+	<stdlib.h>
+	<stdlib.h>
+	<stdio.h>
+
+1351572541 source:f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\main.c
+	<stdio.h>
+	<stdlib.h>
+	"test.tab.h"
+	"etypes.h"
+	"parser_env.h"
+	"tree.h"
+	"mem.h"
+	"symbol_stack.h"
+
+1351731175 source:f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\proc.c
+	"common.h"
+	"etypes.h"
+	"mem.h"
+	"parser_env.h"
+	"symbol_stack.h"
+
+1351487176 f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\parser_env.h
+	"common.h"
+	"etypes.h"
+	"stack.h"
+
+1351572991 f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\symbol_stack.h
+	"common.h"
+	"etypes.h"
+	"stack.h"
+	"tree.h"
+	"parser_env.h"
+
+1351730993 source:f:\ecg\dependencies\bison\bison-2.4.1-bin\bin\symbol_stack.c
+	"symbol_stack.h"
+	"mem.h"
+

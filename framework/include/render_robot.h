@@ -196,6 +196,7 @@ public:
 		, m_pureLightingMat(NULL)
 		, m_coverMat(NULL)
 		, m_locator(NULL)
+		, m_lineDrawer(NULL)
 		, m_guiMat(NULL)
 		, m_defaultVtxDec(NULL)
 		, m_rendererChain(rdrChain)
@@ -222,6 +223,7 @@ public:
     , m_pureLightingMat(NULL)
     , m_coverMat(NULL)
     , m_locator(NULL)
+	, m_lineDrawer(NULL)
     , m_guiMat(NULL)
     , m_defaultVtxDec(NULL)
     , m_rendererChain(rdrChain)
@@ -355,8 +357,8 @@ public:
 	}
 #else
     RenderRobot();
-    ~RenderRobot();
 #endif
+	~RenderRobot();
 public:
 	virtual void InitChannels();
 	virtual xhn::static_string GetName();

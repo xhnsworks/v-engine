@@ -23,8 +23,18 @@
 ///#include "material_instance.h"
 #include "material_prototype.h"
 
+enum DebugRenderOutput
+{
+	NonDebug = 0,
+	ColorDebug,
+	NormalDebug,
+	PositionDebug,
+	DepthDebug,
+};
+
 API_EXPORT Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls);
 API_EXPORT Pass create_display_texture_pass(VertexDecl _dec);
+API_EXPORT Pass create_debug_display_pass(VertexDecl _dec, DebugRenderOutput _db_rdr_out);
 
 ///void _create_dispaly_pass_ex2_test(VertexDecl _dec);
 #endif

@@ -1721,11 +1721,11 @@
 			Name="tmp"
 			>
 			<File
-				RelativePath="..\glew\GL\glew.h"
+				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
+				RelativePath="..\glew\GL\glew.h"
 				>
 			</File>
 			<File
@@ -2721,7 +2721,15 @@
 			Name="glsl_complier"
 			>
 			<File
+				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
 				>
 			</File>
 			<File
@@ -2733,11 +2741,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\src\glsltex.cpp"
+				RelativePath="..\glsl_compiler\src\glsl_lex.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\include\glsltex.h"
+				RelativePath="..\glsl_compiler\include\glsl_lex.h"
 				>
 			</File>
 		</Filter>

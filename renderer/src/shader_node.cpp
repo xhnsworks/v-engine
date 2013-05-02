@@ -424,18 +424,11 @@ void ShaderNode_clear_links(ShaderNode _sn)
 
 const char* ShaderNode_compile(ShaderNode _sn)
 {
+#ifndef USE_RECOMPILE
 	string_buffer_new(STRING_BUFFER_SIZE);
-	/**
-    if ( to_ptr(_sn->result_link) != NULL )
-    {
-		sbuf_printf("%s = ", ShaderObject_get_name(_sn->result_link));
-    }
-**/
 	EString tmp = _compile_links(_sn);
 	sbuf_printf("%s( %s );", _sn->node_name, tmp);
 	EString_delete(tmp);
-
-#ifndef USE_RECOMPILE
 	return EString_new(get_string_buffer);
 #else
 	return _recompile(_sn);

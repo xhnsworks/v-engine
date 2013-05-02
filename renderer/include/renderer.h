@@ -86,6 +86,7 @@ API_EXPORT class Renderer : public RendererBase
     friend class light_prototype;
 private:
     Renderer *prev_renderer;
+	DebugRenderOutput debug_render_output;
 
     SketchBook std_sketch_book;
     SketchBook lighting_sketch_book_array[NUM_LIGHTING_SKETCH_BOOKS];
@@ -170,6 +171,7 @@ public:
     virtual TextureCube get_shadow_cube_map() {
         return shadow_state.get_shadow_cube_map();
     }
+	void set_debug_output(DebugRenderOutput dro);
 };
 
 API_EXPORT const char *_get_param_src_str ( param_source _src );

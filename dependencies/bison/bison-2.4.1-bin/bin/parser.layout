@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="..\..\..\..\common\include\etypes.h" open="1" top="0" tabpos="8">
+		<Cursor position="8855" topLine="378" />
+	</File>
+	<File name="..\..\..\..\common\src\estring.c" open="1" top="0" tabpos="1">
+		<Cursor position="462" topLine="30" />
+	</File>
+	<File name="..\..\..\..\common\src\golden_cudgel.c" open="1" top="0" tabpos="2">
+		<Cursor position="274" topLine="0" />
+	</File>
+	<File name="..\..\..\..\common\src\mem.c" open="1" top="0" tabpos="3">
+		<Cursor position="11602" topLine="460" />
+	</File>
+	<File name="..\..\..\..\common\src\rwbuffer.c" open="1" top="0" tabpos="5">
+		<Cursor position="3506" topLine="65" />
+	</File>
+	<File name="..\..\..\..\common\src\stack.c" open="1" top="0" tabpos="12">
+		<Cursor position="4203" topLine="154" />
+	</File>
+	<File name="..\..\..\..\common\src\tree.c" open="1" top="0" tabpos="13">
+		<Cursor position="16038" topLine="567" />
+	</File>
+	<File name="lex.c" open="1" top="0" tabpos="6">
+		<Cursor position="1813" topLine="277" />
+	</File>
+	<File name="main.c" open="1" top="1" tabpos="4">
+		<Cursor position="1082" topLine="12" />
+	</File>
+	<File name="parser_env.h" open="1" top="0" tabpos="14">
+		<Cursor position="224" topLine="0" />
+	</File>
+	<File name="proc.c" open="1" top="0" tabpos="9">
+		<Cursor position="2706" topLine="65" />
+	</File>
+	<File name="symbol_stack.c" open="1" top="0" tabpos="11">
+		<Cursor position="1568" topLine="39" />
+	</File>
+	<File name="symbol_stack.h" open="1" top="0" tabpos="10">
+		<Cursor position="1303" topLine="20" />
+	</File>
+	<File name="test.tab.c" open="1" top="0" tabpos="15">
+		<Cursor position="37894" topLine="1066" />
+	</File>
+	<File name="test.tab.h" open="1" top="0" tabpos="7">
+		<Cursor position="2492" topLine="32" />
+	</File>
+</CodeBlocks_layout_file>

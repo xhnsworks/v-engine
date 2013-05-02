@@ -1,0 +1,10 @@
+func dot (x0 float, y0 float, x1 float, y1 float) (d float)
+{
+    d = x0 * x1 + y0 * y1;
+}
+func main(a int)
+{
+    var d float;
+    d = dot(1.0, 2.0, 3.0, 4.0);
+    print d;
+}

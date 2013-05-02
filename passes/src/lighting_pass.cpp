@@ -352,6 +352,20 @@ ShaderNode create_lighting_output_node()
     return ret;
 }
 
+ShaderNode create_lighting_output_node_rgba()
+{
+	ShaderNode ret = ShaderNode_new();
+	ShaderNode_set_name(ret, "Output");
+
+	ShaderNode_set_function(ret,
+		"{\n"
+		"    gl_FragData[0] = vec4(LightingValue.rgb, 1.0);\n"
+		"}\n");
+
+	ShaderNode_add_input_param(ret, Float4_Obj, "LightingValue", 1);
+	return ret;
+}
+
 #define USE_SWITCH_NODE
 
 ParamTable ParamTable_new()

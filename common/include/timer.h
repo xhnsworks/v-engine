@@ -32,9 +32,9 @@ __inline__ uint64 perf_counter(void)
 **/
 #if defined(_MSC_VER) || defined(__MINGW32__)
 
-inline uint64 perf_counter(void)
+inline euint64 perf_counter(void)
 {
-	uint64 ret;
+	euint64 ret;
 	QueryPerformanceCounter((LARGE_INTEGER*)&ret);
 	return ret;
 }
@@ -44,13 +44,13 @@ inline double pref_frequency(void)
 	QueryPerformanceFrequency((LARGE_INTEGER*)&temp);
 	return ((double)temp.QuadPart) / 1000000.0;
 }
-inline double cale_elapsed_time(uint64 start, uint64 end, double freq)
+inline double cale_elapsed_time(euint64 start, euint64 end, double freq)
 {
 	return ((double)end - (double)start) / freq;
 }
 struct TimeCheckpoint
 {
-	uint64 timeStamp;
+	euint64 timeStamp;
 	double freq;
 	TimeCheckpoint()
 		: timeStamp(0)

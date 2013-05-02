@@ -388,7 +388,10 @@ void Renderer::common_init()
 }
 
 Renderer::Renderer ( Renderer *_prev_renderer )
-: RendererBase(_prev_renderer)
+: prev_render_skb(NULL)
+, prev_lighting_skb(NULL)
+, debug_render_output(NonDebug)
+, RendererBase(_prev_renderer)
 {
     ///RendererBase::Init ( _prev_renderer );
     common_init();
@@ -397,7 +400,10 @@ Renderer::Renderer ( Renderer *_prev_renderer )
 }
 
 Renderer::Renderer ( ViewportPtr view )
-: RendererBase(view)
+: prev_render_skb(NULL)
+, prev_lighting_skb(NULL)
+, debug_render_output(NonDebug)
+, RendererBase(view)
 {
     ///RendererBase::Init ( x, y, width, height );
     common_init();
@@ -558,22 +564,28 @@ void Renderer::prepare_display_passes()
         Pass_delete ( display_pass );
     }
 
-    Iterator mat_iter = Tree_begin ( material_table );
-    material_decl null_mat_decl = {NULL, -1};
-    material_decl *decls = array_new ( material_decl, Tree_count ( material_table ), null_mat_decl );
+	if (debug_render_output == NonDebug) {
+		Iterator mat_iter = Tree_begin ( material_table );
+		material_decl null_mat_decl = {NULL, -1};
+		material_decl *decls = array_new ( material_decl, Tree_count ( material_table ), null_mat_decl );
 
-    while ( mat_iter ) {
-        var data = Tree_get_value ( mat_iter );
-        MaterialPrototype mp = ( MaterialPrototype ) data.vptr_var;
-        material_decl d = {mp->disp_proc, mp->material_id};
-        apush ( decls, d );
-        mat_iter = Tree_next ( mat_iter );
-    }
+		while ( mat_iter ) {
+			var data = Tree_get_value ( mat_iter );
+			MaterialPrototype mp = ( MaterialPrototype ) data.vptr_var;
+			material_decl d = {mp->disp_proc, mp->material_id};
+			apush ( decls, d );
+			mat_iter = Tree_next ( mat_iter );
+		}
 
-    VertexDecl vtx_decl = RenderablePlane_get_vertex_declaration ( render_plane );
-    display_pass = create_display_pass_ex2 ( vtx_decl, decls );
+		VertexDecl vtx_decl = RenderablePlane_get_vertex_declaration ( render_plane );
+		display_pass = create_display_pass_ex2 ( vtx_decl, decls );
 
-    array_delete ( decls );
+		array_delete ( decls );
+	}
+	else {
+		VertexDecl vtx_decl = RenderablePlane_get_vertex_declaration ( render_plane );
+		display_pass = create_debug_display_pass(vtx_decl, debug_render_output);
+	}
 }
 void Renderer::prepare_lighting_passes()
 {
@@ -976,7 +988,8 @@ void Renderer::render()
     render_std_passes();
 
     if ( use_deferred_shading ) {
-        lighting();
+		if (debug_render_output == NonDebug)
+            lighting();
         glViewport ( x, y, width, height );
 
         if ( !prev_renderer ) {
@@ -985,17 +998,25 @@ void Renderer::render()
             glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         }
 
-        curt_mat_proto = NULL;
-        curt_material_id_sketch = SketchBook_get_sketch ( prev_render_skb, MATERIAL_ID_INDEX );
-        curt_color_sketch = SketchBook_get_sketch ( prev_render_skb, BASE_COLOR_INDEX );
-        curt_normal_sketch = SketchBook_get_sketch ( prev_render_skb, NORMAL_SPECULAR_INDEX );
-        curt_lighting_sketch = SketchBook_get_sketch ( prev_lighting_skb, 0 );
-        curt_diffuse_lighting_sketch = SketchBook_get_sketch ( prev_lighting_skb, 0 );
-        curt_specular_lighting_sketch = SketchBook_get_sketch ( prev_lighting_skb, 1 );
+		curt_mat_proto = NULL;
+		curt_material_id_sketch = SketchBook_get_sketch ( prev_render_skb, MATERIAL_ID_INDEX );
+		curt_color_sketch = SketchBook_get_sketch ( prev_render_skb, BASE_COLOR_INDEX );
+		curt_normal_sketch = SketchBook_get_sketch ( prev_render_skb, NORMAL_SPECULAR_INDEX );
+		curt_plaster = SketchBook_get_plaster ( prev_render_skb );
+		if (prev_lighting_skb) {
+			curt_lighting_sketch = SketchBook_get_sketch ( prev_lighting_skb, 0 );
+			curt_diffuse_lighting_sketch = SketchBook_get_sketch ( prev_lighting_skb, 0 );
+			curt_specular_lighting_sketch = SketchBook_get_sketch ( prev_lighting_skb, 1 );
+		}
+		else {
+            curt_lighting_sketch = NULL;
+            curt_diffuse_lighting_sketch = NULL;
+            curt_specular_lighting_sketch = NULL;
+		}
 
-        Pass_auto_set_uniform_params ( display_pass, this, false );
+		Pass_auto_set_uniform_params ( display_pass, this, false );
 
-        Pass_render_plane ( display_pass, render_plane );
+		Pass_render_plane ( display_pass, render_plane );
     }
 
     dirty_flag = false;
@@ -1135,3 +1156,10 @@ RendererParamEntry Renderer::get_param_entry ( esint32 _id )
     }
 }
 
+void Renderer::set_debug_output(DebugRenderOutput dro)
+{
+	if (dro != debug_render_output) {
+		debug_render_output = dro;
+		dirty_flag = true;
+	}
+}
