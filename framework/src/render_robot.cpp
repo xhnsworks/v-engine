@@ -63,7 +63,7 @@ void RendererChain::Init()
 	///AddRenderer("CoverRenderer");
 
 	///Renderer* rdr = GetRenderer("MainRenderer");
-	///rdr->set_debug_output(NormalDebug);
+	///rdr->set_debug_output(DepthDebug);
 	///rdr->set_deferred_shading(false);
 
 	gl_Init();
@@ -400,14 +400,21 @@ void ResourceAction::DoImpl()
 		    MeshPtr m;
             {
                 ColladaState colSt = ColladaState_new();
+#if defined(_WIN32) || defined(_WIN64)
                 ColladaState_load_mesh(colSt, "D:\\test_scene\\test4.dae");
+#elif defined(__APPLE__)
+                ColladaState_load_mesh(colSt, "../../../../../test_scene/test4.dae");
+#endif
                 ColladaState_log(colSt);
                 m = ColladaState_create_mesh(colSt);
             }
 
             char path[260];
+#if defined(_WIN32) || defined(_WIN64)
             snprintf(path, 259, "%s%s", BASE_DIR, "test_scene\\mesh_pos_unit1.ogl");
-
+#elif defined(__APPLE__)
+            snprintf(path, 259, "%s%s", BASE_DIR, "../../../../../test_scene/mesh_pos_unit1.ogl");
+#endif
 			m_mat0 = MaterialInstance_new("pure_lighting", NULL, NULL, "Texture");
 			Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat0, Triangular);
             Renderable_add_mesh(r, m);
@@ -417,11 +424,18 @@ void ResourceAction::DoImpl()
 		    MeshPtr m;
             {
                 ColladaState colSt = ColladaState_new();
+#if defined(_WIN32) || defined(_WIN64)
                 ColladaState_load_mesh(colSt, "D:\\test_scene\\test5.dae");
+#elif defined(__APPLE__)
+                ColladaState_load_mesh(colSt, "../../../../../test_scene/test5.dae");
+#endif
                 ColladaState_log(colSt);
                 m = ColladaState_create_mesh(colSt);
             }
+            /**
 		    m_mat1 = MaterialInstance_new("default_material", "GAZER789_Diffuse.png", "GAZER789_Normal-1.png", "Texture");
+            **/
+            m_mat1 = MaterialInstance_new("pure_lighting", NULL, "GAZER789_Normal-1.png", "Texture");
 
 		    Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat1, Triangular);
             Renderable_add_mesh(r, m);
