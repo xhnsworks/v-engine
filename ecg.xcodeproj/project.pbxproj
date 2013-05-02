@@ -140,6 +140,7 @@
 		6815E767172FE5A400463B2A /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugiconfig.hpp; sourceTree = "<group>"; };
 		6815E768172FE5A400463B2A /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
 		6815E769172FE5A400463B2A /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
+		68998D251732BD4200EC1D8A /* ecg.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ecg.entitlements; sourceTree = "<group>"; };
 		689B12C3172F8E6500972582 /* ecg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ecg.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		689B12C6172F8E6500972582 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		689B12C9172F8E6500972582 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -808,6 +809,7 @@
 		689B12CC172F8E6500972582 /* ecg */ = {
 			isa = PBXGroup;
 			children = (
+				68998D251732BD4200EC1D8A /* ecg.entitlements */,
 				68B4964E1730EC0800AAB72D /* input */,
 				6815E766172FE5A400463B2A /* pugi-1.0 */,
 				68A35E0E172FE2B4007D0C45 /* framework */,
@@ -2935,6 +2937,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = ecg/ecg.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ecg/ecg-Prefix.pch";
@@ -2976,6 +2979,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = ecg/ecg.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ecg/ecg-Prefix.pch";
