@@ -8,8 +8,8 @@
 #include "xhn_static_string.hpp"
 #include "texture2d.h"
 #define USE_DS_RENDER         true
-#define MATERIAL_ID_INDEX     0
-#define BASE_COLOR_INDEX      1
+#define MATERIAL_ID_INDEX     1
+#define BASE_COLOR_INDEX      0
 #define NORMAL_SPECULAR_INDEX 2
 
 #define MATERIAL_ID_FORMAL     RGBA8

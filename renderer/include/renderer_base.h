@@ -11,6 +11,7 @@
 #include "lighting.h"
 #include "renderable.h"
 #include "xhn_set.hpp"
+#include "xhn_map.hpp"
 
 struct Viewport : public RefObject
 {
@@ -39,13 +40,15 @@ public:
 	virtual ~DefaultRenderableSorter() {}
     virtual void Sort(STD_NAMESPACE::set<Renderable>& used_renderable_set, STD_NAMESPACE::list<Renderable>& sorted_renderable_list);
 };
+typedef struct _renderer_param_entry *RendererParamEntry;
 class API_EXPORT RendererBase : public MemObject
 {
 protected:
     RenderablePlane render_plane;
 	matrix4x4* default_rend_matrix;
 
-	Tree param_proc_tree;
+	///Tree param_proc_tree;
+	STD_NAMESPACE::map<param_source, RendererParamEntry> param_proc_map;
 
 	Tree material_table;
     esint material_count;
@@ -115,7 +118,7 @@ public:
         return render_plane;
     }
 };
-typedef struct _renderer_param_entry *RendererParamEntry;
+
 typedef renderer_param_value ( *GetRendererParamProc ) ( RendererBase * );
 API_EXPORT RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint _array_size );
 API_EXPORT void RendererParamEntry_delete ( RendererParamEntry _self );

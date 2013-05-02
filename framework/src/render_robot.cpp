@@ -62,8 +62,9 @@ void RendererChain::Init()
 	AddRenderer("MainRenderer");
 	///AddRenderer("CoverRenderer");
 
-	Renderer* rdr = GetRenderer("MainRenderer");
-	rdr->set_debug_output(NormalDebug);
+	///Renderer* rdr = GetRenderer("MainRenderer");
+	///rdr->set_debug_output(NormalDebug);
+	///rdr->set_deferred_shading(false);
 
 	gl_Init();
 	ERROR_PROC;

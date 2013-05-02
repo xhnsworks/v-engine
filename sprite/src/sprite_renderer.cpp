@@ -167,10 +167,11 @@ void SpriteRenderer::prepare_renderable(Renderable _rbl)
 
 bool SpriteRenderer::is_uniform_param_source ( esint32 _src )
 {
-	var key, data;
-	key.sint32_var = _src;
+	///var key, data;
+	///key.sint32_var = _src;
 
-	if ( Tree_find ( param_proc_tree, key, &data ) ) {
+	///if ( Tree_find ( param_proc_tree, key, &data ) ) {
+	if (param_proc_map.find((param_source)_src) != param_proc_map.end()) {
 		return true;
 	}
 	else {
@@ -188,11 +189,15 @@ TextureCube SpriteRenderer::get_shadow_cube_map()
 }
 renderer_param_value SpriteRenderer::get_shader_object_value ( esint32 _src )
 {
-	var key, data;
-	key.sint32_var = _src;
+	///var key, data;
+	///key.sint32_var = _src;
 
-	if ( Tree_find ( param_proc_tree, key, &data ) ) {
-		RendererParamEntry entry = ( RendererParamEntry ) data.vptr_var;
+	STD_NAMESPACE::map<param_source, RendererParamEntry>::iterator iter = param_proc_map.find((param_source)_src);
+
+	///if ( Tree_find ( param_proc_tree, key, &data ) ) {
+	if (iter != param_proc_map.end()) {
+		///RendererParamEntry entry = ( RendererParamEntry ) data.vptr_var;
+		RendererParamEntry entry = iter->second;
 		return entry->get_value_proc ( this );
 	}
 	else {

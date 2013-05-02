@@ -148,9 +148,6 @@ void _render_one_frame_begin()
  *
  */
 
-
-
-
 const char *_get_param_src_str ( param_source _src )
 {
     switch ( _src ) {
@@ -366,7 +363,6 @@ const char *_get_param_src_str ( param_source _src )
     }
 }
 
-///void _Renderer_common_Init(renderer* _self)
 void Renderer::common_init()
 {
 	RendererBase::CommonInit();
@@ -381,10 +377,6 @@ void Renderer::common_init()
     dirty_flag = true;
     clear_color_buffer_flag = true;
     clear_depth_buffer_flag = true;
-
-    ///curt_rend_world_matrix = NULL;
-
-	///shadow_renderer = ENEW ShadowRenderer(this);
 }
 
 Renderer::Renderer ( Renderer *_prev_renderer )
@@ -393,7 +385,6 @@ Renderer::Renderer ( Renderer *_prev_renderer )
 , debug_render_output(NonDebug)
 , RendererBase(_prev_renderer)
 {
-    ///RendererBase::Init ( _prev_renderer );
     common_init();
     prev_renderer = _prev_renderer;
     use_deferred_shading = _prev_renderer->use_deferred_shading;
@@ -405,13 +396,11 @@ Renderer::Renderer ( ViewportPtr view )
 , debug_render_output(NonDebug)
 , RendererBase(view)
 {
-    ///RendererBase::Init ( x, y, width, height );
     common_init();
     prev_renderer = NULL;
     use_deferred_shading = USE_DS_RENDER;
 }
 
-///void Renderer_Dest(renderer* _self)
 void Renderer::RendererDest()
 {
     Dest();
@@ -429,7 +418,7 @@ void Renderer::RendererDest()
             }
         }
     }
-
+/**
     Iterator iter = Tree_begin ( param_proc_tree );
 
     while ( iter ) {
@@ -440,8 +429,13 @@ void Renderer::RendererDest()
     }
 
     Tree_Dest ( param_proc_tree );
-
-	///delete shadow_renderer;
+	**/
+	STD_NAMESPACE::map<param_source, RendererParamEntry>::iterator iter = param_proc_map.begin();
+	STD_NAMESPACE::map<param_source, RendererParamEntry>::iterator end = param_proc_map.end();
+	for (; iter != end; iter++) {
+        RendererParamEntry entry = iter->second;
+		RendererParamEntry_delete ( entry );
+	}
 }
 
 Renderer::~Renderer()
@@ -518,7 +512,6 @@ void Renderer::prepare_sketchbooks()
         }
 
         shadow_state.prepare ( get_render_plane() );
-		///shadow_renderer->prepare();
 
         elog ( "%s", "LIGHTING SKETCHBOOK INIT BEGIN:" );
 
@@ -614,7 +607,10 @@ void Renderer::render_std_passes()
     prev_render_skb = std_sketch_book;
     Pass std_pass = {NULL};
 
-    glViewport ( 0, 0, width, height );
+	if ( use_deferred_shading )
+        glViewport ( 0, 0, width, height );
+	else
+        glViewport ( x, y, width, height );
 
     if ( use_deferred_shading ) {
         SketchBook_bind_framebuffer ( prev_render_skb );
@@ -642,17 +638,14 @@ void Renderer::render_std_passes()
         SketchBook_unbind_renderbuffer();
     }
 
-    ///Iterator r_iter = Tree_begin ( used_renderable_tree );
 	renderable_sorter->Sort(used_renderable_set, sorted_renderable_list);
 	STD_NAMESPACE::list<Renderable>::iterator r_iter = sorted_renderable_list.begin();
 	STD_NAMESPACE::list<Renderable>::iterator end = sorted_renderable_list.end();
     euint count = 0;
 
-    ///while ( r_iter ) {
 	for (; r_iter != end; r_iter++ ) {
         var key, data;
-        ///data = Tree_get_value ( r_iter );
-        ///Renderable rbl = ( Renderable ) data.vptr_var;
+
 		Renderable rbl = *r_iter;
 
         if ( !rbl->world_matrix ) {
@@ -721,7 +714,6 @@ void Renderer::render_std_passes()
         }
 
         count++;
-        ///r_iter = Tree_next ( r_iter );
     }
 }
 
@@ -767,8 +759,6 @@ void Renderer::shadow_render ( Renderable rbl, SketchBook curt_skb, sketch_type 
 
     SketchBook_draw_begin ( curt_skb, 1 );
 
-    ///Renderable_prev_render(rbl);
-    ///Pass std_pass = rbl->std_pass;
     Renderable_depth_prev_render ( rbl );
     Pass std_pass = NULL;
 
@@ -817,8 +807,6 @@ void Renderer::lighting_render ( Pass lighting_pass, SketchBook curt_skb )
 
 void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
 {
-    //LightBase2 pl = ( LightBase2 ) data.vptr_var;
-
     curt_light = pl;
     /// here render shadow map
     sketch_type shadow_type = pl->get_shadow_type();
@@ -1078,7 +1066,6 @@ Renderable Renderer::new_renderable ( VertexDecl _dec, MaterialInstance _m_inst,
         throw_exception ( MaterialNotExist, mbuf );
     }
 
-    ///return _RendererBase_new_renderable(&_self->base, _dec, _m_inst, _mesh_mode);
     return RendererBase::new_renderable ( _dec, _m_inst, _mesh_mode );
 }
 
@@ -1104,10 +1091,11 @@ void shader_object_value_Dest ( renderer_param_value _obj )
 
 bool Renderer::is_uniform_param_source ( esint32 _src )
 {
-    var key, data;
-    key.sint32_var = _src;
+    ///var key, data;
+    ///key.sint32_var = _src;
 
-    if ( Tree_find ( param_proc_tree, key, &data ) ) {
+    ///if ( Tree_find ( param_proc_tree, key, &data ) ) {
+	if (param_proc_map.find((param_source)_src) != param_proc_map.end()) {
         return true;
     }
     else {
@@ -1117,11 +1105,13 @@ bool Renderer::is_uniform_param_source ( esint32 _src )
 
 renderer_param_value Renderer::get_shader_object_value ( RendererBase* rdr, esint32 _src )
 {
-	var key, data;
-    key.sint32_var = _src;
+	///var key, data;
+    ///key.sint32_var = _src;
 
-    if ( Tree_find ( param_proc_tree, key, &data ) ) {
-        RendererParamEntry entry = ( RendererParamEntry ) data.vptr_var;
+	STD_NAMESPACE::map<param_source, RendererParamEntry>::iterator iter = param_proc_map.find((param_source)_src);
+    ///if ( Tree_find ( param_proc_tree, key, &data ) ) {
+	if (iter != param_proc_map.end()) {
+        RendererParamEntry entry = iter->second;
         return entry->get_value_proc ( rdr );
     }
     else {
@@ -1137,18 +1127,21 @@ renderer_param_value Renderer::get_shader_object_value ( esint32 _src )
 
 void Renderer::register_renderer_param ( esint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc )
 {
-    var key, data;
-    key.sint32_var = _id;
-    data.vptr_var = RendererParamEntry_new ( _proc, _type, _array_size );
-    Tree_insert ( param_proc_tree, key, data );
+    ///var key, data;
+    ///key.sint32_var = _id;
+    ///data.vptr_var = RendererParamEntry_new ( _proc, _type, _array_size );
+    ///Tree_insert ( param_proc_tree, key, data );
+	param_proc_map.insert(STD_NAMESPACE::make_pair((param_source)_id, RendererParamEntry_new ( _proc, _type, _array_size )));
 }
 RendererParamEntry Renderer::get_param_entry ( esint32 _id )
 {
-    var key, data;
-    key.sint32_var = _id;
+    ///var key, data;
+    ///key.sint32_var = _id;
 
-    if ( Tree_find ( param_proc_tree, key, &data ) ) {
-        RendererParamEntry entry = ( RendererParamEntry ) data.vptr_var;
+    STD_NAMESPACE::map<param_source, RendererParamEntry>::iterator iter = param_proc_map.find((param_source)_id);
+    ///if ( Tree_find ( param_proc_tree, key, &data ) ) {
+	if (iter != param_proc_map.end()) {
+        RendererParamEntry entry = iter->second;
         return entry;
     }
     else {

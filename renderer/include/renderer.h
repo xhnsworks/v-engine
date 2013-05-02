@@ -92,7 +92,6 @@ private:
     SketchBook lighting_sketch_book_array[NUM_LIGHTING_SKETCH_BOOKS];
 
     ShadowRenderer shadow_state;
-	///ShadowRenderer* shadow_renderer;
 
     dir_light_prototype dir_light_ptype;
     spot_light_prototype spot_light_ptype;
@@ -130,8 +129,6 @@ private:
 	void lighting();
 
     esint get_material_id ( const char *mat_name );
-    ///Renderer ( euint x, euint y, euint width, euint height );
-    ///Renderer ( Renderer *prev_renderer );
 protected:
     virtual void set_pre_lighting_state() {}
 public:
@@ -139,7 +136,7 @@ public:
     void register_material ( const char *mat_name, SDisplayProc disp_proc, e_draw_mode draw_mode, bool double_sided_flag );
     Renderable new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode );
     void viewport_refresh ( euint _x, euint _y, euint _width, euint _height );
-    ///void FORCE_ALIGN_ARG_POINTER get_mouse_ray ( int _x, int _y, EFloat3 *ori, EFloat3 *dir );
+   
     inline LightBase2 add_dir_light_2() {
         return dir_light_ptype.new_light();
     }
@@ -157,6 +154,9 @@ public:
 	}
 	inline Camera get_camera() {
 		return curt_render_cam;
+	}
+	inline void set_deferred_shading(bool enable) {
+		use_deferred_shading = enable;
 	}
 
     renderer_param_value get_shader_object_value ( esint32 _src );
