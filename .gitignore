@@ -32,6 +32,13 @@ local.properties
 # PDT-specific
 .buildpath
 
+#################
+## XCode
+#################
+
+ArchiveIntermediates
+PrecompiledHeaders
+*.build
 
 #################
 ## Visual Studio
