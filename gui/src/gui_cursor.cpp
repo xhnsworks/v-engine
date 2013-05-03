@@ -49,7 +49,7 @@ Sprite* GUICursorFactory::MakeSpriteImpl()
 	m_cursorCount++;
 	GUICursor* ret = ENEW GUICursor(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUICursorMouseEventProc(ret));
-	ret->RegisterEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUICursorMouseEventProc(ret));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }

@@ -398,15 +398,16 @@ void Sprite::SaveConfig(const char* configName)
     /// nothing
 }
 
-void Sprite::RegisterEventCallback(const RTTI* type, SpriteEventProcPtr proc)
+void Sprite::RegisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc)
 {
-    m_eventProcs[type].insert(proc);
+    m_publicEventProcs[type].insert(proc);
 }
-void Sprite::EventCallback(const SpriteEvent* evt)
+
+void Sprite::PublicEventCallback(const SpriteEvent* evt)
 {
 	const RTTI* rtti = evt->GetRTTI();
-	EventProcMap::iterator procSetIter = m_eventProcs.find(rtti);
-	if (procSetIter != m_eventProcs.end())
+	EventProcMap::iterator procSetIter = m_publicEventProcs.find(rtti);
+	if (procSetIter != m_publicEventProcs.end())
 	{
 		xhn::set<SpriteEventProcPtr>& procs = procSetIter->second;
 		xhn::set<SpriteEventProcPtr>::iterator procIter = procs.begin();
@@ -468,6 +469,31 @@ void Sprite::SetRotate(float rad)
 	///m_rotation = rad;
 	EFloat* rotation = (EFloat*)m_rotationHandle.GetAttribute();
 	rotation->x = rad;
+}
+
+void Sprite::BroadcastEventToBrothers(const SpriteEvent* evt)
+{
+	if (m_parent) {
+		xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator iter = m_parent->m_children.begin();
+		xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator end = m_parent->m_children.end();
+		for (; iter != end; iter++) {
+			Sprite* sp = (*iter)->DynamicCast<Sprite>();
+			if (sp && sp != this) {
+				EventProcMap& epm = sp->GetPrivateEventProcMap();
+				const RTTI* rtti = evt->GetRTTI();
+				xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> >::iterator epmIter = epm.find(rtti);
+				if (epmIter != epm.end()) {
+					xhn::set<SpriteEventProcPtr>& sepSet = epmIter->second;
+					xhn::set<SpriteEventProcPtr>::iterator i = sepSet.begin();
+					xhn::set<SpriteEventProcPtr>::iterator e = sepSet.end();
+					for (; i != e; i++) {
+						SpriteEventProcPtr sep = *i;
+						sep->Proc(evt);
+					}
+				}
+			}
+		}
+	}
 }
 
 void Sprite::LoadConfig(const pugi::xml_node& from)

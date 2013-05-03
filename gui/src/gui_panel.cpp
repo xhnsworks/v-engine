@@ -213,6 +213,6 @@ Sprite* GUIPanelFactory::MakeSpriteImpl()
 	m_panelCount++;
 	GUIPanel* ret = ENEW GUIPanel(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }

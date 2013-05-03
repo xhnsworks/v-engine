@@ -1,0 +1,25 @@
+<root>
+  <layers>
+    <background>
+      <elements num_elements="9">
+        <!--这些坐标以Photoshop的标尺为准-->
+        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="268.0" area_x1="274.0" area_y0="25.0" area_y1="31.0" transparent="1.0" />
+        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="268.0" area_x1="274.0" area_y0="2.0" area_y1="8.0" transparent="1.0" />
+        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="328.0" area_x1="334.0" area_y0="2.0" area_y1="8.0" transparent="1.0" />
+        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="328.0" area_x1="334.0" area_y0="25.0" area_y1="31.0" transparent="1.0" />
+
+        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="268.0" area_x1="274.0" area_y0="8.0" area_y1="25.0" transparent="1.0" />
+        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="274.0" area_x1="328.0" area_y0="2.0" area_y1="8.0" transparent="1.0" />
+        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="328.0" area_x1="334.0" area_y0="8.0" area_y1="25.0" transparent="1.0" />
+        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="268.0" area_x1="274.0" area_y0="25.0" area_y1="31.0" transparent="1.0" />
+
+        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="274.0" area_x1="334.0" area_y0="8.0" area_y1="25.0" transparent="1.0" />
+      </elements>
+    </background>
+    <text>
+      <styles num_styles="1">
+        <style name="default" text="kill you!" color="ff00ffff" interval="2.0" transparent="1.0"/>
+      </styles>
+    </text>
+  </layers>
+</root>

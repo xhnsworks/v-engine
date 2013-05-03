@@ -19,6 +19,7 @@
 #include "gui_button.h"
 #include "gui_cursor.h"
 #include "gui_panel.h"
+#include "gui_edit.h"
 ///*************************************************************************************************************************///
 ///                                                     include end                                                         ///
 ///*************************************************************************************************************************///
@@ -49,8 +50,8 @@ public:
 ///*************************************************************************************************************************///
 ///                                                  marco define begin                                                     ///
 ///*************************************************************************************************************************///
-#define W_Width  1440
-#define W_Height 900
+#define W_Width  1280
+#define W_Height 720
 ///*************************************************************************************************************************///
 ///                                                  marco define end                                                       ///
 ///*************************************************************************************************************************///
@@ -181,10 +182,12 @@ private:
 	GUIButtonFactory* m_buttonFactory;
 	GUICursorFactory* m_cursorFactory;
 	GUIPanelFactory* m_panelFactory;
+	GUIEditFactory* m_editFactory;
 
 	GUIButton* m_guiButton;
 	GUICursor* m_guiCursor;
 	GUIPanel* m_guiPanel;
+	GUIEdit* m_guiEdit;
 
 	bool m_isInited;
 public:
@@ -210,9 +213,12 @@ public:
 		, m_inputSys(inputSys)
         , m_buttonFactory(NULL)
 		, m_cursorFactory(NULL)
+		, m_panelFactory(NULL)
+		, m_editFactory(NULL)
 		, m_guiButton(NULL)
 		, m_guiCursor(NULL)
 		, m_guiPanel(NULL)
+		, m_guiEdit(NULL)
 		, m_isInited(false)
 	{}
 #else
@@ -235,9 +241,11 @@ public:
     , m_inputSys(inputSys)
     , m_buttonFactory(NULL)
     , m_cursorFactory(NULL)
+	, m_panelFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
+	, m_guiEdit(NULL)
     , m_isInited(false)
 	{}
 #endif

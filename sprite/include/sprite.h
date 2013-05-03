@@ -246,7 +246,8 @@ class Sprite : public SpriteLayer
 	DeclareRTTI;
 public:
     ElementList m_elements;
-    EventProcMap m_eventProcs;
+    EventProcMap m_publicEventProcs;
+	EventProcMap m_privateEventProcs;
 protected:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_coordinateHandle;
@@ -259,14 +260,18 @@ public:
     virtual void Init() {}
     void LoadConfig(const char* configName);
     void SaveConfig(const char* configName);
-    void RegisterEventCallback(const RTTI* type, SpriteEventProcPtr proc);
-    void EventCallback(const SpriteEvent* evt);
+    void RegisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc);
+    void PublicEventCallback(const SpriteEvent* evt);
     void AttachToGeomBuffer(SpriteGeomBufferPtr buffer);
 	void SetCoord(float x, float y);
 	void SetScale(float x, float y);
 	void SetRotate(float rad);
-	inline const EventProcMap& GetEventProcMap() {
-		return m_eventProcs;
+	void BroadcastEventToBrothers(const SpriteEvent* evt);
+	inline const EventProcMap& GetPublicEventProcMap() {
+		return m_publicEventProcs;
+	}
+	inline EventProcMap& GetPrivateEventProcMap() {
+		return m_privateEventProcs;
 	}
 	inline SpriteLayerPtr GetLayer(euint index) {
 		SpriteLayerPtr ret;

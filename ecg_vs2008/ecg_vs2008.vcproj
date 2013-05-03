@@ -1721,11 +1721,11 @@
 			Name="tmp"
 			>
 			<File
-				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
+				RelativePath="..\glew\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath="..\glew\GL\glew.h"
+				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
 				>
 			</File>
 			<File
@@ -2220,6 +2220,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\gui\include\gui_edit.h"
+					>
+				</File>
+				<File
 					RelativePath="..\gui\include\gui_material.h"
 					>
 				</File>
@@ -2261,6 +2265,10 @@
 				</File>
 				<File
 					RelativePath="..\gui\src\gui_cursor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\gui\src\gui_edit.cpp"
 					>
 				</File>
 				<File
@@ -2721,19 +2729,19 @@
 			Name="glsl_complier"
 			>
 			<File
-				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
+				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
 				>
 			</File>
 			<File

@@ -64,7 +64,7 @@ private:
 	SpriteEventHub();
 	~SpriteEventHub();
 public:
-	void BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& reces);
+	void BroadcastPublicEvent(const SpriteEvent& evt, const ReceiverSet& reces);
 	void RegisterSprite(Sprite* spt);
 	void BroadcastFrameStartEvent(const SpriteFrameStartEvent& evt, const ReceiverSet& reces);
 	inline const ReceiverSet& GetAllReceivers() const {

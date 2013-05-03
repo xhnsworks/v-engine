@@ -29,7 +29,7 @@ SpriteEventHub* SpriteEventHub::Get()
     return s_singleton_inst;
 }
 
-void SpriteEventHub::BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& reces)
+void SpriteEventHub::BroadcastPublicEvent(const SpriteEvent& evt, const ReceiverSet& reces)
 {
 	ReceiverSet::const_iterator iter = reces.begin();
 	ReceiverSet::const_iterator end = reces.end();
@@ -42,14 +42,14 @@ void SpriteEventHub::BroadcastEvent(const SpriteEvent& evt, const ReceiverSet& r
 			xhn::set<Sprite*>::iterator e = sptSet.end();
 			for (; i != e; i++) {
 				Sprite* spt = *i;
-				spt->EventCallback(&evt);
+				spt->PublicEventCallback(&evt);
 			}
 		}
 	}
 }
 void SpriteEventHub::RegisterSprite(Sprite* spt)
 {
-	const EventProcMap& evnMap = spt->GetEventProcMap();
+	const EventProcMap& evnMap = spt->GetPublicEventProcMap();
 	EventProcMap::const_iterator iter = evnMap.begin();
 	EventProcMap::const_iterator end = evnMap.end();
 	for (; iter != end; iter++) {
@@ -61,5 +61,5 @@ void SpriteEventHub::RegisterSprite(Sprite* spt)
 
 void SpriteEventHub::BroadcastFrameStartEvent(const SpriteFrameStartEvent& evt, const ReceiverSet& reces)
 {
-    BroadcastEvent(evt, reces);
+    BroadcastPublicEvent(evt, reces);
 }

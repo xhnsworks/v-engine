@@ -279,7 +279,7 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		sptEvt.m_curtMousePos.x = m_mouseX;
 		sptEvt.m_curtMousePos.y = m_mouseY;
 		///m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
-		SpriteEventHub::Get()->BroadcastEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+		SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
 	}
 	else if (event.type == MouseButtonDownEvent)
 	{
@@ -287,7 +287,7 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 			m_leftButtonDown = true;
 			SpriteMouseButtonDownEvent sptEvt;
 			sptEvt.m_leftButtomDown = true;
-			SpriteEventHub::Get()->BroadcastEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
 		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = true;
@@ -301,7 +301,7 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 			m_leftButtonDown = true;
 			SpriteMouseButtonUpEvent sptEvt;
 			sptEvt.m_leftButtomUp = true;
-			SpriteEventHub::Get()->BroadcastEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
 		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = false;
@@ -351,10 +351,13 @@ void ResourceAction::DoImpl()
 		m_buttonFactory = ENEW GUIButtonFactory(guiRdr, "button2.xml");
 		m_cursorFactory = ENEW GUICursorFactory(guiRdr, "cursor.xml");
 		m_panelFactory = ENEW GUIPanelFactory(guiRdr, "panel2.xml");
+		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
+		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();
+		m_guiEdit->SetCoord(0.0f, 50.0f);
 		m_guiPanel->SetCoord(30.0f, 50.0f);
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
@@ -365,6 +368,7 @@ void ResourceAction::DoImpl()
 
 		///
 		m_guiPanel->AddChild(m_guiButton);
+		m_guiPanel->AddChild(m_guiEdit);
 		m_guiPanel->SetRotate(0.2f);
 		///
 

@@ -5,9 +5,9 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIButtonLayer, SpriteNormalLayer);
+ImplementRTTI(GUIButtonLayer, GUIPanelLayer);
 ImplementRTTI(GUIButtonTextLayer, SpriteTextLayer);
-ImplementRTTI(GUIButton, Sprite);
+ImplementRTTI(GUIButton, GUIPanel);
 
 GUIButtonLayer::GUIButtonLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
 : GUIPanelLayer(name, pivotHandle, sizeHandle)
@@ -207,9 +207,9 @@ Sprite* GUIButtonFactory::MakeSpriteImpl()
 	m_buttonCount++;
     GUIButton* ret = ENEW GUIButton(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUIButton::MouseMoveEventProc(ret));
-	ret->RegisterEventCallback(&SpriteMouseButtonDownEvent::s_RTTI, ENEW GUIButton::MouseButtonDownEventProc(ret));
-	ret->RegisterEventCallback(&SpriteMouseButtonUpEvent::s_RTTI, ENEW GUIButton::MouseButtonUpEventProc(ret));
-	ret->RegisterEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUIButton::MouseMoveEventProc(ret));
+	ret->RegisterPublicEventCallback(&SpriteMouseButtonDownEvent::s_RTTI, ENEW GUIButton::MouseButtonDownEventProc(ret));
+	ret->RegisterPublicEventCallback(&SpriteMouseButtonUpEvent::s_RTTI, ENEW GUIButton::MouseButtonUpEventProc(ret));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
