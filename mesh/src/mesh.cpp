@@ -6,6 +6,7 @@
 #include "mesh_triangle.h"
 #include "eassert.h"
 #include "exception.h"
+#include "xhn_exception.hpp"
 
 static int s_mesh_count = 0;
 void Mesh_print_mesh_count()
@@ -179,8 +180,8 @@ void _alloc_and_copy(void** p, void* s, euint size)
 ///#define MESH_BUILD_DEBUG
 
 void Mesh_build(Mesh _mesh,
-                float* pos_stream, float* uv_stream, float* nor_stream, euint num_vtxs,
-                euint32* idx_stream, euint num_faces,
+                float* pos_stream, float* uv_stream, float* nor_stream, euint32 num_vtxs,
+                euint32* idx_stream, euint32 num_faces,
                 e_mesh_mode mesh_mode)
 {
     TRY(0)
@@ -224,6 +225,8 @@ void Mesh_build(Mesh _mesh,
         _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(euint32) * 2 * num_faces);
         _Mesh_get_data_0004(_mesh)->indexed_vtx_count = num_faces * 2;
         break;
+    default:
+        break;
     }
     #ifdef MESH_BUILD_DEBUG
     if (!MCheck())
@@ -255,8 +258,8 @@ void Mesh_build(Mesh _mesh,
 
 void Mesh_build2(Mesh _mesh,
                 float* pos_stream, float* uv_stream, float* nor_stream, float* col_stream,
-                euint num_vtxs,
-                euint32* idx_stream, euint num_faces,
+                euint32 num_vtxs,
+                euint32* idx_stream, euint32 num_faces,
                 e_mesh_mode mesh_mode)
 {
     _free_and_set_null((vptr*)&_Mesh_get_data_0004(_mesh)->vtx_pos);
@@ -292,6 +295,9 @@ void Mesh_build2(Mesh _mesh,
     case Segment:
         _alloc_and_copy((vptr*)&_Mesh_get_data_0004(_mesh)->indexs, idx_stream, sizeof(euint32) * 2 * num_faces);
         _Mesh_get_data_0004(_mesh)->indexed_vtx_count = num_faces * 2;
+        break;
+    default:
+        VEngineExce(InvalidEnumerationException, "mesh mode is invalid enumeration");
         break;
     }
 

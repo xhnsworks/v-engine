@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6815E768172FE5A400463B2A /* pugixml.cpp */; };
+		688ED9851733E77C00940811 /* gui_edit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9841733E77C00940811 /* gui_edit.cpp */; };
+		688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9881733F95700940811 /* xhn_exception.cpp */; };
 		689B12C7172F8E6500972582 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12C6172F8E6500972582 /* Cocoa.framework */; };
 		689B12D1172F8E6500972582 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 689B12CF172F8E6500972582 /* InfoPlist.strings */; };
 		689B12D3172F8E6500972582 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 689B12D2172F8E6500972582 /* main.m */; };
@@ -140,6 +142,10 @@
 		6815E767172FE5A400463B2A /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugiconfig.hpp; sourceTree = "<group>"; };
 		6815E768172FE5A400463B2A /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
 		6815E769172FE5A400463B2A /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
+		688ED9841733E77C00940811 /* gui_edit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_edit.cpp; sourceTree = "<group>"; };
+		688ED9861733E78300940811 /* gui_edit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_edit.h; sourceTree = "<group>"; };
+		688ED9871733F71A00940811 /* xhn_exception.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = xhn_exception.hpp; sourceTree = "<group>"; };
+		688ED9881733F95700940811 /* xhn_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xhn_exception.cpp; sourceTree = "<group>"; };
 		68998D251732BD4200EC1D8A /* ecg.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ecg.entitlements; sourceTree = "<group>"; };
 		689B12C3172F8E6500972582 /* ecg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ecg.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		689B12C6172F8E6500972582 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -2086,6 +2092,7 @@
 				68A35D92172FE26E007D0C45 /* estring.h */,
 				68A35D93172FE26E007D0C45 /* etypes.h */,
 				68A35D94172FE26E007D0C45 /* exception.h */,
+				688ED9871733F71A00940811 /* xhn_exception.hpp */,
 				68A35D95172FE26E007D0C45 /* gc_test.h */,
 				68A35D97172FE26E007D0C45 /* hash.h */,
 				68A35D98172FE26E007D0C45 /* list.h */,
@@ -2144,6 +2151,7 @@
 				68A35DDB172FE26E007D0C45 /* tree.cpp */,
 				68A35DDC172FE26E007D0C45 /* xhn_static_string.cpp */,
 				68A35DDD172FE26E007D0C45 /* xhn_test.cpp */,
+				688ED9881733F95700940811 /* xhn_exception.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2220,6 +2228,7 @@
 		68A35E67172FE2B4007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				688ED9861733E78300940811 /* gui_edit.h */,
 				68A35E68172FE2B4007D0C45 /* gui_button.h */,
 				68A35E69172FE2B4007D0C45 /* gui_cursor.h */,
 				68A35E6A172FE2B4007D0C45 /* gui_material.h */,
@@ -2232,6 +2241,7 @@
 		68A35E6D172FE2B4007D0C45 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				688ED9841733E77C00940811 /* gui_edit.cpp */,
 				68A35E6E172FE2B4007D0C45 /* gui_button.cpp */,
 				68A35E6F172FE2B4007D0C45 /* gui_cursor.cpp */,
 				68A35E70172FE2B4007D0C45 /* gui_material.cpp */,
@@ -2843,6 +2853,8 @@
 				68B4964D1730D91500AAB72D /* render_robot.cpp in Sources */,
 				68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */,
 				68B4966F1730EC7E00AAB72D /* input_system_osx.cpp in Sources */,
+				688ED9851733E77C00940811 /* gui_edit.cpp in Sources */,
+				688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

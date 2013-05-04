@@ -15,7 +15,7 @@ struct FStrCmpProc {
     }
 };
 struct FDefaultStrProc {
-    char* operator() () const {
+    const char* operator() () const {
         return "";
     }
 };
@@ -39,7 +39,7 @@ struct FWStrCmpProc {
     }
 };
 struct FDefaultWStrProc {
-    wchar_t* operator() () const {
+    const wchar_t* operator() () const {
         return L"";
     }
 };

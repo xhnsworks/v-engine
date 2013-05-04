@@ -24,9 +24,9 @@ mxml_type_t collada_callback(mxml_node_t * node)
 typedef struct _stream
 {
     float* float_array;
-    euint set;
-    euint count;
-    euint stride;
+    euint32 set;
+    euint32 count;
+    euint32 stride;
     bool is_vertex_stream;
 } stream;
 typedef struct _stream* FloatStream;
@@ -61,7 +61,7 @@ typedef enum _collada_semantic
 typedef struct _index_element
 {
     collada_semantic sem;
-    euint offs;
+    euint32 offs;
 } index_element;
 
 typedef struct _collada_state
@@ -69,7 +69,7 @@ typedef struct _collada_state
     Tree stream_tree;
     Tree sem_stream_tree;
     index_element* idx_eles;
-    euint num_tri;
+    euint32 num_tri;
     euint32* idx_stream;
 } collada_state;
 
@@ -208,7 +208,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
                 Tree_insert(_self->sem_stream_tree, key, data);
                 if (offsAttr)
                 {
-					index_element ie = {(collada_semantic)key.uint32_var, (euint)atoi(offsAttr.value())};
+					index_element ie = {(collada_semantic)key.uint32_var, (euint32)atoi(offsAttr.value())};
                     apush(_self->idx_eles, ie);
                 }
             }
@@ -218,7 +218,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
                 {
                     var key;
                     key.uint32_var = ColladaVertex;
-                    index_element ie = {(collada_semantic)key.uint32_var, (euint)atoi(offsAttr.value())};
+                    index_element ie = {(collada_semantic)key.uint32_var, (euint32)atoi(offsAttr.value())};
                     apush(_self->idx_eles, ie);
                 }
             }
@@ -267,7 +267,7 @@ euint32* _parse_p(const char* str, euint32* result)
 			if (tmp.size())
 			{
 				xhn::string s = tmp;
-				euint u = (euint)atoi(s.c_str());
+				euint32 u = (euint32)atoi(s.c_str());
 				apush(result, u);
 			}
 			tmp.clear();
@@ -455,9 +455,9 @@ void ColladaState_log(ColladaState _self)
     }
 }
 
-euint _find_offset(ColladaState _self, collada_semantic sem)
+euint32 _find_offset(ColladaState _self, collada_semantic sem)
 {
-    euint n = array_n(_self->idx_eles);
+    euint32 n = array_n(_self->idx_eles);
     for (euint i = 0; i < n; i++)
     {
         if (sem == _self->idx_eles[i].sem)
@@ -468,21 +468,21 @@ euint _find_offset(ColladaState _self, collada_semantic sem)
 
 Mesh ColladaState_create_mesh(ColladaState _self)
 {
-    euint num_vtx = 0;
+    euint32 num_vtx = 0;
     float* pos_src = NULL;
     float* tex_src = NULL;
     float* nor_src = NULL;
-    euint num_pos = 0;
-    euint num_tex = 0;
-    euint num_nor = 0;
-    euint stride_pos = 0;
-    euint stride_tex = 0;
-    euint stride_nor = 0;
-    euint offs_pos = 0;
-    euint offs_tex = 0;
-    euint offs_nor = 0;
+    euint32 num_pos = 0;
+    euint32 num_tex = 0;
+    euint32 num_nor = 0;
+    euint32 stride_pos = 0;
+    euint32 stride_tex = 0;
+    euint32 stride_nor = 0;
+    euint32 offs_pos = 0;
+    euint32 offs_tex = 0;
+    euint32 offs_nor = 0;
     collada_semantic base_sem = ColladaEmptySemantic;
-    euint offs_base = 0;
+    euint32 offs_base = 0;
     Iterator iter = Tree_begin(_self->sem_stream_tree);
     while (iter)
     {
@@ -554,7 +554,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     }
 
     ///euint32* idx_src = _self->idx_stream;
-    euint stride_idx = array_n(_self->idx_eles);
+    euint32 stride_idx = array_n(_self->idx_eles);
     ///euint num_tri = _self->num_tri;
     ///euint32* idx_stream = SMalloc(sizeof(euint32) * 3 * num_tri);
 
@@ -563,7 +563,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     float* nor_stream = (float*)SMalloc(sizeof(float) * 3 * num_vtx);
     euint32* idx_src = _self->idx_stream;
 
-    euint num_tri = _self->num_tri;
+    euint32 num_tri = _self->num_tri;
     euint32* idx_stream = (euint32*)SMalloc(sizeof(euint32) * 3 * num_tri);
 
     memset(pos_stream, 0, sizeof(float) * 3 * num_vtx);
@@ -591,11 +591,11 @@ Mesh ColladaState_create_mesh(ColladaState _self)
         return ret;
     }
 	**/
-    euint max_idx_base = 0;
-    euint max_idx_pos = 0;
-    euint max_idx_tex = 0;
-    euint max_idx_nor = 0;
-    euint idx_count = 0;
+    euint32 max_idx_base = 0;
+    euint32 max_idx_pos = 0;
+    euint32 max_idx_tex = 0;
+    euint32 max_idx_nor = 0;
+    ///euint32 idx_count = 0;
 	/**
     void _stream_copy(struct idx_group* idx_grp)
     {
@@ -639,9 +639,15 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     euint offs_base = 0;
     **/
     elog("num_vtx %d\n", num_vtx);
-    elog("pos_src %x\n", pos_src);
-    elog("tex_src %x\n", tex_src);
-    elog("nor_src %x\n", nor_src);
+#if BIT_WIDTH == 32
+    elog("pos_src %x\n", (ref_ptr)pos_src);
+    elog("tex_src %x\n", (ref_ptr)tex_src);
+    elog("nor_src %x\n", (ref_ptr)nor_src);
+#elif BIT_EIDTH == 64
+    elog("pos_src %llx\n", (ref_ptr)pos_src);
+    elog("tex_src %llx\n", (ref_ptr)tex_src);
+    elog("nor_src %llx\n", (ref_ptr)nor_src);
+#endif
     elog("num_pos %d\n", num_pos);
     elog("num_tex %d\n", num_tex);
     elog("num_nor %d\n", num_nor);
@@ -655,7 +661,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     elog("offs_base %d\n", offs_base);
     elog("base_sem %d\n", base_sem);
     elog("num_tri %d\n", num_tri);
-	euint num_idx = array_n(_self->idx_stream);
+	euint32 num_idx = array_n(_self->idx_stream);
 	elog("real_num_idx %d\n", num_idx);
 
     for (euint i = 0; i < num_tri; i++)

@@ -71,7 +71,7 @@ void GUIButton::Init(const xhn::static_string configName)
 #if defined(_WIN32) || defined(_WIN64)
 			FontRenderer* fr = ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
 #else
-            FontRenderer* fr = ENEW FontRenderer("../../../../../test_scene/Earthbound-Condensed-Bold.otf");
+            FontRenderer* fr = ENEW FontRenderer("/Users/joumining/v-engine/test_scene/Earthbound-Condensed-Bold.otf");
 #endif
 			fr->set_font_size(Pixel30);
 			ComposingStick* cs = ENEW ComposingStick(fr, 256);
@@ -197,7 +197,7 @@ void GUIButton::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
 
 void GUIButton::MouseButtonUpEventProc::Proc(const SpriteEvent* evt)
 {
-	const SpriteMouseButtonUpEvent* mouseEvt = evt->DynamicCast<SpriteMouseButtonUpEvent>();
+	///const SpriteMouseButtonUpEvent* mouseEvt = evt->DynamicCast<SpriteMouseButtonUpEvent>();
 }
 
 Sprite* GUIButtonFactory::MakeSpriteImpl()

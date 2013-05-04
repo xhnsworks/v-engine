@@ -407,7 +407,7 @@ void ResourceAction::DoImpl()
 #if defined(_WIN32) || defined(_WIN64)
                 ColladaState_load_mesh(colSt, "D:\\test_scene\\test4.dae");
 #elif defined(__APPLE__)
-                ColladaState_load_mesh(colSt, "../../../../../test_scene/test4.dae");
+                ColladaState_load_mesh(colSt, "/Users/joumining/v-engine/test_scene/test4.dae");
 #endif
                 ColladaState_log(colSt);
                 m = ColladaState_create_mesh(colSt);
@@ -417,7 +417,7 @@ void ResourceAction::DoImpl()
 #if defined(_WIN32) || defined(_WIN64)
             snprintf(path, 259, "%s%s", BASE_DIR, "test_scene\\mesh_pos_unit1.ogl");
 #elif defined(__APPLE__)
-            snprintf(path, 259, "%s%s", BASE_DIR, "../../../../../test_scene/mesh_pos_unit1.ogl");
+            snprintf(path, 259, "%s%s", BASE_DIR, "/Users/joumining/v-engine/test_scene/mesh_pos_unit1.ogl");
 #endif
 			m_mat0 = MaterialInstance_new("pure_lighting", NULL, NULL, "Texture");
 			Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat0, Triangular);
@@ -431,7 +431,7 @@ void ResourceAction::DoImpl()
 #if defined(_WIN32) || defined(_WIN64)
                 ColladaState_load_mesh(colSt, "D:\\test_scene\\test5.dae");
 #elif defined(__APPLE__)
-                ColladaState_load_mesh(colSt, "../../../../../test_scene/test5.dae");
+                ColladaState_load_mesh(colSt, "/Users/joumining/v-engine/test_scene/test5.dae");
 #endif
                 ColladaState_log(colSt);
                 m = ColladaState_create_mesh(colSt);

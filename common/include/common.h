@@ -85,14 +85,16 @@ or
 #define to_ShaderBuffer(__tsb__) ToShaderBuffer(__tsb__)
 #endif
 
-
-#ifdef __GNUC__
+#if defined(__MINGW32__) || defined(__MINGW64__) || defined(__linux) || defined(__linux__)
 #define _INLINE_ static inline
 #define FORCE_ALIGN_ARG_POINTER __attribute__ ((force_align_arg_pointer))
-#else
+#elif defined(_MSC_VER)
 #define _INLINE_ static inline
 #define FORCE_ALIGN_ARG_POINTER
 #define snprintf sprintf_s
+#elif defined(__APPLE__)
+#define _INLINE_ inline
+#define FORCE_ALIGN_ARG_POINTER
 #endif
 
 #ifdef _WIN32
@@ -105,8 +107,6 @@ or
 #define BIT_WIDTH 64
 #elif defined(__APPLE__)
 #define BIT_WIDTH 64
-///#include <OpenGL/gl.h>
-///#include <OpenGL/gl3.h>
 #include <OpenGL/gl.h>
 #endif
 
@@ -157,3 +157,5 @@ inline FILE* SafeFOpen(const char* path, const char* mode)
 #endif
 #include <pthread.h>
 #endif
+
+///#define USE_LOG_SYSTEM

@@ -57,26 +57,4 @@ const RTTI rootclassname::s_RTTI(#rootclassname, 0)
 #define ImplementRTTI(classname, parentclassname) \
 const RTTI classname::s_RTTI(#classname, &parentclassname::s_RTTI)
 
-class AAA
-{
-    DeclareRootRTTI;
-public:
-	int a;
-	int b;
-	AAA(int _a)
-		: a(_a)
-		, b(0)
-	{}
-};
-
-class BBB : public AAA
-{
-    DeclareRTTI
-public:
-    BBB ()
-		: AAA(0)
-	{}
-};
-
-void rtti_test();
 #endif

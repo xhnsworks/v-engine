@@ -77,7 +77,7 @@ public:
 		return atte_coef;
 	}
 	inline int get_num_shadow_emitters() {
-		return num_shadow_emitters;
+		return (int)num_shadow_emitters;
 	}
 	inline matrix4x4* get_proj_matrix(euint i) {
 		if (i < num_shadow_emitters)

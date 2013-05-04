@@ -122,7 +122,7 @@ public:
 	}
 
     void insert ( K key ) {
-        rbnode_type *node = ( rbnode_type * ) rbtree_type::_find ( &m_rbtree, key, true );
+        rbtree_type::_find ( &m_rbtree, key, true );
     }
     iterator find ( K &key ) {
         rbnode_type *node = ( rbnode_type * ) rbtree_type::_find ( &m_rbtree, key, false );

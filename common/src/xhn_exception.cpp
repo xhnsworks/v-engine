@@ -6,4 +6,10 @@
 //  Copyright (c) 2013年 徐 海宁. All rights reserved.
 //
 
-#include "xhn_exception.h"
+#include "xhn_exception.hpp"
+
+ImplementRootRTTI(Exception);
+ImplementRTTI(FunctionArgumentException, Exception);
+ImplementRTTI(FunctionExecutionException, Exception);
+ImplementRTTI(FunctionResultException, Exception);
+ImplementRTTI(InvalidEnumerationException, FunctionExecutionException);

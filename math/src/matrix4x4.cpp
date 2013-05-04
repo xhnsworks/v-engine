@@ -19,7 +19,7 @@ void _Matrix4x4_delete(matrix4x4* _mat, const char* _file, euint _line)
 }
 matrix4x4* _Matrix4x4_new(const char* _file, euint _line)
 {
-    matrix4x4* ret = (matrix4x4*)_Malloc(sizeof(matrix4x4), _file, _line);
+    matrix4x4* ret = (matrix4x4*)_Malloc(sizeof(matrix4x4), _file, (euint32)_line);
     ///memset(ret, 0, sizeof(matrix4x4));
     return ret;
 }
@@ -522,7 +522,7 @@ void Matrix4x4_blend(matrix4x4* _mat)
 ///void Matrix4x4_projection(matrix4x4* _mat, float _left, float _right, float _top, float _bottom, float _near, float _far)
 void Matrix4x4_projection(matrix4x4* _mat, float _width, float _height, float _near, float _far)
 {
-    float epsilon = 2.4e-7f;
+    ///float epsilon = 2.4e-7f;
     float l = -0.5f * _width;
     float r = 0.5f * _width;
     float t = 0.5f * _height;
@@ -558,7 +558,7 @@ void Matrix4x4_projection(matrix4x4* _mat, float _width, float _height, float _n
 }
 void Matrix4x4_orthogonal(matrix4x4* _mat, float _width, float _height, float _near, float _far)
 {
-    float epsilon = 2.4e-7f;
+    ///float epsilon = 2.4e-7f;
     float l = -0.5f * _width;
     float r = 0.5f * _width;
     float t = 0.5f * _height;
@@ -1289,11 +1289,8 @@ sfloat4 Matrix4x4_mul_float4(const matrix4x4* _mat, sfloat4 _ft)///__m128& point
     temp3 = _mm_shuffle_ps(temp3, temp3, _MM_SHUFFLE(0, 3, 3, 3));
 
     __m128 result;
-#ifdef _MSC_VER
 	result = _mm_setzero_ps();
-#else
-    result = _mm_xor_ps(result, result);
-#endif
+
     result = _mm_or_ps(result, temp0);
     result = _mm_or_ps(result, temp1);
     result = _mm_or_ps(result, temp2);

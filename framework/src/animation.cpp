@@ -37,7 +37,7 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 {
 	AnimationRobot* animRob = exeRob->DynamicCast<AnimationRobot>();
 	if (animRob) {
-		AnimationStatus prevStatus = animRob->GetAnimationStatus(m_animID);
+		///AnimationStatus prevStatus = animRob->GetAnimationStatus(m_animID);
 		animRob->StopAnimation(m_animID);
 		RWBuffer receiptChannel = RobotManager::Get()->GetChannel(animRob->GetName(), sender);
 		if (receiptChannel) {

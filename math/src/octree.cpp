@@ -300,12 +300,12 @@ typedef struct _octree_node_index_pair
     int idx0;
     int idx1;
 } octree_node_index_pair;
-octree_node_index_pair _inner_index(octree_node* node, sfloat3 pt, euint mask)
+octree_node_index_pair _inner_index(octree_node* node, sfloat3 pt, euint32 mask)
 {
     sfloat3 center = _get_center(node);
     sfloat3_compare_result cmp_ret = SFloat3_greater(pt, center);
     /// 这里存在一个GCC的bug
-    volatile euint i = 0;
+    volatile euint32 i = 0;
     if (cmp_ret.x_cmp_ret) {
         i |= MASK_X;
     }
@@ -316,9 +316,9 @@ octree_node_index_pair _inner_index(octree_node* node, sfloat3 pt, euint mask)
         i |= MASK_Z;
     }
 
-    euint inv_mask = ~mask;
-    euint index0 = i & inv_mask;
-    euint index1 = i | mask;
+    euint32 inv_mask = ~mask;
+    euint32 index0 = i & inv_mask;
+    euint32 index1 = i | mask;
 
     octree_node_index_pair ret;
     ret.idx0 = index0;
@@ -426,7 +426,7 @@ Octree Octree_new(float min_size, int octree_depth)
 
 void Octree_print(Octree _self)
 {
-    euint count = 0;
+    euint32 count = 0;
     octree_node* n = _self->trunk;
 
     do
@@ -495,13 +495,13 @@ void _touch(octree_node* node, Ray ray, LineDrawer drawer, crossed_point_info* p
     bool touched[8];
     memset(touched, 0, sizeof(touched));
 
-    euint n = array_n(point_array);
+    euint32 n = array_n(point_array);
     crossed_point_info null_point = {EFloat3(fexce, fexce, fexce), XPlane};
     crossed_point_info* next_point_array = array_new(crossed_point_info, n, null_point);
 
-    const char* x = "XAxis";
-    const char* y = "YAxis";
-    const char* z = "ZAxis";
+    ///const char* x = "XAxis";
+    ///const char* y = "YAxis";
+    ///const char* z = "ZAxis";
 #define PUSH_CROSS_POINT(axis) \
         if      (_is_in_##axis##_plane(node, SFloat3_assign_from_efloat3(&pt))) { \
             _draw_pt(pt); \

@@ -146,7 +146,11 @@ totel_refer_info mem_pool_node_log(mem_pool_node* _node)
         if (info->file_name)
         {
             ret.used_mem_size += _node->real_chk_size;
+#if BIT_WIDTH == 32
             elog("##ptr %x file %s, line %d", (ref_ptr)ptr, info->file_name, info->line);
+#elif BIT_WIDTH == 64
+            elog("##ptr %llx file %s, line %lld", (ref_ptr)ptr, info->file_name, info->line);
+#endif
         }
         else
         {
@@ -526,7 +530,11 @@ void MemAllocator_log(MemAllocator _self)
 			ret.used_mem_size += info.used_mem_size;
 		}
 	}
+#if BIT_WIDTH == 32
 	elog("totel used mem %d totel unused mem %d", ret.used_mem_size, ret.unused_mem_size);
+#elif BIT_WIDTH == 64
+    elog("totel used mem %lld totel unused mem %lld", ret.used_mem_size, ret.unused_mem_size);
+#endif
 }
 bool MemAllocator_check(MemAllocator _self)
 {

@@ -402,7 +402,7 @@ GLSL::GLSLParserEnv::GLSLParserEnv(const char* str)
 
 void GLSL::test()
 {
-	char* str =
+	const char* str =
 		/**
 	"#version 130\n"
 	"///shader///\n"

@@ -168,7 +168,6 @@ float Float3_length(float3 _f3)
     EAssert(f3.ft128[3] == 0.0f, "%s", "float3 error");
   #endif
     __m128 tmp0 = *f3.m128;
-    __m128 tmp1 = tmp0;
     tmp0 = _mm_mul_ps(tmp0, tmp0);
     tmp0 = _mm_hadd_ps(tmp0, tmp0);
     tmp0 = _mm_hadd_ps(tmp0, tmp0);

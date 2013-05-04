@@ -34,7 +34,7 @@ _INLINE_ euint32 _string_length(const char* _str)
 EString _EString_new(const char* _str, const char* _file_name, euint _file_line)
 {
     euint32 length = _string_length(_str);
-    estring* ret = (estring*)_Malloc(sizeof(estring) + length + 1, _file_name, _file_line);
+    estring* ret = (estring*)_Malloc(sizeof(estring) + length + 1, _file_name, (euint32)_file_line);
 
     ret->length = length;
     memcpy(&ret->str[0], _str, length + 1);
@@ -62,8 +62,8 @@ EString _EString_add(EString _str0, const char* _str1, const char* _file_name, e
     return &ret->str[0];
     **/
     estring* estr = _get_estring(_str0);
-    euint32 length = strlen(_str1);
-    estring* ret = (estring*)_Malloc(sizeof(estring) + estr->length + length + 1, _file_name, _file_line);
+    euint32 length = (euint32)strlen(_str1);
+    estring* ret = (estring*)_Malloc(sizeof(estring) + estr->length + length + 1, _file_name, (euint32)_file_line);
 
     char* dest = &ret->str[0];
     memcpy(dest, _str0, estr->length); dest += estr->length;
@@ -84,14 +84,22 @@ euint EString_size(EString _str)
 EString _EString_add_sint(EString _str, esint _si, const char* _file_name, euint _file_line)
 {
     char mbuf[STRING_BUFFER_SIZE];
+#if BIT_WIDTH == 32
     snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%d", _si);
+#elif BIT_WIDTH == 64
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%lld", _si);
+#endif
     return EString_add(_str, mbuf);
 }
 
 EString _EString_add_uint(EString _str, euint _ui, const char* _file_name, euint _file_line)
 {
     char mbuf[STRING_BUFFER_SIZE];
+#if BIT_WIDTH == 32
     snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%d", _ui);
+#elif BIT_WIDTH == 64
+    snprintf(mbuf, STRING_BUFFER_SIZE - 1, "%lld", _ui);
+#endif
     return EString_add(_str, mbuf);
 }
 
