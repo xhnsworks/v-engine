@@ -41,12 +41,12 @@ API_EXPORT void Pass_set_uniform_param_float4(Pass _self, const char* _name, EFl
 API_EXPORT void Pass_set_uniform_param_mat4x4(Pass _self, const char* _name, matrix4x4* _mat);
 API_EXPORT void Pass_set_uniform_param_int(Pass _self, const char* _name, int _n);
 
-API_EXPORT void Pass_set_uniform_param_ints(Pass _self, const char* _name, int* _ns, euint _cnt);
-API_EXPORT void Pass_set_uniform_param_floats(Pass _self, const char* _name, EFloat* _fts, euint _cnt);
-API_EXPORT void Pass_set_uniform_param_float2s(Pass _self, const char* _name, EFloat2* _ft2s, euint _cnt);
-API_EXPORT void Pass_set_uniform_param_float3s(Pass _self, const char* _name, EFloat3* _ft3s, euint _cnt);
-API_EXPORT void Pass_set_uniform_param_float4s(Pass _self, const char* _name, EFloat4* _ft4s, euint _cnt);
-API_EXPORT void Pass_set_uniform_param_mat4x4s(Pass _self, const char* _name, matrix4x4** _mats, euint _cnt);
+API_EXPORT void Pass_set_uniform_param_ints(Pass _self, const char* _name, int* _ns, euint32 _cnt);
+API_EXPORT void Pass_set_uniform_param_floats(Pass _self, const char* _name, EFloat* _fts, euint32 _cnt);
+API_EXPORT void Pass_set_uniform_param_float2s(Pass _self, const char* _name, EFloat2* _ft2s, euint32 _cnt);
+API_EXPORT void Pass_set_uniform_param_float3s(Pass _self, const char* _name, EFloat3* _ft3s, euint32 _cnt);
+API_EXPORT void Pass_set_uniform_param_float4s(Pass _self, const char* _name, EFloat4* _ft4s, euint32 _cnt);
+API_EXPORT void Pass_set_uniform_param_mat4x4s(Pass _self, const char* _name, matrix4x4** _mats, euint32 _cnt);
 
 API_EXPORT void Pass_buy_vertex_param_source_tree(Pass _self, Tree _vtx_param_src_tree);
 API_EXPORT void Pass_buy_pixel_param_source_tree(Pass _self, Tree _pxl_param_src_tree);

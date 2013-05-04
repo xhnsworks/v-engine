@@ -8,7 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 const char* convertInternalFormatToString(GLenum format)
 {
-    char* formatName;
+    const char* formatName;
 
     switch(format)
     {
@@ -165,7 +165,7 @@ const char* getRenderbufferParameters(GLuint id)
 {
     if(glIsRenderbuffer(id) == GL_FALSE)
     {
-        char* str = "Not Renderbuffer object";
+        const char* str = "Not Renderbuffer object";
         euint len = 0;
         while (str[len])
         {
@@ -208,7 +208,7 @@ const char* getTextureParameters(GLuint id)
 {
     if(glIsTexture(id) == GL_FALSE)
     {
-        char* str = "Not texture object";
+        const char* str = "Not texture object";
         euint len = 0;
         while (str[len])
         {
@@ -455,7 +455,7 @@ void _error_proc(const char* _file, euint _line)
 	**/
 }
 
-void _shader_log(const char* _file, euint _line, euint32 _id)
+void _shader_log(const char* _file, euint32 _line, euint32 _id)
 {
     int log_length = 0xffffffff;
     glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &log_length);
@@ -468,7 +468,7 @@ void _shader_log(const char* _file, euint _line, euint32 _id)
 	Mfree(log_buffer);
 }
 
-void _program_log(const char* _file, euint _line, euint32 _id)
+void _program_log(const char* _file, euint32 _line, euint32 _id)
 {
     int log_length = 0xffffffff;
     glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &log_length);

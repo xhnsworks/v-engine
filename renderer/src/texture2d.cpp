@@ -4,7 +4,7 @@
 #include "emem.h"
 #include "clamp.h"
 
-Tex2DLockedRect::Tex2DLockedRect(euint _x, euint _y, euint _width, euint _height, pixel_format _fmt)
+Tex2DLockedRect::Tex2DLockedRect(euint32 _x, euint32 _y, euint32 _width, euint32 _height, pixel_format _fmt)
 : x(_x)
 , y(_y)
 , width(_width)
@@ -19,10 +19,10 @@ Tex2DLockedRect::Tex2DLockedRect(euint _x, euint _y, euint _width, euint _height
 Tex2DLockedRect::~Tex2DLockedRect()
 {
 }
-vptr Tex2DLockedRect::GetAt(euint _x, euint _y)
+vptr Tex2DLockedRect::GetAt(euint32 _x, euint32 _y)
 {
-    _x = clamp<euint>(_x, 0, width - 1);
-	_y = clamp<euint>(_y, 0, height - 1);
+    _x = clamp<euint32>(_x, 0, width - 1);
+	_y = clamp<euint32>(_y, 0, height - 1);
 	char* ret = (char*)pxl_buffer.get();
 	return (vptr)(ret + (height * _y + _x) * _get_pixel_size(format));
 }
@@ -42,7 +42,7 @@ Texture2D::~Texture2D()
 	glDeleteTextures(1, &id);
 }
 
-void Texture2D::Create(pixel_format _fmt, euint _w, euint _h)
+void Texture2D::Create(pixel_format _fmt, euint32 _w, euint32 _h)
 {
 	format = _fmt;
 	width = _w;
@@ -51,7 +51,7 @@ void Texture2D::Create(pixel_format _fmt, euint _w, euint _h)
 	Update(false);
 }
 
-void Texture2D::LoadFromMem(vptr _mem, pixel_format _fmt, euint _w, euint _h, euint _size_in_byte, bool is_compressed)
+void Texture2D::LoadFromMem(vptr _mem, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _size_in_byte, bool is_compressed)
 {
 	format = _fmt;
 	width = _w;

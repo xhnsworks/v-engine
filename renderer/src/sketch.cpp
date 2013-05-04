@@ -47,8 +47,8 @@ RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char
                                             "Tf3"
                                             "Bf3");
 
-    _self->vbf = _VertexBuffer_new(_self->dec, _file, _line);
-    _self->ibf = _IndexBuffer_new(Triangular, _file, _line);
+    _self->vbf = VertexBuffer_new(_self->dec);
+    _self->ibf = IndexBuffer_new(Triangular);
 
     float* fpos = (float*)VertexBuffer_insert(_self->vbf, Position, 0);
     fpos[0] = -1.0;
@@ -86,28 +86,28 @@ RenderablePlane RenderablePlane_Init(struct _renderable_plane* _self, const char
     ftex[0] = 1.0;
     ftex[1] = 1.0;
 
-    for (euint i = 0; i < 4; i++)
+    for (euint32 i = 0; i < 4; i++)
     {
         float* fnor = (float*)VertexBuffer_insert(_self->vbf, Normal, i);
         fnor[0] = 0.0;
         fnor[1] = 0.0;
         fnor[2] = -1.0;
     }
-    for (euint i = 0; i < 4; i++)
+    for (euint32 i = 0; i < 4; i++)
     {
         float* ftgt = (float*)VertexBuffer_insert(_self->vbf, Tangent, i);
         ftgt[0] = 1.0;
         ftgt[1] = 0.0;
         ftgt[2] = 0.0;
     }
-    for (euint i = 0; i < 4; i++)
+    for (euint32 i = 0; i < 4; i++)
     {
         float* fbinor = (float*)VertexBuffer_insert(_self->vbf, Binormal, i);
         fbinor[0] = 0.0;
         fbinor[1] = 1.0;
         fbinor[2] = 0.0;
     }
-    for (euint i = 0; i < 4; i++)
+    for (euint32 i = 0; i < 4; i++)
     {
         float* fcolor = (float*)VertexBuffer_insert(_self->vbf, Color, i);
         fcolor[0] = 1.0;
@@ -235,7 +235,7 @@ void SketchBookConfig_set_sketch_format(SketchBookConfig _self, euint _idx, pixe
         _self->sketch_format_array = array_new(pixel_format, _idx + 1, RGBA8);
         _self->sketch_format_array = array_resize(_self->sketch_format_array, _idx + 1);
     }
-    euint n = array_n(_self->sketch_format_array);
+    ///euint n = array_n(_self->sketch_format_array);
     _self->sketch_format_array[_idx] = _fmt;
 }
 

@@ -8,10 +8,8 @@
 typedef struct _vertex_buffer* VertexBuffer;
 
 API_EXPORT void VertexBuffer_Dest(struct _vertex_buffer* _self);
-API_EXPORT VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, euint _line);
-API_EXPORT void _VertexBuffer_delete(VertexBuffer _self, const char* _file, euint _line);
-#define VertexBuffer_new(d) _VertexBuffer_new(d, __FILE__, __LINE__)
-#define VertexBuffer_delete(b) _VertexBuffer_delete(b, __FILE__, __LINE__)
+API_EXPORT VertexBuffer VertexBuffer_new(VertexDecl _dec);
+API_EXPORT void VertexBuffer_delete(VertexBuffer _self);
 ///API_EXPORT vptr VertexBuffer_access(VertexBuffer _self, element_semantic _sem, unsigned int _i);
 API_EXPORT bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _i, vptr _result);
 API_EXPORT vptr VertexBuffer_insert(VertexBuffer _self, element_semantic _sem, unsigned int _i);

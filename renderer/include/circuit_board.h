@@ -25,8 +25,7 @@ API_EXPORT void CircuitBoard_Init(CircuitBoard _self);
 API_EXPORT void CircuitBoard_Dest(CircuitBoard _self);
 API_EXPORT CircuitBoard CircuitBoard_new();
 API_EXPORT void CircuitBoard_delete(CircuitBoard _self);
-API_EXPORT ShaderNode _CircuitBoard_add_reference_node(CircuitBoard _self, ShaderNode _prototype_node, const char* _file, euint _line);
-#define CircuitBoard_add_reference_node(s, n) _CircuitBoard_add_reference_node(s, n, __FILE__, __LINE__)
+API_EXPORT ShaderNode CircuitBoard_add_reference_node(CircuitBoard _self, ShaderNode _prototype_node);
 API_EXPORT char* CircuitBoard_compile(CircuitBoard _self);
-API_EXPORT CircuitBoard CircuitBoard_clone(CircuitBoard _self, const char* _file, euint _line);
+API_EXPORT CircuitBoard CircuitBoard_clone(CircuitBoard _self);
 #endif

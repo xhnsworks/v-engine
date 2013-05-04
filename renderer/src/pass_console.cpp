@@ -8,10 +8,10 @@
 #include "array.h"
 #include "estring.h"
 //#include "material_instance.h"
-euint32 _file_length( FILE *fp )
+euint _file_length( FILE *fp )
 {
-    euint32 cur_pos;
-    euint32 len;
+    euint cur_pos;
+    euint len;
 
 ///取得当前文件流的读取位置
     cur_pos = ftell( fp );
@@ -30,7 +30,7 @@ void Char_Dest(vptr p)
 char* _load_text_file(const char* _file_name)
 {
     FILE* fp = SafeFOpen(_file_name, "r");
-    euint32 len = _file_length( fp );
+    euint len = _file_length( fp );
     char* buffer = (char*)SMalloc(len);
     fread(buffer, len, 1, fp);
     fclose(fp);

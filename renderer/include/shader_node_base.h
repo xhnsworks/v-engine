@@ -11,7 +11,7 @@ typedef struct _shader_node_base
     shader_node_clone_proc clone_proc;
 } shader_node_base;
 
-API_EXPORT void ShaderNodeBase_delete(ShaderNodeBase _self, const char* _file, euint _line);
+API_EXPORT void ShaderNodeBase_delete(ShaderNodeBase _self);
 
 #define USE_RECOMPILE
 #endif

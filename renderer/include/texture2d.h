@@ -44,16 +44,16 @@ class Tex2DLockedRect : public MemObject
 {
 	friend class Texture2D;
 private:
-	euint x;
-	euint y;
-	euint width;
-	euint height;
+	euint32 x;
+	euint32 y;
+	euint32 width;
+	euint32 height;
 	pixel_format format;
 	xhn::void_vector pxl_buffer;
-    Tex2DLockedRect(euint _x, euint _y, euint _width, euint _height, pixel_format _fmt);
+    Tex2DLockedRect(euint32 _x, euint32 _y, euint32 _width, euint32 _height, pixel_format _fmt);
 	~Tex2DLockedRect();
 public:
-	vptr GetAt(euint _x, euint _y);
+	vptr GetAt(euint32 _x, euint32 _y);
 	inline euint GetWidth() const {
 		return width;
 	}
@@ -74,8 +74,8 @@ public:
 public:
 	Texture2D();
 	~Texture2D();
-	void Create(pixel_format _fmt, euint _w, euint _h);
-	void LoadFromMem(vptr _mem, pixel_format _fmt, euint _w, euint _h, euint _size_in_byte, bool is_compressed);
+	void Create(pixel_format _fmt, euint32 _w, euint32 _h);
+	void LoadFromMem(vptr _mem, pixel_format _fmt, euint32 _w, euint32 _h, euint32 _size_in_byte, bool is_compressed);
 	void LoadFromColor(const EColor& _color);
 	void Bind();
 	static void Unbind();

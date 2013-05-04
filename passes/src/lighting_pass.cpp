@@ -16,7 +16,7 @@
 
 #define USE_DEPTH_MAP
 
-static bool g_display_pos = false;
+///static bool g_display_pos = false;
 
 ///=========================create_lighting_shader_node============================///
 

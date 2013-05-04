@@ -12,7 +12,7 @@ void CircuitBoard_Dest(CircuitBoard _self)
 {
     for (euint i = 0; i < array_n(_self->shader_node_reference_table); i++)
     {
-        ShaderNodeBase_delete((ShaderNodeBase)_self->shader_node_reference_table[i], __FILE__, __LINE__);
+        ShaderNodeBase_delete((ShaderNodeBase)_self->shader_node_reference_table[i]);
     }
     array_delete(_self->shader_node_reference_table);
 }
@@ -27,11 +27,11 @@ void CircuitBoard_delete(CircuitBoard _self)
     CircuitBoard_Dest(_self);
     Mfree(_self);
 }
-ShaderNode _CircuitBoard_add_reference_node(CircuitBoard _self, ShaderNode _prototype_node, const char* _file, euint _line)
+ShaderNode CircuitBoard_add_reference_node(CircuitBoard _self, ShaderNode _prototype_node)
 {
     ///ShaderNode csn = _ShaderNode_clone(_prototype_node, __FILE__, __LINE__);
     ShaderNodeBase snb = (ShaderNodeBase)_prototype_node;
-    ShaderNode csn = (ShaderNode)snb->clone_proc((ShaderNodeBase)_prototype_node, _file, _line);
+    ShaderNode csn = (ShaderNode)snb->clone_proc((ShaderNodeBase)_prototype_node);
     apush(_self->shader_node_reference_table, csn);
     return csn;
 }
@@ -57,10 +57,10 @@ char* CircuitBoard_compile(CircuitBoard _self)
     }
     return (char*)EString_new(mbuf);
 }
-CircuitBoard CircuitBoard_clone(CircuitBoard _self, const char* _file, euint _line)
+CircuitBoard CircuitBoard_clone(CircuitBoard _self)
 {
-    CircuitBoard ret = (CircuitBoard)_Malloc(sizeof(s_circuit_board), _file, _line);
-    euint n = array_n(_self->shader_node_reference_table);
+    CircuitBoard ret = (CircuitBoard)Malloc(sizeof(s_circuit_board));
+    euint32 n = array_n(_self->shader_node_reference_table);
     ret->shader_node_reference_table = array_new(ShaderNode, n, NULL);
     for (euint i = 0; i < n; i++)
     {

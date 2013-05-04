@@ -30,7 +30,7 @@ void PxlSdrBuf_Dest(struct _pixel_shader_buffer* _buf, const char* _file, euint 
 PxlSdrBuf _PxlSdrBuf_new(const char* _file, euint _line)
 {
     PxlSdrBuf ret;
-    ret = (pixel_shader_buffer*)_Malloc(sizeof(pixel_shader_buffer), _file, _line);
+    ret = (pixel_shader_buffer*)_Malloc(sizeof(pixel_shader_buffer), _file, (euint32)_line);
     ret = (pixel_shader_buffer*)ShaderBuffer_Init((struct _shader_buffer*)ret, __FILE__, __LINE__);
     ret = PxlSdrBuf_Init(ret, _file, _line);
     return ret;

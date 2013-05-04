@@ -19,10 +19,8 @@ typedef struct _index_buffer* IndexBuffer;
 typedef struct _vertex_buffer* VertexBuffer;
 
 API_EXPORT void IndexBuffer_Dest(struct _index_buffer* _self);
-API_EXPORT IndexBuffer _IndexBuffer_new(e_mesh_mode mode, const char* _file, euint _line);
-API_EXPORT void _IndexBuffer_delete(IndexBuffer _self, const char* _file, euint _line);
-#define IndexBuffer_new(m) _IndexBuffer_new(m, __FILE__, __LINE__)
-#define IndexBuffer_delete(b) _IndexBuffer_delete(b, __FILE__, __LINE__)
+API_EXPORT IndexBuffer IndexBuffer_new(e_mesh_mode mode);
+API_EXPORT void IndexBuffer_delete(IndexBuffer _self);
 API_EXPORT bool IndexBuffer_read(IndexBuffer _self, unsigned int _i, vptr _result);
 API_EXPORT vptr IndexBuffer_insert(IndexBuffer _self, unsigned int _i);
 API_EXPORT euint32 IndexBuffer_get_id(IndexBuffer _self);

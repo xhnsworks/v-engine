@@ -23,11 +23,11 @@ void VertexBuffer_Dest(struct _vertex_buffer* _buf)
     array_delete(_buf->vtx_ele_offs);
     Mfree(_buf->vertex_buffer);
 }
-VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, euint _line)
+VertexBuffer VertexBuffer_new(VertexDecl _dec)
 {
     if (VertexDecl_count(_dec))
     {
-        vertex_buffer* buffer = (vertex_buffer*)_Malloc(sizeof(vertex_buffer), _file, _line);
+        vertex_buffer* buffer = (vertex_buffer*)Malloc(sizeof(vertex_buffer));
         buffer->vtx_ele_offs = array_new(euint, VertexDecl_count(_dec), 0xffffffff);
         euint32 vertex_size = 0;
         euint32 i = 0;
@@ -50,7 +50,7 @@ VertexBuffer _VertexBuffer_new(VertexDecl _dec, const char* _file, euint _line)
                 vertex_size += get_element_size(VertexElement_get_type(element));
             }
         }
-        buffer->vertex_buffer = (char*)_Malloc(vertex_size * DEFAULT_VERTEX_BUFFER_SIZE, _file, _line);
+        buffer->vertex_buffer = (char*)Malloc(vertex_size * DEFAULT_VERTEX_BUFFER_SIZE);
         buffer->vertex_size = vertex_size;
         buffer->vertex_buffer_size = vertex_size * DEFAULT_VERTEX_BUFFER_SIZE;
         buffer->vertex_buffer_tail = 0;
@@ -82,7 +82,7 @@ void _VertexBuffer_grow_up(VertexBuffer _self, euint num_vtxs)
     }
 }
 
-void _VertexBuffer_delete(VertexBuffer _self, const char* _file, euint _line)
+void VertexBuffer_delete(VertexBuffer _self)
 {
     VertexBuffer_Dest(_self);
     Mfree(_self);

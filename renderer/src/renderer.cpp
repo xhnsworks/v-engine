@@ -372,7 +372,7 @@ void Renderer::common_init()
 
     curt_light = NULL;
 
-    VertexDecl pdec = RenderablePlane_get_vertex_declaration ( render_plane );
+    ///VertexDecl pdec = RenderablePlane_get_vertex_declaration ( render_plane );
 
     dirty_flag = true;
     clear_color_buffer_flag = true;
@@ -523,7 +523,7 @@ void Renderer::prepare_sketchbooks()
             }
         }
 
-        for ( euint i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
+        for ( euint32 i = 0; i < NUM_LIGHTING_SKETCH_BOOKS; i++ ) {
             elog ( "    SKETCH BOOK %d", i );
             SketchBookConfig cfg = SketchBookConfig_new();
             SketchBookConfig_set_size ( cfg, width, height );
@@ -560,7 +560,7 @@ void Renderer::prepare_display_passes()
 	if (debug_render_output == NonDebug) {
 		Iterator mat_iter = Tree_begin ( material_table );
 		material_decl null_mat_decl = {NULL, -1};
-		material_decl *decls = array_new ( material_decl, Tree_count ( material_table ), null_mat_decl );
+		material_decl *decls = array_new ( material_decl, (euint32)Tree_count ( material_table ), null_mat_decl );
 
 		while ( mat_iter ) {
 			var data = Tree_get_value ( mat_iter );
@@ -584,7 +584,7 @@ void Renderer::prepare_lighting_passes()
 {
     VertexDecl vtx_decl = RenderablePlane_get_vertex_declaration ( render_plane );
     lighting_decl null_lt_decl = {NULL, -1};
-    lighting_decl *decls = array_new ( lighting_decl, Tree_count ( material_table ), null_lt_decl );
+    lighting_decl *decls = array_new ( lighting_decl, (euint32)Tree_count ( material_table ), null_lt_decl );
     Iterator mat_iter = Tree_begin ( material_table );
 
     while ( mat_iter ) {

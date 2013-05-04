@@ -440,9 +440,9 @@ typedef enum _compare_operation
 
 typedef struct _shader_node_base* ShaderNodeBase;
 typedef const char* (*shader_node_compile_proc)(ShaderNodeBase);
-typedef void (*shader_node_init_proc)(ShaderNodeBase, const char*, euint);
-typedef void (*shader_node_dest_proc)(ShaderNodeBase, const char*, euint);
-typedef ShaderNodeBase (*shader_node_clone_proc)(ShaderNodeBase, const char*, euint);
+typedef void (*shader_node_init_proc)(ShaderNodeBase);
+typedef void (*shader_node_dest_proc)(ShaderNodeBase);
+typedef ShaderNodeBase (*shader_node_clone_proc)(ShaderNodeBase);
 
 typedef struct _string_buffer
 {

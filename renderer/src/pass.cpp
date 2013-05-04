@@ -16,7 +16,7 @@ typedef struct _param
 {
     char* name;
     param_type type;
-    euint array_size;
+    euint32 array_size;
     vptr param_ptr;
 } param;
 
@@ -455,7 +455,7 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
     euint32 tex_loc = UINT32_EXCE;
     euint32 tgt_loc = UINT32_EXCE;
     euint32 bin_loc = UINT32_EXCE;
-    euint32 epw_loc = UINT32_EXCE;
+    ///euint32 epw_loc = UINT32_EXCE;
     for (euint32 i = 0; i < VertexDecl_count(dec); i++)
     {
         VertexElement element = VertexDecl_find(dec, i);
@@ -766,37 +766,37 @@ void Pass_set_uniform_param_int(Pass _self, const char* _name, int _n)
     Pass_push_param(_self, pam);
 }
 
-void Pass_set_uniform_param_ints(Pass _self, const char* _name, int* _ns, euint _cnt)
+void Pass_set_uniform_param_ints(Pass _self, const char* _name, int* _ns, euint32 _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ns, Int_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_floats(Pass _self, const char* _name, EFloat* _fts, euint _cnt)
+void Pass_set_uniform_param_floats(Pass _self, const char* _name, EFloat* _fts, euint32 _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _fts, Float32_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_float2s(Pass _self, const char* _name, EFloat2* _ft2s, euint _cnt)
+void Pass_set_uniform_param_float2s(Pass _self, const char* _name, EFloat2* _ft2s, euint32 _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ft2s, Float32x2_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_float3s(Pass _self, const char* _name, EFloat3* _ft3s, euint _cnt)
+void Pass_set_uniform_param_float3s(Pass _self, const char* _name, EFloat3* _ft3s, euint32 _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ft3s, Float32x3_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_float4s(Pass _self, const char* _name, EFloat4* _ft4s, euint _cnt)
+void Pass_set_uniform_param_float4s(Pass _self, const char* _name, EFloat4* _ft4s, euint32 _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _ft4s, Float32x4_Param, _cnt);
     Pass_push_param(_self, pam);
 }
-void Pass_set_uniform_param_mat4x4s(Pass _self, const char* _name, matrix4x4** _mats, euint _cnt)
+void Pass_set_uniform_param_mat4x4s(Pass _self, const char* _name, matrix4x4** _mats, euint32 _cnt)
 {
     Param pam = Param_new();
     Param_set(pam, _name, _mats, Matrix4x4_Param, _cnt);
@@ -828,7 +828,7 @@ void _auto_set_uniform_params(Tree _param_source_tree, Pass _self, RendererBase*
 			{
 				renderer_param_value shader_object_value = _rdr->get_shader_object_value(src);
 				ShaderObject obj = {(struct _shader_object*)data.vptr_var};
-				euint array_size, array_index;
+				euint32 array_size, array_index;
 				shader_object_type type = ShaderObject_get_type(obj, &array_size, &array_index);
 				EAssert(array_size > 0, "%s", "param array size less equal zero!");
 				const char* name = ShaderObject_get_name(obj);

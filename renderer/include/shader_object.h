@@ -15,7 +15,7 @@ API_EXPORT void _ShaderObject_delete(ShaderObject _so, const char* _file, euint 
 API_EXPORT ShaderObject _ShaderObject_clone(ShaderObject _so, const char* _file, euint _line);
 #define ShaderObject_clone(s) _ShaderObject_clone(s, __FILE__, __LINE__)
 API_EXPORT bool ShaderObject_equal(ShaderObject _so0, ShaderObject _so1);
-API_EXPORT shader_object_type ShaderObject_get_type(ShaderObject _so, euint* _array_size, euint* _array_index);
+API_EXPORT shader_object_type ShaderObject_get_type(ShaderObject _so, euint32* _array_size, euint32* _array_index);
 API_EXPORT const char* ShaderObject_get_name(ShaderObject _so);
 API_EXPORT void ShaderObject_set_type(ShaderObject _so, shader_object_type _type, euint32 _array_size, euint32 _array_index);
 API_EXPORT void ShaderObject_set_index(ShaderObject _so, euint32 _array_index);

@@ -214,7 +214,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 
     ShaderObject diffuse = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "DiffuseValue", 1);
     ShaderObject specular = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "SpecularValue", 1);
-    ShaderObject view_light_dir = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "ViewLightDir", 1);
+    ///ShaderObject view_light_dir = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "ViewLightDir", 1);
     ShaderObject light_weight = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "LightingWeight", 1);
 
     euint _num_shadow_map = _lt_state->num_shadow_emitters;
@@ -229,7 +229,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 
     if (_lt_state->type != PointType)
     {
-        for (euint i = 0; i < _num_shadow_map; i++)
+        for (euint32 i = 0; i < _num_shadow_map; i++)
         {
             char shadow_map[256];
             char light_world_matrix[256];
@@ -267,7 +267,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
     ShaderObject inv_cam_world_mat =  IPxlSdrBuf.find_object((ShaderBuffer)_psb, INVERT_CAMERA_WORLD_MATRIX);
     ShaderObject inv_cam_proj_mat =  IPxlSdrBuf.find_object((ShaderBuffer)_psb, INVERT_CAMERA_PROJECTION_MATRIX);
 
-    ShaderObject cam_world_mat = IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_WORLD_MATRIX);
+    ///ShaderObject cam_world_mat = IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_WORLD_MATRIX);
     ShaderObject cam_pos = IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_POSITION);
 
     ShaderObject light_pos = IPxlSdrBuf.find_object((ShaderBuffer)_psb, LIGHT_POSITION);
@@ -289,7 +289,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderNode_add_output_link(sampler_node, diffuse, INVALID_ARRAY_INDEX);
 	
         sampler_node = ISdrNdGen.add_reference_node_2(_sng, _cb, MapSampleNode);
-        ShaderObject specular_map = IPxlSdrBuf.find_object((ShaderBuffer)_psb, SPECULAR_LIGHTING_MAP);
+        ///ShaderObject specular_map = IPxlSdrBuf.find_object((ShaderBuffer)_psb, SPECULAR_LIGHTING_MAP);
         ShaderNode_add_input_link(sampler_node, diffuse_map, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(sampler_node, tex_crd, INVALID_ARRAY_INDEX);
         ShaderNode_add_output_link(sampler_node, specular, INVALID_ARRAY_INDEX);
@@ -562,7 +562,7 @@ PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, 
 
     if (type != PointType)
     {
-        for (euint i = 0; i < _num_shadow_map; i++)
+        for (euint32 i = 0; i < _num_shadow_map; i++)
         {
             char shadow_map[256];
             char light_world_matrix[256];

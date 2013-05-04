@@ -333,7 +333,7 @@ float* _stream_doubling(float* _stream, euint _cnt, euint _num_comp)
     return ret;
 }
 
-static inline void _fill_ext_idxs(euint i, euint32 e0, euint e1, euint vtx_cnt, euint32* idxs0, euint32* idxs1)
+static inline void _fill_ext_idxs(euint i, euint32 e0, euint32 e1, euint32 vtx_cnt, euint32* idxs0, euint32* idxs1)
 {
     idxs0[i * 3 + 0] = e1;
     idxs0[i * 3 + 1] = e0;
@@ -349,8 +349,8 @@ Mesh Mesh_build_volume(Mesh _mesh)
     if (_Mesh_get_data_0004(_mesh)->indexs && _Mesh_get_data_0005(_mesh)->mesh_mode == Triangular && !_Mesh_get_data_0006(_mesh)->vtx_epw)
     {
         Mesh ret = Mesh_new();
-        euint vtx_count = _Mesh_get_data_0004(_mesh)->vtx_count;
-        euint idx_count = _Mesh_get_data_0004(_mesh)->indexed_vtx_count;
+        euint32 vtx_count = _Mesh_get_data_0004(_mesh)->vtx_count;
+        euint32 idx_count = _Mesh_get_data_0004(_mesh)->indexed_vtx_count;
 
         float* pos_buf = (float*)SMalloc(sizeof(float) * 3 * vtx_count * 2);
         float* base_pos_ptr0 = pos_buf;
@@ -359,7 +359,7 @@ Mesh Mesh_build_volume(Mesh _mesh)
         memcpy(base_pos_ptr1, _Mesh_get_data_0004(_mesh)->vtx_pos, sizeof(float) * 3 * vtx_count);
 
         float* epw_buf = (float*)SMalloc(sizeof(float) * vtx_count * 2);
-        float* base_epw_ptr0 = epw_buf;
+        ///float* base_epw_ptr0 = epw_buf;
         float* base_epw_ptr1 = &epw_buf[vtx_count];
 
         for (euint i = 0; i < vtx_count; i++)
@@ -384,7 +384,7 @@ Mesh Mesh_build_volume(Mesh _mesh)
         EAssert( _Mesh_get_data_0004(_mesh)->face_count == _Mesh_get_data_0004(_mesh)->indexed_vtx_count / 3, "%s", "index count error!" );
         EAssert( 0 == _Mesh_get_data_0004(_mesh)->indexed_vtx_count % 3, "%s", "index count error!" );
 
-        euint face_count = _Mesh_get_data_0004(_mesh)->face_count;
+        euint32 face_count = _Mesh_get_data_0004(_mesh)->face_count;
         for (euint i = 0; i < face_count; i++)
         {
             euint32 vtx0 = base_idx_ptr0[i * 3 + 0];

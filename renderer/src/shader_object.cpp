@@ -76,7 +76,7 @@ bool ShaderObject_equal(ShaderObject _so0, ShaderObject _so1)
     }
 }
 
-shader_object_type ShaderObject_get_type(ShaderObject _so, euint* _array_size, euint* _array_index)
+shader_object_type ShaderObject_get_type(ShaderObject _so, euint32* _array_size, euint32* _array_index)
 {
     *_array_size = _so.self->array_size;
     *_array_index = _so.self->array_index;

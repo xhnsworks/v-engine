@@ -14,7 +14,7 @@ typedef struct _switch_node
     Tree switch_tree;
 } switch_node;
 
-void SwitchNode_Dest(SwitchNode _self, const char* _file, euint _line)
+void SwitchNode_Dest(SwitchNode _self)
 {
     Iterator iter = Tree_begin(_self->switch_tree);
     while (iter)
@@ -59,8 +59,8 @@ char* SwitchNode_compile(SwitchNode _self)
     sbuf_printf("%s", "}\n");
     return (char*)EString_new(get_string_buffer);
 }
-void SwitchNode_Init(SwitchNode _self, const char* _file, euint _line);
-SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, euint _line)
+void SwitchNode_Init(SwitchNode _self);
+SwitchNode SwitchNode_clone(SwitchNode _self)
 {
     SwitchNode ret = (SwitchNode)SMalloc(sizeof(switch_node));
     ret->base.init_proc = (shader_node_init_proc)SwitchNode_Init;
@@ -85,7 +85,7 @@ SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, euint _line)
         }
 
         CircuitBoard src_bd = (CircuitBoard)data.vptr_var;
-        CircuitBoard dst_bd = CircuitBoard_clone(src_bd, _file, _line);
+        CircuitBoard dst_bd = CircuitBoard_clone(src_bd);
 
         key.vptr_var = dst_tags;
         data.vptr_var = dst_bd;
@@ -100,7 +100,7 @@ SwitchNode SwitchNode_clone(SwitchNode _self, const char* _file, euint _line)
 
     return ret;
 }
-void SwitchNode_Init(SwitchNode _self, const char* _file, euint _line)
+void SwitchNode_Init(SwitchNode _self)
 {
     _self->base.init_proc = (shader_node_init_proc)SwitchNode_Init;
     _self->base.dest_proc = (shader_node_dest_proc)SwitchNode_Dest;
@@ -111,19 +111,19 @@ void SwitchNode_Init(SwitchNode _self, const char* _file, euint _line)
     _self->switch_obj.self = NULL;
 }
 
-SwitchNode _SwitchNode_new(const char* _file, euint _line)
+SwitchNode SwitchNode_new()
 {
     SwitchNode ret = (SwitchNode)SMalloc(sizeof(switch_node));
-    SwitchNode_Init(ret, _file, _line);
+    SwitchNode_Init(ret);
     return ret;
 }
-void _SwitchNode_delete(SwitchNode _self, const char* _file, euint _line)
+void SwitchNode_delete(SwitchNode _self)
 {
-    ShaderNodeBase_delete((ShaderNodeBase)_self, _file, _line);
+    ShaderNodeBase_delete((ShaderNodeBase)_self);
 }
 CircuitBoard SwitchNode_add_branch_block(SwitchNode _self, esint* _tags)
 {
-    euint n = array_n(_tags);
+    euint32 n = array_n(_tags);
     esint* tags = array_new(esint, n, -1);
     for (euint i = 0; i < n; i++)
     {
@@ -140,7 +140,7 @@ void SwitchNode_set_switch_object(SwitchNode _self, ShaderObject _so)
 {
     if (to_ptr(_self->switch_obj))
         return;
-    euint array_size, array_index;
+    euint32 array_size, array_index;
     shader_object_type type = ShaderObject_get_type(_so, &array_size, &array_index);
     EAssert(type == Int_Obj, "shader object %s is not int!", ShaderObject_get_name(_so));
     EAssert(array_size == 1 || array_index != INVALID_ARRAY_INDEX, "shader object %s is array!", ShaderObject_get_name(_so));

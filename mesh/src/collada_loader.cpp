@@ -409,7 +409,7 @@ void ColladaState_load_mesh(ColladaState _self, const char* filepath)
 			else if (eleName == "triangles")
 			{
 				ColladaState_enum_semantics(_self, ele, false);
-				euint count = ele.attribute("count").as_uint();
+				euint32 count = ele.attribute("count").as_uint();
 				_self->num_tri = count;
 				pugi::xml_node p = ele.child("p");
 				if (p)

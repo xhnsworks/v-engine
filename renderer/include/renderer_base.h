@@ -51,7 +51,7 @@ protected:
 	STD_NAMESPACE::map<param_source, RendererParamEntry> param_proc_map;
 
 	Tree material_table;
-    esint material_count;
+    esint32 material_count;
 
 	STD_NAMESPACE::set<Renderable> used_renderable_set;
 	STD_NAMESPACE::set<Renderable> unused_renderable_set;
@@ -62,10 +62,10 @@ protected:
     Pass display_pass;
     Pass clear_sketchbook_pass;
 
-    euint x;
-    euint y;
-    euint width;
-    euint height;
+    euint32 x;
+    euint32 y;
+    euint32 width;
+    euint32 height;
     Camera camera_base;
 public:
     matrix4x4* curt_rend_world_matrix;
@@ -108,10 +108,10 @@ public:
 	virtual renderer_param_value get_shader_object_value ( esint32 _src ) = 0;
 	virtual void prepare_renderable(Renderable _rbl) = 0;
 
-	inline euint get_width() {
+	inline euint32 get_width() {
 		return width;
 	}
-	inline euint get_height() {
+	inline euint32 get_height() {
 		return height;
 	}
     inline RenderablePlane get_render_plane() {

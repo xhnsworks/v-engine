@@ -87,12 +87,12 @@ const char* BranchNode_compile(BranchNode _self)
         condition cond = _self->branch_blocks[i].cond;
         if (!ShaderObject_equal(cond.left_obj, cond.right_obj))
         {
-            const char* left_name = ShaderObject_get_name(cond.left_obj);
-            const char* right_name = ShaderObject_get_name(cond.right_obj);
-            euint left_array_size, left_array_index;
-            euint right_array_size, right_array_index;
-            shader_object_type left_type = ShaderObject_get_type(cond.left_obj, &left_array_size, &left_array_index);
-            shader_object_type right_type = ShaderObject_get_type(cond.right_obj, &right_array_size, &right_array_index);
+            ///const char* left_name = ShaderObject_get_name(cond.left_obj);
+            ///const char* right_name = ShaderObject_get_name(cond.right_obj);
+            ///euint left_array_size, left_array_index;
+            ///euint right_array_size, right_array_index;
+            ///shader_object_type left_type = ShaderObject_get_type(cond.left_obj, &left_array_size, &left_array_index);
+            ///shader_object_type right_type = ShaderObject_get_type(cond.right_obj, &right_array_size, &right_array_index);
             return NULL;
         }
         if (i == 0)
@@ -153,7 +153,7 @@ const char* BranchNode_compile(BranchNode _self)
     const char* ret = EString_new(mbuf);
     return ret;
 }
-void BranchNode_Dest(BranchNode _self, const char* _file, euint _line)
+void BranchNode_Dest(BranchNode _self)
 {
     euint n = array_n(_self->branch_blocks);
     for (euint i = 0; i < n; i++)
@@ -166,41 +166,41 @@ void BranchNode_Dest(BranchNode _self, const char* _file, euint _line)
     if (_self->else_block)
         CircuitBoard_delete(_self->else_block);
 }
-BranchNode _BranchNode_clone(BranchNode _bn, const char* _file, euint _line);
-void BranchNode_Init(BranchNode _self, const char* _file, euint _line)
+BranchNode BranchNode_clone(BranchNode _bn);
+void BranchNode_Init(BranchNode _self)
 {
     _self->base.init_proc = (shader_node_init_proc)BranchNode_Init;
     _self->base.dest_proc = (shader_node_dest_proc)BranchNode_Dest;
-    _self->base.clone_proc = (shader_node_clone_proc)_BranchNode_clone;
+    _self->base.clone_proc = (shader_node_clone_proc)BranchNode_clone;
     _self->base.compile_proc = (shader_node_compile_proc)BranchNode_compile;
     branch_block null_brh_blk = {{NULL, EmptyCompare, NULL}, NULL};
     _self->branch_blocks = array_new(branch_block, 20, null_brh_blk);
     _self->else_block = NULL;
 }
 
-BranchNode _BranchNode_clone(BranchNode _bn, const char* _file, euint _line)
+BranchNode BranchNode_clone(BranchNode _bn)
 {
     BranchNode ret = (BranchNode)SMalloc(sizeof(branch_node));
     ret->base.init_proc = (shader_node_init_proc)BranchNode_Init;
     ret->base.dest_proc = (shader_node_dest_proc)BranchNode_Dest;
-    ret->base.clone_proc = (shader_node_clone_proc)_BranchNode_clone;
+    ret->base.clone_proc = (shader_node_clone_proc)BranchNode_clone;
     ret->base.compile_proc = (shader_node_compile_proc)BranchNode_compile;
     branch_block null_brh_blk = {{NULL, EmptyCompare, NULL}, NULL};
-    euint n = array_n(_bn->branch_blocks);
+    euint32 n = array_n(_bn->branch_blocks);
     ret->branch_blocks = array_new(branch_block, n, null_brh_blk);
     for (euint i = 0; i < n; i++)
     {
         ShaderObject a = _bn->branch_blocks[i].cond.left_obj;
         ShaderObject b = _bn->branch_blocks[i].cond.right_obj;
         compare_operation op = _bn->branch_blocks[i].cond.compare_op;
-        CircuitBoard board = CircuitBoard_clone(_bn->branch_blocks[i].board, _file, _line);
+        CircuitBoard board = CircuitBoard_clone(_bn->branch_blocks[i].board);
 
         branch_block block = {{ShaderObject_clone(a), op, ShaderObject_clone(b)}, board};
         apush(ret->branch_blocks, block);
     }
     if (_bn->else_block)
     {
-        ret->else_block = CircuitBoard_clone(_bn->else_block, _file, _line);
+        ret->else_block = CircuitBoard_clone(_bn->else_block);
     }
     else
     {
@@ -212,12 +212,12 @@ BranchNode _BranchNode_clone(BranchNode _bn, const char* _file, euint _line)
 BranchNode BranchNode_new()
 {
     BranchNode ret = (BranchNode)SMalloc(sizeof(branch_node));
-    BranchNode_Init(ret, __FILE__, __LINE__);
+    BranchNode_Init(ret);
     return ret;
 }
 void BranchNode_delete(BranchNode _self)
 {
-    ShaderNodeBase_delete((ShaderNodeBase)_self, __FILE__, __LINE__);
+    ShaderNodeBase_delete((ShaderNodeBase)_self);
 }
 
 CircuitBoard BranchNode_add_branch(BranchNode _self, ShaderObject _a, compare_operation _op, ShaderObject _b)

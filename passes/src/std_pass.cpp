@@ -89,7 +89,7 @@ ShaderNode create_std_vertex_shader_node(VertexDecl _dec, VtxSdrBuf _vsb,
         ///element_type sem_type = get_element_semantic_type(sem);
         const char* sem_str = get_element_semantic_string(sem);
 
-        if (sem != EmptyType &&
+        if (sem != EmptySemantic &&
             sem != Position &&
             sem != Normal &&
             sem != Tangent &&
@@ -115,7 +115,6 @@ ShaderNode create_std_vertex_shader_node(VertexDecl _dec, VtxSdrBuf _vsb,
                                                  ///"    %s = CameraWorldRotateMatrix * %s;\n"
                                                  "    %s = normalize(%s);\n",
                                                  vary_str, sem_str,
-                                                 vary_str, vary_str,
                                                  vary_str, vary_str);
             }
             else {
@@ -258,7 +257,7 @@ enc = enc*0.5+0.5;
             tangent_proc = "    vec3 tmap = vec3(0.0, 0.0, 0.0);\n";
     }
 
-    if ( (_status->dec.usage_tex_flags & COLOR_MAP_MASK) || (_status->dec.usage_tex_flags & COLOR_SKETCH_MASK) && has_texcoord )
+    if ( ((_status->dec.usage_tex_flags & COLOR_MAP_MASK) || (_status->dec.usage_tex_flags & COLOR_SKETCH_MASK)) && has_texcoord )
     {
         if (!_status->use_gausscian_blur) {
             color_proc =

@@ -20,9 +20,9 @@ void IndexBuffer_Dest(struct _index_buffer* _buf)
     glDeleteBuffers(1, &_buf->id);
     Mfree( (vptr)((index_buffer*)_buf)->index_buffer );
 }
-IndexBuffer _IndexBuffer_new(e_mesh_mode mode, const char* _file, euint _line)
+IndexBuffer IndexBuffer_new(e_mesh_mode mode)
 {
-    index_buffer* buffer = (index_buffer*)_Malloc(sizeof(index_buffer), _file, _line);
+    index_buffer* buffer = (index_buffer*)Malloc(sizeof(index_buffer));
     buffer->face_size = face_size(mode);
     buffer->index_buffer = (char*)SMalloc(DEFAULT_INDEX_BUFFER_SIZE);
     buffer->index_buffer_size = DEFAULT_INDEX_BUFFER_SIZE;
@@ -35,7 +35,7 @@ IndexBuffer _IndexBuffer_new(e_mesh_mode mode, const char* _file, euint _line)
     ret = buffer;
     return ret;
 }
-void _IndexBuffer_delete(IndexBuffer _self, const char* _file, euint _line)
+void IndexBuffer_delete(IndexBuffer _self)
 {
     IndexBuffer_Dest(_self);
     Mfree(_self);

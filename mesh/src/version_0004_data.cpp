@@ -7,7 +7,7 @@ void version_0004_tangent_calculate(struct version_0004_data* data)
     data->vtx_tgt = (float*)SMalloc(sizeof(float) * 3 * data->vtx_count);
     float* pos_end = data->vtx_pos + data->vtx_count * 3;
     float* tex_end = data->vtx_uv  + data->vtx_count * 2;
-    float* nor_end = data->vtx_nor + data->vtx_count * 3;
+    ///float* nor_end = data->vtx_nor + data->vtx_count * 3;
     float* tgt_end = data->vtx_tgt + data->vtx_count * 3;
     euint32* idx_end = data->indexs + data->indexed_vtx_count;
 

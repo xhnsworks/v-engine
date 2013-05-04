@@ -231,7 +231,7 @@ void ShaderBuffer_print_shader_object(ShaderBuffer _sb)
     {
         var data = Tree_get_value(iter);
         ShaderObject so = {(struct _shader_object*)data.vptr_var};
-        euint array_size, array_index;
+        euint32 array_size, array_index;
         shader_object_type type = ShaderObject_get_type(so, &array_size, &array_index);
         const char* name = ShaderObject_get_name(so);
         if (array_size <= 1)
@@ -599,7 +599,7 @@ void ShaderBuffer_add_prototype_node(ShaderBuffer _sb, ShaderNode _sn)
     if (ShaderNode_get_name(_sn))
     {
         ShaderNodeBase snb = (ShaderNodeBase)_sn;
-        ShaderNode sn = (ShaderNode)snb->clone_proc((ShaderNodeBase)_sn, __FILE__, __LINE__);
+        ShaderNode sn = (ShaderNode)snb->clone_proc((ShaderNodeBase)_sn);
         var key;
         var data;
         key.str_var = ShaderNode_get_name(sn);
@@ -633,7 +633,7 @@ ShaderNode _ShaderBuffer_add_reference_node(ShaderBuffer _sb, const char* _name,
 
 void _ShaderBuffer_add_branch_node(ShaderBuffer _sb, BranchNode _bn, const char* _file, euint _line)
 {
-    _CircuitBoard_add_reference_node(&_sb->circuit_board, (ShaderNode)_bn, _file, _line);
+    CircuitBoard_add_reference_node(&_sb->circuit_board, (ShaderNode)_bn);
 }
 
 ShaderObject ShaderBuffer_find_object(ShaderBuffer _sb, const char* _name)
