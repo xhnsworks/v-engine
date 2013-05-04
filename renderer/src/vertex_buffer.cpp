@@ -8,7 +8,7 @@
 typedef struct _vertex_buffer
 {
     euint32 id;
-    euint* vtx_ele_offs;
+    euint32* vtx_ele_offs;
     VertexDecl vertex_declaration;
     char* vertex_buffer;
     euint32 vertex_size;
@@ -28,7 +28,7 @@ VertexBuffer VertexBuffer_new(VertexDecl _dec)
     if (VertexDecl_count(_dec))
     {
         vertex_buffer* buffer = (vertex_buffer*)Malloc(sizeof(vertex_buffer));
-        buffer->vtx_ele_offs = array_new(euint, VertexDecl_count(_dec), 0xffffffff);
+        buffer->vtx_ele_offs = array_new(euint32, VertexDecl_count(_dec), 0xffffffff);
         euint32 vertex_size = 0;
         euint32 i = 0;
         for (; i < VertexDecl_count(_dec); i++)
@@ -68,9 +68,9 @@ VertexBuffer VertexBuffer_new(VertexDecl _dec)
     }
 }
 
-void _VertexBuffer_grow_up(VertexBuffer _self, euint num_vtxs)
+void VertexBuffer_grow_up(VertexBuffer _self, euint32 num_vtxs)
 {
-    euint totel_vtx_buf_size = (_self->vertex_buffer_tail + num_vtxs) * _self->vertex_size;
+    euint32 totel_vtx_buf_size = (_self->vertex_buffer_tail + num_vtxs) * _self->vertex_size;
     if (totel_vtx_buf_size > _self->vertex_buffer_size)
     {
         char* tmp = (char*)SMalloc(totel_vtx_buf_size * 2);
@@ -90,7 +90,7 @@ void VertexBuffer_delete(VertexBuffer _self)
 
 bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _i, vptr _result)
 {
-    euint* offs = _self->vtx_ele_offs;
+    euint32* offs = _self->vtx_ele_offs;
     if (_i >= _self->vertex_buffer_tail)
     {
         return false;
@@ -122,10 +122,10 @@ bool VertexBuffer_read(VertexBuffer _self, element_semantic _sem, unsigned int _
 
 vptr VertexBuffer_insert(VertexBuffer _self, element_semantic _sem, unsigned int _i)
 {
-    euint* offs = _self->vtx_ele_offs;
+    euint32* offs = _self->vtx_ele_offs;
     if (_i >= _self->vertex_buffer_tail)
     {
-        _VertexBuffer_grow_up(_self, _i - _self->vertex_buffer_tail);
+        VertexBuffer_grow_up(_self, _i - _self->vertex_buffer_tail);
         _self->vertex_buffer_tail += (_i - _self->vertex_buffer_tail + 1);
     }
     if (VertexDecl_count(_self->vertex_declaration))
@@ -247,9 +247,9 @@ void _fill_vertex_data(VertexBuffer _self, euint _offs, VertexElement _ele, euin
 
 euint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh)
 {
-    euint* offs = _self->vtx_ele_offs;
-    euint num_vtxs = Mesh_get_vertex_count(_mesh);
-    _VertexBuffer_grow_up(_self, num_vtxs);
+    euint32* offs = _self->vtx_ele_offs;
+    euint32 num_vtxs = Mesh_get_vertex_count(_mesh);
+    VertexBuffer_grow_up(_self, num_vtxs);
     if (VertexDecl_count(_self->vertex_declaration))
     {
         float* fpos = Mesh_get_position(_mesh);
@@ -257,7 +257,7 @@ euint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh)
         float* ftex = Mesh_get_tex_coord(_mesh);
         float* ftgt = Mesh_get_tangent(_mesh);
         float* fbin = Mesh_get_binormal(_mesh);
-        float* fepw = Mesh_get_edge_proj_weight(_mesh);
+        ///float* fepw = Mesh_get_edge_proj_weight(_mesh);
         float* fcol = Mesh_get_color(_mesh);
         euint32 tail = _self->vertex_buffer_tail;
         euint32 i = 0;
@@ -326,7 +326,7 @@ void VertexBuffer_buffer_data(VertexBuffer _self)
     }
 }
 
-euint* VertexBuffer_get_ele_offs(VertexBuffer _self)
+euint32* VertexBuffer_get_ele_offs(VertexBuffer _self)
 {
     return _self->vtx_ele_offs;
 }

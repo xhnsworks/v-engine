@@ -42,12 +42,12 @@ class ComposingStick : public MemObject
 public:
 	struct GlyphInfo : public MemObject
 	{
-		euint x;
-		euint y;
-		euint width;
-		euint height;
+		euint32 x;
+		euint32 y;
+		euint32 width;
+		euint32 height;
 		wchar_t letter;
-		euint usageCount;
+		euint32 usageCount;
 		GlyphInfo()
 			: x(0)
 			, y(0)
@@ -63,7 +63,7 @@ public:
 	private:
         GlyphInfo* glyph;
 		ComposingStick* owner;
-		euint letterWidth;
+		euint32 letterWidth;
 	public:
 		GlyphHandle()
 			: glyph(NULL)
@@ -105,7 +105,7 @@ public:
 		{
 			return glyph;
 		}
-		inline euint GetWidth() const
+		inline euint32 GetWidth() const
 		{
 			return letterWidth;
 		}
@@ -116,7 +116,7 @@ public:
 	xhn::map<wchar_t, GlyphInfo*> m_glyphIndex;
 	FontRenderer* m_renderer;
 public:
-	ComposingStick(FontRenderer* renderer, euint numChars);
+	ComposingStick(FontRenderer* renderer, euint32 numChars);
 	GlyphHandle AllocGlyph(wchar_t ch);
 	bool HasGlyph(wchar_t ch);
 	void IncreaseGlyph(wchar_t ch);
@@ -132,19 +132,19 @@ public:
     FontRenderer(const char* _font_name);
     ~FontRenderer();
     void set_font_size(PixelSize _size);
-	inline euint get_font_size() {
+	inline euint32 get_font_size() {
 		return m_pixel_size;
 	}
-    void print(const wchar_t* _str, euint _num_chars, vptr _target, euint _x, euint _y, euint _w);
-    void print(const char* _str, vptr _target, euint _x, euint _y, euint _w);
-	euint draw_letter(wchar_t _letter, vptr _target, euint _width);
+    void print(const wchar_t* _str, euint32 _num_chars, vptr _target, euint32 _x, euint32 _y, euint32 _w);
+    void print(const char* _str, vptr _target, euint32 _x, euint32 _y, euint32 _w);
+	euint32 draw_letter(wchar_t _letter, vptr _target, euint32 _width);
 private:
-    euint draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _y, euint _w);
+    euint32 draw_text(FT_Bitmap* bitmap, vptr _target, euint32 _x, euint32 _y, euint32 _w);
     const char* m_font_name;
     FT_Library  m_ft_lib;
     FT_Face     m_ft_face;
-    euint m_char_ptr;
-    euint m_pixel_size;
+    euint32 m_char_ptr;
+    euint32 m_pixel_size;
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///

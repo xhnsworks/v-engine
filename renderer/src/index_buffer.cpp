@@ -51,7 +51,7 @@ bool IndexBuffer_read(IndexBuffer _self, unsigned int _i, vptr _result)
     return true;
 }
 
-void _IndexBuffer_grow_up(IndexBuffer _self, euint num_faces);
+void _IndexBuffer_grow_up(IndexBuffer _self, euint32 num_faces);
 vptr IndexBuffer_insert(IndexBuffer _self, unsigned int _i)
 {
     if (_i >= _self->index_buffer_tail)
@@ -72,9 +72,9 @@ euint32 IndexBuffer_get_buffer_size(IndexBuffer _self)
     return _self->index_buffer_size;
 }
 **/
-void _IndexBuffer_grow_up(IndexBuffer _self, euint num_faces)
+void _IndexBuffer_grow_up(IndexBuffer _self, euint32 num_faces)
 {
-    euint totel_idx_buf_size = (_self->index_buffer_tail + num_faces) * _self->face_size;
+    euint32 totel_idx_buf_size = (_self->index_buffer_tail + num_faces) * _self->face_size;
     if (totel_idx_buf_size > _self->index_buffer_size)
     {
         char* tmp = (char*)SMalloc(totel_idx_buf_size * 2);
@@ -88,7 +88,7 @@ void _IndexBuffer_grow_up(IndexBuffer _self, euint num_faces)
 
 euint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf)
 {
-    euint num_faces = Mesh_get_face_count(_mesh);
+    euint32 num_faces = Mesh_get_face_count(_mesh);
     _IndexBuffer_grow_up(_self, num_faces);
 
     euint32 tail = _self->index_buffer_tail;
@@ -97,7 +97,7 @@ euint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _pre
     euint32 i = 0;
     if (_self->mesh_mode == Triangular)
     {
-        euint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
+        euint32 start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
         for (; i < Mesh_get_face_count(_mesh); i++)
         {
             ibf[i * 3] = start + idx[i * 3];
@@ -107,7 +107,7 @@ euint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _pre
     }
     else
     {
-        euint start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
+        euint32 start = VertexBuffer_get_buffer_tail(_prev_vtx_buf);
         for (; i < Mesh_get_face_count(_mesh); i++)
         {
             ibf[i * 2] = start + idx[i * 2];
@@ -128,12 +128,12 @@ void IndexBuffer_buffer_data(IndexBuffer _self)
     }
 }
 
-euint IndexBuffer_get_num_faces(IndexBuffer _self)
+euint32 IndexBuffer_get_num_faces(IndexBuffer _self)
 {
     return _self->index_buffer_tail;
 }
 
-euint IndexBuffer_get_face_size(IndexBuffer _self)
+euint32 IndexBuffer_get_face_size(IndexBuffer _self)
 {
     return _self->face_size;
 }

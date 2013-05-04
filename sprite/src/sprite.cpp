@@ -81,7 +81,7 @@ void SpriteLayer::GetScope(SpriteRect& result)
 	GetScopeImpl(result);
 	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator iter = m_children.begin();
 	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator end = m_children.end();
-	euint size = m_children.size();
+	///euint size = m_children.size();
 	for (; iter != end; iter++) {
 		SpriteRect rc;
 		(*iter)->GetScope(rc);
@@ -263,7 +263,7 @@ void SpriteTextLayer::LoadConfig(const pugi::xml_node& from)
 	for (; iter != end; iter++)
 	{
 		pugi::xml_node node = *iter;
-		pugi::xml_attribute name = node.attribute("name");
+		///pugi::xml_attribute name = node.attribute("name");
 		pugi::xml_attribute text = node.attribute("text");
 		pugi::xml_attribute interval = node.attribute("interval");
 		pugi::xml_attribute color = node.attribute("color");

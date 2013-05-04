@@ -27,8 +27,8 @@ API_EXPORT euint32 IndexBuffer_get_id(IndexBuffer _self);
 ///API_EXPORT euint32 IndexBuffer_get_buffer_size(IndexBuffer _self);
 API_EXPORT euint32 IndexBuffer_attach_mesh(IndexBuffer _self, Mesh _mesh, VertexBuffer _prev_vtx_buf);
 API_EXPORT void IndexBuffer_buffer_data(IndexBuffer _self);
-API_EXPORT euint IndexBuffer_get_num_faces(IndexBuffer _self);
-API_EXPORT euint IndexBuffer_get_face_size(IndexBuffer _self);
+API_EXPORT euint32 IndexBuffer_get_num_faces(IndexBuffer _self);
+API_EXPORT euint32 IndexBuffer_get_face_size(IndexBuffer _self);
 API_EXPORT e_mesh_mode IndexBuffer_get_mesh_mode(IndexBuffer _self);
 API_EXPORT void IndexBuffer_reset(IndexBuffer _self);
 #endif

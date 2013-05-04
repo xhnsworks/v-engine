@@ -27,7 +27,7 @@ API_EXPORT bool MCheck();
 API_EXPORT vptr Ealloc(euint _size);
 API_EXPORT vptr SEalloc(euint _size);
 API_EXPORT void Efree(vptr _ptr);
-API_EXPORT const char* Minfo(vptr _ptr, euint* _line);
+API_EXPORT const char* Minfo(vptr _ptr, euint32* _line);
 API_EXPORT euint Msize(vptr _ptr);
 
 typedef struct _mem_pool_node_

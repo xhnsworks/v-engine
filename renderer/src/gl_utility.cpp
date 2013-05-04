@@ -148,7 +148,7 @@ const char* convertInternalFormatToString(GLenum format)
         printf("format %x\n", format);
     }
 
-    euint len = 0;
+    euint32 len = 0;
     while (formatName[len])
     {
         len++;
@@ -166,7 +166,7 @@ const char* getRenderbufferParameters(GLuint id)
     if(glIsRenderbuffer(id) == GL_FALSE)
     {
         const char* str = "Not Renderbuffer object";
-        euint len = 0;
+        euint32 len = 0;
         while (str[len])
         {
             len++;
@@ -189,7 +189,7 @@ const char* getRenderbufferParameters(GLuint id)
 
     char sbuf[256];
     snprintf(sbuf, 255, "%dx%d, %s", width, height, formatName);
-    euint len = 0;
+    euint32 len = 0;
     while (sbuf[len])
     {
         len++;
@@ -209,7 +209,7 @@ const char* getTextureParameters(GLuint id)
     if(glIsTexture(id) == GL_FALSE)
     {
         const char* str = "Not texture object";
-        euint len = 0;
+        euint32 len = 0;
         while (str[len])
         {
             len++;
@@ -231,7 +231,7 @@ const char* getTextureParameters(GLuint id)
 
     char sbuf[256];
     snprintf(sbuf, 255, "%dx%d, %s", width, height, formatName);
-    euint len = 0;
+    euint32 len = 0;
     while (sbuf[len])
     {
         len++;
@@ -420,7 +420,7 @@ bool checkFramebufferStatus()
     }
 }
 
-void _error_proc(const char* _file, euint _line)
+void _error_proc(const char* _file, euint32 _line)
 {
 	/**
     GLenum error_info = glGetError();

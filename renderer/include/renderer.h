@@ -39,7 +39,7 @@
 typedef struct _renderer_param_entry {
     GetRendererParamProc get_value_proc;
     param_type type;
-    esint array_size;
+    esint32 array_size;
 } renderer_param_entry;
 
 typedef void ( *DrawPointLightShapeProc ) ( PointLight );
@@ -135,7 +135,7 @@ public:
     virtual void render();
     void register_material ( const char *mat_name, SDisplayProc disp_proc, e_draw_mode draw_mode, bool double_sided_flag );
     Renderable new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode );
-    void viewport_refresh ( euint _x, euint _y, euint _width, euint _height );
+    void viewport_refresh ( euint32 _x, euint32 _y, euint32 _width, euint32 _height );
    
     inline LightBase2 add_dir_light_2() {
         return dir_light_ptype.new_light();
@@ -161,7 +161,7 @@ public:
 
     renderer_param_value get_shader_object_value ( esint32 _src );
 	renderer_param_value get_shader_object_value ( RendererBase* rdr, esint32 _src );
-    void register_renderer_param ( esint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc );
+    void register_renderer_param ( esint32 _id, param_type _type, esint32 _array_size, GetRendererParamProc _proc );
     bool is_uniform_param_source ( esint32 _src );
     RendererParamEntry get_param_entry ( esint32 _id );
 

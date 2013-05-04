@@ -81,16 +81,16 @@ const char* BranchNode_compile(BranchNode _self)
         }
     }
 #endif
-    euint n = array_n(_self->branch_blocks);
-    for (euint i = 0; i < n; i++)
+    euint32 n = array_n(_self->branch_blocks);
+    for (euint32 i = 0; i < n; i++)
     {
         condition cond = _self->branch_blocks[i].cond;
         if (!ShaderObject_equal(cond.left_obj, cond.right_obj))
         {
             ///const char* left_name = ShaderObject_get_name(cond.left_obj);
             ///const char* right_name = ShaderObject_get_name(cond.right_obj);
-            ///euint left_array_size, left_array_index;
-            ///euint right_array_size, right_array_index;
+            ///euint32 left_array_size, left_array_index;
+            ///euint32 right_array_size, right_array_index;
             ///shader_object_type left_type = ShaderObject_get_type(cond.left_obj, &left_array_size, &left_array_index);
             ///shader_object_type right_type = ShaderObject_get_type(cond.right_obj, &right_array_size, &right_array_index);
             return NULL;
@@ -155,8 +155,8 @@ const char* BranchNode_compile(BranchNode _self)
 }
 void BranchNode_Dest(BranchNode _self)
 {
-    euint n = array_n(_self->branch_blocks);
-    for (euint i = 0; i < n; i++)
+    euint32 n = array_n(_self->branch_blocks);
+    for (euint32 i = 0; i < n; i++)
     {
         ShaderObject_delete(_self->branch_blocks[i].cond.left_obj);
         ShaderObject_delete(_self->branch_blocks[i].cond.right_obj);
@@ -188,7 +188,7 @@ BranchNode BranchNode_clone(BranchNode _bn)
     branch_block null_brh_blk = {{NULL, EmptyCompare, NULL}, NULL};
     euint32 n = array_n(_bn->branch_blocks);
     ret->branch_blocks = array_new(branch_block, n, null_brh_blk);
-    for (euint i = 0; i < n; i++)
+    for (euint32 i = 0; i < n; i++)
     {
         ShaderObject a = _bn->branch_blocks[i].cond.left_obj;
         ShaderObject b = _bn->branch_blocks[i].cond.right_obj;

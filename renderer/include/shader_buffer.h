@@ -31,17 +31,12 @@ typedef struct shader_buffer_
 **/
 class Renderer;
 typedef struct _shader_buffer* ShaderBuffer;
-API_EXPORT shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, euint _line);
-API_EXPORT void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, euint _line);
+API_EXPORT shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf);
+API_EXPORT void ShaderBuffer_Dest(struct _shader_buffer* _buf);
 API_EXPORT void ShaderBuffer_complete(struct _shader_buffer* _buf);
 API_EXPORT ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const char* _vary, esint32 _src);
-API_EXPORT ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
-                                                  const char* _file, euint _line);
-#define ShaderBuffer_add_uniform(s, t, u, as, ps) _ShaderBuffer_add_uniform(s, t, u, as, ps, __FILE__, __LINE__)
-
-API_EXPORT ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
-                                                                const char* _file, euint _line);
-#define ShaderBuffer_add_uniform_from_renderer(s, r, i, u) _ShaderBuffer_add_uniform_from_renderer(s, r, i, u, __FILE__, __LINE__)
+API_EXPORT ShaderObject ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src);
+API_EXPORT ShaderObject ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif);
 API_EXPORT ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_float_object(ShaderBuffer _sb, float _ft);
 API_EXPORT ShaderObject ShaderBuffer_new_immediate_int_object(ShaderBuffer _sb, int _i);
@@ -77,10 +72,8 @@ API_EXPORT void ref_insert(ShaderNode _node, ShaderBuffer _buf);
 API_EXPORT void ref_earse(ShaderNode _node);
 API_EXPORT void ref_log();
 
-#define _New()                                 __New(__FILE__, __LINE__)
-#define _Delete(sb)                            __Delete(sb, __FILE__, __LINE__)
-#define add_uniform(sb, t, u, a, s)            _add_uniform(sb, t, u, a, s, __FILE__, __LINE__)
-#define add_uniform_from_renderer(sb, r, i, u) _add_uniform_from_renderer(sb, r, i, u, __FILE__, __LINE__)
+#define _New()                                 __New()
+#define _Delete(sb)                            __Delete(sb)
 #define add_reference_node(sb, n)              _add_reference_node(sb, n, __FILE__, __LINE__)
 #define add_branch_node(sb, b)                 _add_branch_node(sb, b, __FILE__, __LINE__)
 

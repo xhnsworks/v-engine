@@ -22,5 +22,5 @@ API_EXPORT euint32 VertexBuffer_attach_mesh(VertexBuffer _self, Mesh _mesh);
 API_EXPORT void VertexBuffer_reset(VertexBuffer _self);
 API_EXPORT void VertexBuffer_buffer_data(VertexBuffer _self);
 
-API_EXPORT euint* VertexBuffer_get_ele_offs(VertexBuffer _self);
+API_EXPORT euint32* VertexBuffer_get_ele_offs(VertexBuffer _self);
 #endif

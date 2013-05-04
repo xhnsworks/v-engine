@@ -100,7 +100,7 @@ ShaderNode default_material_proc3 ( PxlSdrBuf _psb, int _id )
 
 #include "renderer_param_procs.h"
 
-RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint _array_size )
+RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint32 _array_size )
 {
     RendererParamEntry ret = ( RendererParamEntry ) SMalloc ( sizeof ( renderer_param_entry ) );
     ret->get_value_proc = _proc;
@@ -194,7 +194,11 @@ void RendererBase::CommonInit()
         else {
             ///RendererParamEntry rpe = ( RendererParamEntry ) data.vptr_var;
 			RendererParamEntry rpe = ppt_iter->second;
-            elog ( "source %s, proc %x, type %d", _get_param_src_str ( ( param_source ) ppt_iter->first ), rpe->get_value_proc, rpe->type, rpe->array_size );
+#if BIT_WIDTH == 32
+            elog ( "source %s, proc %x, type %d, size %d", _get_param_src_str ( ( param_source ) ppt_iter->first ), rpe->get_value_proc, rpe->type, rpe->array_size );
+#elif BIT_WIDTH == 64
+            elog ( "source %s, proc %llx, type %d, size %d", _get_param_src_str ( ( param_source ) ppt_iter->first ), (ref_ptr)rpe->get_value_proc, rpe->type, rpe->array_size );
+#endif
         }
     }
 	elog ( "%s", "########" );

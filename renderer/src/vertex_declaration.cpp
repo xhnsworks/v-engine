@@ -137,7 +137,7 @@ VertexDecl VertexDecl_new()
 
 VertexDecl VertexDecl_new_from_string(const char* str)
 {
-    VertexElement null_ele = {EmptyType, EmptySemantic};
+    ///VertexElement null_ele = {EmptyType, EmptySemantic};
     vertex_element eles[16];
     euint n = _get_vtx_eles((char*)str, eles, 16);
     vertex_decl tmp;

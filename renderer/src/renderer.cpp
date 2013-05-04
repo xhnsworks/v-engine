@@ -617,7 +617,7 @@ void Renderer::render_std_passes()
         SketchBook_bind_renderbuffer();
     }
 
-    euint clear_flag = 0;
+    euint32 clear_flag = 0;
 
     if ( clear_color_buffer_flag ) {
         clear_flag |= GL_COLOR_BUFFER_BIT;
@@ -696,7 +696,7 @@ void Renderer::render_std_passes()
         curt_mat_inst = rbl->material;
         Pass_auto_set_uniform_params ( std_pass, this, false );
 
-        euint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
+        euint32 face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
         e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
         if ( mode == Triangular ) {
@@ -777,7 +777,7 @@ void Renderer::shadow_render ( Renderable rbl, SketchBook curt_skb, sketch_type 
 
     Pass_auto_set_uniform_params ( std_pass, this, false );
 
-    euint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
+    euint32 face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
     e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
     if ( mode == Triangular ) {
@@ -825,8 +825,8 @@ void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
             clear_sketch_book ( skb );
 
 			for (; rbl_iter != end; rbl_iter++) {
-                euint width = SketchBookConfig_get_width ( shadow_state.depth_sketch_cfg );
-                euint height = SketchBookConfig_get_height ( shadow_state.depth_sketch_cfg );
+                euint32 width = SketchBookConfig_get_width ( shadow_state.depth_sketch_cfg );
+                euint32 height = SketchBookConfig_get_height ( shadow_state.depth_sketch_cfg );
 
 				Renderable rbl = *rbl_iter;
                 glViewport ( 0, 0, width, height );
@@ -863,8 +863,8 @@ void Renderer::prepare_shadow_maps ( LightBase2 pl, light_prototype *prototype )
 
                 ///while ( rbl_iter ) {
 				for (; rbl_iter != end; rbl_iter++) {
-                    euint width = shadow_state.blurred_depth_sketch_cube_size;
-                    euint height = shadow_state.blurred_depth_sketch_cube_size;
+                    euint32 width = shadow_state.blurred_depth_sketch_cube_size;
+                    euint32 height = shadow_state.blurred_depth_sketch_cube_size;
 
 					Renderable rbl = *rbl_iter;
                     glViewport ( 0, 0, width, height );
@@ -1069,7 +1069,7 @@ Renderable Renderer::new_renderable ( VertexDecl _dec, MaterialInstance _m_inst,
     return RendererBase::new_renderable ( _dec, _m_inst, _mesh_mode );
 }
 
-void Renderer::viewport_refresh ( euint _x, euint _y, euint _width, euint _height )
+void Renderer::viewport_refresh ( euint32 _x, euint32 _y, euint32 _width, euint32 _height )
 {
     Camera cam = curt_render_cam;
 
@@ -1125,7 +1125,7 @@ renderer_param_value Renderer::get_shader_object_value ( esint32 _src )
     return get_shader_object_value(this, _src);
 }
 
-void Renderer::register_renderer_param ( esint32 _id, param_type _type, esint _array_size, GetRendererParamProc _proc )
+void Renderer::register_renderer_param ( esint32 _id, param_type _type, esint32 _array_size, GetRendererParamProc _proc )
 {
     ///var key, data;
     ///key.sint32_var = _id;

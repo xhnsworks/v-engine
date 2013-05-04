@@ -24,23 +24,19 @@ typedef struct pixel_shader_buffer_
 **/
 class Renderer;
 typedef struct _pixel_shader_buffer* PxlSdrBuf;
-API_EXPORT PxlSdrBuf _PxlSdrBuf_new(const char* _file, euint _line);
-API_EXPORT void _PxlSdrBuf_delete(PxlSdrBuf _psb, const char* _file, euint _line);
-#define PxlSdrBuf_new() _PxlSdrBuf_new(__FILE__, __LINE__)
-#define PxlSdrBuf_delete(p) _PxlSdrBuf_delete(p, __FILE__, __LINE__)
+API_EXPORT PxlSdrBuf PxlSdrBuf_new();
+API_EXPORT void PxlSdrBuf_delete(PxlSdrBuf _psb);
 API_EXPORT void PxlSdrBuf_complete(PxlSdrBuf _psb);
 
 struct _i_pxl_sdr_buf
 {
-    PxlSdrBuf (*__New)(const char* _file, euint _line);
-    void (*__Delete)(PxlSdrBuf _vsb, const char* _file, euint _line);
+    PxlSdrBuf (*__New)();
+    void (*__Delete)(PxlSdrBuf _vsb);
     void (*complete)(PxlSdrBuf _vsb);
 
     ShaderObject (*add_varying)(ShaderBuffer _sb, param_type _type, const char* _vary, esint32 _src);
-    ShaderObject (*_add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
-                                                  const char* _file, euint _line);
-    ShaderObject (*_add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
-                                                                const char* _file, euint _line);
+    ShaderObject (*add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src);
+    ShaderObject (*add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif);
     ShaderObject (*new_object)(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size);
     ShaderObject (*new_immediate_float_object)(ShaderBuffer _sb, float _ft);
     ShaderObject (*new_immediate_int_object)(ShaderBuffer _sb, int _i);
@@ -58,13 +54,13 @@ struct _i_pxl_sdr_buf
 };
 
 static struct _i_pxl_sdr_buf IPxlSdrBuf = {
-    _PxlSdrBuf_new,
-    _PxlSdrBuf_delete,
+    PxlSdrBuf_new,
+    PxlSdrBuf_delete,
     PxlSdrBuf_complete,
 
     ShaderBuffer_add_varying,
-    _ShaderBuffer_add_uniform,
-    _ShaderBuffer_add_uniform_from_renderer,
+    ShaderBuffer_add_uniform,
+    ShaderBuffer_add_uniform_from_renderer,
     ShaderBuffer_new_object,
     ShaderBuffer_new_immediate_float_object,
     ShaderBuffer_new_immediate_int_object,

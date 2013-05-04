@@ -200,7 +200,7 @@ euint& ArrayNum(T* a)
 inline float _fexce()
 {
     float ret;
-	*((euint*)&ret) = 0xffffffff;
+	*((euint32*)&ret) = 0xffffffff;
 	return ret;
 }
 #define fexce _fexce()

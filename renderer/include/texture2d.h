@@ -29,10 +29,10 @@ public:
 };
 struct Tex2DRect
 {
-	euint x;
-	euint y;
-	euint width;
-	euint height;
+	euint32 x;
+	euint32 y;
+	euint32 width;
+	euint32 height;
     Tex2DRect()
 		: x(0)
 		, y(0)
@@ -54,10 +54,10 @@ private:
 	~Tex2DLockedRect();
 public:
 	vptr GetAt(euint32 _x, euint32 _y);
-	inline euint GetWidth() const {
+	inline euint32 GetWidth() const {
 		return width;
 	}
-	inline euint GetHeight() const {
+	inline euint32 GetHeight() const {
 		return height;
 	}
 };

@@ -13,21 +13,21 @@ esint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 {
 	// Get the required size of the buffer that receives the Unicode
 	// string.
-	euint _size;
+	euint32 _size;
 	_size = MultiByteToWideChar (0, 0, _src_str, -1, NULL, 0);
 
 	// Convert headers from ASCII to Unicode.
 	return MultiByteToWideChar (0, 0, _src_str, -1, (WCHAR*)_dst_str, _size);
 }
 #else
-euint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
+euint32 _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 {
-	euint _count = 0;
+	euint32 _count = 0;
 	while (_src_str[_count])
 	{
 		_count++;
 	}
-	euint i = 0;
+	euint32 i = 0;
 	for (;i < _count; i++)
 	{
 		_dst_str[i] = (wchar_t)_src_str[i];
@@ -39,20 +39,20 @@ euint _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 #endif
 /****************/
 
-ComposingStick::ComposingStick(FontRenderer* renderer, euint numChars)
+ComposingStick::ComposingStick(FontRenderer* renderer, euint32 numChars)
 : m_renderer(renderer)
 {
 	int numCharsPerRow = (int)sqrtf((float)numChars + 0.5f);
-	euint fontPixelWidth = renderer->get_font_size();
-	euint fontPixelHeight = fontPixelWidth;
-    euint texPixelWidth = (euint)(numCharsPerRow + 1) * fontPixelWidth;
-	euint texPixelHeight = texPixelWidth;
+	euint32 fontPixelWidth = renderer->get_font_size();
+	euint32 fontPixelHeight = fontPixelWidth;
+    euint32 texPixelWidth = (euint32)(numCharsPerRow + 1) * fontPixelWidth;
+	euint32 texPixelHeight = texPixelWidth;
 
-	euint numHoris = numCharsPerRow;
-	euint numVerts = numCharsPerRow;
-	for (euint y = 0; y < numVerts; y++)
+	euint32 numHoris = numCharsPerRow;
+	euint32 numVerts = numCharsPerRow;
+	for (euint32 y = 0; y < numVerts; y++)
 	{
-		for (euint x = 0; x < numHoris; x++)
+		for (euint32 x = 0; x < numHoris; x++)
 		{
 			GlyphInfo* info = ENEW GlyphInfo();
 			info->x = x * fontPixelWidth;
@@ -99,7 +99,7 @@ ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 		rect.width = m_renderer->get_font_size();
 		rect.height = m_renderer->get_font_size();
 		Tex2DLockedRect* lock = m_texture->Lock(rect);
-		euint letterWidth = m_renderer->draw_letter(ch, lock->GetAt(0, 0), lock->GetWidth());
+		euint32 letterWidth = m_renderer->draw_letter(ch, lock->GetAt(0, 0), lock->GetWidth());
 		m_texture->Unlock(lock);
 		m_glyphIndex.insert(xhn::make_pair(ch, info));
 		info->letter = ch;
@@ -192,7 +192,7 @@ FontRenderer::FontRenderer(const char* _font_name) : m_font_name(_font_name), m_
 
 void FontRenderer::set_font_size(PixelSize _size)
 {
-    m_pixel_size = (euint)_size;
+    m_pixel_size = (euint32)_size;
 
     FT_Error error = FT_Set_Char_Size(
                 m_ft_face,
@@ -213,7 +213,7 @@ FontRenderer::~FontRenderer()
 {
 }
 
-euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _y, euint _w)
+euint32 FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint32 _x, euint32 _y, euint32 _w)
 {
     FT_Int i, j, p, q;
     FT_Int x_max = (FT_Int)m_char_ptr + bitmap->width;
@@ -245,13 +245,13 @@ euint FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint _x, euint _
 	return bitmap->width;
 }
 
-void FontRenderer::print(const wchar_t* _str, euint _num_chars, vptr _target, euint _x, euint _y, euint _w)
+void FontRenderer::print(const wchar_t* _str, euint32 _num_chars, vptr _target, euint32 _x, euint32 _y, euint32 _w)
 {
     FT_GlyphSlot slot = m_ft_face->glyph;
     FT_UInt glyph_index;
     FT_UInt error;
 
-    euint n;
+    euint32 n;
     m_char_ptr = 0;
     for ( n = 0; n < _num_chars; n++ )
     {
@@ -285,7 +285,7 @@ void FontRenderer::print(const wchar_t* _str, euint _num_chars, vptr _target, eu
     }
 }
 
-euint FontRenderer::draw_letter(wchar_t _letter, vptr _target, euint _width)
+euint32 FontRenderer::draw_letter(wchar_t _letter, vptr _target, euint32 _width)
 {
 	FT_GlyphSlot slot = m_ft_face->glyph;
 	FT_UInt glyph_index;
@@ -312,9 +312,9 @@ euint FontRenderer::draw_letter(wchar_t _letter, vptr _target, euint _width)
 	return draw_text( &slot->bitmap, _target, 0, 0, _width);
 }
 
-void FontRenderer::print(const char* _str, vptr _target, euint _x, euint _y, euint _w)
+void FontRenderer::print(const char* _str, vptr _target, euint32 _x, euint32 _y, euint32 _w)
 {
     wchar_t _buf[128];
-    esint _count = _MByteToWChar(_str, _buf);
+    esint32 _count = _MByteToWChar(_str, _buf);
     print(_buf, _count, _target, _x, _y, _w);
 }

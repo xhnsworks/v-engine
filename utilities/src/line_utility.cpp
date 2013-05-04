@@ -87,7 +87,7 @@ void LineDrawer_delete(LineDrawer _self)
 void LineDrawer_update(LineDrawer _self)
 {
     Renderable_clear(_self->line_strip_rabl);
-    euint n = array_n(_self->lines);
+    euint32 n = array_n(_self->lines);
     ///EFloat3* pos_stream = (EFloat3*)SMalloc(sizeof(EFloat3) * n * 2);
     ///EFloat4* col_stream = (EFloat4*)SMalloc(sizeof(EFloat4) * n * 2);
     ///EFloat3* nor_stream = (EFloat3*)SMalloc(sizeof(EFloat3) * n * 2);
@@ -95,9 +95,9 @@ void LineDrawer_update(LineDrawer _self)
 	EFloat4* col_stream = ENEW_ARRAY EFloat4[n * 2];
 	EFloat3* nor_stream = ENEW_ARRAY EFloat3[n * 2];
     euint32* idx_stream = (euint32*)SMalloc(sizeof(euint32) * n * 2);
-    euint count = 0;
+    euint32 count = 0;
     MeshPtr m = Mesh_new();
-    for (euint i = 0; i < n; i++)
+    for (euint32 i = 0; i < n; i++)
     {
         pos_stream[count] = _self->lines[i].begin;
         col_stream[count] = _self->lines[i].begin_color;

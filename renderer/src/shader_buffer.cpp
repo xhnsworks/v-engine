@@ -13,7 +13,7 @@ typedef struct _ref_entry
 {
     ShaderBuffer buffer;
     const char* buf_ctor_file;
-    euint buf_ctor_line;
+    euint32 buf_ctor_line;
 } ref_entry;
 
 static Tree g_ref_table = NULL;
@@ -46,7 +46,11 @@ void ref_log()
     {
         var data = Tree_get_value(iter);
         ref_entry* ent = (ref_entry*)data.vptr_var;
+#if BIT_WIDTH == 32
         elog("####buffer %x file %s line %d", (ref_ptr)to_ptr(ent->buffer), ent->buf_ctor_file, ent->buf_ctor_line);
+#elif BIT_WIDTH == 64
+        elog("####buffer %llx file %s line %d", (ref_ptr)to_ptr(ent->buffer), ent->buf_ctor_file, ent->buf_ctor_line);
+#endif
         iter = Tree_next(iter);
     }
 }
@@ -241,7 +245,7 @@ void ShaderBuffer_print_shader_object(ShaderBuffer _sb)
         iter = Tree_next(iter);
     }
 }
-shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file, euint _line)
+shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf)
 {
     ///ShaderNode exec_node = {NULL};
     _buf->shader_node_prototype_tree = Tree_new(String, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
@@ -261,7 +265,7 @@ shader_buffer* ShaderBuffer_Init(struct _shader_buffer* _buf, const char* _file,
     return _buf;
 }
 
-void ShaderBuffer_Dest(struct _shader_buffer* _buf, const char* _file, euint _line)
+void ShaderBuffer_Dest(struct _shader_buffer* _buf)
 {
     Iterator iter = NULL;
     if (_buf->param_src_obj_tree)
@@ -424,8 +428,7 @@ ShaderObject ShaderBuffer_add_varying(ShaderBuffer _sb, param_type _type, const 
     return ret;
 }
 
-ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
-                                       const char* _file, euint _line)
+ShaderObject ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src)
 {
     const char* type = get_param_type_string(_type);
     ShaderObject ret = {NULL};
@@ -492,14 +495,13 @@ ShaderObject _ShaderBuffer_add_uniform(ShaderBuffer _sb, param_type _type, const
 
     ShaderBuffer_push_shader_object(_sb, ret);
 
-    ShaderObject cloned_obj = _ShaderObject_clone(ret, _file, _line);
+    ShaderObject cloned_obj = ShaderObject_clone(ret);
     data.vptr_var = to_ptr(cloned_obj);
     Tree_insert(_sb->param_src_obj_tree, key, data);
     return ret;
 }
 
-ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
-                                                     const char* _file, euint _line)
+ShaderObject ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif)
 {
     RendererParamEntry ent = _rdr->get_param_entry(_id);
     if (!ent)
@@ -507,7 +509,7 @@ ShaderObject _ShaderBuffer_add_uniform_from_renderer(ShaderBuffer _self, Rendere
         ShaderObject null_obj = {NULL};
         return null_obj;
     }
-    return _ShaderBuffer_add_uniform(_self, ent->type, _unif, ent->array_size, _id, _file, _line);
+    return ShaderBuffer_add_uniform(_self, ent->type, _unif, ent->array_size, _id);
 }
 
 ShaderObject ShaderBuffer_new_object(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size)

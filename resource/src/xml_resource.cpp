@@ -18,7 +18,7 @@ ResourcePtr XMLImplement::Load(ResourceGroup* resGrp, FileStream stream)
     ResourcePtr ret;
 	if (stream) {
 		fseek(stream, 0, SEEK_END);
-		int length = ftell(stream);
+		euint length = ftell(stream);
 		fseek(stream, 0, SEEK_SET);
 		xhn::buffer buf(length);
 		fread(buf.get(), length, 1, stream);

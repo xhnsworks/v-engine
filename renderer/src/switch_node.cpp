@@ -46,7 +46,11 @@ char* SwitchNode_compile(SwitchNode _self)
         euint n = array_n(tags);
         for (euint i = 0; i < n; i++)
         {
+#if BIT_WIDTH == 32
             sbuf_printf("case %d:\n", tags[i]);
+#elif BIT_WIDTH == 64
+            sbuf_printf("case %lld:\n", tags[i]);
+#endif
         }
         CircuitBoard cb = (CircuitBoard)data.vptr_var;
         sbuf_printf("%s", "{\n");
@@ -76,7 +80,7 @@ SwitchNode SwitchNode_clone(SwitchNode _self)
         var data = Tree_get_value(iter);
 
         esint* src_tags = (esint*)key.vptr_var;
-        euint n = array_n(src_tags);
+        euint32 n = array_n(src_tags);
         esint* dst_tags = array_new(esint, n, -1);
         for (euint i = 0; i < n; i++)
         {

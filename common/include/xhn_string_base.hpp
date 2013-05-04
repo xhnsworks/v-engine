@@ -245,9 +245,9 @@ public:
             return npos;
         }
 
-        int count = pos;
-        int match_count = ( int ) str.m_size - 1;
-        int match_pos = ( int ) pos;
+        esint count = pos;
+        esint match_count = ( esint ) str.m_size - 1;
+        esint match_pos = ( esint ) pos;
         bool matching = false;
 
         while ( count >= 0 ) {

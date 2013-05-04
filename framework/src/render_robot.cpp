@@ -531,9 +531,10 @@ void ResourceAction::DoImpl()
 			m_light = lt;
 	    }
 	}
+#if defined(_WIN32) || defined(_WIN64)
 	static bool s_isCreateAnimed = false;
 	{
-#if defined(_WIN32) || defined(_WIN64)
+
 		if (!RobotManager::Get()->GetChannel("RenderRobot", "AnimationRobot"))
 			RobotManager::Get()->MakeChannel("RenderRobot", "AnimationRobot");
 		if (!RobotManager::Get()->GetChannel("AnimationRobot", "RenderRobot"))
@@ -557,8 +558,8 @@ void ResourceAction::DoImpl()
 				s_isCreateAnimed = true;
 			}
 		}
-#endif
 	}
+#endif
 }
 
 ResourceAction::~ResourceAction()

@@ -120,7 +120,7 @@ void SpriteRenderer::render()
         curt_mat_inst = rbl->material;
         Pass_auto_set_uniform_params ( std_pass, this, false );
 
-        euint face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
+        euint32 face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
         e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
         if ( mode == Triangular ) {

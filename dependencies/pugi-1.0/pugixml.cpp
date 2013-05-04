@@ -4501,7 +4501,7 @@ namespace pugi
 			MemStream* ret = new MemStream;
 
 			fseek(fp, 0, SEEK_END);
-			int length = ftell(fp);
+			long length = ftell(fp);
 			ret->Resize(length + 1);
 			fseek(fp, 0, SEEK_SET);
 			char* stream = (char*)ret->GetStream();

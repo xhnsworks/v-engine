@@ -324,16 +324,11 @@ void _ShaderNode_delete(ShaderNode _sn, const char* _file, euint _line)
 {
     ShaderNodeBase_delete((ShaderNodeBase)_sn);
 }
-/**
-void ShaderNode_set_return_type(ShaderNode _sn, shader_object_type _type, euint32 _array_size)
-{
-    ShaderObject_set_type(_sn->result, _type, _array_size, INVALID_ARRAY_INDEX);
-}
-**/
+
 void _ShaderNode_add_input_param(ShaderNode _sn, shader_object_type _type, const char* _pam_name, euint32 _array_size,
                                  const char* _file, euint32 _line)
 {
-    ShaderObject so = _ShaderObject_new(_type, _pam_name, _array_size, _file, _line);
+    ShaderObject so = ShaderObject_new(_type, _pam_name, _array_size);
     _sn->input_param_table = array_push(_sn->input_param_table, so);
 }
 

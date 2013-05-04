@@ -20,7 +20,7 @@ typedef struct camera_
     struct _camera* self;
 } Camera;
 struct _line_drawer;
-API_EXPORT Camera Camera_new(euint _width, euint _height);
+API_EXPORT Camera Camera_new(euint32 _width, euint32 _height);
 API_EXPORT void Camera_delete(Camera _self);
 API_EXPORT void Camera_updata(Camera _self);
 API_EXPORT void Camera_draw_shape(Camera _self, struct _line_drawer* _drawer);
@@ -58,7 +58,7 @@ API_EXPORT bool Camera_is_orthogonal(Camera _self);
 
 ///API_EXPORT void Camera_get_width_height(Camera _self, float hori_angle, float vert_angle);
 
-API_EXPORT void Camera_refresh(Camera _self, euint _width, euint _height);
+API_EXPORT void Camera_refresh(Camera _self, euint32 _width, euint32 _height);
 
 API_EXPORT EFloat3 FORCE_ALIGN_ARG_POINTER Camera_screen_position_to_world_position(Camera _self, float x, float y);
 #endif

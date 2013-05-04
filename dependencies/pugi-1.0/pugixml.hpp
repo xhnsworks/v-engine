@@ -107,7 +107,7 @@ namespace pugi
 	{
 	private:
 		void* m_stream;
-		int m_size;
+		long m_size;
 	public:
 		MemStream()
 			: m_stream(NULL)
@@ -120,13 +120,13 @@ namespace pugi
 			m_stream = NULL;
 			m_size = 0;
 		}
-		void Resize(int size)
+		void Resize(long size)
 		{
 			m_stream = realloc(m_stream, size);
 			m_size = size;
 		}
 		void* GetStream() const { return m_stream; }
-		int   GetSize()   const { return m_size; }
+		long  GetSize()   const { return m_size; }
 	};
 	typedef MemStream* (*PugiFileOpenFunc)(const char*);
 	// Tree node types

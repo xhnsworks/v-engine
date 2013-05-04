@@ -25,7 +25,7 @@ typedef struct _mem_node
 typedef struct _refer_info
 {
     const char* file_name;
-    euint line;
+    euint32 line;
 } refer_info;
 
 typedef struct _totel_refer_info
@@ -149,7 +149,7 @@ totel_refer_info mem_pool_node_log(mem_pool_node* _node)
 #if BIT_WIDTH == 32
             elog("##ptr %x file %s, line %d", (ref_ptr)ptr, info->file_name, info->line);
 #elif BIT_WIDTH == 64
-            elog("##ptr %llx file %s, line %lld", (ref_ptr)ptr, info->file_name, info->line);
+            elog("##ptr %llx file %s, line %d", (ref_ptr)ptr, info->file_name, info->line);
 #endif
         }
         else
@@ -662,7 +662,7 @@ void Efree(vptr _ptr)
 	MemAllocator_free(g_MemAllocator, _ptr);
 #endif
 }
-const char* Minfo(vptr _ptr, euint* _line)
+const char* Minfo(vptr _ptr, euint32* _line)
 {
 #ifdef USE_C_MALLOC
     return NULL;

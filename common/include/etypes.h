@@ -309,7 +309,7 @@ typedef union _mouse_event_info
     s_mouse_abs_pos mouse_abs_pos;
 } mouse_event_info;
 
-typedef euint key_code;
+typedef euint32 key_code;
 
 typedef union _input_event_info
 {

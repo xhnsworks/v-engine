@@ -13,27 +13,23 @@ typedef struct vertex_shader_buffer_
 **/
 class Renderer;
 typedef struct _vertex_shader_buffer* VtxSdrBuf;
-API_EXPORT VtxSdrBuf _VtxSdrBuf_new(const char* _file, euint _line);
-API_EXPORT void _VtxSdrBuf_delete(VtxSdrBuf _vsb, const char* _file, euint _line);
-#define VtxSdrBuf_new() _VtxSdrBuf_new(__FILE__, __LINE__)
-#define VtxSdrBuf_delete(p) _VtxSdrBuf_delete(p, __FILE__, __LINE__)
+API_EXPORT VtxSdrBuf VtxSdrBuf_new();
+API_EXPORT void VtxSdrBuf_delete(VtxSdrBuf _vsb);
 API_EXPORT ShaderObject VtxSdrBuf_add_attribute(VtxSdrBuf _vsb, element_semantic _sem, element_type _type);
 API_EXPORT void VtxSdrBuf_complete(VtxSdrBuf _vsb);
 API_EXPORT void VtxSdrBuf_print(VtxSdrBuf _vsb);
 
 struct _i_vtx_sdr_buf
 {
-    VtxSdrBuf (*__New)(const char* _file, euint _line);
-    void (*__Delete)(VtxSdrBuf _vsb, const char* _file, euint _line);
+    VtxSdrBuf (*__New)();
+    void (*__Delete)(VtxSdrBuf _vsb);
     ShaderObject (*add_attribute)(VtxSdrBuf _vsb, element_semantic _sem, element_type _type);
     void (*complete)(VtxSdrBuf _vsb);
     void (*print)(VtxSdrBuf _vsb);
 
     ShaderObject (*add_varying)(ShaderBuffer _sb, param_type _type, const char* _vary, esint32 _src);
-    ShaderObject (*_add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src,
-                                                  const char* _file, euint _line);
-    ShaderObject (*_add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif,
-                                                                const char* _file, euint _line);
+    ShaderObject (*add_uniform)(ShaderBuffer _sb, param_type _type, const char* _unif, euint32 _array_size, esint32 _src);
+    ShaderObject (*add_uniform_from_renderer)(ShaderBuffer _self, Renderer* _rdr, esint32 _id, const char* _unif);
     ShaderObject (*new_object)(ShaderBuffer _sb, shader_object_type _type, const char* _name, euint32 _array_size);
     ShaderObject (*new_immediate_float_object)(ShaderBuffer _sb, float _ft);
     ShaderObject (*new_immediate_int_object)(ShaderBuffer _sb, int _i);
@@ -49,15 +45,15 @@ struct _i_vtx_sdr_buf
 };
 
 static struct _i_vtx_sdr_buf IVtxSdrBuf = {
-    _VtxSdrBuf_new,
-    _VtxSdrBuf_delete,
+    VtxSdrBuf_new,
+    VtxSdrBuf_delete,
     VtxSdrBuf_add_attribute,
     VtxSdrBuf_complete,
     VtxSdrBuf_print,
 
     ShaderBuffer_add_varying,
-    _ShaderBuffer_add_uniform,
-    _ShaderBuffer_add_uniform_from_renderer,
+    ShaderBuffer_add_uniform,
+    ShaderBuffer_add_uniform_from_renderer,
     ShaderBuffer_new_object,
     ShaderBuffer_new_immediate_float_object,
     ShaderBuffer_new_immediate_int_object,

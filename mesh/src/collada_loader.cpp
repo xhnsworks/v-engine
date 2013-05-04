@@ -98,7 +98,7 @@ void ColladaState_enum_semantics(ColladaState _self, mxml_node_t* node, bool is_
 
         if (sem_str && source)
         {
-            euint count = 0;
+            euint32 count = 0;
             while (source[count] && source[count] == '#')
                 count++;
 
@@ -171,7 +171,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
 
 		if (semAttr && sourceAttr)
         {
-            euint count = 0;
+            euint32 count = 0;
 			const char* sem = semAttr.value();
 			const char* source = sourceAttr.value();
             while (source[count] && source[count] == '#')
@@ -228,7 +228,7 @@ void ColladaState_enum_semantics(ColladaState _self, pugi::xml_node& node, bool 
 
 void _parse_float_array(const char* str, FloatStream result)
 {
-	euint count = 0;
+	euint32 count = 0;
 	xhn::vector< char, xhn::FGetCharRealSizeProc<char> > tmp;
 	while (str[count])
 	{
@@ -253,7 +253,7 @@ void _parse_float_array(const char* str, FloatStream result)
 
 euint32* _parse_p(const char* str, euint32* result)
 {
-	euint count = 0;
+	euint32 count = 0;
 	xhn::vector< char, xhn::FGetCharRealSizeProc<char> > tmp;
 	while (str[count])
 	{
@@ -301,8 +301,8 @@ void ColladaState_load_mesh2(ColladaState _self, const char* filepath)
                     /// count和stride必须从technique_common里面取，真他妈操蛋
                     const char* count_str = mxmlElementGetAttr(accessor, "count");
                     const char* stride_str = mxmlElementGetAttr(accessor, "stride");
-                    euint count = atoi(count_str);
-                    euint stride = atoi(stride_str);
+                    euint32 count = atoi(count_str);
+                    euint32 stride = atoi(stride_str);
                     FloatStream s = FloatStream_new();
                     s->count = count;
                     s->stride = stride;
@@ -336,7 +336,7 @@ void ColladaState_load_mesh2(ColladaState _self, const char* filepath)
         {
             ColladaState_enum_semantics(_self, triangles, false);
 
-            euint count = atoi(mxmlElementGetAttr(triangles, "count"));
+            euint32 count = atoi(mxmlElementGetAttr(triangles, "count"));
             _self->num_tri = count;
             mxml_node_t* p = mxmlFindElement(triangles, triangles, "p", NULL, NULL, MXML_DESCEND);
             if (p)
@@ -458,7 +458,7 @@ void ColladaState_log(ColladaState _self)
 euint32 _find_offset(ColladaState _self, collada_semantic sem)
 {
     euint32 n = array_n(_self->idx_eles);
-    for (euint i = 0; i < n; i++)
+    for (euint32 i = 0; i < n; i++)
     {
         if (sem == _self->idx_eles[i].sem)
             return _self->idx_eles[i].offs;
@@ -555,7 +555,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 
     ///euint32* idx_src = _self->idx_stream;
     euint32 stride_idx = array_n(_self->idx_eles);
-    ///euint num_tri = _self->num_tri;
+    ///euint32 num_tri = _self->num_tri;
     ///euint32* idx_stream = SMalloc(sizeof(euint32) * 3 * num_tri);
 
     float* pos_stream = (float*)SMalloc(sizeof(float) * 3 * num_vtx);
@@ -579,10 +579,10 @@ Mesh ColladaState_create_mesh(ColladaState _self)
         euint32 idx_nor;
     };
 	/**
-    struct idx_group _get_idx_group(euint i, euint idx_tri_vtx)
+    struct idx_group _get_idx_group(euint32 i, euint32 idx_tri_vtx)
     {
         struct idx_group ret;
-        euint base = i * stride_idx * 3 + stride_idx * idx_tri_vtx;
+        euint32 base = i * stride_idx * 3 + stride_idx * idx_tri_vtx;
         ret.idx_base = idx_src[base + offs_base];
         ret.idx_pos = idx_src[base + offs_pos];
         ret.idx_tex = idx_src[base + offs_tex];
@@ -622,21 +622,21 @@ Mesh ColladaState_create_mesh(ColladaState _self)
     }
 	**/
     /**
-    euint num_vtx = 0;
+    euint32 num_vtx = 0;
     float* pos_src = NULL;
     float* tex_src = NULL;
     float* nor_src = NULL;
-    euint num_pos = 0;
-    euint num_tex = 0;
-    euint num_nor = 0;
-    euint stride_pos = 0;
-    euint stride_tex = 0;
-    euint stride_nor = 0;
-    euint offs_pos = 0;
-    euint offs_tex = 0;
-    euint offs_nor = 0;
+    euint32 num_pos = 0;
+    euint32 num_tex = 0;
+    euint32 num_nor = 0;
+    euint32 stride_pos = 0;
+    euint32 stride_tex = 0;
+    euint32 stride_nor = 0;
+    euint32 offs_pos = 0;
+    euint32 offs_tex = 0;
+    euint32 offs_nor = 0;
     collada_semantic base_sem = ColladaEmptySemantic;
-    euint offs_base = 0;
+    euint32 offs_base = 0;
     **/
     elog("num_vtx %d\n", num_vtx);
 #if BIT_WIDTH == 32
@@ -664,7 +664,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 	euint32 num_idx = array_n(_self->idx_stream);
 	elog("real_num_idx %d\n", num_idx);
 
-    for (euint i = 0; i < num_tri; i++)
+    for (euint32 i = 0; i < num_tri; i++)
     {
         ///struct idx_group idx0 = _get_idx_group(i, 0);
         ///struct idx_group idx1 = _get_idx_group(i, 1);
@@ -674,7 +674,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 		struct idx_group idx2;
 		{
 			struct idx_group ret;
-            euint base = i * stride_idx * 3 + stride_idx * 0;
+            euint32 base = i * stride_idx * 3 + stride_idx * 0;
             ret.idx_base = idx_src[base + offs_base];
             ret.idx_pos = idx_src[base + offs_pos];
             ret.idx_tex = idx_src[base + offs_tex];
@@ -683,7 +683,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 		}
 		{
 			struct idx_group ret;
-            euint base = i * stride_idx * 3 + stride_idx * 1;
+            euint32 base = i * stride_idx * 3 + stride_idx * 1;
             ret.idx_base = idx_src[base + offs_base];
             ret.idx_pos = idx_src[base + offs_pos];
             ret.idx_tex = idx_src[base + offs_tex];
@@ -692,7 +692,7 @@ Mesh ColladaState_create_mesh(ColladaState _self)
 		}
 		{
 			struct idx_group ret;
-            euint base = i * stride_idx * 3 + stride_idx * 2;
+            euint32 base = i * stride_idx * 3 + stride_idx * 2;
             ret.idx_base = idx_src[base + offs_base];
             ret.idx_pos = idx_src[base + offs_pos];
             ret.idx_tex = idx_src[base + offs_tex];

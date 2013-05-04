@@ -448,7 +448,7 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
     }
 
     VertexDecl dec = VertexBuffer_get_vertex_declaration(_vbf);
-    euint* vtx_ele_offs = VertexBuffer_get_ele_offs(_vbf);
+    euint32* vtx_ele_offs = VertexBuffer_get_ele_offs(_vbf);
     euint32 pos_loc = UINT32_EXCE;
     euint32 nor_loc = UINT32_EXCE;
     euint32 col_loc = UINT32_EXCE;

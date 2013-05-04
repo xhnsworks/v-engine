@@ -15,10 +15,10 @@
 
 struct Viewport : public RefObject
 {
-	euint x;
-	euint y;
-    euint width;
-	euint height;
+	euint32 x;
+	euint32 y;
+    euint32 width;
+	euint32 height;
 	xhn::SmartPtr<Viewport> parent;
 	Viewport()
 		: x(0)
@@ -120,6 +120,6 @@ public:
 };
 
 typedef renderer_param_value ( *GetRendererParamProc ) ( RendererBase * );
-API_EXPORT RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint _array_size );
+API_EXPORT RendererParamEntry RendererParamEntry_new ( GetRendererParamProc _proc, param_type _type, esint32 _array_size );
 API_EXPORT void RendererParamEntry_delete ( RendererParamEntry _self );
 #endif
