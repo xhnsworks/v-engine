@@ -60,7 +60,7 @@ class Robot : public MemObject
 {
     DeclareRootRTTI;
 public:
-	pthread_t m_thread;
+	///pthread_t m_thread;
 	xhn::vector<ActionPtr> m_actionQueue;
 	int m_curtActionIndex;
 	xhn::map<xhn::static_string, RWBuffer> m_commandReceivingChannels;
@@ -68,7 +68,7 @@ public:
 public:
 	Robot()
 		: m_curtActionIndex(-1) {
-		memset(&m_thread, 0, sizeof(m_thread));
+		///memset(&m_thread, 0, sizeof(m_thread));
 	}
 	virtual ~Robot() {}
 	inline void AddAction(ActionPtr act) {
@@ -117,7 +117,7 @@ private:
 public:
     xhn::RWLock2 m_readwriteLock;
 	typedef xhn::SmartPtr< xhn::map<xhn::static_string, Robot*> > RobotArray;
-	/// ÕâÁ½¸öÈİÆ÷ĞèÒªÑÏ¸ñÍ¬²½
+	/// â€™â€šÂ¡Î©âˆË†Â»â€ºâˆ†Ëœâ€“Ã‹â€œâ„¢â€”Å“âˆÃ’Ã•Â¨â‰¤Î©
 	RobotArray m_robots;
 	xhn::map<xhn::static_string, Robot*> m_robotMap;
 public:
@@ -145,6 +145,7 @@ public:
 		rob->InitChannels();
 		return rob;
 	}
+    Robot* GetRobot(xhn::static_string robName);
 	void MakeChannel(xhn::static_string sender, xhn::static_string receiver);
 	void BreakChannel(xhn::static_string sender, xhn::static_string receiver);
 	RWBuffer GetChannel(xhn::static_string sender, xhn::static_string receiver);
@@ -164,5 +165,7 @@ public:
 		}
 		return ret;
 	}
+    /// remove a robot, who is no longer be controlled by a manager, but it also in m_robotMap
+    Robot* Remove(xhn::static_string robName);
 };
 #endif

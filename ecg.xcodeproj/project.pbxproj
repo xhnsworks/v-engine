@@ -135,7 +135,8 @@
 		68B4964B17302B8700AAB72D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68B4964A17302B8700AAB72D /* QuartzCore.framework */; };
 		68B4964D1730D91500AAB72D /* render_robot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4964C1730D91500AAB72D /* render_robot.cpp */; };
 		68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4965F1730EC0800AAB72D /* input_system.cpp */; };
-		68B4966F1730EC7E00AAB72D /* input_system_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4966D1730EC7E00AAB72D /* input_system_osx.cpp */; };
+		68B4966F1730EC7E00AAB72D /* input_system_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68B4966D1730EC7E00AAB72D /* input_system_osx.mm */; };
+		68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68BA0C591735451F00E1FAE2 /* input_robot.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -738,8 +739,10 @@
 		68B4964C1730D91500AAB72D /* render_robot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = render_robot.cpp; sourceTree = "<group>"; };
 		68B496571730EC0800AAB72D /* input_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_system.h; sourceTree = "<group>"; };
 		68B4965F1730EC0800AAB72D /* input_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_system.cpp; sourceTree = "<group>"; };
-		68B4966D1730EC7E00AAB72D /* input_system_osx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_system_osx.cpp; sourceTree = "<group>"; };
+		68B4966D1730EC7E00AAB72D /* input_system_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = input_system_osx.mm; sourceTree = "<group>"; };
 		68B496701730ECA900AAB72D /* input_system_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_system_osx.h; sourceTree = "<group>"; };
+		68BA0C591735451F00E1FAE2 /* input_robot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_robot.cpp; sourceTree = "<group>"; };
+		68BA0C5C1735458E00E1FAE2 /* input_robot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_robot.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2168,6 +2171,7 @@
 		68A35E0F172FE2B4007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				68BA0C5C1735458E00E1FAE2 /* input_robot.h */,
 				68A35E10172FE2B4007D0C45 /* animation.hpp */,
 				68A35E11172FE2B4007D0C45 /* attribute.h */,
 				68A35E12172FE2B4007D0C45 /* ecg2pugi.h */,
@@ -2185,6 +2189,7 @@
 				68A35E17172FE2B4007D0C45 /* animation.cpp */,
 				68A35E19172FE2B4007D0C45 /* robot.cpp */,
 				68A35E1A172FE2B4007D0C45 /* robot_thread.cpp */,
+				68BA0C591735451F00E1FAE2 /* input_robot.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2666,7 +2671,7 @@
 			isa = PBXGroup;
 			children = (
 				68B4965F1730EC0800AAB72D /* input_system.cpp */,
-				68B4966D1730EC7E00AAB72D /* input_system_osx.cpp */,
+				68B4966D1730EC7E00AAB72D /* input_system_osx.mm */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2852,9 +2857,10 @@
 				6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */,
 				68B4964D1730D91500AAB72D /* render_robot.cpp in Sources */,
 				68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */,
-				68B4966F1730EC7E00AAB72D /* input_system_osx.cpp in Sources */,
+				68B4966F1730EC7E00AAB72D /* input_system_osx.mm in Sources */,
 				688ED9851733E77C00940811 /* gui_edit.cpp in Sources */,
 				688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */,
+				68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

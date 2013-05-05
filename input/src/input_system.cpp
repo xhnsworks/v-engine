@@ -6,6 +6,7 @@
 #if defined(_WIN32) || defined(_WIN64)
 #include "input_win32.h"
 #elif defined(__APPLE__)
+#include "input_system_osx.h"
 #endif
 #include "xhn_vector.hpp"
 /**
@@ -51,6 +52,7 @@ void InputSystem::Init(vptr platform_param)
 #if defined(_WIN32) || defined(_WIN64)
     input_Init((HWND)platform_param);
 #elif defined(__APPLE__)
+    input_Init();
 #endif
     m_input_listen_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
 }
@@ -77,8 +79,5 @@ void InputSystem::update()
 
 		iter = Tree_next(iter);
 	}
-#if defined(_WIN32) || defined(_WIN64)
 	input_Proc(buffer);
-#elif defined(__APPLE__)
-#endif
 }

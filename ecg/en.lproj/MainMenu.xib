@@ -1311,12 +1311,14 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrameSize">{1280, 720}</string>
 							<reference key="NSSuperview" ref="439893737"/>
+							<reference key="NSWindow"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<string key="NSClassName">MyView</string>
 						</object>
 					</array>
 					<string key="NSFrameSize">{1280, 720}</string>
 					<reference key="NSSuperview"/>
+					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="74797211"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>

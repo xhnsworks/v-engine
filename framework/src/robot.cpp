@@ -70,6 +70,17 @@ RobotManager::RobotManager()
 	m_robots = ENEW xhn::map<xhn::static_string, Robot*>;
 }
 
+Robot* RobotManager::GetRobot(xhn::static_string robName)
+{
+    xhn::RWLock2::Instance inst = m_readwriteLock.GetReadLock();
+    xhn::map<xhn::static_string, Robot*>::iterator iter = m_robotMap.find(robName);
+    if (iter != m_robotMap.end()) {
+        return iter->second;
+    }
+    else
+        return NULL;
+}
+
 void RobotManager::MakeChannel(xhn::static_string sender, xhn::static_string receiver)
 {
     xhn::RWLock2::Instance inst = m_readwriteLock.GetWriteLock();
@@ -149,4 +160,16 @@ void RobotManager::Dest()
 RobotManager* RobotManager::Get()
 {
 	return s_RobotManager;
+}
+Robot* RobotManager::Remove(xhn::static_string robName)
+{
+    xhn::RWLock2::Instance inst =  m_readwriteLock.GetWriteLock();
+    xhn::map<xhn::static_string, Robot*>::iterator iter = m_robots->find(robName);
+    if (iter != m_robots->end()) {
+        Robot* ret = iter->second;
+        m_robots->erase(iter);
+        return ret;
+    }
+    else
+        return NULL;
 }

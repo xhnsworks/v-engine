@@ -175,143 +175,10 @@ ShaderNode red_material_proc(PxlSdrBuf _psb, int _id)
     return psn;
 }
 
-class DefaultKeyboardListener2 : public InputListener
-{
-	DeclareRTTI;
-public:
-	bool m_left_alt_key_down;
-	DefaultKeyboardListener2()
-		: m_left_alt_key_down(false)
-	{}
-	virtual void ListenImpl(const input_event& event);
-};
 
-class DefaultMouseListener2 : public InputListener
-{
-	DeclareRTTI;
-public:
-	DefaultKeyboardListener2* m_keyboardListener;
-	CameraUtility m_cameraUtil;
-	SpriteRenderer* m_guiRenderer;
-	int m_mouseX;
-	int m_mouseY;
-	bool m_leftButtonDown;
-	bool m_rightButtonDown;
-	bool m_middleButtonDown;
-	DefaultMouseListener2(DefaultKeyboardListener2* list, RendererChain* rendererChain, GUIRendererChain* guiRenderChain);
-	~DefaultMouseListener2();
-	virtual void ListenImpl(const input_event& event);
-};
-
-ImplementRTTI(DefaultKeyboardListener2, InputListener);
-ImplementRTTI(DefaultMouseListener2, InputListener);
-
-void DefaultKeyboardListener2::ListenImpl(const input_event& event)
-{
-	if (event.type == KeyDownEvent)
-	{
-		printf("key down %d\n", event.info.key_info);
-		if (event.info.key_info == 56)
-		{
-			m_left_alt_key_down = true;
-		}
-	}
-	else if (event.type == KeyUpEvent)
-	{
-		printf("key up %d\n", event.info.key_info);
-		if (event.info.key_info == 56)
-		{
-			m_left_alt_key_down = false;
-		}
-	}
-}
-
-DefaultMouseListener2::DefaultMouseListener2(DefaultKeyboardListener2* list, RendererChain* rendererChain, GUIRendererChain* guiRenderChain)
-: m_keyboardListener(list)
-, m_mouseX(0)
-, m_mouseY(0)
-, m_leftButtonDown(false)
-, m_rightButtonDown(false)
-, m_middleButtonDown(false)
-{
-    Renderer* mainRdr = rendererChain->GetRenderer("MainRenderer");
-	m_cameraUtil = CameraUtility_new(mainRdr->get_camera());
-	m_guiRenderer = guiRenderChain->GetRenderer("GUIRenderer");
-}
-
-DefaultMouseListener2::~DefaultMouseListener2()
-{
-	if (m_cameraUtil) {
-		CameraUtility_delete(m_cameraUtil);
-	}
-}
-
-void DefaultMouseListener2::ListenImpl(const input_event& event)
-{
-	if (event.type == MouseMoveEvent)
-	{	
-		if (m_keyboardListener->m_left_alt_key_down && m_rightButtonDown)
-		{
-			sfloat3 vec = SFloat3( (float)event.info.mouse_info.mouse_move_info.x,
-				(float)event.info.mouse_info.mouse_move_info.y,
-				0.0f );
-			float dist = SFloat3_length(vec);
-
-			if (event.info.mouse_info.mouse_move_info.x < 0)
-				dist = -dist;
-			CameraUtility_dolly_shot(m_cameraUtil, dist);
-		}
-		else if (m_keyboardListener->m_left_alt_key_down && m_middleButtonDown)
-		{
-			CameraUtility_pan(m_cameraUtil, (float)event.info.mouse_info.mouse_move_info.x, (float)event.info.mouse_info.mouse_move_info.y);
-		}
-		else if (m_keyboardListener->m_left_alt_key_down && m_leftButtonDown)
-		{
-			CameraUtility_rotate(m_cameraUtil, (float)-event.info.mouse_info.mouse_move_info.x, 0.0f);
-		}
-	}
-	else if (event.type == MouseAbsolutePositionEvent)
-	{
-		m_mouseX = event.info.mouse_info.mouse_abs_pos.x;
-		m_mouseY = event.info.mouse_info.mouse_abs_pos.y + 35;
-		///printf("mouse x %d, y %d\n", g_mouse_x, g_mouse_y);
-		SpriteMouseMoveEvent sptEvt;
-		sptEvt.m_curtMousePos.x = m_mouseX;
-		sptEvt.m_curtMousePos.y = m_mouseY;
-		///m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
-		SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
-	}
-	else if (event.type == MouseButtonDownEvent)
-	{
-		if (event.info.mouse_info.mouse_button_info == LeftButton) {
-			m_leftButtonDown = true;
-			SpriteMouseButtonDownEvent sptEvt;
-			sptEvt.m_leftButtomDown = true;
-			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
-		}
-		else if (event.info.mouse_info.mouse_button_info == RightButton)
-			m_rightButtonDown = true;
-		else if (event.info.mouse_info.mouse_button_info == MiddleButton)
-			m_middleButtonDown = true;
-	}
-	else if (event.type == MouseButtonUpEvent)
-	{
-		if (event.info.mouse_info.mouse_button_info == LeftButton) {
-			m_leftButtonDown = false;
-			m_leftButtonDown = true;
-			SpriteMouseButtonUpEvent sptEvt;
-			sptEvt.m_leftButtomUp = true;
-			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
-		}
-		else if (event.info.mouse_info.mouse_button_info == RightButton)
-			m_rightButtonDown = false;
-		else if (event.info.mouse_info.mouse_button_info == MiddleButton)
-			m_middleButtonDown = false;
-	}
-}
 
 ImplementRTTI(ResourceAction, Action);
-ImplementRTTI(InputAction, Action);
+
 ImplementRTTI(LogicAction, Action);
 ImplementRTTI(RenderAction, Action);
 #if defined(_WIN32) || defined(_WIN64)
@@ -331,16 +198,14 @@ void ResourceAction::DoImpl()
 		RenderSystem_Init(hwnd);
 
         m_swpAct->Init(hdc);
-        m_inputSys->Init(hwnd);
 #else
         RenderSystem_Init(W_Width, W_Height);
-        m_inputSys->Init(NULL);
 #endif
 
 		m_rendererChain->Init();
 		m_guiRendererChain->Init();
 
-		m_inputAct->Init();
+		///m_inputAct->Init();
 
 		Renderer* mainRdr = m_rendererChain->GetRenderer("MainRenderer");
 		Renderer* coverRdr = m_rendererChain->GetRenderer("CoverRenderer");
@@ -569,36 +434,7 @@ ResourceAction::~ResourceAction()
 #endif
 }
 
-InputAction::InputAction(InputSystem* inputSys, RendererChain* rendererChain, GUIRendererChain* guiRendererChain)
-	: m_inputSys(inputSys)
-	, m_rendererChain(rendererChain)
-	, m_guiRendererChain(guiRendererChain)
-	, m_mouseListener(NULL)
-	, m_keyboardListener(NULL)
-{
-}
 
-InputAction::~InputAction()
-{
-	delete m_keyboardListener;
-    delete m_mouseListener;
-}
-void InputAction::Init()
-{
-	DefaultKeyboardListener2* list = ENEW DefaultKeyboardListener2;
-	m_keyboardListener = list;
-	list->Init();
-	m_mouseListener = ENEW DefaultMouseListener2(list, m_rendererChain, m_guiRendererChain);
-	m_mouseListener->Init();
-	m_inputSys->register_input_listener(m_keyboardListener);
-	m_inputSys->register_input_listener(m_mouseListener);
-}
-void InputAction::DoImpl()
-{
-	m_inputSys->update();
-    m_keyboardListener->Listen();
-	m_mouseListener->Listen();
-}
 static float s_rotate = 0.0f;
 void LogicAction::DoImpl()
 {
@@ -623,7 +459,7 @@ void LogicAction::DoImpl()
 	SpriteEventHub::Get()->BroadcastFrameStartEvent(evt, SpriteEventHub::Get()->GetAllReceivers());
 
 	guiRdr->clear_depth();
-	
+	/**
 	ray mouseRay;
 	DefaultMouseListener2* list = m_inputAct->m_mouseListener->DynamicCast<DefaultMouseListener2>();
 	rdr->get_mouse_ray(list->m_mouseX, list->m_mouseY, &mouseRay.origin, &mouseRay.direction);
@@ -641,6 +477,7 @@ void LogicAction::DoImpl()
 
 	guiRdr->get_mouse_ray(list->m_mouseX, list->m_mouseY, &mouseRay.origin, &mouseRay.direction);
 	///Ray_log(&mouseRay);
+     **/
 
 	if (m_resAct->m_lineDrawer)
 	    ILnDwr.update(m_resAct->m_lineDrawer);
@@ -691,15 +528,15 @@ RenderRobot::RenderRobot()
 {
 	InputSystem* inputSys = ENEW InputSystem;
     
-	InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
-	ActionPtr inputActPtr = inputAct;
-	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain, inputAct, inputSys);
+	///InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
+	///ActionPtr inputActPtr = inputAct;
+	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain);
 	ActionPtr resActPtr = resAct;
-	ActionPtr logicActPtr = ENEW LogicAction(resAct, inputAct);
+	ActionPtr logicActPtr = ENEW LogicAction(resAct);
 	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain, &m_guiRendererChain);
 	
 	AddAction(resActPtr);
-	AddAction(inputActPtr);
+	///AddAction(inputActPtr);
 	AddAction(logicActPtr);
 	AddAction(renderActPtr);
 }
@@ -733,4 +570,10 @@ void RenderRobot::CommandReceiptProcImpl(xhn::static_string sender, RobotCommand
 	if (animStatusChangeRec) {
 		m_attrStatusMap.insert(xhn::make_pair(animStatusChangeRec->m_animInfo.animID, animStatusChangeRec->m_animInfo.cureStatus));
 	}
+}
+
+Camera RenderRobot::GetMainCamera()
+{
+    Renderer* rdr = m_rendererChain.GetRenderer("MainRenderer");
+    return rdr->get_camera();
 }

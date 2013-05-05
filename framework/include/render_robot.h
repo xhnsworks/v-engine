@@ -20,6 +20,7 @@
 #include "gui_cursor.h"
 #include "gui_panel.h"
 #include "gui_edit.h"
+#include "input_robot.h"
 ///*************************************************************************************************************************///
 ///                                                     include end                                                         ///
 ///*************************************************************************************************************************///
@@ -177,8 +178,7 @@ private:
 	vptr m_window;
     SwapBuffersAction* m_swpAct;
 #endif
-	InputSystem* m_inputSys;
-
+    
 	GUIButtonFactory* m_buttonFactory;
 	GUICursorFactory* m_cursorFactory;
 	GUIPanelFactory* m_panelFactory;
@@ -192,7 +192,7 @@ private:
 	bool m_isInited;
 public:
 #if defined(_WIN32) || defined(_WIN64)
-	ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, SwapBuffersAction* swpAct, InputAction* inputAct, vptr window, InputSystem* inputSys)
+	ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, SwapBuffersAction* swpAct, vptr window)
 		: m_mouseRay(NULL)
 		, m_mat0(NULL)
 		, m_mat1(NULL)
@@ -208,9 +208,7 @@ public:
 		, m_lightPos(2.0f, 0.0f, 2.0f)
 		, m_light(NULL)
 		, m_swpAct(swpAct)
-		, m_inputAct(inputAct)
-		, m_window(window)
-		, m_inputSys(inputSys)
+        , m_window(window)
         , m_buttonFactory(NULL)
 		, m_cursorFactory(NULL)
 		, m_panelFactory(NULL)
@@ -222,7 +220,7 @@ public:
 		, m_isInited(false)
 	{}
 #else
-    ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, InputAction* inputAct, InputSystem* inputSys)
+    ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain)
     : m_mouseRay(NULL)
     , m_mat0(NULL)
     , m_mat1(NULL)
@@ -237,8 +235,6 @@ public:
     , m_lightMatrix(NULL)
     , m_lightPos(2.0f, 0.0f, 2.0f)
     , m_light(NULL)
-    , m_inputAct(inputAct)
-    , m_inputSys(inputSys)
     , m_buttonFactory(NULL)
     , m_cursorFactory(NULL)
 	, m_panelFactory(NULL)
@@ -258,38 +254,15 @@ public:
 ///*************************************************************************************************************************///
 ///                                                  class define begin                                                     ///
 ///*************************************************************************************************************************///
-class InputAction : public Action
-{
-	DeclareRTTI;
-public:
-	InputSystem* m_inputSys;
-	RendererChain* m_rendererChain;
-	GUIRendererChain* m_guiRendererChain;
-	InputListener* m_mouseListener;
-	InputListener* m_keyboardListener;
-public:
-	InputAction(InputSystem* inputSys, RendererChain* rendererChain, GUIRendererChain* guiRendererChain);
-	~InputAction();
-	void Init();
-	virtual void DoImpl();
-};
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
 class LogicAction : public Action
 {
 	DeclareRTTI;
 private:
 	ResourceAction* m_resAct;
-	InputAction* m_inputAct;
 	TimeCheckpoint m_prevCheckpoint;
 public:
-	LogicAction(ResourceAction* resAct, InputAction* inputAct)
+	LogicAction(ResourceAction* resAct)
 		: m_resAct(resAct)
-		, m_inputAct(inputAct)
 	{
 	}
 	~LogicAction()
@@ -372,6 +345,7 @@ public:
 	virtual xhn::static_string GetName();
 	virtual void CommandProcImpl(xhn::static_string sender, RobotCommand* command);
 	virtual void CommandReceiptProcImpl(xhn::static_string sender, RobotCommandReceipt* receipt);
+    Camera GetMainCamera();
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///

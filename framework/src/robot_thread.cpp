@@ -17,59 +17,62 @@ void RobotThread::Run()
 		xhn::list<xhn::static_string>* tmp = NULL;
 		RobotManager::RobotArray::CheckoutHandle handle;
 		Robot* nextActivedRobot = NULL;
-		/// 开始循环
+		/// loop begin
 		do
 		{
 			nextActivedRobot = NULL;
-			/// 先清除无用数据
+			/// delete cloned queue
 			if (tmp) {
 				delete tmp;
 				tmp = NULL;
 			}
-			/// 重新克隆
+			/// try to clone queue
 			tmp = m_dispatchQueue->clone();
-			/// 重新签出
+			/// checkout robot array
 			handle = RobotManager::Get()->Checkout();
 
 			xhn::map<xhn::static_string, Robot*>* robots = handle.Get();
 
 			if (m_curtActivedRobot) {
-				/// 如果当前有激活的Robot，则将该Robot放在队列末尾
+				/// current actived robot push to robot array's tail
 				xhn::static_string name = m_curtActivedRobot->GetName();
 				robots->insert(xhn::make_pair(name, m_curtActivedRobot));
 				tmp->push_back(name);
 			}
 			else {
-				/// 什么也不做，尝试去获取m_curtActivedRobot
+				/// m_curtActivedRobot is null, do nothing
 			}
 
 			if (tmp->size()) {
-				/// 如果队列尺寸不为0
-				/// 提取出首个Robot
+				/// get the head of robot array's head
 				xhn::static_string name = tmp->front();
 				tmp->pop_front();
-				/// 判断提取出的Robot是否是空闲的
+
 				xhn::map<xhn::static_string, Robot*>::iterator iter = robots->find(name);
 				if (iter != robots->end()) {
-					/// 是的话将它赋给nextActivedRobot
-					nextActivedRobot = iter->second;
-					robots->erase(iter);
+                    /// get next actived robot
+                    xhn::map<xhn::static_string, Robot*>::iterator nextIter = iter;
+                    nextIter++;
+                    if (nextIter == robots->end())
+                        nextIter = iter;
+                    nextActivedRobot = nextIter->second;
+					robots->erase(nextIter);
 				}
 				else {
-					/// 否则将该Robot置于队列末尾
+                    /// robot array is empty, that next actived robot is current actived robot
 					tmp->push_back(name);
+                    nextActivedRobot = m_curtActivedRobot;
 				}
 			}
 			else {
-				/// 如果队列尺寸为0
 				xhn::map<xhn::static_string, Robot*>::iterator iter = robots->begin();
-				/// 则从robots里面取第一个Robot，激活它
+				
 				if (iter != robots->end()) {
 					robots->erase(iter);
 					nextActivedRobot = iter->second;
 				}
 				else {
-					/// 什么也不做，尝试去提交
+					/// do nothing
 				}
 			}
 		} while (!RobotManager::Get()->Submit(handle));

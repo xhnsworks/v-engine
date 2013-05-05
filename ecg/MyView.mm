@@ -15,6 +15,10 @@
 #include "elog.h"
 #include "shader_log.h"
 
+#include "input_system_osx.h"
+#include "input_robot.h"
+#include "animation.hpp"
+#include "robot_thread.h"
 
 @interface MyView (InternalMethods)
 
@@ -27,6 +31,8 @@
 
 #pragma mark -
 #pragma mark Display Link
+
+
 
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now,
                                       const CVTimeStamp *outputTime, CVOptionFlags flagsIn,
@@ -96,7 +102,16 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     ELog_Init();
     ShaderLog_Init();
     
-    renderRobot = ENEW RenderRobot;
+    RobotManager::Init();
+    RobotThreadManager::Init();
+    renderRobot = RobotManager::Get()->AddRobot<RenderRobot>();
+    RobotManager::Get()->AddRobot<InputRobot>();
+    RobotManager::Get()->AddRobot<AnimationRobot>();
+    RobotThreadManager::Get()->AddRobotThread();
+    ///renderRobot = ENEW RenderRobot;
+    RobotManager::Get()->Remove(renderRobot->GetName());
+    
+    ///input_Init();
     
     return self;
 }
