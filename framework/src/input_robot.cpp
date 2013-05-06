@@ -51,7 +51,9 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
     if (!m_camUtil) {
         Robot* rob = RobotManager::Get()->GetRobot("RenderRobot");
         RenderRobot* renderRob = rob->DynamicCast<RenderRobot>();
-        m_camUtil = CameraUtility_new(renderRob->GetMainCamera());
+        Camera cam = renderRob->GetMainCamera();
+		if (cam.self)
+            m_camUtil = CameraUtility_new(cam);
     }
     
 	if (event.type == MouseMoveEvent)
@@ -165,10 +167,18 @@ void InputAction::DoImpl()
 
 ImplementRTTI(InputRobot, Robot);
 
+#if defined(_WIN32) || defined(_WIN64)
+InputRobot::InputRobot(HWND hwnd)
+#elif defined(__APPLE__)
 InputRobot::InputRobot()
+#endif
 {
     m_inputSys = ENEW InputSystem;
+#if defined(_WIN32) || defined(_WIN64)
+	m_inputSys->Init(hwnd);
+#elif defined(__APPLE__)
     m_inputSys->Init(NULL);
+#endif
     InputAction* act = ENEW InputAction(m_inputSys);
     act->Init();
     AddAction(act);

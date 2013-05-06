@@ -190,7 +190,7 @@ void ResourceAction::DoImpl()
 	{
 		m_isInited = true;
 #if defined(_WIN32) || defined(_WIN64)
-		HWND hwnd = (HWND)m_window;
+		HWND hwnd = m_window;
 		HDC hdc;
 		HGLRC hglrc;
 		EnableOpenGL(hwnd, &hdc, &hglrc);
@@ -502,22 +502,21 @@ void SwapBuffersAction::DoImpl()
 #endif
 ImplementRTTI(RenderRobot, Robot);
 #if defined(_WIN32) || defined(_WIN64)
-RenderRobot::RenderRobot(vptr window)
-: m_window(window)
+RenderRobot::RenderRobot(HWND window)
 {
-	InputSystem* inputSys = ENEW InputSystem;
+	///InputSystem* inputSys = ENEW InputSystem;
 
 	SwapBuffersAction* swpAct = ENEW SwapBuffersAction();
-	InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
+	///InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
 	ActionPtr swpActPtr = swpAct;
-	ActionPtr inputActPtr = inputAct;
-	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain, swpAct, inputAct, window, inputSys);
+	///ActionPtr inputActPtr = inputAct;
+	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain, swpAct, window);
 	ActionPtr resActPtr = resAct;
-	ActionPtr logicActPtr = ENEW LogicAction(resAct, inputAct);
+	ActionPtr logicActPtr = ENEW LogicAction(resAct);
 	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain, &m_guiRendererChain);
 	
 	AddAction(resActPtr);
-	AddAction(inputActPtr);
+	///AddAction(inputActPtr);
 	AddAction(logicActPtr);
 	AddAction(renderActPtr);
 	AddAction(swpActPtr);
@@ -575,5 +574,10 @@ void RenderRobot::CommandReceiptProcImpl(xhn::static_string sender, RobotCommand
 Camera RenderRobot::GetMainCamera()
 {
     Renderer* rdr = m_rendererChain.GetRenderer("MainRenderer");
-    return rdr->get_camera();
+	if (rdr)
+        return rdr->get_camera();
+	else {
+		Camera ret = {NULL};
+		return ret;
+	}
 }

@@ -8,13 +8,18 @@ void* RobotThread::Execute(void *_robThd)
 	return NULL;
 }
 
+#include <vector>
+#include <string>
+
 void RobotThread::Run()
 {
 	while (m_isRunning) {
+		/**
 		if (!m_dispatchQueue.get()) {
 			m_dispatchQueue = ENEW xhn::list<xhn::static_string>;
 		}
-		xhn::list<xhn::static_string>* tmp = NULL;
+		**/
+		///xhn::list<xhn::static_string>* tmp = NULL;
 		RobotManager::RobotArray::CheckoutHandle handle;
 		Robot* nextActivedRobot = NULL;
 		/// loop begin
@@ -22,17 +27,26 @@ void RobotThread::Run()
 		{
 			nextActivedRobot = NULL;
 			/// delete cloned queue
+			/**
 			if (tmp) {
 				delete tmp;
 				tmp = NULL;
 			}
 			/// try to clone queue
 			tmp = m_dispatchQueue->clone();
+			**/
 			/// checkout robot array
 			handle = RobotManager::Get()->Checkout();
 
-			xhn::map<xhn::static_string, Robot*>* robots = handle.Get();
-
+			xhn::list<Robot*>* robots = handle.Get();
+			if (m_curtActivedRobot) {
+				robots->push_back(m_curtActivedRobot);
+			}
+			if (robots->size()) {
+				nextActivedRobot = robots->front();
+				robots->pop_front();
+			}
+/**
 			if (m_curtActivedRobot) {
 				/// current actived robot push to robot array's tail
 				xhn::static_string name = m_curtActivedRobot->GetName();
@@ -50,13 +64,11 @@ void RobotThread::Run()
 
 				xhn::map<xhn::static_string, Robot*>::iterator iter = robots->find(name);
 				if (iter != robots->end()) {
-                    /// get next actived robot
-                    xhn::map<xhn::static_string, Robot*>::iterator nextIter = iter;
-                    nextIter++;
-                    if (nextIter == robots->end())
-                        nextIter = iter;
-                    nextActivedRobot = nextIter->second;
-					robots->erase(nextIter);
+                    /// next actived robot is queue head
+                    nextActivedRobot = iter->second;
+					/// push current actived robot to queue tail
+					///tmp->push_back(iter->second->GetName());
+					robots->erase(iter);
 				}
 				else {
                     /// robot array is empty, that next actived robot is current actived robot
@@ -75,10 +87,11 @@ void RobotThread::Run()
 					/// do nothing
 				}
 			}
+**/
 		} while (!RobotManager::Get()->Submit(handle));
 
 		m_curtActivedRobot = nextActivedRobot;
-		m_dispatchQueue = tmp;
+		///m_dispatchQueue = tmp;
 		if (m_curtActivedRobot) {
 			m_curtActivedRobot->DoAction();
 		}

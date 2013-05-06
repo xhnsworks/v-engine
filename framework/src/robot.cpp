@@ -67,7 +67,7 @@ void Robot::CommandProc()
 
 RobotManager::RobotManager()
 {
-	m_robots = ENEW xhn::map<xhn::static_string, Robot*>;
+	m_robots = ENEW xhn::list<Robot*>;
 }
 
 Robot* RobotManager::GetRobot(xhn::static_string robName)
@@ -164,12 +164,15 @@ RobotManager* RobotManager::Get()
 Robot* RobotManager::Remove(xhn::static_string robName)
 {
     xhn::RWLock2::Instance inst =  m_readwriteLock.GetWriteLock();
-    xhn::map<xhn::static_string, Robot*>::iterator iter = m_robots->find(robName);
-    if (iter != m_robots->end()) {
-        Robot* ret = iter->second;
-        m_robots->erase(iter);
-        return ret;
-    }
-    else
-        return NULL;
+
+    xhn::list< Robot*>::iterator iter = m_robots->begin();
+	xhn::list< Robot*>::iterator end = m_robots->end();
+	for (; iter != end; iter++) {
+		if ((*iter)->GetName() == robName) {
+			Robot* ret = *iter;
+			m_robots->remove(iter);
+			return ret;
+		}
+	}
+	return NULL;
 }

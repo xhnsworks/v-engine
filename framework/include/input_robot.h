@@ -81,7 +81,11 @@ class InputRobot : public Robot
 public:
     InputSystem* m_inputSys;
 public:
+#if defined(_WIN32) || defined(_WIN64)
+	InputRobot(HWND hwnd);
+#elif defined(__APPLE__)
     InputRobot();
+#endif
     ~InputRobot();
     virtual xhn::static_string GetName();
 };

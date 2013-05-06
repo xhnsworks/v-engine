@@ -85,6 +85,7 @@
 
 #include "render_robot.h"
 #include "animation.hpp"
+#include "input_robot.h"
 #include "robot_thread.h"
 
 #include "shader_log.h"
@@ -114,6 +115,7 @@ HHOOK g_hhkLowLevelKybd = NULL;
 
 static RenderRobot* g_robot = NULL;
 static AnimationRobot* g_anim_robot = NULL;
+static InputRobot* g_input_robot = NULL;
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
@@ -174,7 +176,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	g_robot = RobotManager::Get()->StartRobot<RenderRobot, vptr>((vptr)hwnd);
 **/
 	g_anim_robot = RobotManager::Get()->AddRobot<AnimationRobot>();
-	g_robot = RobotManager::Get()->AddRobot<RenderRobot, vptr>((vptr)hwnd);
+	g_input_robot = RobotManager::Get()->AddRobot<InputRobot, HWND>(hwnd);
+	g_robot = RobotManager::Get()->AddRobot<RenderRobot, HWND>(hwnd);
+	RobotManager::Get()->Remove("RenderRobot");
 	RobotThreadManager::Get()->AddRobotThread();
 	RobotThreadManager::Get()->AddRobotThread();
 
@@ -194,7 +198,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
         }
         else
         {
-			Sleep(0);
+		    g_robot->RunOnce();
         }
     }
 

@@ -116,8 +116,7 @@ private:
     static RobotManager* s_RobotManager;
 public:
     xhn::RWLock2 m_readwriteLock;
-	typedef xhn::SmartPtr< xhn::map<xhn::static_string, Robot*> > RobotArray;
-	/// ’‚¡Ω∏ˆ»›∆˜–Ë“™—œ∏ÒÕ¨≤Ω
+	typedef xhn::SmartPtr< xhn::list<Robot*> > RobotArray;
 	RobotArray m_robots;
 	xhn::map<xhn::static_string, Robot*> m_robotMap;
 public:
@@ -128,7 +127,7 @@ public:
 		R* rob = ENEW R;
 		{
 			xhn::RWLock2::Instance inst =  m_readwriteLock.GetWriteLock();
-			m_robots->insert(xhn::make_pair(rob->GetName(), (Robot*)rob));
+			m_robots->push_back((Robot*)rob);
 			m_robotMap.insert(xhn::make_pair(rob->GetName(), (Robot*)rob));
 		}
 		rob->InitChannels();
@@ -139,7 +138,7 @@ public:
 		R* rob = ENEW R(p0);
 		{
 			xhn::RWLock2::Instance inst =  m_readwriteLock.GetWriteLock();
-			m_robots->insert(xhn::make_pair(rob->GetName(), (Robot*)rob));
+			m_robots->push_back((Robot*)rob);
 			m_robotMap.insert(xhn::make_pair(rob->GetName(), (Robot*)rob));
 		}
 		rob->InitChannels();
@@ -157,7 +156,7 @@ public:
 		return m_robots.Checkout();
 	}
 	inline bool Submit(RobotArray::CheckoutHandle& handle) {
-		xhn::FGarbageCollectProc< xhn::map<xhn::static_string, Robot*> > gc;
+		xhn::FGarbageCollectProc< xhn::list<Robot*> > gc;
 		bool ret = false;
 		{
 			xhn::RWLock2::Instance inst = m_readwriteLock.GetWriteLock();

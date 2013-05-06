@@ -175,7 +175,7 @@ private:
 
     InputAction* m_inputAct;
 #if defined(_WIN32) ||defined(_WIN64)
-	vptr m_window;
+	HWND m_window;
     SwapBuffersAction* m_swpAct;
 #endif
     
@@ -192,7 +192,7 @@ private:
 	bool m_isInited;
 public:
 #if defined(_WIN32) || defined(_WIN64)
-	ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, SwapBuffersAction* swpAct, vptr window)
+	ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, SwapBuffersAction* swpAct, HWND window)
 		: m_mouseRay(NULL)
 		, m_mat0(NULL)
 		, m_mat1(NULL)
@@ -207,8 +207,8 @@ public:
 		, m_lightMatrix(NULL)
 		, m_lightPos(2.0f, 0.0f, 2.0f)
 		, m_light(NULL)
+		, m_window(window)
 		, m_swpAct(swpAct)
-        , m_window(window)
         , m_buttonFactory(NULL)
 		, m_cursorFactory(NULL)
 		, m_panelFactory(NULL)
@@ -328,9 +328,8 @@ public:
 	GUIRendererChain m_guiRendererChain;
 	xhn::map<int, AnimationStatus> m_attrStatusMap;
 #if defined(_WIN32) || defined(_WIN64)
-	vptr m_window;
     SwapBuffersAction* m_swpAct;
-    RenderRobot(vptr window);
+    RenderRobot(HWND window);
     inline int GetAndClearFPS() {
 		int fps = m_swpAct->m_fps;
 		m_swpAct->m_fps = 0;
