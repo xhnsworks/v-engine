@@ -4,7 +4,6 @@
 #include "sprite.h"
 #include "sprite_factory.h"
 
-class GUIRenderer;
 class GUICursorLayer : public SpriteNormalLayer
 {
 	DeclareRTTI;

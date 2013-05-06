@@ -581,3 +581,8 @@ Camera RenderRobot::GetMainCamera()
 		return ret;
 	}
 }
+
+SpriteRenderer* RenderRobot::GetGUIRenderer()
+{
+    return m_guiRendererChain.GetRenderer("GUIRenderer");
+}

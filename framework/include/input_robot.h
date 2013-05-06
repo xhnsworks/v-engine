@@ -48,6 +48,7 @@ class DefaultMouseListener2 : public InputListener
 	DeclareRTTI;
 public:
     CameraUtility m_camUtil;
+    SpriteRenderer* m_guiRenderer;
 	DefaultKeyboardListener2* m_keyboardListener;
 	int m_mouseX;
 	int m_mouseY;
@@ -84,7 +85,7 @@ public:
 #if defined(_WIN32) || defined(_WIN64)
 	InputRobot(HWND hwnd);
 #elif defined(__APPLE__)
-    InputRobot();
+    InputRobot(vptr view);
 #endif
     ~InputRobot();
     virtual xhn::static_string GetName();

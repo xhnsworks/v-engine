@@ -14,6 +14,8 @@ static RWBuffer g_event_buffer = NULL;
 static float g_mouse_x = 0.0f;
 static float g_mouse_y = 0.0f;
 
+static NSView* g_view = NULL;
+
 #include <AppKit/NSWorkspace.h>
 #include <ApplicationServices/ApplicationServices.h>
 #import <Foundation/NSAutoreleasePool.h>
@@ -303,10 +305,19 @@ static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type, CGEvent
     }
     if (kCGEventMouseMoved == type) {
         CGPoint location = CGEventGetLocation(event);
+        
+        NSWindow* win = [ g_view window ];
+        NSRect rc;
+        rc.origin.x = 0.0f;
+        rc.origin.y = 0.0f;
+        if (win) {
+            rc = [ win frame ];
+        }
+
         input_event evt;
         evt.type = MouseAbsolutePositionEvent;
-        evt.info.mouse_info.mouse_abs_pos.x = (int)location.x;
-        evt.info.mouse_info.mouse_abs_pos.y = (int)location.y;
+        evt.info.mouse_info.mouse_abs_pos.x = (int)(location.x - rc.origin.x);
+        evt.info.mouse_info.mouse_abs_pos.y = (int)(location.y - rc.origin.y);
         evt.time_stamp = 0;
         RWBuffer_Write(g_event_buffer, (const euint*)&evt, sizeof(evt));
         
@@ -422,8 +433,9 @@ int initxx()
     return 0;
 }
 
-void input_Init()
+void input_Init(vptr view)
 {
+    g_view = (NSView*)view;
     CGEventMask mask =
     CGEventMaskBit(kCGEventLeftMouseDown) |
     CGEventMaskBit(kCGEventLeftMouseUp) |

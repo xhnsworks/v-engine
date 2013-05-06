@@ -105,7 +105,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     RobotManager::Init();
     RobotThreadManager::Init();
     renderRobot = RobotManager::Get()->AddRobot<RenderRobot>();
-    RobotManager::Get()->AddRobot<InputRobot>();
+    RobotManager::Get()->AddRobot<InputRobot, vptr>((vptr)self);
     RobotManager::Get()->AddRobot<AnimationRobot>();
     RobotThreadManager::Get()->AddRobotThread();
     ///renderRobot = ENEW RenderRobot;

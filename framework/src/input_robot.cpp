@@ -8,6 +8,8 @@
 
 #include "input_robot.h"
 #include "sfloat3.h"
+#include "sprite_event_hub.h"
+#include "sprite_renderer.h"
 ImplementRTTI(DefaultKeyboardListener2, InputListener);
 ImplementRTTI(DefaultMouseListener2, InputListener);
 
@@ -33,6 +35,7 @@ void DefaultKeyboardListener2::ListenImpl(const input_event& event)
 
 DefaultMouseListener2::DefaultMouseListener2(DefaultKeyboardListener2* list)
 : m_camUtil(NULL)
+, m_guiRenderer(NULL)
 , m_keyboardListener(list)
 , m_mouseX(0)
 , m_mouseY(0)
@@ -55,7 +58,11 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		if (cam.self)
             m_camUtil = CameraUtility_new(cam);
     }
-    
+    if (!m_guiRenderer) {
+        Robot* rob = RobotManager::Get()->GetRobot("RenderRobot");
+        RenderRobot* renderRob = rob->DynamicCast<RenderRobot>();
+        m_guiRenderer = renderRob->GetGUIRenderer();
+    }
 	if (event.type == MouseMoveEvent)
 	{
 		if (m_keyboardListener->m_left_alt_key_down && m_rightButtonDown)
@@ -90,8 +97,11 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 	else if (event.type == MouseAbsolutePositionEvent)
 	{
 		m_mouseX = event.info.mouse_info.mouse_abs_pos.x;
+#if defined(_WIN32) || defined(_WIN64)
 		m_mouseY = event.info.mouse_info.mouse_abs_pos.y + 35;
-		printf("mouse x %d, y %d\n", m_mouseX, m_mouseY);
+#elif defined(__APPLE__)
+        m_mouseY = event.info.mouse_info.mouse_abs_pos.y;
+#endif
         /**
 		SpriteMouseMoveEvent sptEvt;
 		sptEvt.m_curtMousePos.x = m_mouseX;
@@ -99,6 +109,16 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		///m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
 		SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
          **/
+        if (m_guiRenderer) {
+            SpriteMouseMoveEvent sptEvt;
+            sptEvt.m_curtMousePos.x = m_mouseX;
+            sptEvt.m_curtMousePos.y = m_mouseY;
+            printf("mouse x %d, y %d\n", m_mouseX, m_mouseY);
+            /**
+            m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
+             **/
+            SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+        }
 	}
 	else if (event.type == MouseButtonDownEvent)
 	{
@@ -170,14 +190,14 @@ ImplementRTTI(InputRobot, Robot);
 #if defined(_WIN32) || defined(_WIN64)
 InputRobot::InputRobot(HWND hwnd)
 #elif defined(__APPLE__)
-InputRobot::InputRobot()
+InputRobot::InputRobot(vptr view)
 #endif
 {
     m_inputSys = ENEW InputSystem;
 #if defined(_WIN32) || defined(_WIN64)
 	m_inputSys->Init(hwnd);
 #elif defined(__APPLE__)
-    m_inputSys->Init(NULL);
+    m_inputSys->Init(view);
 #endif
     InputAction* act = ENEW InputAction(m_inputSys);
     act->Init();

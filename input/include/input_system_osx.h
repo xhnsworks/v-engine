@@ -11,7 +11,7 @@
 #include "common.h"
 #include "etypes.h"
 #include "xhn_vector.hpp"
-API_EXPORT void input_Init();
+API_EXPORT void input_Init(vptr view);
 API_EXPORT void input_Proc(xhn::vector<input_buffer>& input_buffers);
 
 #endif /* defined(__ecg__input_system_osx__) */

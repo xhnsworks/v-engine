@@ -345,6 +345,7 @@ public:
 	virtual void CommandProcImpl(xhn::static_string sender, RobotCommand* command);
 	virtual void CommandReceiptProcImpl(xhn::static_string sender, RobotCommandReceipt* receipt);
     Camera GetMainCamera();
+    SpriteRenderer* GetGUIRenderer();
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///
