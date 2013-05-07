@@ -1,6 +1,6 @@
 #include "sprite_pch.h"
 #include "sprite_event_hub.h"
-
+#include "xhn_exception.hpp"
 ImplementRTTI(SpriteMouseMoveEvent, SpriteEvent);
 ImplementRTTI(SpriteMouseButtonDownEvent, SpriteEvent);
 ImplementRTTI(SpriteMouseButtonUpEvent, SpriteEvent);
@@ -26,6 +26,8 @@ void SpriteEventHub::Dest()
 }
 SpriteEventHub* SpriteEventHub::Get()
 {
+	if (!s_singleton_inst)
+		VEngineExce(ObjectUninitializedException, "SpriteEventHub is used, but it not initialized");
     return s_singleton_inst;
 }
 

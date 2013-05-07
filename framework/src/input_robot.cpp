@@ -117,7 +117,7 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
             /**
             m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
              **/
-            SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
         }
 	}
 	else if (event.type == MouseButtonDownEvent)

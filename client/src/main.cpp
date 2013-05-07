@@ -94,11 +94,13 @@
 
 #include "glsl_lex.h"
 
+#include "sprite_event_hub.h"
+
 Mesh g_mesh0 = {NULL};
 Mesh g_mesh1 = {NULL};
 
 
-GUIRenderer* g_gui_renderer = NULL;
+///GUIRenderer* g_gui_renderer = NULL;
 
 LineDrawer g_line_drawer = NULL;
 
@@ -171,16 +173,18 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	RobotManager::Init();
 	RobotThreadManager::Init();
+	SpriteEventHub::Init();
 /**	
 	g_anim_robot = RobotManager::Get()->StartRobot<AnimationRobot>();
 	g_robot = RobotManager::Get()->StartRobot<RenderRobot, vptr>((vptr)hwnd);
 **/
+	g_robot = RobotManager::Get()->AddRobot<RenderRobot, HWND>(hwnd);
 	g_anim_robot = RobotManager::Get()->AddRobot<AnimationRobot>();
 	g_input_robot = RobotManager::Get()->AddRobot<InputRobot, HWND>(hwnd);
-	g_robot = RobotManager::Get()->AddRobot<RenderRobot, HWND>(hwnd);
+	
 	RobotManager::Get()->Remove("RenderRobot");
 	RobotThreadManager::Get()->AddRobotThread();
-	RobotThreadManager::Get()->AddRobotThread();
+	///RobotThreadManager::Get()->AddRobotThread();
 
     while (!bQuit)
     {

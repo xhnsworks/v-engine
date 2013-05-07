@@ -9,7 +9,10 @@
 #include "xhn_exception.hpp"
 
 ImplementRootRTTI(Exception);
-ImplementRTTI(FunctionArgumentException, Exception);
-ImplementRTTI(FunctionExecutionException, Exception);
-ImplementRTTI(FunctionResultException, Exception);
+ImplementRTTI(FunctionException, Exception);
+ImplementRTTI(FunctionArgumentException, FunctionException);
+ImplementRTTI(FunctionExecutionException, FunctionException);
+ImplementRTTI(FunctionResultException, FunctionException);
+ImplementRTTI(ObjectException, Exception);
+ImplementRTTI(ObjectUninitializedException, ObjectException);
 ImplementRTTI(InvalidEnumerationException, FunctionExecutionException);

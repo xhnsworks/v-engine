@@ -12,7 +12,7 @@
 #include <exception>
 #include "rtti.hpp"
 #include "xhn_string.hpp"
-
+#include "elog.h"
 class Exception : public std::exception
 {
     DeclareRootRTTI;
@@ -26,7 +26,9 @@ public:
     : m_file(file)
     , m_line(line)
     , m_msg(msg)
-    {}
+    {
+		elog("error: %s", what());
+	}
     const char* what() {
         const RTTI* rtti = GetRTTI();
         
@@ -37,32 +39,49 @@ public:
         return m_what.c_str();
     }
 };
+class FunctionException : public Exception
+{
+	DeclareRTTI;
+public:
+	FunctionException(const char* file, euint32 line, xhn::string msg)
+		: Exception(file, line, msg)
+	{}
+};
 /// 函数的输入参数为非法
-class FunctionArgumentException : public Exception
+class FunctionArgumentException : public FunctionException
 {
     DeclareRTTI;
 public:
     FunctionArgumentException(const char* file, euint32 line, xhn::string msg)
-    : Exception(file, line, msg)
+    : FunctionException(file, line, msg)
     {}
 };
 /// 函数执行过程的异常
-class FunctionExecutionException : public Exception
+class FunctionExecutionException : public FunctionException
 {
     DeclareRTTI;
 public:
     FunctionExecutionException(const char* file, euint32 line, xhn::string msg)
-    : Exception(file, line, msg)
+    : FunctionException(file, line, msg)
     {}
 };
 /// 函数结果不是期望值
-class FunctionResultException : public Exception
+class FunctionResultException : public FunctionException
 {
     DeclareRTTI;
 public:
     FunctionResultException(const char* file, euint32 line, xhn::string msg)
-    : Exception(file, line, msg)
+    : FunctionException(file, line, msg)
     {}
+};
+
+class ObjectException : public Exception
+{
+	DeclareRTTI;
+public:
+	ObjectException(const char* file, euint32 line, xhn::string msg)
+		: Exception(file, line, msg)
+	{}
 };
     
 /// switch case里的枚举值是无效的
@@ -75,5 +94,13 @@ public:
     {}
 };
 
+class ObjectUninitializedException : public ObjectException
+{
+	DeclareRTTI;
+public:
+	ObjectUninitializedException(const char* file, euint32 line, xhn::string msg)
+		: ObjectException(file, line, msg)
+	{}
+};
 #define VEngineExce(e, m) throw e(__FILE__, __LINE__, (m))
 #endif

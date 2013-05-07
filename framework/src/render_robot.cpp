@@ -212,7 +212,6 @@ void ResourceAction::DoImpl()
 
 		SpriteRenderer* guiRdr = m_guiRendererChain->GetRenderer("GUIRenderer");
 
-		SpriteEventHub::Init();
 		m_buttonFactory = ENEW GUIButtonFactory(guiRdr, "button2.xml");
 		m_cursorFactory = ENEW GUICursorFactory(guiRdr, "cursor.xml");
 		m_panelFactory = ENEW GUIPanelFactory(guiRdr, "panel2.xml");
@@ -458,7 +457,6 @@ void LogicAction::DoImpl()
 	SpriteFrameStartEvent evt(elapsedTime);
 	SpriteEventHub::Get()->BroadcastFrameStartEvent(evt, SpriteEventHub::Get()->GetAllReceivers());
 
-	guiRdr->clear_depth();
 	/**
 	ray mouseRay;
 	DefaultMouseListener2* list = m_inputAct->m_mouseListener->DynamicCast<DefaultMouseListener2>();

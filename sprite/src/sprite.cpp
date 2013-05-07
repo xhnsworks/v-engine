@@ -437,9 +437,8 @@ void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 	for (; iter != m_elements.end(); iter++)
 	{
 		SpriteElement& ele = *iter;
-		float depth = m_renderer->get_depth();
 		Mesh mesh = ele.Build(m_renderer);
-		buffer->Attach(ele.m_filename, mesh, depth);
+		buffer->Attach(ele.m_filename, mesh, 0.0f);
 	}
 }
 

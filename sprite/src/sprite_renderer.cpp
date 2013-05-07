@@ -26,7 +26,6 @@ SpriteRenderer::SpriteRenderer(ViewportPtr view)
 : m_sprite_pass_map(_dest_sprite_pass_tree, VertexDecl_compare)
 , m_totel_width((float)view->parent->width)
 , m_totel_height((float)view->parent->height)
-, m_z(0.0f)
 , RendererBase(view)
 {
 	///RendererBase::Init();
@@ -58,9 +57,9 @@ void SpriteRenderer::render()
     Pass std_pass = {NULL};
     glViewport ( x, y, width, height );
     glClear ( GL_DEPTH_BUFFER_BIT );
-    glDepthMask ( GL_TRUE );
+    glDepthMask ( GL_FALSE );
 
-	glEnable(GL_ALPHA_TEST);
+	glDisable(GL_ALPHA_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	ERROR_PROC;
@@ -221,8 +220,7 @@ Mesh SpriteRenderer::new_widget_mesh(float _x, float _y, float _width, float _he
 	_x -= half_width;
 	_y -= half_height;
 
-	Mesh ret = create_plane_mesh(_x, _y, m_z, _width, _height, _u0, _u1, _v0, _v1, color_u0v0, color_u1v0, color_u1v1, color_u0v1);
-	m_z += 0.01f;
+	Mesh ret = create_plane_mesh(_x, _y, 0.0f, _width, _height, _u0, _u1, _v0, _v1, color_u0v0, color_u1v0, color_u1v1, color_u0v1);
 	return ret;
 }
 /**
