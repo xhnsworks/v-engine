@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		680D583B17393FA800C82F21 /* MyOpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 680D583817393FA800C82F21 /* MyOpenGLView.mm */; };
+		680D583C17393FA800C82F21 /* MyOpenGLViewBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 680D583A17393FA800C82F21 /* MyOpenGLViewBase.mm */; };
 		6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6815E768172FE5A400463B2A /* pugixml.cpp */; };
 		688ED9851733E77C00940811 /* gui_edit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9841733E77C00940811 /* gui_edit.cpp */; };
 		688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9881733F95700940811 /* xhn_exception.cpp */; };
@@ -16,7 +18,6 @@
 		689B12D7172F8E6500972582 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 689B12D5172F8E6500972582 /* Credits.rtf */; };
 		689B12DA172F8E6500972582 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 689B12D9172F8E6500972582 /* AppDelegate.m */; };
 		689B12DD172F8E6500972582 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689B12DB172F8E6500972582 /* MainMenu.xib */; };
-		689B12E5172F8EA800972582 /* MyView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 689B12E4172F8EA800972582 /* MyView.mm */; };
 		689B12E7172F8F0800972582 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12E6172F8F0700972582 /* OpenGL.framework */; };
 		689B12E9172F8F0F00972582 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12E8172F8F0F00972582 /* GLUT.framework */; };
 		68A35D7A172FE166007D0C45 /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A35D79172FE166007D0C45 /* libpng.dylib */; };
@@ -140,6 +141,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		680D583717393FA800C82F21 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
+		680D583817393FA800C82F21 /* MyOpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyOpenGLView.mm; sourceTree = "<group>"; };
+		680D583917393FA800C82F21 /* MyOpenGLViewBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLViewBase.h; sourceTree = "<group>"; };
+		680D583A17393FA800C82F21 /* MyOpenGLViewBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyOpenGLViewBase.mm; sourceTree = "<group>"; };
 		6815E767172FE5A400463B2A /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugiconfig.hpp; sourceTree = "<group>"; };
 		6815E768172FE5A400463B2A /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
 		6815E769172FE5A400463B2A /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
@@ -161,8 +166,6 @@
 		689B12D8172F8E6500972582 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		689B12D9172F8E6500972582 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		689B12DC172F8E6500972582 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		689B12E3172F8EA800972582 /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
-		689B12E4172F8EA800972582 /* MyView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyView.mm; sourceTree = "<group>"; };
 		689B12E6172F8F0700972582 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		689B12E8172F8F0F00972582 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		68A35BE2172FE129007D0C45 /* ecg.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = ecg.app; sourceTree = "<group>"; };
@@ -855,11 +858,13 @@
 		689B12EA172F8F7B00972582 /* cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				680D583717393FA800C82F21 /* MyOpenGLView.h */,
+				680D583817393FA800C82F21 /* MyOpenGLView.mm */,
+				680D583917393FA800C82F21 /* MyOpenGLViewBase.h */,
+				680D583A17393FA800C82F21 /* MyOpenGLViewBase.mm */,
 				689B12DB172F8E6500972582 /* MainMenu.xib */,
 				689B12D9172F8E6500972582 /* AppDelegate.m */,
 				689B12D8172F8E6500972582 /* AppDelegate.h */,
-				689B12E4172F8EA800972582 /* MyView.mm */,
-				689B12E3172F8EA800972582 /* MyView.h */,
 			);
 			name = cocoa;
 			sourceTree = "<group>";
@@ -2742,7 +2747,6 @@
 			files = (
 				689B12D3172F8E6500972582 /* main.m in Sources */,
 				689B12DA172F8E6500972582 /* AppDelegate.m in Sources */,
-				689B12E5172F8EA800972582 /* MyView.mm in Sources */,
 				68A35DEB172FE26E007D0C45 /* apple_file_manager.mm in Sources */,
 				68A35DED172FE26E007D0C45 /* eassert.cpp in Sources */,
 				68A35DEF172FE26E007D0C45 /* elog.cpp in Sources */,
@@ -2861,6 +2865,8 @@
 				688ED9851733E77C00940811 /* gui_edit.cpp in Sources */,
 				688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */,
 				68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */,
+				680D583B17393FA800C82F21 /* MyOpenGLView.mm in Sources */,
+				680D583C17393FA800C82F21 /* MyOpenGLViewBase.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
