@@ -96,7 +96,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
     CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
-    
+    /**
     /// create render robot
     MInit();
     ELog_Init();
@@ -112,7 +112,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     RobotManager::Get()->Remove(renderRobot->GetName());
     
     ///input_Init();
-    
+    **/
     return self;
 }
 
@@ -174,4 +174,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
 }
 
+- (void) keyDown:(NSEvent *)pEvent
+{
+    printf("here\n");
+}
 @end

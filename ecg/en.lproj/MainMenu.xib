@@ -1312,8 +1312,9 @@
 							<string key="NSFrameSize">{1280, 720}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
-							<string key="NSClassName">MyView</string>
+							<string key="NSClassName">MyOpenGLView</string>
 						</object>
 					</array>
 					<string key="NSFrameSize">{1280, 720}</string>
@@ -3304,11 +3305,30 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">MyView</string>
+					<string key="className">MyOpenGLView</string>
+					<string key="superclassName">MyOpenGLViewBase</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">toggleFullscreen:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">toggleFullscreen:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">toggleFullscreen:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/MyOpenGLView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">MyOpenGLViewBase</string>
 					<string key="superclassName">NSOpenGLView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/MyView.h</string>
+						<string key="minorKey">./Classes/MyOpenGLViewBase.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
