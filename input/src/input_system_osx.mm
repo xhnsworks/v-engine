@@ -11,8 +11,6 @@
 #include "input_system_osx.h"
 #include "rwbuffer.h"
 static RWBuffer g_event_buffer = NULL;
-static float g_mouse_x = 0.0f;
-static float g_mouse_y = 0.0f;
 
 static CGEventRef eventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
     if (kCGEventLeftMouseDown == type) {

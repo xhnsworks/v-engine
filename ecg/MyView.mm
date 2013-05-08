@@ -190,6 +190,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     evt.info.mouse_info.mouse_abs_pos.y = (int)(viewHeight - local_point.y);
     evt.time_stamp = 0;
     RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+    
+    float dx = [pEvent deltaX];
+    float dy = [pEvent deltaY];
+    printf("delta %f %f\n", dx, dy);
+    evt.type = MouseMoveEvent;
+    evt.info.mouse_info.mouse_move_info.x = (int)(dx);
+    evt.info.mouse_info.mouse_move_info.y = (int)(dy);
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
 }
 - (void)mouseDown:(NSEvent *)pEvent
 {
@@ -199,7 +208,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     evt.time_stamp = 0;
     RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
 }
-- (void)rightMouseDown:(NSEvent *)theEvent
+- (void)rightMouseDown:(NSEvent *)pEvent
 {
     input_event evt;
     evt.type = MouseButtonDownEvent;
@@ -207,9 +216,15 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     evt.time_stamp = 0;
     RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
 }
-- (void)otherMouseDown:(NSEvent *)theEvent
-{}
-- (void)mouseUp:(NSEvent *)theEvent
+- (void)otherMouseDown:(NSEvent *)pEvent
+{
+    input_event evt;
+    evt.type = MouseButtonDownEvent;
+    evt.info.mouse_info.mouse_button_info = MiddleButton;
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)mouseUp:(NSEvent *)pEvent
 {
     input_event evt;
     evt.type = MouseButtonUpEvent;
@@ -217,7 +232,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     evt.time_stamp = 0;
     RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
 }
-- (void)rightMouseUp:(NSEvent *)theEvent
+- (void)rightMouseUp:(NSEvent *)pEvent
 {
     input_event evt;
     evt.type = MouseButtonUpEvent;
@@ -225,8 +240,49 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     evt.time_stamp = 0;
     RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
 }
-- (void)otherMouseUp:(NSEvent *)theEvent
+- (void)otherMouseUp:(NSEvent *)pEvent
 {
+    input_event evt;
+    evt.type = MouseButtonUpEvent;
+    evt.info.mouse_info.mouse_button_info = MiddleButton;
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)mouseDragged:(NSEvent *)pEvent
+{
+    input_event evt;
+    float dx = [pEvent deltaX];
+    float dy = [pEvent deltaY];
+    printf("delta %f %f\n", dx, dy);
+    evt.type = MouseMoveEvent;
+    evt.info.mouse_info.mouse_move_info.x = (int)(dx);
+    evt.info.mouse_info.mouse_move_info.y = (int)(dy);
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)rightMouseDragged:(NSEvent *)pEvent
+{
+    input_event evt;
+    float dx = [pEvent deltaX];
+    float dy = [pEvent deltaY];
+    printf("delta %f %f\n", dx, dy);
+    evt.type = MouseMoveEvent;
+    evt.info.mouse_info.mouse_move_info.x = (int)(dx);
+    evt.info.mouse_info.mouse_move_info.y = (int)(dy);
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)otherMouseDragged:(NSEvent *)pEvent
+{
+    input_event evt;
+    float dx = [pEvent deltaX];
+    float dy = [pEvent deltaY];
+    printf("delta %f %f\n", dx, dy);
+    evt.type = MouseMoveEvent;
+    evt.info.mouse_info.mouse_move_info.x = (int)(dx);
+    evt.info.mouse_info.mouse_move_info.y = (int)(dy);
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
 }
 - (void) keyDown:(NSEvent *)pEvent
 {
@@ -240,5 +296,19 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     NSUInteger flags = [pEvent modifierFlags];
     printf("flagsChanged %lx\n", flags);
+    if (flags & NSCommandKeyMask) {
+        input_event evt;
+        evt.type = KeyDownEvent;
+        evt.info.key_info = 56;
+        evt.time_stamp = 0;
+        RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+    }
+    else {
+        input_event evt;
+        evt.type = KeyUpEvent;
+        evt.info.key_info = 56;
+        evt.time_stamp = 0;
+        RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+    }
 }
 @end

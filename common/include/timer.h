@@ -92,7 +92,7 @@ struct TimeCheckpoint
         elapsedNano = AbsoluteToNanoseconds( *(AbsoluteTime *) &elapsed );
         
         uint64 ret = * (uint64 *) &elapsedNano;
-        ret *= 1000;
+        ret /= 1000;
         return (double)ret;
 	}
 };

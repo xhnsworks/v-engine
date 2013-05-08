@@ -137,7 +137,6 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 	{
 		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = false;
-			m_leftButtonDown = true;
 			SpriteMouseButtonUpEvent sptEvt;
 			sptEvt.m_leftButtomUp = true;
 			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
@@ -148,7 +147,6 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 			m_middleButtonDown = false;
 	}
 }
-
 
 ImplementRTTI(InputAction, Action);
 
