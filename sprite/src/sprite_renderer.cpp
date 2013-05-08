@@ -9,14 +9,14 @@
 void SpriteRenderableSorter::Sort(STD_NAMESPACE::set<Renderable>& used_renderable_set, STD_NAMESPACE::list<Renderable>& sorted_renderable_list)
 {
 	sorted_renderable_list.clear();
-    m_geomBuffer->DepthSort();
-	const xhn::list<SpriteGeomBuffer::SpriteSubGeomBuffer*>& sortedSubGeomBuffers = m_geomBuffer->GetSortedSubGeomBuffers();
-	xhn::list<SpriteGeomBuffer::SpriteSubGeomBuffer*>::const_iterator iter = sortedSubGeomBuffers.begin();
-    xhn::list<SpriteGeomBuffer::SpriteSubGeomBuffer*>::const_iterator end = sortedSubGeomBuffers.end();
+    m_geomBuffer->Sort();
+	const xhn::list<Renderable>& sortedRenderables = m_geomBuffer->GetSortedRenderables();
+	xhn::list<Renderable>::const_iterator iter = sortedRenderables.begin();
+    xhn::list<Renderable>::const_iterator end = sortedRenderables.end();
 	for (; iter != end; iter++)
 	{
-		const SpriteGeomBuffer::SpriteSubGeomBuffer* subGeomBuf = *iter;
-		sorted_renderable_list.push_back(subGeomBuf->m_buffer);
+		const Renderable rdl = *iter;
+		sorted_renderable_list.push_back(rdl);
 	}
 }
 void _dest_sprite_pass_tree(Tree _sprite_pass_tree)
@@ -81,7 +81,8 @@ void SpriteRenderer::render()
 		curt_render_cam = camera_base;
         curt_rend_world_matrix = rbl->world_matrix;
 
-        const char *mat_name = MaterialInstance_get_material_name ( rbl->material );
+        ///const char *mat_name = MaterialInstance_get_material_name ( rbl->material );
+		const char *mat_name = rbl->material->GetMaterialName().c_str();
 
         key.str_var = mat_name;
         Iterator iter = Tree_find ( material_table, key, &data );
@@ -109,7 +110,7 @@ void SpriteRenderer::render()
         std_pass = rbl->std_pass;
 
         curt_mat_proto = mp;
-        curt_mat_inst = rbl->material;
+        curt_mat_inst = rbl->material.get();
         Pass_auto_set_uniform_params ( std_pass, this, false );
 
         euint32 face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );

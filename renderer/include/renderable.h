@@ -45,7 +45,7 @@ public:
     Pass point_depth_pass;
     Pass shadow_pass;
     ///euint32 tri_cnt;
-    MaterialInstance material;
+    MaterialInstancePtr material;
     ///int material_id;
     matrix4x4* world_matrix;
     Renderer* ower;

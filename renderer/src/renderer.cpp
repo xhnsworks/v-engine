@@ -655,7 +655,7 @@ void Renderer::render_std_passes()
 
         curt_rend_world_matrix = rbl->world_matrix;
 
-        const char *mat_name = MaterialInstance_get_material_name ( rbl->material );
+        const char *mat_name = rbl->material->GetMaterialName().c_str();
 
         key.str_var = mat_name;
         Iterator iter = Tree_find ( material_table, key, &data );
@@ -693,7 +693,7 @@ void Renderer::render_std_passes()
         std_pass = rbl->std_pass;
 
         curt_mat_proto = mp;
-        curt_mat_inst = rbl->material;
+        curt_mat_inst = rbl->material.get();
         Pass_auto_set_uniform_params ( std_pass, this, false );
 
         euint32 face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
@@ -726,7 +726,7 @@ void Renderer::shadow_render ( Renderable rbl, SketchBook curt_skb, sketch_type 
 
     curt_rend_world_matrix = rbl->world_matrix;
 
-    const char *mat_name = MaterialInstance_get_material_name ( rbl->material );
+    const char *mat_name = rbl->material->GetMaterialName().c_str();
 
     var key, data;
     key.str_var = mat_name;
@@ -773,7 +773,7 @@ void Renderer::shadow_render ( Renderable rbl, SketchBook curt_skb, sketch_type 
     }
 
     curt_mat_proto = mp;
-    curt_mat_inst = rbl->material;
+    curt_mat_inst = rbl->material.get();
 
     Pass_auto_set_uniform_params ( std_pass, this, false );
 
@@ -1053,9 +1053,9 @@ void Renderer::clear_sketchbook()
     SketchBook_draw_end ( render_skb );
 }
 
-Renderable Renderer::new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode )
+Renderable Renderer::new_renderable ( VertexDecl _dec, MaterialInstance* _m_inst, e_mesh_mode _mesh_mode )
 {
-    const char *mat_name = MaterialInstance_get_material_name ( _m_inst );
+    const char *mat_name = _m_inst->GetMaterialName().c_str();
     var key, data;
     key.str_var = mat_name;
     Iterator iter = Tree_find ( material_table, key, &data );

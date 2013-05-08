@@ -135,6 +135,10 @@ public:
 	{
 		return m_ptr < ptr.m_ptr;
 	}
+	bool operator == (const SmartPtr& ptr) const
+	{
+		return m_ptr == ptr.m_ptr;
+	}
 	T* get()
 	{
 		return m_ptr;

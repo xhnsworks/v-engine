@@ -15,16 +15,16 @@ public:
 	class SpriteSubGeomBuffer : public MemObject
 	{
 	public:
-		Renderable m_buffer;
+		MeshPtr m_mesh;
+		MaterialInstancePtr m_matInst;
 		SpriteSubGeomBuffer()
-			: m_buffer(NULL)
 		{}
-		~SpriteSubGeomBuffer();
+		~SpriteSubGeomBuffer()
+		{}
 	};
 private:
-	xhn::vector<SpriteSubGeomBuffer> m_subGeomBuffers;
-	xhn::map<xhn::static_string, SpriteSubGeomBuffer> m_subGeomBufferMap;
-	xhn::list<SpriteSubGeomBuffer*> m_sortedSubGeomBuffers;
+	xhn::list<SpriteSubGeomBuffer> m_subGeomBuffers;
+	xhn::list<Renderable> m_sortedRenderables;
 	SpriteRenderer* m_renderer;
 public:
 	SpriteGeomBuffer(SpriteRenderer* renderer)
@@ -32,9 +32,9 @@ public:
 	{}
 	~SpriteGeomBuffer();
 	void Attach(xhn::static_string& filename, Mesh mesh);
-	void DepthSort();
-	const xhn::list<SpriteSubGeomBuffer*>& GetSortedSubGeomBuffers() const {
-		return m_sortedSubGeomBuffers;
+	void Sort();
+	const xhn::list<Renderable>& GetSortedRenderables() const {
+		return m_sortedRenderables;
 	}
 	void Clear();
 };

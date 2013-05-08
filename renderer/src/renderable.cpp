@@ -99,9 +99,9 @@ void Renderable_prev_render(Renderable _rabl)
     {
         euint usage_tex_flags = 0;
 
-        if (_rabl->material->col_tex.get())
+        if (_rabl->material->HasColorTexture())
             usage_tex_flags |= COLOR_MAP_MASK;
-        if (_rabl->material->nor_tex.get())
+        if (_rabl->material->HasNormalTexture())
             usage_tex_flags |= NORMAL_MAP_MASK;
 
         pass_decl p_dec;

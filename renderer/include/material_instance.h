@@ -22,30 +22,48 @@
 #include "pixel_shader_buffer.h"
 #include "pass.h"
 #include "texture2d.h"
-
-struct material_instance : public MemObject
+#include "xhn_static_string.hpp"
+#include "xhn_smart_ptr.hpp"
+class MaterialInstance : public RefObject
 {
-	material_instance()
-		: mat_name(NULL)
+private:
+	Texture2DPtr m_colTex;
+	Texture2DPtr m_norTex;
+	xhn::static_string m_matName;
+public:
+	MaterialInstance(const char* matName, const char* colTexFile, const char* norTexFile, const char* resGrp);
+	MaterialInstance(const MaterialInstance& matInst)
+		: m_colTex(matInst.m_colTex)
+		, m_norTex(matInst.m_norTex)
+		, m_matName(matInst.m_matName)
 	{}
-	~material_instance();
-	///VertexDecl vtx_dec;
-	///Pass std_pass;
-	Texture2DPtr col_tex;
-	Texture2DPtr nor_tex;
-	const char* mat_name;
-	///int material_id;
+	MaterialInstance(const MaterialInstance* matInst)
+		: m_colTex(matInst->m_colTex)
+		, m_norTex(matInst->m_norTex)
+		, m_matName(matInst->m_matName)
+	{}
+	MaterialInstance(const xhn::SmartPtr<MaterialInstance>& matInst)
+		: m_colTex(matInst->m_colTex)
+		, m_norTex(matInst->m_norTex)
+		, m_matName(matInst->m_matName)
+	{}
+	~MaterialInstance() {}
+	inline Texture2DPtr GetColorTexture() {
+		return m_colTex;
+	}
+	inline Texture2DPtr GetNormalTexture() {
+		return m_norTex;
+	}
+	inline bool HasColorTexture() {
+		return m_colTex.get() != NULL;
+	}
+	inline bool HasNormalTexture() {
+		return m_norTex.get() != NULL;
+	}
+	inline xhn::static_string GetMaterialName() {
+		return m_matName;
+	}
+	MaterialInstance* Clone();
 };
-typedef struct material_instance* MaterialInstance;
-
-API_EXPORT MaterialInstance MaterialInstance_new(const char* mat_name, const char* _col_tex_file, const char* _nor_tex_file, const char* _res_grp);
-API_EXPORT void MaterialInstance_delete(MaterialInstance _self);
-///API_EXPORT Pass MaterialInstance_get_std_pass(MaterialInstance _self);
-API_EXPORT Texture2DPtr MaterialInstance_get_color_texture(MaterialInstance _self);
-API_EXPORT Texture2DPtr MaterialInstance_get_normal_texture(MaterialInstance _self);
-API_EXPORT const char* MaterialInstance_get_material_name(MaterialInstance _self);
-API_EXPORT bool MaterialInstance_has_color_texture(MaterialInstance _self);
-API_EXPORT bool MaterialInstance_has_normal_texture(MaterialInstance _self);
-API_EXPORT MaterialInstance MaterialInstance_clone(MaterialInstance _self);
-
+typedef xhn::SmartPtr<MaterialInstance> MaterialInstancePtr;
 #endif

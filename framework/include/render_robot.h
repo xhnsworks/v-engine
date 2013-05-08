@@ -154,17 +154,17 @@ private:
     sfloat4 p7;
 
 	Ray m_mouseRay;
-    MaterialInstance m_mat0;
-    MaterialInstance m_mat1;
+    MaterialInstance* m_mat0;
+    MaterialInstance* m_mat1;
 
-    MaterialInstance m_pureLightingMat;
-    MaterialInstance m_coverMat;
+    MaterialInstance* m_pureLightingMat;
+    MaterialInstance* m_coverMat;
 
 	Renderable m_locator;
 
 	LineDrawer m_lineDrawer;
 
-    MaterialInstance m_guiMat;
+    MaterialInstance* m_guiMat;
     VertexDecl m_defaultVtxDec;
 	RendererChain* m_rendererChain;
 	GUIRendererChain* m_guiRendererChain;

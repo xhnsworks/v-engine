@@ -260,7 +260,7 @@ void ResourceAction::DoImpl()
             "Tf3"
             "Bf3");
 		if (coverRdr) {
-			m_coverMat = MaterialInstance_new("red_material", NULL, NULL, "Texture");
+			m_coverMat = ENEW MaterialInstance("red_material", NULL, NULL, "Texture");
 			m_locator = coverRdr->new_renderable(m_defaultVtxDec, m_coverMat, Segment);
             coverRdr->use_renderable(m_locator);
 		}
@@ -283,7 +283,7 @@ void ResourceAction::DoImpl()
 #elif defined(__APPLE__)
             snprintf(path, 259, "%s%s", BASE_DIR, "/Users/joumining/v-engine/test_scene/mesh_pos_unit1.ogl");
 #endif
-			m_mat0 = MaterialInstance_new("pure_lighting", NULL, NULL, "Texture");
+			m_mat0 = ENEW MaterialInstance("pure_lighting", NULL, NULL, "Texture");
 			Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat0, Triangular);
             Renderable_add_mesh(r, m);
             mainRdr->use_renderable(r);
@@ -303,7 +303,7 @@ void ResourceAction::DoImpl()
             /**
 		    m_mat1 = MaterialInstance_new("default_material", "GAZER789_Diffuse.png", "GAZER789_Normal-1.png", "Texture");
             **/
-            m_mat1 = MaterialInstance_new("pure_lighting", NULL, "GAZER789_Normal-1.png", "Texture");
+            m_mat1 = ENEW MaterialInstance("pure_lighting", NULL, "GAZER789_Normal-1.png", "Texture");
 
 		    Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat1, Triangular);
             Renderable_add_mesh(r, m);

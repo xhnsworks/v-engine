@@ -70,7 +70,7 @@ protected:
 public:
     matrix4x4* curt_rend_world_matrix;
 
-    MaterialInstance curt_mat_inst;
+    MaterialInstance* curt_mat_inst;
     MaterialPrototype curt_mat_proto;
 
     Texture2DPtr curt_plaster;
@@ -96,7 +96,7 @@ protected:
 	void CommonInit();
     void Dest();
 public:
-    Renderable new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode );
+    Renderable new_renderable ( VertexDecl _dec, MaterialInstance* _m_inst, e_mesh_mode _mesh_mode );
     void use_renderable ( Renderable _rbl );
 	void clear_renderables();
 

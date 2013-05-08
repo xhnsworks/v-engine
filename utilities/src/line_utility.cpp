@@ -61,7 +61,8 @@ LineDrawer LineDrawer_new(Renderer* _rdr)
     s.proc = flat_material_proc;
     _rdr->register_material("flat_material", s, Shaded, true);
 
-    MaterialInstance inst = MaterialInstance_new("flat_material", NULL, NULL, "Texture");
+    ///MaterialInstance inst = MaterialInstance_new("flat_material", NULL, NULL, "Texture");
+	MaterialInstance* inst = ENEW MaterialInstance("flat_material", NULL, NULL, "Texture");
     Renderable rabl = _rdr->new_renderable(decl, inst, Segment);
     _rdr->use_renderable(rabl);
 

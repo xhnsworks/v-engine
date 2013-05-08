@@ -27,8 +27,7 @@ void RendererBase::_renderable_set_dest ( STD_NAMESPACE::set<Renderable>& _s )
         VertexBuffer_delete ( rdl->vtx_buf );
         IndexBuffer_delete ( rdl->idx_buf );
         Matrix4x4_delete ( rdl->world_matrix );
-        MaterialInstance_delete ( rdl->material );
-
+		
 		delete rdl;
     }
 	_s.clear();
@@ -314,7 +313,7 @@ void RendererBase::Dest()
     }
 }
 
-Renderable RendererBase::new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode )
+Renderable RendererBase::new_renderable ( VertexDecl _dec, MaterialInstance* _m_inst, e_mesh_mode _mesh_mode )
 {
     ///Renderable ret = ( Renderable ) SMalloc ( sizeof ( renderable ) );
     Renderable ret = ENEW renderable;
@@ -322,7 +321,7 @@ Renderable RendererBase::new_renderable ( VertexDecl _dec, MaterialInstance _m_i
     ret->vtx_buf = VertexBuffer_new ( _dec );
     ret->idx_buf = IndexBuffer_new ( _mesh_mode );
     ///ret->mesh_list = List_new ( Vptr, Ealloc, Efree );
-    ret->material = MaterialInstance_clone ( _m_inst );
+    ret->material = _m_inst->Clone();
     ret->std_pass_dirty_flag = true;
     ret->depth_pass_dirty_flag = true;
     ret->shadow_pass_dirty_flag = true;

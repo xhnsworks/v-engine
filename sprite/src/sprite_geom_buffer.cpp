@@ -4,11 +4,15 @@
 SpriteGeomBuffer::~SpriteGeomBuffer()
 {
 }
-SpriteGeomBuffer::SpriteSubGeomBuffer::~SpriteSubGeomBuffer()
-{
-	m_buffer = NULL;
-}
 void SpriteGeomBuffer::Attach(xhn::static_string& filename, Mesh mesh)
+{
+	MaterialInstance* mat = ENEW MaterialInstance("default_material", filename.c_str(), NULL, "Texture");
+	SpriteSubGeomBuffer subGeomBuf;
+	subGeomBuf.m_mesh = mesh;
+	subGeomBuf.m_matInst = mat;
+	m_subGeomBuffers.push_back(subGeomBuf);
+}
+void SpriteGeomBuffer::Sort()
 {
 	VertexDecl vdec = VertexDecl_new_from_string(
 		"pf3"
@@ -17,25 +21,35 @@ void SpriteGeomBuffer::Attach(xhn::static_string& filename, Mesh mesh)
 		"nf3"
 		"Tf3"
 		"Bf3");
-	MaterialInstance mat = MaterialInstance_new("default_material", filename.c_str(), NULL, "Texture");
-	renderable* rbl = m_renderer->new_renderable(vdec, mat, Triangular);
-	Renderable_add_mesh(rbl, mesh);
-	SpriteSubGeomBuffer subGeomBuf;
-	subGeomBuf.m_buffer = rbl;
-	m_subGeomBuffers.push_back(subGeomBuf);
-}
-void SpriteGeomBuffer::DepthSort()
-{
-	m_sortedSubGeomBuffers.clear();
-	xhn::vector<SpriteSubGeomBuffer>::iterator iter = m_subGeomBuffers.begin();
-	xhn::vector<SpriteSubGeomBuffer>::iterator end = m_subGeomBuffers.end();
-	for (; iter != end; iter++) {
-		m_sortedSubGeomBuffers.push_front(&(*iter));
+	renderable* rbl = NULL;
+    xhn::list<SpriteSubGeomBuffer>::iterator iter = m_subGeomBuffers.begin();
+	while (iter != m_subGeomBuffers.end()) {
+		SpriteSubGeomBuffer* curtSubGeomBuffer = &(*iter);
+		if (rbl) {
+			if (rbl->material->GetColorTexture() == curtSubGeomBuffer->m_matInst->GetColorTexture()) {
+				/// do nothing
+			}
+			else {
+				m_sortedRenderables.push_front(rbl);
+				MaterialInstance mat(curtSubGeomBuffer->m_matInst);
+				rbl = m_renderer->new_renderable(vdec, &mat, Triangular);
+			}
+		}
+		else {
+			MaterialInstance mat(curtSubGeomBuffer->m_matInst);
+			rbl = m_renderer->new_renderable(vdec, &mat, Triangular);
+		}
+		Renderable_add_mesh(rbl, curtSubGeomBuffer->m_mesh);
+		iter++;
+	}
+	if (rbl) {
+		m_sortedRenderables.push_front(rbl);
 	}
 }
 
 void SpriteGeomBuffer::Clear()
 {
+	m_sortedRenderables.clear();
 	m_subGeomBuffers.clear();
 	m_renderer->clear_renderables();
 }

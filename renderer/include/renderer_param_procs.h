@@ -101,7 +101,7 @@ renderer_param_value getColorMap0Proc(RendererBase* _self)
 {
     renderer_param_value ret;
     Texture2D** tmp = (Texture2D**)SMalloc(sizeof(Texture2D*));
-    *tmp = MaterialInstance_get_color_texture(_self->curt_mat_inst).get();
+    *tmp = _self->curt_mat_inst->GetColorTexture().get();
     ret.value = tmp;
     return ret;
 }
@@ -109,7 +109,7 @@ renderer_param_value getNormalMap0Proc(RendererBase* _self)
 {
     renderer_param_value ret;
     Texture2D** tmp = (Texture2D**)SMalloc(sizeof(Texture2D*));
-    *tmp = MaterialInstance_get_normal_texture(_self->curt_mat_inst).get();
+    *tmp = _self->curt_mat_inst->GetNormalTexture().get();
     ret.value = tmp;
     return ret;
 }

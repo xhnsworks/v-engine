@@ -134,7 +134,7 @@ protected:
 public:
     virtual void render();
     void register_material ( const char *mat_name, SDisplayProc disp_proc, e_draw_mode draw_mode, bool double_sided_flag );
-    Renderable new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode );
+    Renderable new_renderable ( VertexDecl _dec, MaterialInstance* _m_inst, e_mesh_mode _mesh_mode );
     void viewport_refresh ( euint32 _x, euint32 _y, euint32 _width, euint32 _height );
    
     inline LightBase2 add_dir_light_2() {
