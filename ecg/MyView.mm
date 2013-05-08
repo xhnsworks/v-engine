@@ -165,12 +165,11 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     // must lock GL context because display link is threaded
     CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
     
-    glViewport(0, 0, viewWidth, viewHeight);
+    ///glViewport(0, 0, viewWidth, viewHeight);
     // draw here
     renderRobot->RunOnce();
     
     [currentContext flushBuffer];
-    
     CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
 }
 
