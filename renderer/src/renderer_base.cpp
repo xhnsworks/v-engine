@@ -18,38 +18,6 @@ void DefaultRenderableSorter::Sort(STD_NAMESPACE::set<Renderable>& used_renderab
 	}
 }
 
-void RendererBase::_renderable_tree_dest ( Tree _t )
-{
-    Iterator iter = Tree_begin ( _t );
-
-    while ( iter ) {
-        var data;
-        data = Tree_get_value ( iter );
-        renderable *rdl = ( renderable * ) data.vptr_var;
-        VertexBuffer_delete ( rdl->vtx_buf );
-        IndexBuffer_delete ( rdl->idx_buf );
-		/**
-        Iterator mesh_iter = List_begin ( rdl->mesh_list );
-
-        while ( mesh_iter ) {
-            var data = List_get_value ( mesh_iter );
-            Mesh mesh = ( Mesh ) data.vptr_var;
-            Mesh_delete ( mesh );
-            mesh_iter = List_next ( mesh_iter );
-        }
-		**/
-        ///List_Dest ( rdl->mesh_list );
-        Matrix4x4_delete ( rdl->world_matrix );
-        MaterialInstance_delete ( rdl->material );
-        ///Mfree ( rdl );
-        iter = Tree_next ( iter );
-
-		delete rdl;
-    }
-
-    Tree_Dest ( _t );
-}
-
 void RendererBase::_renderable_set_dest ( STD_NAMESPACE::set<Renderable>& _s )
 {
 	STD_NAMESPACE::set<Renderable>::iterator iter = _s.begin();
@@ -58,12 +26,12 @@ void RendererBase::_renderable_set_dest ( STD_NAMESPACE::set<Renderable>& _s )
         renderable *rdl = *iter;
         VertexBuffer_delete ( rdl->vtx_buf );
         IndexBuffer_delete ( rdl->idx_buf );
-
         Matrix4x4_delete ( rdl->world_matrix );
         MaterialInstance_delete ( rdl->material );
 
 		delete rdl;
     }
+	_s.clear();
 }
 
 ShaderNode default_material_proc3 ( PxlSdrBuf _psb, int _id )
@@ -373,24 +341,18 @@ Renderable RendererBase::new_renderable ( VertexDecl _dec, MaterialInstance _m_i
 
 void RendererBase::use_renderable ( Renderable _rbl )
 {
-	/**
-    var key, data;
-    key.vptr_var = _rbl;
-    Iterator iter = Tree_find ( unused_renderable_tree, key, &data );
-
-    if ( iter ) {
-        key.vptr_var = _rbl;
-        data.vptr_var = _rbl;
-        Tree_insert ( used_renderable_tree, key, data );
-        Tree_remove ( unused_renderable_tree, key );
-    }
-	**/
 	STD_NAMESPACE::set<Renderable>::iterator iter = unused_renderable_set.find(_rbl);
 	if (iter != unused_renderable_set.end())
 	{
 		used_renderable_set.insert(_rbl);
 		unused_renderable_set.erase(iter);
 	}
+}
+
+void RendererBase::clear_renderables()
+{
+    _renderable_set_dest(used_renderable_set);
+	_renderable_set_dest(unused_renderable_set);
 }
 
 void RendererBase::get_mouse_ray ( int _x, int _y, EFloat3 *ori, EFloat3 *dir )

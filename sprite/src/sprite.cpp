@@ -438,7 +438,7 @@ void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 	{
 		SpriteElement& ele = *iter;
 		Mesh mesh = ele.Build(m_renderer);
-		buffer->Attach(ele.m_filename, mesh, 0.0f);
+		buffer->Attach(ele.m_filename, mesh);
 	}
 }
 

@@ -288,7 +288,7 @@ public:
         if ( node->left_node && node->right_node ) {
             node = node->right_node;
 
-            while ( ( left = _node->left_node ) != NULL ) {
+            while ( ( left = node->left_node ) != NULL ) {
                 node = left;
             }
 

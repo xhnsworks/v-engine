@@ -75,6 +75,8 @@ public:
 	{}
 	virtual void Init(const xhn::static_string configName);
 	virtual void GetScopeImpl(SpriteRect& result);
+	void BuildBackgroundLayer(const matrix4x4& transform);
+	void BuildTextLayer(const matrix4x4& transform);
 	virtual void Build();
 	virtual void Tick(double elapsedTime);
 	inline void SetState(ButtonState state) {

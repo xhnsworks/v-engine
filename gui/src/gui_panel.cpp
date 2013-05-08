@@ -96,15 +96,15 @@ void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 	to.push_back(tmpCenter);
 
-	to.push_back(tmpLeft);
-	to.push_back(tmpTop);
-	to.push_back(tmpRight);
-	to.push_back(tmpBottom);
-
 	to.push_back(tmpLowerLeft);
 	to.push_back(tmpLowerRight);
 	to.push_back(tmpUpperLeft);
 	to.push_back(tmpUpperRight);
+
+	to.push_back(tmpLeft);
+	to.push_back(tmpTop);
+	to.push_back(tmpRight);
+	to.push_back(tmpBottom);
 }
 
 void GUIPanelLayer::GetScopeImpl(SpriteRect& result)

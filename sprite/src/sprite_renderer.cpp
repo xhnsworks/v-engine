@@ -102,14 +102,7 @@ void SpriteRenderer::render()
         ERROR_PROC;
 
 		glDisable ( GL_CULL_FACE );
-/**
-        if ( mp->double_sided_flag ) {
-            glDisable ( GL_CULL_FACE );
-        }
-        else {
-            glEnable ( GL_CULL_FACE );
-        }
-**/
+
         ERROR_PROC;
 
         prepare_renderable ( rbl );

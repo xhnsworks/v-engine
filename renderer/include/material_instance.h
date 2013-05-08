@@ -47,4 +47,5 @@ API_EXPORT const char* MaterialInstance_get_material_name(MaterialInstance _self
 API_EXPORT bool MaterialInstance_has_color_texture(MaterialInstance _self);
 API_EXPORT bool MaterialInstance_has_normal_texture(MaterialInstance _self);
 API_EXPORT MaterialInstance MaterialInstance_clone(MaterialInstance _self);
+
 #endif

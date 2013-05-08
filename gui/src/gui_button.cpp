@@ -89,12 +89,9 @@ void GUIButton::GetScopeImpl(SpriteRect& result)
 	result.height = 0.0f;
 }
 
-void GUIButton::Build()
+void GUIButton::BuildBackgroundLayer(const matrix4x4& transform)
 {
-	m_elements.clear();
-	matrix4x4 transform;
-	GetMatrix(&transform);
-    switch (m_curtState)
+	switch (m_curtState)
 	{
 	case Normal:
 		{
@@ -137,6 +134,9 @@ void GUIButton::Build()
 		}
 		break;
 	}
+}
+void GUIButton::BuildTextLayer(const matrix4x4& transform)
+{
 	SpriteLayerArray::iterator iter = m_children.begin();
 	for (; iter != m_children.end(); iter++)
 	{
@@ -146,6 +146,16 @@ void GUIButton::Build()
 			layerPtr->BuildElements(m_elements);
 		}
 	}
+}
+
+void GUIButton::Build()
+{
+	m_elements.clear();
+	matrix4x4 transform;
+	GetMatrix(&transform);
+    
+	BuildTextLayer(transform);
+	BuildBackgroundLayer(transform);
 }
 
 void GUIButton::Tick(double elapsedTime)

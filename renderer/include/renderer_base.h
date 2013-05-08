@@ -89,7 +89,6 @@ private:
     bool own_camera;
 	bool own_material_table;
 private:
-	void _renderable_tree_dest( Tree _t );
 	void _renderable_set_dest ( STD_NAMESPACE::set<Renderable>& _s );
 protected:
     RendererBase ( ViewportPtr view, RenderableSorter* sorter = NULL );
@@ -99,6 +98,7 @@ protected:
 public:
     Renderable new_renderable ( VertexDecl _dec, MaterialInstance _m_inst, e_mesh_mode _mesh_mode );
     void use_renderable ( Renderable _rbl );
+	void clear_renderables();
 
 	void FORCE_ALIGN_ARG_POINTER get_mouse_ray ( int _x, int _y, EFloat3 *ori, EFloat3 *dir );
     
