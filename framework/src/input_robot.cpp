@@ -124,11 +124,9 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 	{
 		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = true;
-            /**
 			SpriteMouseButtonDownEvent sptEvt;
 			sptEvt.m_leftButtomDown = true;
 			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
-             **/
 		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = true;
@@ -140,11 +138,9 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = false;
 			m_leftButtonDown = true;
-            /**
 			SpriteMouseButtonUpEvent sptEvt;
 			sptEvt.m_leftButtomUp = true;
 			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
-             **/
 		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = false;

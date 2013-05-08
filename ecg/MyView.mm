@@ -19,6 +19,10 @@
 #include "input_robot.h"
 #include "animation.hpp"
 #include "robot_thread.h"
+#include "sprite_event_hub.h"
+#include "input_system_osx.h"
+
+#import <Cocoa/Cocoa.h>
 
 @interface MyView (InternalMethods)
 
@@ -96,23 +100,23 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
     CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
-    /**
+    
     /// create render robot
     MInit();
     ELog_Init();
     ShaderLog_Init();
+    input_Init();
     
+    rwbuffer = get_rwbuffer();
     RobotManager::Init();
     RobotThreadManager::Init();
+    SpriteEventHub::Init();
     renderRobot = RobotManager::Get()->AddRobot<RenderRobot>();
     RobotManager::Get()->AddRobot<InputRobot, vptr>((vptr)self);
     RobotManager::Get()->AddRobot<AnimationRobot>();
     RobotThreadManager::Get()->AddRobotThread();
-    ///renderRobot = ENEW RenderRobot;
-    RobotManager::Get()->Remove(renderRobot->GetName());
     
-    ///input_Init();
-    **/
+    RobotManager::Get()->Remove(renderRobot->GetName());
     return self;
 }
 
@@ -121,6 +125,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     NSSize    viewBounds = [self bounds].size;
     viewWidth = viewBounds.width;
     viewHeight = viewBounds.height;
+    
+    [[self window] makeFirstResponder: self];
+    [[self window] setAcceptsMouseMovedEvents: YES];
+    if ([[self window] acceptsMouseMovedEvents]) {NSLog(@"window now acceptsMouseMovedEvents");}
     
     // activate the display link
     CVDisplayLinkStart(displayLink);
@@ -158,14 +166,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
     
     glViewport(0, 0, viewWidth, viewHeight);
-    /**
-    // Draw something that changes over time to prove to yourself that it's really updating in a tight loop
-    glClearColor(
-                 sin(CFAbsoluteTimeGetCurrent()),
-                 sin(7.0*CFAbsoluteTimeGetCurrent()),
-                 sin(CFAbsoluteTimeGetCurrent()/3.0),0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    **/
     // draw here
     renderRobot->RunOnce();
     
@@ -174,8 +174,71 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
 }
 
+- (BOOL) acceptsFirstResponder
+{
+    return YES;
+}
+
+- (void)mouseMoved:(NSEvent *)pEvent
+{
+    NSPoint event_location = [pEvent locationInWindow];
+    NSPoint local_point = [self convertPoint:event_location fromView:nil];
+    printf("pt %f %f\n", local_point.x, local_point.y);
+    input_event evt;
+    evt.type = MouseAbsolutePositionEvent;
+    evt.info.mouse_info.mouse_abs_pos.x = (int)(local_point.x);
+    evt.info.mouse_info.mouse_abs_pos.y = (int)(viewHeight - local_point.y);
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)mouseDown:(NSEvent *)pEvent
+{
+    input_event evt;
+    evt.type = MouseButtonDownEvent;
+    evt.info.mouse_info.mouse_button_info = LeftButton;
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)rightMouseDown:(NSEvent *)theEvent
+{
+    input_event evt;
+    evt.type = MouseButtonDownEvent;
+    evt.info.mouse_info.mouse_button_info = RightButton;
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)otherMouseDown:(NSEvent *)theEvent
+{}
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    input_event evt;
+    evt.type = MouseButtonUpEvent;
+    evt.info.mouse_info.mouse_button_info = LeftButton;
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)rightMouseUp:(NSEvent *)theEvent
+{
+    input_event evt;
+    evt.type = MouseButtonUpEvent;
+    evt.info.mouse_info.mouse_button_info = RightButton;
+    evt.time_stamp = 0;
+    RWBuffer_Write(rwbuffer, (const euint*)&evt, sizeof(evt));
+}
+- (void)otherMouseUp:(NSEvent *)theEvent
+{
+}
 - (void) keyDown:(NSEvent *)pEvent
 {
-    printf("here\n");
+    NSEventType type = [pEvent type];
+    if (NSKeyDown == type) {
+        unsigned short key = [pEvent keyCode];
+        printf("key %d\n", key);
+    }
+}
+- (void)flagsChanged:(NSEvent *)pEvent
+{
+    NSUInteger flags = [pEvent modifierFlags];
+    printf("flagsChanged %lx\n", flags);
 }
 @end

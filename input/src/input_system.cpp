@@ -52,7 +52,7 @@ void InputSystem::Init(vptr platform_param)
 #if defined(_WIN32) || defined(_WIN64)
     input_Init((HWND)platform_param);
 #elif defined(__APPLE__)
-    input_Init(platform_param);
+    input_Init();
 #endif
     m_input_listen_tree = Tree_new(Vptr, Vptr, Ealloc, Efree);
 }

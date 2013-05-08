@@ -27,7 +27,7 @@
 // for display link
 #import <QuartzCore/QuartzCore.h>
 #include "render_robot.h"
-
+#include "rwbuffer.h"
 @interface MyView : NSOpenGLView
 {
     CVDisplayLinkRef displayLink;
@@ -38,6 +38,7 @@
     float    viewHeight;
     
     RenderRobot* renderRobot;
+    RWBuffer rwbuffer;
 }
 
 @end

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		680D583B17393FA800C82F21 /* MyOpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 680D583817393FA800C82F21 /* MyOpenGLView.mm */; };
-		680D583C17393FA800C82F21 /* MyOpenGLViewBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 680D583A17393FA800C82F21 /* MyOpenGLViewBase.mm */; };
 		6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6815E768172FE5A400463B2A /* pugixml.cpp */; };
 		688ED9851733E77C00940811 /* gui_edit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9841733E77C00940811 /* gui_edit.cpp */; };
 		688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9881733F95700940811 /* xhn_exception.cpp */; };
@@ -138,13 +136,10 @@
 		68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4965F1730EC0800AAB72D /* input_system.cpp */; };
 		68B4966F1730EC7E00AAB72D /* input_system_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68B4966D1730EC7E00AAB72D /* input_system_osx.mm */; };
 		68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68BA0C591735451F00E1FAE2 /* input_robot.cpp */; };
+		68FE5BFB173A798800094CEB /* MyView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68FE5BFA173A798800094CEB /* MyView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		680D583717393FA800C82F21 /* MyOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLView.h; sourceTree = "<group>"; };
-		680D583817393FA800C82F21 /* MyOpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyOpenGLView.mm; sourceTree = "<group>"; };
-		680D583917393FA800C82F21 /* MyOpenGLViewBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOpenGLViewBase.h; sourceTree = "<group>"; };
-		680D583A17393FA800C82F21 /* MyOpenGLViewBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyOpenGLViewBase.mm; sourceTree = "<group>"; };
 		6815E767172FE5A400463B2A /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugiconfig.hpp; sourceTree = "<group>"; };
 		6815E768172FE5A400463B2A /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
 		6815E769172FE5A400463B2A /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
@@ -746,6 +741,8 @@
 		68B496701730ECA900AAB72D /* input_system_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_system_osx.h; sourceTree = "<group>"; };
 		68BA0C591735451F00E1FAE2 /* input_robot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_robot.cpp; sourceTree = "<group>"; };
 		68BA0C5C1735458E00E1FAE2 /* input_robot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_robot.h; sourceTree = "<group>"; };
+		68FE5BF9173A798800094CEB /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
+		68FE5BFA173A798800094CEB /* MyView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -858,10 +855,8 @@
 		689B12EA172F8F7B00972582 /* cocoa */ = {
 			isa = PBXGroup;
 			children = (
-				680D583717393FA800C82F21 /* MyOpenGLView.h */,
-				680D583817393FA800C82F21 /* MyOpenGLView.mm */,
-				680D583917393FA800C82F21 /* MyOpenGLViewBase.h */,
-				680D583A17393FA800C82F21 /* MyOpenGLViewBase.mm */,
+				68FE5BF9173A798800094CEB /* MyView.h */,
+				68FE5BFA173A798800094CEB /* MyView.mm */,
 				689B12DB172F8E6500972582 /* MainMenu.xib */,
 				689B12D9172F8E6500972582 /* AppDelegate.m */,
 				689B12D8172F8E6500972582 /* AppDelegate.h */,
@@ -2865,8 +2860,7 @@
 				688ED9851733E77C00940811 /* gui_edit.cpp in Sources */,
 				688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */,
 				68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */,
-				680D583B17393FA800C82F21 /* MyOpenGLView.mm in Sources */,
-				680D583C17393FA800C82F21 /* MyOpenGLViewBase.mm in Sources */,
+				68FE5BFB173A798800094CEB /* MyView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

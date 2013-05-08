@@ -158,4 +158,4 @@ inline FILE* SafeFOpen(const char* path, const char* mode)
 #include <pthread.h>
 #endif
 
-#define USE_LOG_SYSTEM
+///#define USE_LOG_SYSTEM

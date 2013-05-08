@@ -5,6 +5,16 @@
 
 #import "MyOpenGLView.h"
 
+#include "emem.h"
+#include "elog.h"
+#include "shader_log.h"
+
+#include "input_system_osx.h"
+#include "input_robot.h"
+#include "animation.hpp"
+#include "robot_thread.h"
+#include "sprite_event_hub.h"
+
 #pragma mark -
 #pragma mark Enumerated Types
 
@@ -26,9 +36,12 @@
 
 - (void) scene
 {
+    /**
     glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f );
     glClearDepth ( 1.0 );
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    **/
+    renderRobot->RunOnce();
 } 
 
 - (void) terminate:(NSNotification *)notification
@@ -49,6 +62,21 @@
                                                      name:@"NSApplicationWillTerminateNotification"
                                                    object:NSApp];
     }
+    
+    /// create render robot
+    MInit();
+    ELog_Init();
+    ShaderLog_Init();
+    
+    RobotManager::Init();
+    RobotThreadManager::Init();
+    SpriteEventHub::Init();
+    renderRobot = RobotManager::Get()->AddRobot<RenderRobot>();
+    RobotManager::Get()->AddRobot<InputRobot, vptr>((vptr)self);
+    RobotManager::Get()->AddRobot<AnimationRobot>();
+    RobotThreadManager::Get()->AddRobotThread();
+    ///renderRobot = ENEW RenderRobot;
+    RobotManager::Get()->Remove(renderRobot->GetName());
 
     return self;
 }
