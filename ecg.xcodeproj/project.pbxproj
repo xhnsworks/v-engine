@@ -10,6 +10,7 @@
 		6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6815E768172FE5A400463B2A /* pugixml.cpp */; };
 		688ED9851733E77C00940811 /* gui_edit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9841733E77C00940811 /* gui_edit.cpp */; };
 		688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9881733F95700940811 /* xhn_exception.cpp */; };
+		6892B29D173BDEDF00A5ED22 /* gui_bar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6892B29B173BDEDF00A5ED22 /* gui_bar.cpp */; };
 		689B12C7172F8E6500972582 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12C6172F8E6500972582 /* Cocoa.framework */; };
 		689B12D1172F8E6500972582 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 689B12CF172F8E6500972582 /* InfoPlist.strings */; };
 		689B12D3172F8E6500972582 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 689B12D2172F8E6500972582 /* main.m */; };
@@ -147,6 +148,8 @@
 		688ED9861733E78300940811 /* gui_edit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_edit.h; sourceTree = "<group>"; };
 		688ED9871733F71A00940811 /* xhn_exception.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = xhn_exception.hpp; sourceTree = "<group>"; };
 		688ED9881733F95700940811 /* xhn_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xhn_exception.cpp; sourceTree = "<group>"; };
+		6892B29B173BDEDF00A5ED22 /* gui_bar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_bar.cpp; sourceTree = "<group>"; };
+		6892B29E173BDF2500A5ED22 /* gui_bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_bar.h; sourceTree = "<group>"; };
 		68998D251732BD4200EC1D8A /* ecg.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ecg.entitlements; sourceTree = "<group>"; };
 		689B12C3172F8E6500972582 /* ecg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ecg.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		689B12C6172F8E6500972582 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -2233,6 +2236,7 @@
 		68A35E67172FE2B4007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				6892B29E173BDF2500A5ED22 /* gui_bar.h */,
 				688ED9861733E78300940811 /* gui_edit.h */,
 				68A35E68172FE2B4007D0C45 /* gui_button.h */,
 				68A35E69172FE2B4007D0C45 /* gui_cursor.h */,
@@ -2252,6 +2256,7 @@
 				68A35E70172FE2B4007D0C45 /* gui_material.cpp */,
 				68A35E71172FE2B4007D0C45 /* gui_panel.cpp */,
 				68A35E72172FE2B4007D0C45 /* gui_pch.cpp */,
+				6892B29B173BDEDF00A5ED22 /* gui_bar.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2861,6 +2866,7 @@
 				688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */,
 				68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */,
 				68FE5BFB173A798800094CEB /* MyView.mm in Sources */,
+				6892B29D173BDEDF00A5ED22 /* gui_bar.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -377,7 +377,7 @@ void GUIPanelFactory::CreateSheetConfig(const char* cfgName, const char* sheetNa
 		center.append_attribute("height").set_value(panelRect.size.height - cornerSize.height - cornerSize.height);
 
 		center.append_attribute("area_x0").set_value(areaLeft + areaCornerSize.width);
-		center.append_attribute("area_x1").set_value(areaRight - areaCornerSize.height);
+		center.append_attribute("area_x1").set_value(areaRight - areaCornerSize.width);
 		center.append_attribute("area_y0").set_value(areaTop + areaCornerSize.height);
 		center.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
 

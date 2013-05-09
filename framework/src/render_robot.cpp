@@ -227,14 +227,14 @@ void ResourceAction::DoImpl()
 		cornerSize.width = 8.0f;
 		cornerSize.height = 8.0f;
 
-		areaRect.left = 0.0f;
-		areaRect.top = 0.0f;
-		areaRect.size.width = 64.0f;
-		areaRect.size.height = 64.0f;
-		areaCornerSize.width = 16.0f;
-		areaCornerSize.height = 16.0f;
+		areaRect.left = 268.0f;
+		areaRect.top = 2.0f;
+		areaRect.size.width = 334.0f - 268.0f;
+		areaRect.size.height = 31.0f - 2.0f;
+		areaCornerSize.width = 8.0f;
+		areaCornerSize.height = 8.0f;
 
-		GUIPanelFactory::CreateSheetConfig("text_edit.xml", "background", "button_prototype.png",
+		GUIPanelFactory::CreateSheetConfig("text_edit.xml", "background", "BlackOrangeSkins.png",
 			panelRect, cornerSize, areaRect, areaCornerSize);
 
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
@@ -420,7 +420,7 @@ void ResourceAction::DoImpl()
 			m_light = lt;
 	    }
 	}
-#if defined(_WIN32) || defined(_WIN64)
+
 	static bool s_isCreateAnimed = false;
 	{
 
@@ -448,7 +448,6 @@ void ResourceAction::DoImpl()
 			}
 		}
 	}
-#endif
 }
 
 ResourceAction::~ResourceAction()
