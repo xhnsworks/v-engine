@@ -46,6 +46,7 @@ API_EXPORT Pass RenderSystem_register_std_pass(PassDecl dec);
 API_EXPORT Texture2DPtr RenderSystem_register_texture2d(const xhn::static_string filename, const xhn::static_string res_group);
 API_EXPORT Texture2DPtr RenderSystem_new_texture2d(const xhn::static_string filename, const xhn::static_string res_group);
 API_EXPORT Texture2DPtr RenderSystem_get_texture2d(const xhn::static_string filename, const xhn::static_string res_group);
+API_EXPORT XMLResourcePtr RenderSystem_new_gui_config(const xhn::static_string filename);
 API_EXPORT XMLResourcePtr RenderSystem_load_gui_config(const xhn::static_string filename);
 
 API_EXPORT void RenderSystem_get_window_width_height(int* w, int* h);

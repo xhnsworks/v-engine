@@ -102,6 +102,10 @@ public:
             : base_type (
                 a, ele_real_size, FReadProc<list_node>(), FWriteProc<list_node>(), FNextProc<list_node>(), FPrevProc<list_node>() )
         {}
+		iterator (  )
+			: base_type (
+			NULL, 0, FReadProc<list_node>(), FWriteProc<list_node>(), FNextProc<list_node>(), FPrevProc<list_node>() )
+		{}
         inline iterator &operator++() {
             base_type::next();
             return *this;
@@ -135,6 +139,10 @@ public:
             : base_type (
                 a, ele_real_size, FReadProc<list_node>(), FWriteProc<list_node>(), FNextProc<list_node>(), FPrevProc<list_node>() )
         {}
+		const_iterator (  )
+			: base_type (
+			NULL, 0, FReadProc<list_node>(), FWriteProc<list_node>(), FNextProc<list_node>(), FPrevProc<list_node>() )
+		{}
         inline const_iterator &operator++() {
             base_type::next();
             return *this;
@@ -332,6 +340,28 @@ public:
             m_count--;
         }
     }
+	void throw_front(iterator i) {
+		if (i.m_ptr != m_head) {
+			if (i.m_ptr->m_iter_next)
+				i.m_ptr->m_iter_next->m_iter_prev = i.m_ptr->m_iter_prev;
+			if (i.m_ptr->m_iter_prev)
+				i.m_ptr->m_iter_prev->m_iter_next = i.m_ptr->m_iter_next;
+			i.m_ptr->m_iter_next = m_head;
+			i.m_ptr->m_iter_prev = NULL;
+			m_head = i.m_ptr;
+		}
+	}
+	void throw_back(iterator i) {
+		if (i.m_ptr != m_tail) {
+			if (i.m_ptr->m_iter_next)
+				i.m_ptr->m_iter_next->m_iter_prev = i.m_ptr->m_iter_prev;
+			if (i.m_ptr->m_iter_prev)
+				i.m_ptr->m_iter_prev->m_iter_next = i.m_ptr->m_iter_next;
+			i.m_ptr->m_iter_next = NULL;
+			i.m_ptr->m_iter_prev = m_tail;
+			m_tail = i.m_ptr;
+		}
+	}
 };
 
 }

@@ -24,50 +24,66 @@ namespace pugi
 
 class SpriteRenderer;
 struct FourBorders;
+struct SpriteSize
+{
+    float width;
+	float height;
+	SpriteSize()
+		: width(32.0f)
+		, height(32.0f)
+	{}
+    SpriteSize(float w, float h)
+		: width(w)
+		, height(h)
+	{}
+	SpriteSize(const SpriteSize& size)
+		: width(size.width)
+		, height(size.height)
+	{}
+	inline SpriteSize& operator = (const SpriteSize& size) {
+		width = size.width;
+		height = size.height;
+		return *this;
+	}
+};
 struct SpriteRect
 {
 	float left;
 	float top;
-	float width;
-	float height;
+	SpriteSize size;
 	SpriteRect()
 		: left(0.0f)
 		, top(0.0f)
-		, width(32.0f)
-		, height(32.0f)
 	{}
 	SpriteRect(float x, float y, float w, float h)
 		: left(x)
 		, top(y)
-		, width(w)
-		, height(h)
+		, size(w, h)
 	{}
 	SpriteRect(const SpriteRect& rc)
 		: left(rc.left)
 		, top(rc.top)
-		, width(rc.width)
-		, height(rc.height)
+		, size(rc.size)
 	{}
 	inline SpriteRect& operator = (const SpriteRect& rc) {
 		left = rc.left;
 		top = rc.top;
-		width = rc.width;
-		height = rc.height;
+		size = rc.size;
 		return *this;
 	}
 	inline void Merge(const SpriteRect& rc) {
-		float right = left + width;
-		float bottom = top + height;
-		float rcRight = rc.left + rc.width;
-		float rcBottom = rc.top + rc.height;
+		float right = left + size.width;
+		float bottom = top + size.height;
+		float rcRight = rc.left + rc.size.width;
+		float rcBottom = rc.top + rc.size.height;
 
 		left = left < rc.left ? left : rc.left;
 		top = top < rc.top ? top : rc.top;
 		right = right > rcRight ? right : rcRight;
 		bottom = bottom > rcBottom ? bottom : rcBottom;
 
-		width = right - left;
-		height = bottom - top;
+		size.width = right - left;
+		size.height = bottom - top;
 	}
 	void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
 };
@@ -244,6 +260,9 @@ public:
 class Sprite : public SpriteLayer
 {
 	DeclareRTTI;
+	friend class SpriteFactory;
+protected:
+	virtual ~Sprite() {}
 public:
     ElementList m_elements;
     EventProcMap m_publicEventProcs;

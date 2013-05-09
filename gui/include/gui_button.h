@@ -22,6 +22,9 @@ public:
 class GUIButton : public GUIPanel
 {
 	DeclareRTTI;
+	friend class GUIButtonFactory;
+protected:
+	~GUIButton() {}
 public:
 	enum ButtonState
 	{
@@ -68,7 +71,7 @@ public:
 	};
 public:
 	GUIButton(SpriteRenderer* renderer, const xhn::static_string name)
-	: m_releaseDelay(1.0)
+	: m_releaseDelay(0.25)
 	, m_releaseTimer(0.0f)
 	, m_curtState(Normal)
 	, GUIPanel(renderer, name)

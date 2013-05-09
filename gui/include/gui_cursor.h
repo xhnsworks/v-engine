@@ -13,6 +13,9 @@ public:
 class GUICursor : public Sprite
 {
 	DeclareRTTI;
+	friend class GUICursorFactory;
+protected:
+	~GUICursor() {}
 public:
 	GUICursor(SpriteRenderer* renderer, const xhn::static_string name)
 		: Sprite(renderer, name)

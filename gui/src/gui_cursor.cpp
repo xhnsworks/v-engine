@@ -31,8 +31,8 @@ void GUICursor::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.width = 0.0f;
-	result.height = 0.0f;
+	result.size.width = 0.0f;
+	result.size.height = 0.0f;
 }
 
 void GUICursorMouseEventProc::Proc(const SpriteEvent* evt)

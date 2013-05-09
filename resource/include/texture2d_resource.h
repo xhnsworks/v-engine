@@ -55,8 +55,8 @@ public:
 	Texture2DDetector(const xhn::static_string type)
 		: ResourceTypeDetector(type) 
 	{}
-	virtual xhn::static_string Detect(const xhn::string& resName, FileStream stream);
-	virtual xhn::static_string Detect(const xhn::string& resName);
+	virtual xhn::static_string Detect(xhn::static_string resName, FileStream stream);
+	virtual xhn::static_string Detect(xhn::static_string resName);
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///
@@ -86,8 +86,8 @@ public:
 	DefaultTexture2DDetector(const xhn::static_string type)
 		: ResourceTypeDetector(type) 
 	{}
-	virtual xhn::static_string Detect(const xhn::string& resName, FileStream stream);
-	virtual xhn::static_string Detect(const xhn::string& resName);
+	virtual xhn::static_string Detect(xhn::static_string resName, FileStream stream);
+	virtual xhn::static_string Detect(xhn::static_string resName);
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///

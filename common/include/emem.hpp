@@ -53,16 +53,13 @@ public:
 class RefObject : public MemObject
 {
 public:
-	pthread_rwlock_t lock;
 	volatile int ref_count;
 	RefObject()
 	{
-		pthread_rwlock_init(&lock, NULL);
 		ref_count = 0;
 	}
 	~RefObject()
 	{
-		pthread_rwlock_destroy(&lock);
 	}
 };
 

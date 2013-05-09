@@ -22,8 +22,8 @@ void GUIEditTextLayer::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.width = 0.0f;
-	result.height = 0.0f;
+	result.size.width = 0.0f;
+	result.size.height = 0.0f;
 }
 void GUIEdit::Init(const xhn::static_string configName)
 {
@@ -39,15 +39,7 @@ void GUIEdit::Init(const xhn::static_string configName)
 			size->x = 100.0f;
 			size->y = 50.0f;
 		}
-
-		{
-			pugi::xml_node baselayer = layers.child("background");
-			if (!baselayer)
-				return;
-			SpriteLayerPtr layer = ENEW GUIEditBackgroundLayer(m_pivotHandle, m_sizeHandle);
-			layer->LoadConfig(baselayer);
-			AddChild(layer);
-		}
+/**
 		{
 			pugi::xml_node textlayer = layers.child("text");
 			if (!textlayer)
@@ -61,7 +53,16 @@ void GUIEdit::Init(const xhn::static_string configName)
 			ComposingStick* cs = ENEW ComposingStick(fr, 256);
 			SpriteLayerPtr layer = ENEW GUIEditTextLayer(cs);
 			layer->LoadConfig(textlayer);
-			m_children.push_back(layer);
+			AddChild(layer);
+		}
+**/
+		{
+			pugi::xml_node baselayer = layers.child("background");
+			if (!baselayer)
+				return;
+			SpriteLayerPtr layer = ENEW GUIEditBackgroundLayer(m_pivotHandle, m_sizeHandle);
+			layer->LoadConfig(baselayer);
+			AddChild(layer);
 		}
 	}
 }
@@ -69,8 +70,8 @@ void GUIEdit::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.width = 0.0f;
-	result.height = 0.0f;
+	result.size.width = 0.0f;
+	result.size.height = 0.0f;
 }
 
 Sprite* GUIEditFactory::MakeSpriteImpl()

@@ -23,6 +23,9 @@ public:
 class GUIEdit : public GUIPanel
 {
 	DeclareRTTI;
+	friend class GUIEditFactory;
+protected:
+	~GUIEdit() {}
 public:
 	xhn::string m_text;
 

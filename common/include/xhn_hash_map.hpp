@@ -26,10 +26,10 @@ namespace xhn
 		{
 		public:
 			list< pair<K, V> > m_value_list;
-			RWLock2 m_lock;
+			RWLock m_lock;
 		public:
 			typename list< pair<K, V> >::iterator insert ( const K& key, const V &value ) {
-				RWLock2::Instance inst = m_lock.GetWriteLock();
+				RWLock::Instance inst = m_lock.GetWriteLock();
 				if ( !m_value_list.size() ) {
 					return m_value_list.push_back ( make_pair(key, value) );
 				} else {
@@ -45,7 +45,7 @@ namespace xhn
 				}
 			}
 			bool erase ( const K& key ) {
-                RWLock2::Instance inst = m_lock.GetWriteLock();
+                RWLock::Instance inst = m_lock.GetWriteLock();
 				if ( !m_value_list.size() ) {
 					return false;
 				} else {
@@ -62,7 +62,7 @@ namespace xhn
 				}
 			}
 			bool test ( const K &key ) {
-				RWLock2::Instance inst = m_lock.GetReadLock();
+				RWLock::Instance inst = m_lock.GetReadLock();
 				if ( !m_value_list.size() ) {
 					return false;
 				} else {
@@ -93,10 +93,10 @@ namespace xhn
 					return NULL;
 				}
 			}
-			RWLock2::Instance get_write_lock() {
+			RWLock::Instance get_write_lock() {
 				return m_lock.GetWriteLock();
 			}
-			RWLock2::Instance get_read_lock() {
+			RWLock::Instance get_read_lock() {
 				return m_lock.GetReadLock();
 			}
 			V* find_unlock( const K &key ) {

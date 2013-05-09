@@ -215,13 +215,35 @@ void ResourceAction::DoImpl()
 		m_buttonFactory = ENEW GUIButtonFactory(guiRdr, "button2.xml");
 		m_cursorFactory = ENEW GUICursorFactory(guiRdr, "cursor.xml");
 		m_panelFactory = ENEW GUIPanelFactory(guiRdr, "panel2.xml");
+		SpriteRect panelRect;
+		SpriteSize cornerSize;
+		SpriteRect areaRect;
+		SpriteSize areaCornerSize;
+
+		panelRect.left = 0.0f;
+		panelRect.top = 0.0f;
+		panelRect.size.width = 12.0f;
+		panelRect.size.height = 12.0f;
+		cornerSize.width = 4.0f;
+		cornerSize.height = 4.0f;
+
+		areaRect.left = 268.0f;
+		areaRect.top = 2.0f;
+		areaRect.size.width = 66.0f;
+		areaRect.size.height = 29.0f;
+		areaCornerSize.width = 4.0f;
+		areaCornerSize.height = 4.0f;
+
+		GUIPanelFactory::CreateSheetConfig("text_edit.xml", "background", "BlackOrangeSkins.png",
+			panelRect, cornerSize, areaRect, areaCornerSize);
+
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
 		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();
-		m_guiEdit->SetCoord(0.0f, 50.0f);
+		m_guiEdit->SetCoord(0.0f, 100.0f);
 		m_guiPanel->SetCoord(30.0f, 50.0f);
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
@@ -234,6 +256,9 @@ void ResourceAction::DoImpl()
 		m_guiPanel->AddChild(m_guiButton);
 		m_guiPanel->AddChild(m_guiEdit);
 		m_guiPanel->SetRotate(0.2f);
+
+		SpriteFactory::AlwaysOnTop(m_guiEdit);
+		SpriteFactory::AlwaysOnTop(m_guiCursor);
 		///
 
 		SDisplayProc s;
@@ -454,8 +479,11 @@ void LogicAction::DoImpl()
 	double elapsedTime = TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkPoint);
 	elapsedTime = us_to_s(elapsedTime);
 	m_prevCheckpoint = checkPoint;
-	SpriteFrameStartEvent evt(elapsedTime);
-	SpriteEventHub::Get()->BroadcastFrameStartEvent(evt, SpriteEventHub::Get()->GetAllReceivers());
+	///SpriteFrameStartEvent evt(elapsedTime);
+	///SpriteEventHub::Get()->BroadcastFrameStartEvent(evt, SpriteEventHub::Get()->GetAllReceivers());
+	SpriteFactory::FrameEnd(elapsedTime);
+
+	///guiRdr->GetGeomBuffer()->Clear();
 
 	/**
 	ray mouseRay;

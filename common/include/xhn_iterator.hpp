@@ -67,6 +67,9 @@ public:
     inline T *operator->() {
         return m_ptr;
     }
+	inline bool is_valid() {
+		return m_ptr != NULL;
+	}
 };
 
 template <typename T, typename Readproc, typename Writeproc>
@@ -97,6 +100,9 @@ public:
     inline const T *operator->() const {
         return m_ptr;
     }
+	inline bool is_valid() {
+		return m_ptr != NULL;
+	}
 };
 
 template <typename T, typename Readproc, typename Writeproc, typename Nextproc>

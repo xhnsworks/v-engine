@@ -72,14 +72,15 @@ protected:
 	xhn::set<xhn::static_string> m_privateDirectorys;
 	xhn::map<xhn::static_string, ResourceImplementPtr> m_resourceImplementMap;
 
-	xhn::set<ResourcePtr> m_loadedResouceSet;
+	xhn::map<xhn::static_string, ResourcePtr> m_loadedResouceMap;
+	///xhn::set<ResourcePtr> m_loadedResouceSet;
 protected:
 	ResourceGroup(ResourceSystem* owner, const xhn::static_string name, ResourceGroup* parent, DerivedType derivedType, FileImplPtr fileImpl = ENEW DefaultFileImpl);
 	ResourceGroup(ResourceSystem* owner, const xhn::static_string name, FileImplPtr fileImpl = ENEW DefaultFileImpl);
 	~ResourceGroup();
 
-	bool __Load(const xhn::string& resName, xhn::set<xhn::static_string>& dirSet, ResourcePtr& result);
-	bool __New(const xhn::string& resName, ResourcePtr& result);
+	bool __Load(xhn::static_string resName, xhn::set<xhn::static_string>& dirSet, ResourcePtr& result);
+	bool __New(xhn::static_string resName, ResourcePtr& result);
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///
@@ -99,8 +100,8 @@ public:
 	void NewResourceGroup(const xhn::static_string grpName, const xhn::static_string parentGrpName, DerivedType dt);
 	ResourceGroup* GetResourceGroup(const xhn::static_string grpName);
 	void RegisterResourceTypeDetector(ResourceTypeDetectorPtr rtd);
-	xhn::static_string DetectResourceType(const xhn::string& resName, FileStream stream);
-	xhn::static_string DetectResourceType(const xhn::string& resName);
+	xhn::static_string DetectResourceType(xhn::static_string resName, FileStream stream);
+	xhn::static_string DetectResourceType(xhn::static_string resName);
 	xhn::static_string GetWorkDirectory();
 };
 ///*************************************************************************************************************************///

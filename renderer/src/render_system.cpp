@@ -528,6 +528,15 @@ Texture2DPtr RenderSystem_get_texture2d(const xhn::static_string filename, const
         return NULL;
 }
 
+XMLResourcePtr RenderSystem_new_gui_config(const xhn::static_string filename)
+{
+	ResourceGroup* resGrp = g_resource_system->GetResourceGroup("GUIConfig");
+	ResourcePtr res = resGrp->New(filename);
+
+	XMLResourcePtr ret(res->DynamicCast<XMLResource>());
+	return ret;
+}
+
 XMLResourcePtr RenderSystem_load_gui_config(const xhn::static_string filename)
 {
 	ResourceGroup* resGrp = g_resource_system->GetResourceGroup("GUIConfig");

@@ -67,9 +67,9 @@ char toLower(char c)
 	else
 		return c;
 }
-xhn::static_string Texture2DDetector::Detect(const xhn::string& resName, FileStream stream)
+xhn::static_string Texture2DDetector::Detect(xhn::static_string resName, FileStream stream)
 {
-	xhn::string ecgResName( resName );
+	xhn::string ecgResName( resName.c_str() );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), toLower);
 	xhn::string extName = ".png";
 	euint pos = ecgResName.find_last_of(extName);
@@ -78,9 +78,9 @@ xhn::static_string Texture2DDetector::Detect(const xhn::string& resName, FileStr
 	else
 		return xhn::static_string("");
 }
-xhn::static_string Texture2DDetector::Detect(const xhn::string& resName)
+xhn::static_string Texture2DDetector::Detect(xhn::static_string resName)
 {
-	xhn::string ecgResName( resName );
+	xhn::string ecgResName( resName.c_str() );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), toLower);
 	xhn::string extName = ".png";
 	euint pos = ecgResName.find_last_of(extName);
@@ -117,14 +117,14 @@ ResourcePtr DefaultTexture2DImplement::Load(ResourceGroup* resGrp, FileStream st
 {
     return m_defaultTexRes;
 }
-xhn::static_string DefaultTexture2DDetector::Detect(const xhn::string& resName, FileStream stream)
+xhn::static_string DefaultTexture2DDetector::Detect(xhn::static_string resName, FileStream stream)
 {
 	if (resName == "default")
 	    return xhn::static_string("DefaultTexture2D");
 	else
 		return xhn::static_string("");
 }
-xhn::static_string DefaultTexture2DDetector::Detect(const xhn::string& resName)
+xhn::static_string DefaultTexture2DDetector::Detect(xhn::static_string resName)
 {
 	if (resName == "default")
 		return xhn::static_string("DefaultTexture2D");

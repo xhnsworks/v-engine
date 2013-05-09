@@ -11,6 +11,8 @@ ResourceTypeDetectorPtr XMLImplement::MakeResourceTypeDetector()
 ResourcePtr XMLImplement::New(ResourceGroup* resGrp, const xhn::static_string resName)
 {
     ResourcePtr ret;
+	XMLResource* res = ENEW XMLResource(resGrp);
+	ret = res;
 	return ret;
 }
 ResourcePtr XMLImplement::Load(ResourceGroup* resGrp, FileStream stream)
@@ -29,9 +31,9 @@ ResourcePtr XMLImplement::Load(ResourceGroup* resGrp, FileStream stream)
 	return ret;
 }
 
-xhn::static_string XMLDetector::Detect(const xhn::string& resName, FileStream stream)
+xhn::static_string XMLDetector::Detect(xhn::static_string resName, FileStream stream)
 {
-	xhn::string ecgResName( resName );
+	xhn::string ecgResName( resName.c_str() );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), xhn::to_lower);
 	xhn::string extName = ".xml";
 	euint pos = ecgResName.find_last_of(extName);
@@ -40,9 +42,9 @@ xhn::static_string XMLDetector::Detect(const xhn::string& resName, FileStream st
 	else
 		return xhn::static_string("");
 }
-xhn::static_string XMLDetector::Detect(const xhn::string& resName)
+xhn::static_string XMLDetector::Detect(xhn::static_string resName)
 {
-	xhn::string ecgResName( resName );
+	xhn::string ecgResName( resName.c_str() );
 	xhn::transform(ecgResName.begin(), ecgResName.end(), ecgResName.begin(), xhn::to_lower);
 	xhn::string extName = ".xml";
 	euint pos = ecgResName.find_last_of(extName);

@@ -112,8 +112,15 @@ void ResourceGroup::RegisterResourceImplement(ResourceImplementPtr impl)
 	m_owner->RegisterResourceTypeDetector(impl->GetResourceTypeDetector());
 }
 
-bool ResourceGroup::__Load(const xhn::string& resName, xhn::set<xhn::static_string>& dirSet, ResourcePtr& result)
+bool ResourceGroup::__Load(xhn::static_string resName, xhn::set<xhn::static_string>& dirSet, ResourcePtr& result)
 {
+	{
+		xhn::map<xhn::static_string, ResourcePtr>::iterator iter = m_loadedResouceMap.find(resName);
+		if (iter != m_loadedResouceMap.end()) {
+			result = iter->second;
+			return true;
+		}
+	}
 	xhn::set<xhn::static_string>::iterator iter = dirSet.begin();
 	xhn::set<xhn::static_string>::iterator end = dirSet.end();
 	for (; iter != end; iter++)
@@ -124,7 +131,7 @@ bool ResourceGroup::__Load(const xhn::string& resName, xhn::set<xhn::static_stri
 #else
         dir += "/";
 #endif
-		xhn::string path = dir + resName;
+		xhn::string path = dir + resName.c_str();
 		FileStream stream = m_fileImpl->Open(path);
 		{
 			xhn::static_string type = m_owner->DetectResourceType(resName, stream);
@@ -134,7 +141,7 @@ bool ResourceGroup::__Load(const xhn::string& resName, xhn::set<xhn::static_stri
 				{
 					ResourceImplementPtr resLoader = loaderIter->second;
 					result = resLoader->Load(this, stream);
-					m_loadedResouceSet.insert(result);
+					m_loadedResouceMap.insert(xhn::make_pair(resName, result));
 				}
 				m_fileImpl->Close(stream);
 				return true;
@@ -143,8 +150,15 @@ bool ResourceGroup::__Load(const xhn::string& resName, xhn::set<xhn::static_stri
 	}
 	return false;
 }
-bool ResourceGroup::__New(const xhn::string& resName, ResourcePtr& result)
+bool ResourceGroup::__New(xhn::static_string resName, ResourcePtr& result)
 {
+	{
+		xhn::map<xhn::static_string, ResourcePtr>::iterator iter = m_loadedResouceMap.find(resName);
+		if (iter != m_loadedResouceMap.end()) {
+			result = iter->second;
+			return true;
+		}
+	}
 	xhn::static_string type = m_owner->DetectResourceType(resName);
 	if (type.size()) {
 		xhn::map<xhn::static_string, ResourceImplementPtr>::iterator loaderIter = m_resourceImplementMap.find(type);
@@ -152,7 +166,7 @@ bool ResourceGroup::__New(const xhn::string& resName, ResourcePtr& result)
 		{
 			ResourceImplementPtr resLoader = loaderIter->second;
 			result = resLoader->New(this, xhn::static_string(resName.c_str()));
-			m_loadedResouceSet.insert(result);
+			m_loadedResouceMap.insert(xhn::make_pair(resName, result));
 		}
 		return true;
 	}
@@ -161,25 +175,25 @@ bool ResourceGroup::__New(const xhn::string& resName, ResourcePtr& result)
 ResourcePtr ResourceGroup::Load(const xhn::string& resName)
 {
 	ResourcePtr ret;
-	__Load(resName, m_publicDirectorys, ret);
+	__Load(xhn::static_string(resName.c_str()), m_publicDirectorys, ret);
 	return ret;
 }
 ResourcePtr ResourceGroup::Load(const xhn::static_string resName)
 {
 	ResourcePtr ret;
-	__Load(xhn::string(resName.c_str()), m_publicDirectorys, ret);
+	__Load(resName.c_str(), m_publicDirectorys, ret);
 	return ret;
 }
 ResourcePtr ResourceGroup::New(const xhn::string& resName)
 {
 	ResourcePtr ret;
-	__New(resName, ret);
+	__New(xhn::static_string(resName.c_str()), ret);
 	return ret;
 }
 ResourcePtr ResourceGroup::New(const xhn::static_string resName)
 {
 	ResourcePtr ret;
-	__New(resName.c_str(), ret);
+	__New(resName, ret);
 	return ret;
 }
 void ResourceGroup::RegisterResourceDirectory(xhn::static_string dir, DerivedType derivedType)
@@ -253,7 +267,7 @@ void ResourceSystem::RegisterResourceTypeDetector(ResourceTypeDetectorPtr rtd)
 {
 	m_resTypeDetectors.push_back(rtd);
 }
-xhn::static_string ResourceSystem::DetectResourceType(const xhn::string& resName, FileStream stream)
+xhn::static_string ResourceSystem::DetectResourceType(xhn::static_string resName, FileStream stream)
 {
 	xhn::static_string ret("");
 	xhn::vector<ResourceTypeDetectorPtr>::iterator iter = m_resTypeDetectors.begin();
@@ -267,7 +281,7 @@ xhn::static_string ResourceSystem::DetectResourceType(const xhn::string& resName
 	}
 	return ret;
 }
-xhn::static_string ResourceSystem::DetectResourceType(const xhn::string& resName)
+xhn::static_string ResourceSystem::DetectResourceType(xhn::static_string resName)
 {
 	xhn::static_string ret("");
 	xhn::vector<ResourceTypeDetectorPtr>::iterator iter = m_resTypeDetectors.begin();

@@ -25,6 +25,9 @@ public:
 class GUIPanel : public Sprite
 {
 	DeclareRTTI;
+	friend class GUIPanelFactory;
+protected:
+	~GUIPanel() {}
 public:
 	AttributeHandle m_sizeHandle;
 public:
@@ -44,6 +47,8 @@ public:
 		, SpriteFactory(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl();
+	static void CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName, 
+		const SpriteRect& panelRect, const SpriteSize& cornerSize, const SpriteRect& areaRect, const SpriteSize& areaCornerSize);
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///

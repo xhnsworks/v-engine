@@ -37,8 +37,8 @@ public:
 		: m_type(type)
 	{}
 	virtual ~ResourceTypeDetector() {}
-	virtual xhn::static_string Detect(const xhn::string& resName, FileStream stream) = 0;
-	virtual xhn::static_string Detect(const xhn::string& resName) = 0;
+	virtual xhn::static_string Detect(xhn::static_string resName, FileStream stream) = 0;
+	virtual xhn::static_string Detect(xhn::static_string resName) = 0;
 	inline const xhn::static_string GetType() const {
 		return m_type;
     }

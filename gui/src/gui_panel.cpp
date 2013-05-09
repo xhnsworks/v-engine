@@ -47,8 +47,8 @@ void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 	float left = tmpUpperLeft.m_rect.left - pivot.x;
 	float top = tmpUpperLeft.m_rect.top - pivot.y;
-	float right = tmpLowerRight.m_rect.left + tmpLowerRight.m_rect.width - pivot.x;
-	float bottom = tmpLowerRight.m_rect.top + tmpLowerRight.m_rect.height - pivot.y;
+	float right = tmpLowerRight.m_rect.left + tmpLowerRight.m_rect.size.width - pivot.x;
+	float bottom = tmpLowerRight.m_rect.top + tmpLowerRight.m_rect.size.height - pivot.y;
 
 	float realWidth = right - left;
 	float realHeight = bottom - top;
@@ -62,37 +62,37 @@ void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 	bottom *= scaleY;
 
 	tmpLowerLeft.m_rect.left = left;
-	tmpLowerLeft.m_rect.top = bottom - tmpLowerLeft.m_rect.height;
+	tmpLowerLeft.m_rect.top = bottom - tmpLowerLeft.m_rect.size.height;
 
     tmpUpperLeft.m_rect.left = left;
 	tmpUpperLeft.m_rect.top = top;
 
-    tmpUpperRight.m_rect.left = right - tmpUpperRight.m_rect.width;
+    tmpUpperRight.m_rect.left = right - tmpUpperRight.m_rect.size.width;
 	tmpUpperRight.m_rect.top = top;
 
-    tmpLowerRight.m_rect.left = right - tmpLowerRight.m_rect.width;
-	tmpLowerRight.m_rect.top = bottom - tmpLowerRight.m_rect.height;
+    tmpLowerRight.m_rect.left = right - tmpLowerRight.m_rect.size.width;
+	tmpLowerRight.m_rect.top = bottom - tmpLowerRight.m_rect.size.height;
 
 	tmpLeft.m_rect.left = left;
-	tmpLeft.m_rect.top = top + tmpUpperLeft.m_rect.height;
-	tmpLeft.m_rect.height = tmpLowerLeft.m_rect.top - tmpUpperLeft.m_rect.top - tmpUpperLeft.m_rect.height;
+	tmpLeft.m_rect.top = top + tmpUpperLeft.m_rect.size.height;
+	tmpLeft.m_rect.size.height = tmpLowerLeft.m_rect.top - tmpUpperLeft.m_rect.top - tmpUpperLeft.m_rect.size.height;
 
-	tmpTop.m_rect.left = left + tmpUpperLeft.m_rect.width;
+	tmpTop.m_rect.left = left + tmpUpperLeft.m_rect.size.width;
 	tmpTop.m_rect.top = top;
-	tmpTop.m_rect.width = tmpUpperRight.m_rect.left - tmpUpperLeft.m_rect.left - tmpUpperLeft.m_rect.width;
+	tmpTop.m_rect.size.width = tmpUpperRight.m_rect.left - tmpUpperLeft.m_rect.left - tmpUpperLeft.m_rect.size.width;
 
-	tmpRight.m_rect.left = right - tmpRight.m_rect.width;
-	tmpRight.m_rect.top = tmpUpperRight.m_rect.top + tmpUpperRight.m_rect.height;
-	tmpRight.m_rect.height = tmpLowerRight.m_rect.top - tmpUpperRight.m_rect.top - tmpUpperRight.m_rect.height;
+	tmpRight.m_rect.left = right - tmpRight.m_rect.size.width;
+	tmpRight.m_rect.top = tmpUpperRight.m_rect.top + tmpUpperRight.m_rect.size.height;
+	tmpRight.m_rect.size.height = tmpLowerRight.m_rect.top - tmpUpperRight.m_rect.top - tmpUpperRight.m_rect.size.height;
 
-	tmpBottom.m_rect.left = left + tmpLowerLeft.m_rect.width;
+	tmpBottom.m_rect.left = left + tmpLowerLeft.m_rect.size.width;
 	tmpBottom.m_rect.top = tmpLowerLeft.m_rect.top;
-	tmpBottom.m_rect.width = right - tmpLowerLeft.m_rect.left - tmpLowerLeft.m_rect.width;
+	tmpBottom.m_rect.size.width = tmpUpperRight.m_rect.left - tmpLowerLeft.m_rect.left - tmpLowerLeft.m_rect.size.width;
 
-    tmpCenter.m_rect.left = left + tmpLeft.m_rect.width;
-	tmpCenter.m_rect.top = top + tmpTop.m_rect.height;
-	tmpCenter.m_rect.width = tmpTop.m_rect.width;
-	tmpCenter.m_rect.height = tmpRight.m_rect.height;
+    tmpCenter.m_rect.left = left + tmpLeft.m_rect.size.width;
+	tmpCenter.m_rect.top = top + tmpTop.m_rect.size.height;
+	tmpCenter.m_rect.size.width = tmpTop.m_rect.size.width;
+	tmpCenter.m_rect.size.height = tmpRight.m_rect.size.height;
 
 	to.push_back(tmpCenter);
 
@@ -100,7 +100,7 @@ void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 	to.push_back(tmpTop);
 	to.push_back(tmpRight);
 	to.push_back(tmpBottom);
-
+	
 	to.push_back(tmpLowerLeft);
 	to.push_back(tmpLowerRight);
 	to.push_back(tmpUpperLeft);
@@ -146,8 +146,8 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 
 	float left = tmpUpperLeft.m_rect.left - pivot.x;
 	float top = tmpUpperLeft.m_rect.top - pivot.y;
-	float right = tmpLowerRight.m_rect.left + tmpLowerRight.m_rect.width - pivot.x;
-	float bottom = tmpLowerRight.m_rect.top + tmpLowerRight.m_rect.height - pivot.y;
+	float right = tmpLowerRight.m_rect.left + tmpLowerRight.m_rect.size.width - pivot.x;
+	float bottom = tmpLowerRight.m_rect.top + tmpLowerRight.m_rect.size.height - pivot.y;
 
 	float realWidth = right - left;
 	float realHeight = bottom - top;
@@ -162,8 +162,8 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 
 	result.left = left;
 	result.top = top;
-	result.width = right - left;
-	result.height = bottom - top;
+	result.size.width = right - left;
+	result.size.height = bottom - top;
 }
 
 GUIPanel::GUIPanel(SpriteRenderer* renderer, const xhn::static_string name)
@@ -202,8 +202,8 @@ void GUIPanel::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.width = 0.0f;
-	result.height = 0.0f;
+	result.size.width = 0.0f;
+	result.size.height = 0.0f;
 }
 
 Sprite* GUIPanelFactory::MakeSpriteImpl()
@@ -215,4 +215,172 @@ Sprite* GUIPanelFactory::MakeSpriteImpl()
 	ret->Init(m_configName);
 	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
+}
+
+void GUIPanelFactory::CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName, 
+										const SpriteRect& panelRect, const SpriteSize& cornerSize, const SpriteRect& areaRect, const SpriteSize& areaCornerSize)
+{
+    XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
+	pugi::xml_document& doc = xmlRes->GetDocument();
+	pugi::xml_node root = doc.child("root");
+	if (!root)
+	    root = doc.append_child("root");
+	pugi::xml_node layers = root.child("layers");
+	if (!layers)
+		layers = root.append_child("layers");
+	pugi::xml_node sheet = layers.append_child(sheetName);
+	pugi::xml_node elements = sheet.append_child("elements");
+	elements.append_attribute("num_elements").set_value(9);
+
+	pugi::xml_node lowerLeftCorner = elements.append_child("element");
+    pugi::xml_node upperLeftCorner = elements.append_child("element");
+	pugi::xml_node upperRightCorner = elements.append_child("element");
+	pugi::xml_node lowerRightCorner = elements.append_child("element");
+
+	pugi::xml_node left = elements.append_child("element");
+	pugi::xml_node top = elements.append_child("element");
+	pugi::xml_node right = elements.append_child("element");
+	pugi::xml_node bottom = elements.append_child("element");
+
+	pugi::xml_node center = elements.append_child("element");
+
+	lowerLeftCorner.append_attribute("filename").set_value(textureName);
+	upperLeftCorner.append_attribute("filename").set_value(textureName);
+	upperRightCorner.append_attribute("filename").set_value(textureName);
+	lowerRightCorner.append_attribute("filename").set_value(textureName);
+
+	left.append_attribute("filename").set_value(textureName);
+	top.append_attribute("filename").set_value(textureName);
+	right.append_attribute("filename").set_value(textureName);
+	bottom.append_attribute("filename").set_value(textureName);
+
+	center.append_attribute("filename").set_value(textureName);
+
+	float panelLeft = panelRect.left;
+	float panelTop = panelRect.top;
+	float panelRight = panelRect.left + panelRect.size.width;
+	float panelBottom = panelRect.top + panelRect.size.height;
+
+	float areaLeft = areaRect.left;
+	float areaTop = areaRect.top;
+	float areaRight = areaRect.left + areaRect.size.width;
+	float areaBottom = areaRect.top + areaRect.size.height;
+
+	{
+		lowerLeftCorner.append_attribute("name").set_value("lower_left_corner");
+		upperLeftCorner.append_attribute("name").set_value("upper_left_corner");
+		upperRightCorner.append_attribute("name").set_value("upper_right_corner");
+		lowerRightCorner.append_attribute("name").set_value("lower_right_corner");
+
+		lowerLeftCorner.append_attribute("left").set_value(panelLeft);
+		upperLeftCorner.append_attribute("left").set_value(panelLeft);
+		upperRightCorner.append_attribute("left").set_value(panelRight - cornerSize.width);
+		lowerRightCorner.append_attribute("left").set_value(panelRight - cornerSize.width);
+
+		lowerLeftCorner.append_attribute("top").set_value(panelBottom - cornerSize.height);
+		upperLeftCorner.append_attribute("top").set_value(panelTop);
+		upperRightCorner.append_attribute("top").set_value(panelTop);
+		lowerRightCorner.append_attribute("top").set_value(panelBottom - cornerSize.height);
+
+		lowerLeftCorner.append_attribute("width").set_value(cornerSize.width);
+		upperLeftCorner.append_attribute("width").set_value(cornerSize.width);
+		upperRightCorner.append_attribute("width").set_value(cornerSize.width);
+		lowerRightCorner.append_attribute("width").set_value(cornerSize.width);
+
+		lowerLeftCorner.append_attribute("height").set_value(cornerSize.height);
+		upperLeftCorner.append_attribute("height").set_value(cornerSize.height);
+		upperRightCorner.append_attribute("height").set_value(cornerSize.height);
+		lowerRightCorner.append_attribute("height").set_value(cornerSize.height);
+
+		lowerLeftCorner.append_attribute("area_x0").set_value(areaLeft);
+		upperLeftCorner.append_attribute("area_x0").set_value(areaLeft);
+		upperRightCorner.append_attribute("area_x0").set_value(areaRight - areaCornerSize.width);
+		lowerRightCorner.append_attribute("area_x0").set_value(areaRight - areaCornerSize.width);
+
+		lowerLeftCorner.append_attribute("area_x1").set_value(areaLeft + areaCornerSize.width);
+		upperLeftCorner.append_attribute("area_x1").set_value(areaLeft + areaCornerSize.width);
+		upperRightCorner.append_attribute("area_x1").set_value(areaRight);
+		lowerRightCorner.append_attribute("area_x1").set_value(areaRight);
+
+		lowerLeftCorner.append_attribute("area_y0").set_value(areaBottom - areaCornerSize.height);
+		upperLeftCorner.append_attribute("area_y0").set_value(areaTop);
+		upperRightCorner.append_attribute("area_y0").set_value(areaTop);
+		lowerRightCorner.append_attribute("area_y0").set_value(areaBottom - areaCornerSize.height);
+
+		lowerLeftCorner.append_attribute("area_y1").set_value(areaBottom);
+		upperLeftCorner.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
+		upperRightCorner.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
+		lowerRightCorner.append_attribute("area_y1").set_value(areaBottom);
+
+		lowerLeftCorner.append_attribute("transparent").set_value(1.0f);
+		upperLeftCorner.append_attribute("transparent").set_value(1.0f);
+		upperRightCorner.append_attribute("transparent").set_value(1.0f);
+		lowerRightCorner.append_attribute("transparent").set_value(1.0f);
+	}
+	{
+		left.append_attribute("name").set_value("left");
+		top.append_attribute("name").set_value("top");
+		right.append_attribute("name").set_value("right");
+		bottom.append_attribute("name").set_value("bottom");
+
+		left.append_attribute("left").set_value(panelLeft);
+        top.append_attribute("left").set_value(panelLeft + cornerSize.width);
+		right.append_attribute("left").set_value(panelRight - cornerSize.width);
+		bottom.append_attribute("left").set_value(panelLeft + cornerSize.width);
+
+		left.append_attribute("top").set_value(panelTop + cornerSize.height);
+		top.append_attribute("top").set_value(panelTop);
+		right.append_attribute("top").set_value(panelTop + cornerSize.height);
+		bottom.append_attribute("top").set_value(panelBottom - cornerSize.height);
+
+		left.append_attribute("width").set_value(cornerSize.width);
+		top.append_attribute("width").set_value(panelRect.size.width - cornerSize.width - cornerSize.width);
+		right.append_attribute("width").set_value(cornerSize.width);
+		bottom.append_attribute("width").set_value(panelRect.size.width - cornerSize.width - cornerSize.width);
+
+		left.append_attribute("height").set_value(panelRect.size.height - cornerSize.height - cornerSize.height);
+		top.append_attribute("height").set_value(cornerSize.height);
+		right.append_attribute("height").set_value(panelRect.size.height - cornerSize.height - cornerSize.height);
+		bottom.append_attribute("height").set_value(cornerSize.height);
+
+		left.append_attribute("area_x0").set_value(areaLeft);
+		top.append_attribute("area_x0").set_value(areaLeft + areaCornerSize.width);
+		right.append_attribute("area_x0").set_value(areaRight - areaCornerSize.width);
+		bottom.append_attribute("area_x0").set_value(areaLeft + areaCornerSize.width);
+
+		left.append_attribute("area_x1").set_value(areaLeft + areaCornerSize.width);
+		top.append_attribute("area_x1").set_value(areaRight - areaCornerSize.width);
+		right.append_attribute("area_x1").set_value(areaRight);
+		bottom.append_attribute("area_x1").set_value(areaRight - areaCornerSize.width);
+
+		left.append_attribute("area_y0").set_value(areaTop + areaCornerSize.height);
+		top.append_attribute("area_y0").set_value(areaTop);
+		right.append_attribute("area_y0").set_value(areaTop + areaCornerSize.height);
+		bottom.append_attribute("area_y0").set_value(areaBottom - areaCornerSize.height);
+
+		left.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
+		top.append_attribute("area_y1").set_value(areaTop + areaCornerSize.height);
+		right.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
+		bottom.append_attribute("area_y1").set_value(areaBottom);
+
+		left.append_attribute("transparent").set_value(1.0f);
+		top.append_attribute("transparent").set_value(1.0f);
+		right.append_attribute("transparent").set_value(1.0f);
+		bottom.append_attribute("transparent").set_value(1.0f);
+	}
+	{
+		center.append_attribute("name").set_value("center");
+
+        center.append_attribute("left").set_value(panelLeft + cornerSize.width);
+		center.append_attribute("top").set_value(panelTop + cornerSize.height);
+		center.append_attribute("width").set_value(panelRect.size.width - cornerSize.width - cornerSize.width);
+		center.append_attribute("height").set_value(panelRect.size.height - cornerSize.height - cornerSize.height);
+
+		center.append_attribute("area_x0").set_value(areaLeft + areaCornerSize.width);
+		center.append_attribute("area_x1").set_value(areaRight - areaCornerSize.height);
+		center.append_attribute("area_y0").set_value(areaTop + areaCornerSize.height);
+		center.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
+
+		center.append_attribute("transparent").set_value(1.0f);
+	}
 }

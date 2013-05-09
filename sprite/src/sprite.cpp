@@ -10,7 +10,7 @@
 
 void SpriteRect::GetFourBorders(SpriteRenderer* renderer, FourBorders& borders)
 {
-	renderer->get_four_borders(left, top, width, height, borders);
+	renderer->get_four_borders(left, top, size.width, size.height, borders);
 }
 
 void SpriteElement::ApplyTransform(const matrix4x4* transform)
@@ -43,7 +43,7 @@ Mesh SpriteElement::Build(SpriteRenderer* sprite_renderer) const
 		u1v0.alpha *= m_transparent;
 		u1v1.alpha *= m_transparent;
 		u0v1.alpha *= m_transparent;
-		Mesh ret = sprite_renderer->new_widget_mesh(m_rect.left, m_rect.top, m_rect.width, m_rect.height, u0, u1, v0, v1, 
+		Mesh ret = sprite_renderer->new_widget_mesh(m_rect.left, m_rect.top, m_rect.size.width, m_rect.size.height, u0, u1, v0, v1, 
 			u0v0, u1v0, u1v1, u0v1);
 		Mesh_apply_transform(ret, &m_transform);
 		return ret;
@@ -177,8 +177,8 @@ void SpriteNormalLayer::LoadConfig(const pugi::xml_node& from)
 		sprite_ele.SetFilename(xhn::static_string(filename.value()));
 		sprite_ele.m_rect.left = left.as_float();
 		sprite_ele.m_rect.top = top.as_float();
-		sprite_ele.m_rect.width = width.as_float();
-		sprite_ele.m_rect.height = height.as_float();
+		sprite_ele.m_rect.size.width = width.as_float();
+		sprite_ele.m_rect.size.height = height.as_float();
 		sprite_ele.m_area_x0 = area_x0.as_float();
 		sprite_ele.m_area_x1 = area_x1.as_float();
 		sprite_ele.m_area_y0 = area_y0.as_float();
@@ -207,8 +207,8 @@ void SpriteNormalLayer::SaveConfig(pugi::xml_node& to)
 		ele.append_attribute("filename").set_value(sprite_ele.m_filename.c_str());
 		ele.append_attribute("left").set_value(sprite_ele.m_rect.left);
 		ele.append_attribute("top").set_value(sprite_ele.m_rect.top);
-		ele.append_attribute("width").set_value(sprite_ele.m_rect.width);
-		ele.append_attribute("height").set_value(sprite_ele.m_rect.height);
+		ele.append_attribute("width").set_value(sprite_ele.m_rect.size.width);
+		ele.append_attribute("height").set_value(sprite_ele.m_rect.size.height);
 		ele.append_attribute("area_x0").set_value(sprite_ele.m_area_x0);
 		ele.append_attribute("area_x1").set_value(sprite_ele.m_area_x1);
 		ele.append_attribute("area_y0").set_value(sprite_ele.m_area_y0);
@@ -297,8 +297,8 @@ void SpriteTextLayer::LoadConfig(const pugi::xml_node& from)
 			sprite_ele.SetFilename(m_composingStick->GetFilename());
 			sprite_ele.m_rect.left = x;
 			sprite_ele.m_rect.top = y;
-			sprite_ele.m_rect.width = (float)handle.GetGlyph()->width;
-			sprite_ele.m_rect.height = (float)handle.GetGlyph()->height;
+			sprite_ele.m_rect.size.width = (float)handle.GetGlyph()->width;
+			sprite_ele.m_rect.size.height = (float)handle.GetGlyph()->height;
 
 			if ((float)handle.GetGlyph()->height > maxHeight)
 			{
@@ -582,7 +582,7 @@ void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, S
 	slaaMap.insert(this, array);
     b = slaaMap.find_bucket(this);
 	{
-		xhn::RWLock2::Instance inst = b->get_write_lock();
+		xhn::RWLock::Instance inst = b->get_write_lock();
 		SpriteFactory::AnimAttrArray* a = b->find_unlock(this);
 		a->push_back(m_pivotHandle.GetAttribute());
 		a->push_back(m_coordinateHandle.GetAttribute());

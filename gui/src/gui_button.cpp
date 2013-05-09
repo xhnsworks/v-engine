@@ -22,8 +22,8 @@ void GUIButtonTextLayer::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.width = 0.0f;
-	result.height = 0.0f;
+	result.size.width = 0.0f;
+	result.size.height = 0.0f;
 }
 void GUIButton::Init(const xhn::static_string configName)
 {
@@ -85,8 +85,8 @@ void GUIButton::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.width = 0.0f;
-	result.height = 0.0f;
+	result.size.width = 0.0f;
+	result.size.height = 0.0f;
 }
 
 void GUIButton::BuildBackgroundLayer(const matrix4x4& transform)
