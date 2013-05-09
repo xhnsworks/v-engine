@@ -39,30 +39,30 @@ void GUIEdit::Init(const xhn::static_string configName)
 			size->x = 100.0f;
 			size->y = 50.0f;
 		}
-/**
+
 		{
 			pugi::xml_node textlayer = layers.child("text");
-			if (!textlayer)
-				return;
+			if (textlayer) {
 #if defined(_WIN32) || defined(_WIN64)
-			FontRenderer* fr = ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
+                FontRenderer* fr = ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
 #else
-			FontRenderer* fr = ENEW FontRenderer("/Users/joumining/v-engine/test_scene/Earthbound-Condensed-Bold.otf");
+                FontRenderer* fr = ENEW FontRenderer("/Users/joumining/v-engine/test_scene/Earthbound-Condensed-Bold.otf");
 #endif
-			fr->set_font_size(Pixel30);
-			ComposingStick* cs = ENEW ComposingStick(fr, 256);
-			SpriteLayerPtr layer = ENEW GUIEditTextLayer(cs);
-			layer->LoadConfig(textlayer);
-			AddChild(layer);
+                fr->set_font_size(Pixel30);
+                ComposingStick* cs = ENEW ComposingStick(fr, 256);
+                SpriteLayerPtr layer = ENEW GUIEditTextLayer(cs);
+                layer->LoadConfig(textlayer);
+                AddChild(layer);
+            }
 		}
-**/
+
 		{
 			pugi::xml_node baselayer = layers.child("background");
-			if (!baselayer)
-				return;
-			SpriteLayerPtr layer = ENEW GUIEditBackgroundLayer(m_pivotHandle, m_sizeHandle);
-			layer->LoadConfig(baselayer);
-			AddChild(layer);
+			if (baselayer) {
+                SpriteLayerPtr layer = ENEW GUIEditBackgroundLayer(m_pivotHandle, m_sizeHandle);
+                layer->LoadConfig(baselayer);
+                AddChild(layer);
+            }
 		}
 	}
 }

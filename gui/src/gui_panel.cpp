@@ -308,8 +308,8 @@ void GUIPanelFactory::CreateSheetConfig(const char* cfgName, const char* sheetNa
 		lowerRightCorner.append_attribute("area_y0").set_value(areaBottom - areaCornerSize.height);
 
 		lowerLeftCorner.append_attribute("area_y1").set_value(areaBottom);
-		upperLeftCorner.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
-		upperRightCorner.append_attribute("area_y1").set_value(areaBottom - areaCornerSize.height);
+		upperLeftCorner.append_attribute("area_y1").set_value(areaTop + areaCornerSize.height);
+		upperRightCorner.append_attribute("area_y1").set_value(areaTop + areaCornerSize.height);
 		lowerRightCorner.append_attribute("area_y1").set_value(areaBottom);
 
 		lowerLeftCorner.append_attribute("transparent").set_value(1.0f);
