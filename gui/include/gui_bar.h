@@ -35,7 +35,7 @@ public:
 class GUIHoriBar : public Sprite
 {
 	DeclareRTTI;
-	friend class GUIBarFactory;
+	friend class GUIHoriBarFactory;
 protected:
 	~GUIHoriBar() {}
 public:
@@ -59,6 +59,55 @@ public:
 	virtual Sprite* MakeSpriteImpl();
 	static void CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName,
                                   const SpriteRect& panelRect, float cornerSize, const SpriteRect& areaRect, float areaCornerSize);
+};
+///*************************************************************************************************************************///
+///                                                   class define end                                                      ///
+///*************************************************************************************************************************///
+///*************************************************************************************************************************///
+///                                                  class define begin                                                     ///
+///*************************************************************************************************************************///
+class GUIVertBarLayer : public SpriteNormalLayer
+{
+	DeclareRTTI;
+private:
+	AttributeHandle m_pivotHandle;
+	AttributeHandle m_sizeHandle;
+public:
+	GUIVertBarLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+		: m_pivotHandle(pivotHandle)
+		, m_sizeHandle(sizeHandle)
+		, SpriteNormalLayer(name)
+	{}
+	virtual void BuildElements(xhn::list<SpriteElement>& to);
+	virtual void GetScopeImpl(SpriteRect& result);
+};
+class GUIVertBar : public Sprite
+{
+	DeclareRTTI;
+	friend class GUIVertBarFactory;
+protected:
+	~GUIVertBar() {}
+public:
+	AttributeHandle m_sizeHandle;
+public:
+	GUIVertBar(SpriteRenderer* renderer, const xhn::static_string name);
+	virtual void Init(const xhn::static_string configName);
+	void SetSize(float x);
+	virtual void GetScopeImpl(SpriteRect& result);
+};
+
+class GUIVertBarFactory : public SpriteFactory
+{
+public:
+	int m_vertBarCount;
+public:
+	GUIVertBarFactory(SpriteRenderer* renderer, const char* cfgName)
+		: m_vertBarCount(0)
+		, SpriteFactory(renderer, cfgName)
+	{}
+	virtual Sprite* MakeSpriteImpl();
+	static void CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName,
+		const SpriteRect& panelRect, float cornerSize, const SpriteRect& areaRect, float areaCornerSize);
 };
 ///*************************************************************************************************************************///
 ///                                                   class define end                                                      ///

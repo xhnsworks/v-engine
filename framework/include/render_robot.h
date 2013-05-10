@@ -20,6 +20,7 @@
 #include "gui_cursor.h"
 #include "gui_panel.h"
 #include "gui_edit.h"
+#include "gui_bar.h"
 #include "input_robot.h"
 ///*************************************************************************************************************************///
 ///                                                     include end                                                         ///
@@ -183,11 +184,15 @@ private:
 	GUICursorFactory* m_cursorFactory;
 	GUIPanelFactory* m_panelFactory;
 	GUIEditFactory* m_editFactory;
+	GUIHoriBarFactory* m_horiBarFactory;
+	GUIVertBarFactory* m_vertBarFactory;
 
 	GUIButton* m_guiButton;
 	GUICursor* m_guiCursor;
 	GUIPanel* m_guiPanel;
 	GUIEdit* m_guiEdit;
+	GUIHoriBar* m_guiHoriBar;
+    GUIVertBar* m_guiVertBar;
 
 	bool m_isInited;
 public:
@@ -213,10 +218,14 @@ public:
 		, m_cursorFactory(NULL)
 		, m_panelFactory(NULL)
 		, m_editFactory(NULL)
+		, m_horiBarFactory(NULL)
+		, m_vertBarFactory(NULL)
 		, m_guiButton(NULL)
 		, m_guiCursor(NULL)
 		, m_guiPanel(NULL)
 		, m_guiEdit(NULL)
+		, m_guiHoriBar(NULL)
+		, m_guiVertBar(NULL)
 		, m_isInited(false)
 	{}
 #else
@@ -238,10 +247,14 @@ public:
     , m_buttonFactory(NULL)
     , m_cursorFactory(NULL)
 	, m_panelFactory(NULL)
+	, m_horiBarFactory(NULL)
+	, m_vertBarFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
 	, m_guiEdit(NULL)
+	, m_guiHoriBar(NULL)
+    , m_guiVertBar(NULL)
     , m_isInited(false)
 	{}
 #endif

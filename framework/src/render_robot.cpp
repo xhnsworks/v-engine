@@ -237,13 +237,38 @@ void ResourceAction::DoImpl()
 		GUIPanelFactory::CreateSheetConfig("text_edit.xml", "background", "BlackOrangeSkins.png",
 			panelRect, cornerSize, areaRect, areaCornerSize);
 
+		panelRect.size.width = 50.0f;
+		panelRect.size.height = 12.0f;
+		areaRect.left = 113.0f;
+		areaRect.top = 198.0f;
+		areaRect.size.width = 130.0f - 113.0f;
+		areaRect.size.height = 210.0f - 198.0f;
+		GUIHoriBarFactory::CreateSheetConfig("hori_bar.xml", "base", "BlackOrangeSkins.png",
+			panelRect, 6.0f, areaRect, 6.0f);
+
+
+		panelRect.size.width = 12.0f;
+		panelRect.size.height = 50.0f;
+		areaRect.left = 136.0f;
+		areaRect.top = 137.0f;
+		areaRect.size.width = 163.0f - 136.0f;
+		areaRect.size.height = 161.0f - 137.0f;
+		GUIVertBarFactory::CreateSheetConfig("vert_bar.xml", "base", "BlackOrangeSkins.png",
+			panelRect, 6.0f, areaRect, 6.0f);
+
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
+		m_horiBarFactory = ENEW GUIHoriBarFactory(guiRdr, "hori_bar.xml");
+		m_vertBarFactory = ENEW GUIVertBarFactory(guiRdr, "vert_bar.xml");
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
 		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();
+		m_guiHoriBar = m_horiBarFactory->MakeSprite()->DynamicCast<GUIHoriBar>();
+		m_guiVertBar = m_vertBarFactory->MakeSprite()->DynamicCast<GUIVertBar>();
 		m_guiEdit->SetCoord(0.0f, 200.0f);
+		m_guiHoriBar->SetCoord(0.0f, 280.0f);
+		m_guiVertBar->SetCoord(0.0f, 400.0f);
 		m_guiPanel->SetCoord(30.0f, 50.0f);
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
@@ -255,6 +280,8 @@ void ResourceAction::DoImpl()
 		///
 		m_guiPanel->AddChild(m_guiButton);
 		m_guiPanel->AddChild(m_guiEdit);
+		m_guiPanel->AddChild(m_guiHoriBar);
+		m_guiPanel->AddChild(m_guiVertBar);
 		m_guiPanel->SetRotate(0.2f);
 
 		SpriteFactory::AlwaysOnTop(m_guiEdit);
