@@ -80,11 +80,6 @@ PrecompiledHeaders
 *.idx
 *.xcactivitylog
 
-ecg_vs2008.exe
-ecg_vs2012.exe
-mt.dep
-vc90.idb
-
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
 

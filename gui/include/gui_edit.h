@@ -1,5 +1,5 @@
-#ifndef GUI_EDIT
-#define GUI_EDIT
+#ifndef GUI_EDIT_H
+#define GUI_EDIT_H
 #include "xhn_static_string.hpp"
 #include "xhn_string.hpp"
 #include "sprite.h"

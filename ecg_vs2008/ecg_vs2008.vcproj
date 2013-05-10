@@ -2228,6 +2228,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\gui\include\gui_container.h"
+					>
+				</File>
+				<File
 					RelativePath="..\gui\include\gui_cursor.h"
 					>
 				</File>
@@ -2278,6 +2282,10 @@
 							PrecompiledHeaderFile="$(IntDir)\gui_pch.pch"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\gui\src\gui_container.cpp"
+					>
 				</File>
 				<File
 					RelativePath="..\gui\src\gui_cursor.cpp"
