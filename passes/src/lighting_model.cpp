@@ -67,8 +67,6 @@ ShaderNode create_point_lighting_node()
     ShaderNode_add_input_param(ret, Float4_Obj, "LightColor", 1);
     ShaderNode_add_input_param(ret, Float_Obj, "AtteCoef", 1);
 
-    ///ShaderNode_add_input_param(ret, Float_Obj, "OuterCosHalfAngle", 1);
-    ///ShaderNode_add_input_param(ret, Float_Obj, "InnerCosHalfAngle", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightPos", 1);
 
     ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
@@ -132,7 +130,7 @@ ShaderNode create_spot_lighting_node()
 
     ShaderNode_add_input_param(ret, Float_Obj, "OuterCosHalfAngle", 1);
     ShaderNode_add_input_param(ret, Float_Obj, "InnerCosHalfAngle", 1);
-    ///ShaderNode_add_input_param(ret, Float3_Obj, "TargetPos", 1);
+    
     ShaderNode_add_input_param(ret, Float3_Obj, "LightPos", 1);
 
     ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
@@ -214,7 +212,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 
     ShaderObject diffuse = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "DiffuseValue", 1);
     ShaderObject specular = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "SpecularValue", 1);
-    ///ShaderObject view_light_dir = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "ViewLightDir", 1);
+    
     ShaderObject light_weight = IPxlSdrBuf.new_object((ShaderBuffer)_psb, Float3_Obj, "LightingWeight", 1);
 
     euint _num_shadow_map = _lt_state->num_shadow_emitters;
@@ -239,12 +237,7 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
             snprintf(light_world_matrix, 255, "%s%d", LIGHT_WORLD_MATRIX, i);
             snprintf(light_proj_matrix, 255, "%s%d", LIGHT_PROJ_MATRIX, i);
             snprintf(shadow_dir, 255, "%s%d", SHADOW_DIRECTION, i);
-            /**
-            IPxlSdrBuf.add_uniform_from_renderer((ShaderBuffer)ret, _rdr, ShadowMap0 + i, shadow_map);
-            IPxlSdrBuf.add_uniform_from_renderer((ShaderBuffer)ret, _rdr, LightWorldMatrix0 + i, light_world_matrix);
-            IPxlSdrBuf.add_uniform_from_renderer((ShaderBuffer)ret, _rdr, LightProjectionMatrix0 + i, light_proj_matrix);
-            IPxlSdrBuf.add_uniform_from_renderer((ShaderBuffer)ret, _rdr, ShadowDirection0 + i, shadow_dir);
-            **/
+
             shadow_maps[i] = IPxlSdrBuf.find_object((ShaderBuffer)_psb, shadow_map);
             light_world_mats[i] = IPxlSdrBuf.find_object((ShaderBuffer)_psb, light_world_matrix);
             light_proj_mats[i] = IPxlSdrBuf.find_object((ShaderBuffer)_psb, light_proj_matrix);
@@ -264,10 +257,10 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
     ShaderObject near_plane =  IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_PLANE_NEAR);
     ShaderObject far_plane =  IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_PLANE_FAR);
 
-    ShaderObject inv_cam_world_mat =  IPxlSdrBuf.find_object((ShaderBuffer)_psb, INVERT_CAMERA_WORLD_MATRIX);
+    ShaderObject inv_cam_world_mat =  IPxlSdrBuf.find_object((ShaderBuffer)_psb,
+                                                             INVERT_CAMERA_WORLD_MATRIX);
     ShaderObject inv_cam_proj_mat =  IPxlSdrBuf.find_object((ShaderBuffer)_psb, INVERT_CAMERA_PROJECTION_MATRIX);
 
-    ///ShaderObject cam_world_mat = IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_WORLD_MATRIX);
     ShaderObject cam_pos = IPxlSdrBuf.find_object((ShaderBuffer)_psb, CAMERA_POSITION);
 
     ShaderObject light_pos = IPxlSdrBuf.find_object((ShaderBuffer)_psb, LIGHT_POSITION);
@@ -289,7 +282,6 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderNode_add_output_link(sampler_node, diffuse, INVALID_ARRAY_INDEX);
 	
         sampler_node = ISdrNdGen.add_reference_node_2(_sng, _cb, MapSampleNode);
-        ///ShaderObject specular_map = IPxlSdrBuf.find_object((ShaderBuffer)_psb, SPECULAR_LIGHTING_MAP);
         ShaderNode_add_input_link(sampler_node, diffuse_map, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(sampler_node, tex_crd, INVALID_ARRAY_INDEX);
         ShaderNode_add_output_link(sampler_node, specular, INVALID_ARRAY_INDEX);
@@ -312,7 +304,6 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderNode_add_output_link(sampler_node, depth, INVALID_ARRAY_INDEX);
     }
     {
-        ///ShaderNode decode_node = ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(pos_decode_node));
         ShaderNode decode_node = ISdrNdGen.add_reference_node_2(_sng, _cb, PositionDecodeNode);
         ShaderNode_add_input_link(decode_node, tex_crd, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(decode_node, depth, INVALID_ARRAY_INDEX);
@@ -322,7 +313,6 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         ShaderNode_add_input_link(decode_node, height, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(decode_node, inv_cam_world_mat, INVALID_ARRAY_INDEX);
         ShaderNode_add_input_link(decode_node, inv_cam_proj_mat, INVALID_ARRAY_INDEX);
-        ///ShaderNode_set_result_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
 		ShaderNode_add_output_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
     }
     {
@@ -330,15 +320,10 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         {
             if (_num_shadow_map == 1)
             {
-                ShaderNode shadow_test_node = ISdrNdGen.add_reference_node_2(_sng, _cb, Shadow2DMapTestNode);
-                /**
-                ShaderNode_add_input_param(ret, Texture2D_Obj, "DepthMap", 1);
-                ShaderNode_add_input_param(ret, Float3_Obj, "PixelWorldPosition", 1);
-                ShaderNode_add_input_param(ret, Matrix4x4_Obj, "LightWorldMatrix", 1);
-                ShaderNode_add_input_param(ret, Matrix4x4_Obj, "LightProjectionMatrix", 1);
-                ShaderNode_add_input_param(ret, Float3_Obj, "LightPosition", 1);
-                ShaderNode_add_input_param(ret, Float3_Obj, "LightDirection", 1);
-                **/
+                ShaderNode shadow_test_node = ISdrNdGen.add_reference_node_2(_sng,
+                                                                             _cb,
+                                                                             Shadow2DMapTestNode);
+
                 ShaderNode_add_input_link(shadow_test_node, shadow_maps[0], INVALID_ARRAY_INDEX);
                 ShaderNode_add_input_link(shadow_test_node, tgt_pos, INVALID_ARRAY_INDEX);
                 ShaderNode_add_input_link(shadow_test_node, light_world_mats[0], INVALID_ARRAY_INDEX);
@@ -362,41 +347,21 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
             ShaderNode_add_input_link(shadow_test_node, tgt_pos, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(shadow_test_node, light_pos, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(shadow_test_node, light_influence, INVALID_ARRAY_INDEX);
-            ///ShaderNode_set_result_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
 			ShaderNode_add_output_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
         }
     }
     {
-        ///ShaderNode decode_node = ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(nor_decode_node));
         ShaderNode decode_node = ISdrNdGen.add_reference_node_2(_sng, _cb, NormalDecodeNode);
         ShaderNode_add_input_link(decode_node, nor, INVALID_ARRAY_INDEX);
-        ///ShaderNode_set_result_link(decode_node, tgt_nor, INVALID_ARRAY_INDEX);
 		ShaderNode_add_output_link(decode_node, tgt_nor, INVALID_ARRAY_INDEX);
     }
     {
-        ///ShaderNode pt_array_node = ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(point_array_lighting_node));
         component_index idx = {1, CompZ};
         ShaderObject spe = ShaderObject_get_component(nor, idx, 0);
 
         ShaderNode lighting_node = ISdrNdGen.add_reference_node_2(_sng, _cb, _lt_state->lighting_node_id);
         if (_lt_state->type == DirectionType)
         {
-            /**
-            ShaderNode_add_input_param(ret, Float3_Obj, "InDiffuse", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "InSpecular", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "EyePos", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "TargetPos", 1);
-
-            ShaderNode_add_input_param(ret, Float3_Obj, "TargetNor", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "LightDir", 1);
-            ShaderNode_add_input_param(ret, Float4_Obj, "LightColor", 1);
-            ShaderNode_add_input_param(ret, Float_Obj, "AtteCoef", 1);
-
-            ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
-            ShaderNode_add_input_param(ret, Float_Obj, "LightingWeight", 1);
-            ShaderNode_add_output_param(ret, Float3_Obj, "OutDiffuse", 1);
-            ShaderNode_add_output_param(ret, Float3_Obj, "OutSpecular", 1);
-            **/
             ShaderNode_add_input_link(lighting_node, diffuse, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, specular, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, cam_pos, INVALID_ARRAY_INDEX);
@@ -414,28 +379,6 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         }
         else if (_lt_state->type == SpotType)
         {
-            /**
-            ShaderNode_add_input_param(ret, Float3_Obj, "InDiffuse", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "InSpecular", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "EyePos", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "TargetPos", 1);
-
-            ShaderNode_add_input_param(ret, Float3_Obj, "TargetNor", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "LightDir", 1);
-            ShaderNode_add_input_param(ret, Float4_Obj, "LightColor", 1);
-            ShaderNode_add_input_param(ret, Float_Obj, "AtteCoef", 1);
-
-            /// sin相当于1.0 - cos，外半径sin值大于内半径sin值，这样便于理解些
-            ShaderNode_add_input_param(ret, Float_Obj, "OuterSinHalfAngle", 1);
-            ShaderNode_add_input_param(ret, Float_Obj, "InnerSinHalfAngle", 1);
-            ///ShaderNode_add_input_param(ret, Float3_Obj, "TargetPos", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "LightPos", 1);
-
-            ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "LightingWeight", 1);
-            ShaderNode_add_output_param(ret, Float3_Obj, "OutDiffuse", 1);
-            ShaderNode_add_output_param(ret, Float3_Obj, "OutSpecular", 1);
-            **/
             ShaderNode_add_input_link(lighting_node, diffuse, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, specular, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, cam_pos, INVALID_ARRAY_INDEX);
@@ -457,37 +400,15 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
         }
         else if (_lt_state->type == PointType)
         {
-            /**
-            ShaderNode_add_input_param(ret, Float3_Obj, "InDiffuse", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "InSpecular", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "EyePos", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "TargetPos", 1);
-
-            ShaderNode_add_input_param(ret, Float3_Obj, "TargetNor", 1);
-            ShaderNode_add_input_param(ret, Float4_Obj, "LightColor", 1);
-            ShaderNode_add_input_param(ret, Float_Obj, "AtteCoef", 1);
-
-            ShaderNode_add_input_param(ret, Float_Obj, "OuterCosHalfAngle", 1);
-            ShaderNode_add_input_param(ret, Float_Obj, "InnerCosHalfAngle", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "LightPos", 1);
-
-            ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
-            ShaderNode_add_input_param(ret, Float3_Obj, "LightingWeight", 1);
-            ShaderNode_add_output_param(ret, Float3_Obj, "OutDiffuse", 1);
-            ShaderNode_add_output_param(ret, Float3_Obj, "OutSpecular", 1);
-            **/
             ShaderNode_add_input_link(lighting_node, diffuse, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, specular, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, cam_pos, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, tgt_pos, INVALID_ARRAY_INDEX);
 
             ShaderNode_add_input_link(lighting_node, tgt_nor, INVALID_ARRAY_INDEX);
-            ///ShaderNode_add_input_link(lighting_node, light_dir, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, light_col, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, light_ac, INVALID_ARRAY_INDEX);
 
-            ///ShaderNode_add_input_link(lighting_node, light_outer_cos, INVALID_ARRAY_INDEX);
-            ///ShaderNode_add_input_link(lighting_node, light_inner_cos, INVALID_ARRAY_INDEX);
             ShaderNode_add_input_link(lighting_node, light_pos, INVALID_ARRAY_INDEX);
 
             ShaderNode_add_input_link(lighting_node, spe, INVALID_ARRAY_INDEX);
@@ -505,18 +426,10 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 
 PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, euint _num_shadow_map, light_type type, bool _has_lighting_map)
 {
-    /**
-    if (!VertexDecl_test(_dec))
-    {
-        PxlSdrBuf ret = {NULL};
-        return ret;
-    }
-    **/
     EAssert(VertexDecl_test(_dec), "%s", "vertex decl is invalid");
     EAssert(_num_shadow_map <= 6, "%s", "num shadow map is more than 6");
 
     PxlSdrBuf ret = IPxlSdrBuf._New();
-    ///ShaderBuffer sb = to_ShaderBuffer(ret);
 
     const char* prefix = EString_new("v");
 
@@ -588,7 +501,11 @@ PxlSdrBuf create_lighting_pixel_shader_buffer2(Renderer* _rdr, VertexDecl _dec, 
 }
 
 VtxSdrBuf create_lighting_vertex_shader_buffer(VertexDecl _dec);
-Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_state, lighting_decl* _decls, bool _has_lighting_map)
+Pass create_lighting_pass_ex3(Renderer* _rdr,
+                              VertexDecl _dec,
+                              LightState _lt_state,
+                              lighting_decl* _decls,
+                              bool _has_lighting_map)
 {
     char mbuf[STRING_BUFFER_SIZE];
 
@@ -637,10 +554,6 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
 #endif
     Tree inv_tree = Tree_new(Vptr, Vptr, (MALLOC)Ealloc, (MFREE)Efree);
 
-    /// 提取出光照处理函数，将函数指针作为key，
-    /// 从std::map<lighting_proc, std::set<material_id>>的tree里面找出std::set<material_id>，
-    /// 如找不到则创建并插入一个空的std::set<material_id>
-    /// 最后向找到的或新创建出来的std::set<material_id>插入material_id
     euint n = array_n(_decls);
     for (euint i = 0; i < n; i++)
     {
@@ -662,8 +575,6 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
         Tree_insert(tag_set, set_value, set_value);
     }
 
-    /// 遍历inv_tree，收集每一个条目下的material_id
-    /// 将条目添加到对应的material_id构成的case分支标签当中
     Iterator inv_iter = Tree_begin(inv_tree);
     while (inv_iter)
     {
@@ -690,7 +601,6 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
 		while (tag_iter)
 		{
 			var data = Tree_get_value(tag_iter);
-			///apush(tags, data.sint32_var);
 			ShaderObject so = ShaderObject_new_from_sint(data.sint32_var);
 			CircuitBoard cb = BranchNode_add_branch(bn, int_mat_id, Equal, so);
 			light_proc(_lt_state, psb, sng, cb, _has_lighting_map);
@@ -717,7 +627,6 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
 		ShaderObject_delete(tag_obj_buf[i]);
 	}
 #endif
-    /// 清除用过的inv_tree
     inv_iter = Tree_begin(inv_tree);
     while (inv_iter)
     {
@@ -737,7 +646,6 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
     Shader auto_ps = Shader_new();
     sb = to_ShaderBuffer(vsb);
 
-    ///snprintf(mbuf, STRING_BUFFER_SIZE - 1, "#version 400\n%s", sb.self->output);
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
@@ -750,7 +658,6 @@ Pass create_lighting_pass_ex3(Renderer* _rdr, VertexDecl _dec, LightState _lt_st
 
     sb = to_ShaderBuffer(psb);
 
-    ///snprintf(mbuf, STRING_BUFFER_SIZE - 1, "#version 400\n%s", sb.self->output);
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);

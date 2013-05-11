@@ -56,9 +56,6 @@ ShaderNode create_display_pixel_shader_node(VertexDecl _dec)
 							"    vec3 cmap = texture2D(ColorMap, vTexCoord).rgb;\n"
 							"    vec3 lmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
 #endif
-                            ///"    vec3 pos_lmap = clamp(lmap - vec3(0.5, 0.5, 0.5), 0.0, 1.0);\n"
-                            ///"    vec3 neg_lmap = clamp(lmap - vec3(0.5, 0.5, 0.5), -1.0, 0.0);\n"
-                            ///"    gl_FragData[0] = vec4( clamp(cmap * lmap + neg_lmap * 0.5 + pos_lmap * 0.5, 0.0, 1.0), 1.0 );"
                             "    gl_FragData[0] = vec4( clamp(cmap * lmap, 0.0, 1.0), 1.0 );"
                             "}\n");
 
@@ -155,7 +152,7 @@ ShaderNode create_color_output_node(VertexDecl _dec, shader_object_type _col_typ
     int offs = 0;
 
     const char* render_target_str = get_render_target_string(_tgt);
-    ///const char* param_name = "Color";
+    
     shader_object_type type = _col_type;
 
     if      (Float_Obj == type)
@@ -225,7 +222,7 @@ PxlSdrBuf create_display_pixel_shader_buffer(VertexDecl _dec)
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, NORMAL_MAP, 1, NormalSketch);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "MaterialIDMap", 1, MaterialIDSketch);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, DEPTH_MAP, 1, Plaster);
-    ///IPxlSdrBuf.add_uniform(ret, Texture2D_Param, "LightingMap", 1, LightingSketch);
+    
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "DiffuseLightingMap", 1, DiffuseLightingSketch);
     IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, "SpecularLightingMap", 1, SpecularLightingSketch);
 
@@ -320,8 +317,12 @@ Pass create_display_texture_pass(VertexDecl _dec)
 
     {
         ShaderNode ref_map_sample_node = IPxlSdrBuf.add_reference_node((ShaderBuffer)psb, ShaderNode_get_name(map_sample_node));
-        ShaderNode_add_input_link(ref_map_sample_node, IPxlSdrBuf.find_object((ShaderBuffer)psb, "ColorMap"), INVALID_ARRAY_INDEX);
-        ShaderNode_add_input_link(ref_map_sample_node, IPxlSdrBuf.find_object((ShaderBuffer)psb, "vTexCoord"), INVALID_ARRAY_INDEX);
+        ShaderNode_add_input_link(ref_map_sample_node,
+                                  IPxlSdrBuf.find_object((ShaderBuffer)psb, "ColorMap"),
+                                  INVALID_ARRAY_INDEX);
+        ShaderNode_add_input_link(ref_map_sample_node,
+                                  IPxlSdrBuf.find_object((ShaderBuffer)psb, "vTexCoord"),
+                                  INVALID_ARRAY_INDEX);
         ShaderNode_add_output_link(ref_map_sample_node, temp, INVALID_ARRAY_INDEX);
     }
     {
@@ -335,12 +336,7 @@ Pass create_display_texture_pass(VertexDecl _dec)
     Shader auto_ps = Shader_new();
 
     ShaderBuffer sb = to_ShaderBuffer(vsb);
-    /**
-    sprintf(mbuf, "#extension GL_EXT_gpu_shader4      : require\n"
-                  "#extension GL_EXT_geometry_shader4 : enable\n"
-                  "#extension GL_EXT_texture_integer  : enable\n"
-                  "%s", sb.self->output);
-                  **/
+
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
@@ -350,12 +346,7 @@ Pass create_display_texture_pass(VertexDecl _dec)
 #endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
     sb = to_ShaderBuffer(psb);
-    /**
-    sprintf(mbuf, "#extension GL_EXT_gpu_shader4      : require\n"
-                  "#extension GL_EXT_geometry_shader4 : enable\n"
-                  "#extension GL_EXT_texture_integer  : enable\n"
-                  "%s", sb.self->output);
-                  **/
+
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
@@ -437,8 +428,14 @@ Pass create_debug_display_pass(VertexDecl _dec, DebugRenderOutput _db_rdr_out)
 	case NormalDebug:
 		tex = IPxlSdrBuf.find_object(to_ShaderBuffer(psb), NORMAL_MAP);
 		{
-			ShaderObject pixel_rgba = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float4_Obj, "PixelRGBA", 1);
-			ShaderObject pixel_rgb = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float3_Obj, "PixelRGB", 1);
+			ShaderObject pixel_rgba = IPxlSdrBuf.new_object(to_ShaderBuffer(psb),
+                                                            Float4_Obj,
+                                                            "PixelRGBA",
+                                                            1);
+			ShaderObject pixel_rgb = IPxlSdrBuf.new_object(to_ShaderBuffer(psb),
+                                                           Float3_Obj,
+                                                           "PixelRGB",
+                                                           1);
 			{
 				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, MapSampleNodeRGBA);
 				ShaderNode_add_input_link(node, tex, INVALID_ARRAY_INDEX);
@@ -459,14 +456,28 @@ Pass create_debug_display_pass(VertexDecl _dec, DebugRenderOutput _db_rdr_out)
 	case PositionDebug:
 		tex = IPxlSdrBuf.find_object(to_ShaderBuffer(psb), DEPTH_MAP);
 		{
-			ShaderObject pixel_rgba = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float4_Obj, "PixelRGBA", 1);
-			ShaderObject tgt_pos = IPxlSdrBuf.new_object(to_ShaderBuffer(psb), Float3_Obj, "PixelRGB", 1);
-			ShaderObject width =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_WIDTH);
-			ShaderObject height =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_HEIGHT);
-			ShaderObject near_plane =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_NEAR);
-			ShaderObject far_plane =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), CAMERA_PLANE_FAR);
-			ShaderObject inv_cam_world_mat =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), INVERT_CAMERA_WORLD_MATRIX);
-			ShaderObject inv_cam_proj_mat =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb), INVERT_CAMERA_PROJECTION_MATRIX);
+			ShaderObject pixel_rgba = IPxlSdrBuf.new_object(to_ShaderBuffer(psb),
+                                                            Float4_Obj,
+                                                            "PixelRGBA",
+                                                            1);
+			ShaderObject tgt_pos = IPxlSdrBuf.new_object(to_ShaderBuffer(psb),
+                                                         Float3_Obj,
+                                                         "PixelRGB",
+                                                         1);
+			ShaderObject width =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb),
+                                                         CAMERA_PLANE_WIDTH);
+			ShaderObject height =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb),
+                                                          CAMERA_PLANE_HEIGHT);
+			ShaderObject near_plane =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb),
+                                                              CAMERA_PLANE_NEAR);
+			ShaderObject far_plane =  IPxlSdrBuf.find_object(to_ShaderBuffer(psb),
+                                                             CAMERA_PLANE_FAR);
+			ShaderObject inv_cam_world_mat =
+            IPxlSdrBuf.find_object(to_ShaderBuffer(psb),
+                                   INVERT_CAMERA_WORLD_MATRIX);
+			ShaderObject inv_cam_proj_mat =
+            IPxlSdrBuf.find_object(to_ShaderBuffer(psb),
+                                   INVERT_CAMERA_PROJECTION_MATRIX);
 			{
 				ShaderNode node = ISdrNdGen.add_reference_node_1(sng, MapSampleNodeRGBA);
 				ShaderNode_add_input_link(node, tex, INVALID_ARRAY_INDEX);
@@ -483,7 +494,7 @@ Pass create_debug_display_pass(VertexDecl _dec, DebugRenderOutput _db_rdr_out)
 				ShaderNode_add_input_link(node, height, INVALID_ARRAY_INDEX);
 				ShaderNode_add_input_link(node, inv_cam_world_mat, INVALID_ARRAY_INDEX);
 				ShaderNode_add_input_link(node, inv_cam_proj_mat, INVALID_ARRAY_INDEX);
-				///ShaderNode_set_result_link(decode_node, tgt_pos, INVALID_ARRAY_INDEX);
+				
 				ShaderNode_add_output_link(node, tgt_pos, INVALID_ARRAY_INDEX);
 			}
 			{
@@ -565,32 +576,34 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     VtxSdrBuf vsb = create_std_vertex_shader_buffer(_dec, false, false);
     PxlSdrBuf psb = create_display_pixel_shader_buffer(_dec);
     ShaderNode vsn = create_std_vertex_shader_node(_dec, vsb, false, false);
-    ///ShaderNode map_sample_node = create_map_sample_node_rgba();
-    ///ShaderNode material_id_test_node = create_material_id_test_node(_dec);
+    
     ShaderBuffer sb = to_ShaderBuffer(psb);
     SdrNdGen sng = ISdrNdGen.New();
     ISdrNdGen.register_default_nodes(sng);
     ISdrNdGen.attach_all_prototype_nodes(sng, sb);
 
-    ///ShaderBuffer sb;
-    ///sb = to_ShaderBuffer(vsb);
     IVtxSdrBuf.add_prototype_node((ShaderBuffer)vsb, vsn);
     IVtxSdrBuf.add_reference_node((ShaderBuffer)vsb, ShaderNode_get_name(vsn));
 
-    ///sb = to_ShaderBuffer(psb);
-    ///IPxlSdrBuf.add_prototype_node(psb, map_sample_node);
-    ///ShaderBuffer_add_prototype_node(sb, material_id_test_node);
-
-    ShaderObject materialID_pixel = IPxlSdrBuf.new_object((ShaderBuffer)psb, Float4_Obj, "MaterialIDPixel", 1);
-    ///ShaderObject materialID = ShaderBuffer_find_object(sb, "MaterialID");
+    ShaderObject materialID_pixel = IPxlSdrBuf.new_object((ShaderBuffer)psb,
+                                                          Float4_Obj,
+                                                          "MaterialIDPixel",
+                                                          1);
 
     {
-        ///ShaderNode ref_map_sample_node = IPxlSdrBuf.add_reference_node(psb, ShaderNode_get_name(map_sample_node));
-        ShaderNode ref_map_sample_node = ISdrNdGen.add_reference_node_1(sng, MapSampleNodeRGBA);
-        ///ShaderNode_add_input_link(ref_map_sample_node, ShaderBuffer_find_object(sb, "NormalDepthMaterialIDMap"), INVALID_ARRAY_INDEX);
-        ShaderNode_add_input_link(ref_map_sample_node, IPxlSdrBuf.find_object((ShaderBuffer)psb, "MaterialIDMap"), INVALID_ARRAY_INDEX);
-        ShaderNode_add_input_link(ref_map_sample_node, IPxlSdrBuf.find_object((ShaderBuffer)psb, "vTexCoord"), INVALID_ARRAY_INDEX);
-        ShaderNode_add_output_link(ref_map_sample_node, materialID_pixel, INVALID_ARRAY_INDEX);
+        ShaderNode ref_map_sample_node = ISdrNdGen.add_reference_node_1(sng,
+                                                                        MapSampleNodeRGBA);
+        ShaderNode_add_input_link(ref_map_sample_node,
+                                  IPxlSdrBuf.find_object((ShaderBuffer)psb,
+                                                         "MaterialIDMap"),
+                                  INVALID_ARRAY_INDEX);
+        ShaderNode_add_input_link(ref_map_sample_node,
+                                  IPxlSdrBuf.find_object((ShaderBuffer)psb,
+                                                         "vTexCoord"),
+                                  INVALID_ARRAY_INDEX);
+        ShaderNode_add_output_link(ref_map_sample_node,
+                                   materialID_pixel,
+                                   INVALID_ARRAY_INDEX);
     }
 
     BranchNode bn = BranchNode_new();
@@ -601,7 +614,6 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     ShaderObject mat_id = ShaderObject_get_component(materialID_pixel, comp_idx, INVALID_ARRAY_INDEX);
     ShaderObject int_mat_id = ShaderObject_float_to_int(mat_id, 255.0f);
 
-    ///BranchNode_add_branch();
     euint32 n = array_n(_mat_decls);
     for (euint32 i = 0; i < n; i++)
     {
@@ -628,7 +640,6 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     ShaderObject_delete(mat_id);
     ShaderObject_delete(int_mat_id);
 
-    ///sb = to_ShaderBuffer(psb);
     IPxlSdrBuf.add_branch_node((ShaderBuffer)psb, bn);
 
     IVtxSdrBuf.complete(vsb);
@@ -638,13 +649,7 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
 
     char mbuf[STRING_BUFFER_SIZE];
     sb = to_ShaderBuffer(vsb);
-    ///sprintf(mbuf, "#version 120\n%s", sb.self->output);
-    /**
-    sprintf(mbuf, "#extension GL_EXT_gpu_shader4      : require\n"
-                  "#extension GL_EXT_geometry_shader4 : enable\n"
-                  "#extension GL_EXT_texture_integer  : enable\n"
-                  "%s", sb.self->output);
-                  **/
+
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
@@ -655,10 +660,7 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
 
     sb = to_ShaderBuffer(psb);
-    ///sprintf(mbuf, "#version 140\n#extension GL_ARB_gpu_shader5 : enable\n%s", sb.self->output);
 
-    ///sprintf(mbuf, "#extension GL_EXT_gpu_shader4      : require\n"
-    ///              "%s", sb.self->output);
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
 		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
@@ -672,7 +674,6 @@ Pass create_display_pass_ex2(VertexDecl _dec, material_decl* _mat_decls)
     Pass ret = create_pass_from_shader(auto_vs, auto_ps);
 
     ShaderNode_delete(vsn);
-    ///ShaderNode_delete(map_sample_node);
     BranchNode_delete(bn);
 
     Tree vtx_param_src_tree = IVtxSdrBuf.sell_param_source_object_tree((ShaderBuffer)vsb);
@@ -690,15 +691,13 @@ Pass create_clear_buffer_pass(VertexDecl _dec, SdrNdGen _shader_node_gen)
     VtxSdrBuf vsb = create_std_vertex_shader_buffer(_dec, false, false);
     PxlSdrBuf psb = create_clear_buffer_buffer(_dec);
     ShaderNode vsn = create_std_vertex_shader_node(_dec, vsb, false, false);
-    ///ShaderNode psn = create_clear_buffer_node(_dec);
 
     ShaderBuffer sb;
-    ///sb = to_ShaderBuffer(vsb);
+
     IVtxSdrBuf.add_prototype_node((ShaderBuffer)vsb, vsn);
     IVtxSdrBuf.add_reference_node((ShaderBuffer)vsb, ShaderNode_get_name(vsn));
     sb = to_ShaderBuffer(psb);
-    ///ShaderBuffer_add_prototype_node(sb, psn);
-    ///ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(psn));
+
     ISdrNdGen.attach_all_prototype_nodes(_shader_node_gen, sb);
     ISdrNdGen.add_reference_node_1(_shader_node_gen, ClearSketchNode);
 
@@ -711,17 +710,24 @@ Pass create_clear_buffer_pass(VertexDecl _dec, SdrNdGen _shader_node_gen)
     char mbuf[STRING_BUFFER_SIZE];
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+		"#version %d%d0\n%s",
+        GLSL_MAIN_VERSION,
+        GLSL_SUB_VERSION,
+        sb->output);
 #else
     snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-             "%s", sb->output);
+             "%s",
+             sb->output);
 #endif
     Shader_load_from_string(auto_vs, mbuf, VertexShader);
 
     sb = to_ShaderBuffer(psb);
 #ifdef MARK_GLSL_VERSION
 	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-		"#version %d%d0\n%s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+		"#version %d%d0\n%s",
+        GLSL_MAIN_VERSION,
+        GLSL_SUB_VERSION,
+        sb->output);
 #else
     snprintf(mbuf, STRING_BUFFER_SIZE - 1,
              "%s", sb->output);
@@ -731,7 +737,6 @@ Pass create_clear_buffer_pass(VertexDecl _dec, SdrNdGen _shader_node_gen)
     Pass ret = create_pass_from_shader(auto_vs, auto_ps);
 
     ShaderNode_delete(vsn);
-    ///ShaderNode_delete(psn);
     IVtxSdrBuf._Delete(vsb);
     IPxlSdrBuf._Delete(psb);
     return ret;

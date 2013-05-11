@@ -61,10 +61,12 @@ class Robot : public MemObject
     DeclareRootRTTI;
 public:
 	///pthread_t m_thread;
-	xhn::vector<ActionPtr> m_actionQueue;
+    typedef xhn::vector<ActionPtr> ActionQueue;
+    typedef xhn::map<xhn::static_string, RWBuffer> ChannelMap;
+	ActionQueue m_actionQueue;
 	int m_curtActionIndex;
-	xhn::map<xhn::static_string, RWBuffer> m_commandReceivingChannels;
-	xhn::map<xhn::static_string, RWBuffer> m_commandTransmissionChannels;
+	ChannelMap m_commandReceivingChannels;
+	ChannelMap m_commandTransmissionChannels;
 public:
 	Robot()
 		: m_curtActionIndex(-1) {
@@ -117,8 +119,9 @@ private:
 public:
     xhn::RWLock2 m_readwriteLock;
 	typedef xhn::SmartPtr< xhn::list<Robot*> > RobotArray;
+    typedef xhn::map<xhn::static_string, Robot*> RobotMap;
 	RobotArray m_robots;
-	xhn::map<xhn::static_string, Robot*> m_robotMap;
+	RobotMap m_robotMap;
 public:
 	RobotManager();
 

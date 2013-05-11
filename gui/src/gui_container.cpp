@@ -5,16 +5,16 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIContantner, Sprite);
+ImplementRTTI(GUIContainer, Sprite);
 
-GUIContantner::GUIContantner(SpriteRenderer* renderer, const xhn::static_string name)
+GUIContainer::GUIContainer(SpriteRenderer* renderer, const xhn::static_string name)
 : Sprite(renderer, name)
 {
 	m_rectHandle.m_lock = ENEW xhn::RWLock;
 	m_rectHandle.AttachAttribute<EFloat4>();
 }
 
-void GUIContantner::Init(const xhn::static_string configName)
+void GUIContainer::Init(const xhn::static_string configName)
 {
 	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
 	if (TestResourcePtr(cfg)) {
@@ -26,11 +26,17 @@ void GUIContantner::Init(const xhn::static_string configName)
 		pugi::xml_attribute top = rect.attribute("top");
 		pugi::xml_attribute width = rect.attribute("width");
 		pugi::xml_attribute height = rect.attribute("height");
-		SetRect(left.as_float(), top.as_float(), width.as_float(), height.as_float());
+		SetRect(left.as_float(),
+                top.as_float(),
+                width.as_float(),
+                height.as_float());
 	}
 }
 
-void GUIContantner::SetRect(float left, float top, float width, float height)
+void GUIContainer::SetRect(float left,
+                            float top,
+                            float width,
+                            float height)
 {
     xhn::RWLock::Instance inst = m_rectHandle.GetWriteLock();
 	EFloat4* rect = (EFloat4*)m_rectHandle.GetAttribute();
@@ -40,7 +46,7 @@ void GUIContantner::SetRect(float left, float top, float width, float height)
 	rect->w = height;
 }
 
-void GUIContantner::GetScopeImpl(SpriteRect& result)
+void GUIContainer::GetScopeImpl(SpriteRect& result)
 {
 	xhn::RWLock::Instance inst = m_rectHandle.GetReadLock();
 	EFloat4* rect = (EFloat4*)m_rectHandle.GetAttribute();
@@ -50,18 +56,21 @@ void GUIContantner::GetScopeImpl(SpriteRect& result)
     result.size.height = rect->w;
 }
 
-Sprite* GUIContantnerFactory::MakeSpriteImpl()
+Sprite* GUIContainerFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
-	snprintf(mbuf, 255, "GUIContantner_%d", m_contantnerCount);
-	m_contantnerCount++;
-	GUIContantner* ret = ENEW GUIContantner(m_renderer, mbuf);
+	snprintf(mbuf, 255, "GUIContainer_%d", m_containerCount);
+	m_containerCount++;
+	GUIContainer* ret = ENEW GUIContainer(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+                                     ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
 
-void GUIContantnerFactory::CreateSheetConfig(const char* cfgName, const char* sheetName, const SpriteRect& panelRect)
+void GUIContainerFactory::CreateSheetConfig(const char* cfgName,
+                                            const char* sheetName,
+                                            const SpriteRect& panelRect)
 {
 
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);

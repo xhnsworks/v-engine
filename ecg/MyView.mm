@@ -22,6 +22,8 @@
 #include "sprite_event_hub.h"
 #include "input_system_osx.h"
 
+#include "elog.h"
+
 #import <Cocoa/Cocoa.h>
 
 @interface MyView (InternalMethods)
@@ -51,7 +53,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 {
     // deltaTime is unused in this bare bones demo, but here's how to calculate it using display link info
     deltaTime = 1.0 / (outputTime->rateScalar * (double)outputTime->videoTimeScale / (double)outputTime->videoRefreshPeriod);
-    
+    timer += deltaTime;
+    fps += 1.0f;
+    if (timer > 1.0) {
+        timer = 0.0;
+        printf("fps %f\n", fps);
+        fps = 0.0f;
+    }
     [self drawFrame];
     
     return kCVReturnSuccess;
@@ -100,6 +108,9 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
     CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
+    
+    timer = .0;
+    fps = 0;
     
     /// create render robot
     MInit();

@@ -20,10 +20,6 @@ ShaderNode create_std_vertex_shader_node(VertexDecl _dec, VtxSdrBuf _vsb,
         return ret;
     }
 	
-    ///bool has_normal = VertexDecl_test_element_semantic(_dec, Normal);
-    ///bool has_tangent = VertexDecl_test_element_semantic(_dec, Tangent);
-    ///bool has_binormal = VertexDecl_test_element_semantic(_dec, Binormal);
-    /// 这里需要仔细推敲
     const char* cam_world_rot_mat_proc = NULL;
     if (_use_world_mat)
         cam_world_rot_mat_proc = "    mat3 CameraWorldRotateMatrix = mat3(CameraWorldMatrix);\n";
@@ -112,7 +108,6 @@ ShaderNode create_std_vertex_shader_node(VertexDecl _dec, VtxSdrBuf _vsb,
 
             if (_use_world_mat) {
                 count = snprintf(str, remainder, "    %s = RenderableWorldRotateMatrix * %s;\n"
-                                                 ///"    %s = CameraWorldRotateMatrix * %s;\n"
                                                  "    %s = normalize(%s);\n",
                                                  vary_str, sem_str,
                                                  vary_str, vary_str);
@@ -205,11 +200,6 @@ ShaderNode create_std_pixel_shader_node(std_pass_status* _status)
     bool has_tangent = VertexDecl_test_element_semantic(_status->dec.dec, Tangent);
     bool has_binormal = VertexDecl_test_element_semantic(_status->dec.dec, Binormal);
     bool has_texcoord = VertexDecl_test_element_semantic(_status->dec.dec, TexCoord);
-
-/**
-enc = normalize(n.xy) * (sqrt(-n.z*0.5+0.5));
-enc = enc*0.5+0.5;
-**/
 
     if (    (_status->dec.usage_tex_flags & NORMAL_MAP_MASK) &&
             has_texcoord &&
@@ -385,9 +375,6 @@ enc = enc*0.5+0.5;
         case PointVSMDepthOutput:
             render_output_strings[i] = vsm_depth_output;
             break;
-        ///case PositionOutput:
-            ///render_output_strings[i] = position_output;
-            ///break;
         }
     }
 
@@ -450,16 +437,24 @@ VtxSdrBuf create_std_vertex_shader_buffer(VertexDecl _dec, bool _use_proj_mat, b
     }
 
     VtxSdrBuf ret = IVtxSdrBuf._New();
-    ///ShaderBuffer sb = to_ShaderBuffer(ret);
     if (_use_proj_mat)
-        ///ShaderBuffer_add_uniform(sb, Matrix4x4_Param, "ProjMatrix", 1, CameraProjectionMatrix);
-        IVtxSdrBuf.add_uniform((ShaderBuffer)ret, Matrix4x4_Param, "ProjMatrix", 1, CameraProjectionMatrix);
+        IVtxSdrBuf.add_uniform((ShaderBuffer)ret,
+                               Matrix4x4_Param,
+                               "ProjMatrix",
+                               1,
+                               CameraProjectionMatrix);
     if (_use_camera_world_mat)
-        ///ShaderBuffer_add_uniform(sb, Matrix4x4_Param, "CameraWorldMatrix", 1, CameraWorldMatrix);
-        IVtxSdrBuf.add_uniform((ShaderBuffer)ret, Matrix4x4_Param, "CameraWorldMatrix", 1, CameraWorldMatrix);
+        IVtxSdrBuf.add_uniform((ShaderBuffer)ret,
+                               Matrix4x4_Param,
+                               "CameraWorldMatrix",
+                               1,
+                               CameraWorldMatrix);
 
-    ///ShaderBuffer_add_uniform(sb, Matrix4x4_Param, "RenderableWorldMatrix", 1, RenderableWorldMatrix);
-    IVtxSdrBuf.add_uniform((ShaderBuffer)ret, Matrix4x4_Param, "RenderableWorldMatrix", 1, RenderableWorldMatrix);
+    IVtxSdrBuf.add_uniform((ShaderBuffer)ret,
+                           Matrix4x4_Param,
+                           "RenderableWorldMatrix",
+                           1,
+                           RenderableWorldMatrix);
 
     const char* prefix = EString_new("v");
 
@@ -476,20 +471,25 @@ VtxSdrBuf create_std_vertex_shader_buffer(VertexDecl _dec, bool _use_proj_mat, b
             IVtxSdrBuf.add_attribute(ret, sem, sem_type);
             const char* vary_str = EString_add(prefix, sem_str);
             esint32 src = get_param_source(sem);
-            ///ShaderBuffer_add_varying(sb, pam_type, vary_str, src);
-            IVtxSdrBuf.add_varying((ShaderBuffer)ret, pam_type, vary_str, src);
+            
+            IVtxSdrBuf.add_varying((ShaderBuffer)ret,
+                                   pam_type,
+                                   vary_str,
+                                   src);
             EString_delete(vary_str);
-            /// 若语义为Position，则添加vWorldPosition的verying
+            
             if (sem == Position)
             {
                 const char* vary_str = EString_new("vWorldPosition");
-                IVtxSdrBuf.add_varying((ShaderBuffer)ret, Float32x3_Param, vary_str, VaryWorldPosition);
+                IVtxSdrBuf.add_varying((ShaderBuffer)ret,
+                                       Float32x3_Param,
+                                       vary_str,
+                                       VaryWorldPosition);
                 EString_delete(vary_str);
             }
         }
     }
 
-    ///ShaderBuffer_add_uniform(sb, Float32x3_Param, CAMERA_POSITION, 1, CameraPosition);
     IVtxSdrBuf.add_uniform((ShaderBuffer)ret, Float32x3_Param, CAMERA_POSITION, 1, CameraPosition);
 
     EString_delete(prefix);
@@ -521,29 +521,68 @@ PxlSdrBuf create_std_pixel_shader_buffer(std_pass_status* _status)
         if (sem == Position)
         {
             const char* vary_str = EString_new("vWorldPosition");
-            IPxlSdrBuf.add_varying((ShaderBuffer)ret, Float32x3_Param, vary_str, VaryWorldPosition);
+            IPxlSdrBuf.add_varying((ShaderBuffer)ret,
+                                   Float32x3_Param,
+                                   vary_str,
+                                   VaryWorldPosition);
             EString_delete(vary_str);
         }
     }
 
     if (_status->dec.usage_tex_flags & NORMAL_MAP_MASK)
-        IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, NORMAL_MAP, 1, NormalMap0);
+        IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                               Texture2D_Param,
+                               NORMAL_MAP,
+                               1,
+                               NormalMap0);
     if (_status->dec.usage_tex_flags & COLOR_MAP_MASK)
-        IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, COLOR_MAP, 1, ColorMap0);
+        IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                               Texture2D_Param,
+                               COLOR_MAP,
+                               1,
+                               ColorMap0);
     if (_status->dec.usage_tex_flags & COLOR_SKETCH_MASK)
-        IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Texture2D_Param, COLOR_MAP, 1, ColorSketch);
+        IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                               Texture2D_Param,
+                               COLOR_MAP,
+                               1,
+                               ColorSketch);
     if (_status->use_gausscian_blur)
-        IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32x2_Param, PIXEL_SIZE, 1, ColorSketchPixelSize);
-    IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32x3_Param, CAMERA_POSITION, 1, CameraPosition);
-    IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32x3_Param, CAMERA_DIRECTION, 1, CameraDirection);
-    IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, MATERIAL_ID, 1, CurrentMaterialID);
+        IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                               Float32x2_Param,
+                               PIXEL_SIZE,
+                               1,
+                               ColorSketchPixelSize);
+    IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                           Float32x3_Param,
+                           CAMERA_POSITION,
+                           1,
+                           CameraPosition);
+    IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                           Float32x3_Param,
+                           CAMERA_DIRECTION,
+                           1,
+                           CameraDirection);
+    IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                           Float32_Param,
+                           MATERIAL_ID,
+                           1,
+                           CurrentMaterialID);
 
     for (euint i = 0; i < _status->num_render_pipes; i++)
     {
         if (_status->render_pipes[i].out == PointVSMDepthOutput)
         {
-            IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32x3_Param, LIGHT_POSITION, 1, LightPosition);
-            IPxlSdrBuf.add_uniform((ShaderBuffer)ret, Float32_Param, LIGHT_INFLUENCE, 1, LightInfluence);
+            IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                                   Float32x3_Param,
+                                   LIGHT_POSITION,
+                                   1,
+                                   LightPosition);
+            IPxlSdrBuf.add_uniform((ShaderBuffer)ret,
+                                   Float32_Param,
+                                   LIGHT_INFLUENCE,
+                                   1,
+                                   LightInfluence);
             break;
         }
     }
@@ -556,12 +595,17 @@ Pass create_std_pass_from_dec(std_pass_status* _status, bool write_log)
 {
     char mbuf[STRING_BUFFER_SIZE];
     ERROR_PROC;
-    VtxSdrBuf vsb = create_std_vertex_shader_buffer(_status->dec.dec, _status->use_proj_mat, _status->use_world_mat);
+    VtxSdrBuf vsb = create_std_vertex_shader_buffer(_status->dec.dec,
+                                                    _status->use_proj_mat,
+                                                    _status->use_world_mat);
     ERROR_PROC;
     PxlSdrBuf psb = create_std_pixel_shader_buffer(_status);
     ERROR_PROC;
 
-    ShaderNode vsn = create_std_vertex_shader_node(_status->dec.dec, vsb, _status->use_proj_mat, _status->use_world_mat);
+    ShaderNode vsn = create_std_vertex_shader_node(_status->dec.dec,
+                                                   vsb,
+                                                   _status->use_proj_mat,
+                                                   _status->use_world_mat);
     ERROR_PROC;
     ShaderNode psn = create_std_pixel_shader_node(_status);
     ERROR_PROC;
@@ -572,13 +616,20 @@ Pass create_std_pass_from_dec(std_pass_status* _status, bool write_log)
     ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(vsn));
     sb = to_ShaderBuffer(psb);
     ShaderBuffer_add_prototype_node(sb, psn);
-    ShaderNode std_ps_node = ShaderBuffer_add_reference_node(sb, ShaderNode_get_name(psn));
+    ShaderNode std_ps_node = ShaderBuffer_add_reference_node(sb,
+                                                             ShaderNode_get_name(psn));
     ERROR_PROC;
 
-    ShaderObject cam_pos = ShaderBuffer_find_object(sb, CAMERA_POSITION);
-    ShaderObject cam_dir = ShaderBuffer_find_object(sb, CAMERA_DIRECTION);
-    ShaderNode_add_input_link(std_ps_node, cam_pos, INVALID_ARRAY_INDEX);
-    ShaderNode_add_input_link(std_ps_node, cam_dir, INVALID_ARRAY_INDEX);
+    ShaderObject cam_pos = ShaderBuffer_find_object(sb,
+                                                    CAMERA_POSITION);
+    ShaderObject cam_dir = ShaderBuffer_find_object(sb,
+                                                    CAMERA_DIRECTION);
+    ShaderNode_add_input_link(std_ps_node,
+                              cam_pos,
+                              INVALID_ARRAY_INDEX);
+    ShaderNode_add_input_link(std_ps_node,
+                              cam_dir,
+                              INVALID_ARRAY_INDEX);
     ERROR_PROC;
 
     IVtxSdrBuf.complete(vsb);
@@ -588,24 +639,37 @@ Pass create_std_pass_from_dec(std_pass_status* _status, bool write_log)
     Shader auto_ps = Shader_new();
     sb = to_ShaderBuffer(vsb);
 #ifdef MARK_GLSL_VERSION
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-        "#version %d%d0\n %s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+    snprintf(mbuf,
+             STRING_BUFFER_SIZE - 1,
+             "#version %d%d0\n %s",
+             GLSL_MAIN_VERSION,
+             GLSL_SUB_VERSION,
+             sb->output);
 #else
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-             "%s", sb->output);
+    snprintf(mbuf,
+             STRING_BUFFER_SIZE - 1,
+             "%s",
+             sb->output);
 #endif
-    Shader_load_from_string(auto_vs, mbuf, VertexShader);
+    Shader_load_from_string(auto_vs,
+                            mbuf,
+                            VertexShader);
     if (write_log)
         slog(StdPassLog, "%s", mbuf);
 
     sb = to_ShaderBuffer(psb);
-    ///sprintf(mbuf, "#version 140\n#extension GL_ARB_gpu_shader5 : enable\n%s", sb.self->output);
 #ifdef MARK_GLSL_VERSION
-	snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-		"#version %d%d0\n %s", GLSL_MAIN_VERSION, GLSL_SUB_VERSION, sb->output);
+	snprintf(mbuf,
+             STRING_BUFFER_SIZE - 1,
+		     "#version %d%d0\n %s",
+             GLSL_MAIN_VERSION,
+             GLSL_SUB_VERSION,
+             sb->output);
 #else
-    snprintf(mbuf, STRING_BUFFER_SIZE - 1,
-             "%s", sb->output);
+    snprintf(mbuf,
+             STRING_BUFFER_SIZE - 1,
+             "%s",
+             sb->output);
 #endif
     Shader_load_from_string(auto_ps, mbuf, PixelShader);
     if (write_log)

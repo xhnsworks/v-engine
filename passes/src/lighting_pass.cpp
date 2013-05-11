@@ -51,25 +51,17 @@ ShaderNode create_position_decode_node()
 
 ShaderNode create_normal_decode_node()
 {
-/**
-float2 fenc = enc*2-1;
-n.z = -(dot(fenc,fenc)*2-1);
-n.xy = normalize(fenc) * sqrt(1-n.z*n.z);
-**/
     ShaderNode ret = ShaderNode_new();
     ShaderNode_set_name(ret, "NormalDecode");
     ShaderNode_set_function(ret,
                             "{\n"
                             "    vec3 ret;\n"
-                            ///"    ret.xy = Enc.xy * 2.0 - 1.0;\n"
-                            ///"    ret.z = sqrt(1.0 - dot(ret.xy, ret.xy));\n"
                             "    vec2 fenc = Enc.xy * 2.0 - 1.0;\n"
                             "    ret.z = -(dot(fenc, fenc) * 2.0 - 1.0);\n"
                             "    ret.xy = normalize(fenc) * sqrt(1.0 - ret.z * ret.z);\n"
                             "    Result = ret;\n"
                             "}\n");
     ShaderNode_add_input_param(ret, Float4_Obj, "Enc", 1);
-    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
 	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
@@ -168,58 +160,7 @@ VtxSdrBuf create_lighting_vertex_shader_buffer(VertexDecl _dec)
     EString_delete(prefix);
     return ret;
 }
-/**
-PxlSdrBuf create_lighting_pixel_shader_buffer(Renderer _rdr, VertexDecl _dec, bool _has_lighting_map)
-{
-    if (!VertexDecl_test(_dec))
-    {
-        PxlSdrBuf ret = {NULL};
-        return ret;
-    }
 
-    PxlSdrBuf ret = IPxlSdrBuf._New();
-    ///ShaderBuffer sb = to_ShaderBuffer(ret);
-
-    const char* prefix = EString_new("v");
-
-    for (euint32 i = 0; i < VertexDecl_count(_dec); i++)
-    {
-        VertexElement ele = VertexDecl_find(_dec, i);
-        element_semantic sem = VertexElement_get_semantic(ele);
-        const char* sem_str = get_element_semantic_string(sem);
-        param_type pam_type = get_element_param_type(sem);
-        const char* vary_str = EString_add(prefix, sem_str);
-        esint32 src = get_param_source(sem);
-        IPxlSdrBuf.add_varying(ret, pam_type, vary_str, src);
-        EString_delete(vary_str);
-    }
-
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, NormalSketch, NORMAL_MAP);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, Plaster, DEPTH_MAP);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, CameraPlaneWidth, CAMERA_PLANE_WIDTH);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, CameraPlaneHeight, CAMERA_PLANE_HEIGHT);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, CameraPlaneNear, CAMERA_PLANE_NEAR);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, CameraPlaneFar, CAMERA_PLANE_FAR);
-
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, PointLightPosition, POINT_LIGHT_POSITIOIN);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, PointLightColor, POINT_LIGHT_COLOR);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, PointLightAtteCoef, POINT_LIGHT_ATTE_COEF);
-
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, InvertCameraWorldMatrix, INVERT_CAMERA_WORLD_MATRIX);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, InvertCameraProjectionMatrix, INVERT_CAMERA_PROJECTION_MATRIX);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, CameraWorldMatrix, CAMERA_WORLD_MATRIX);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, CameraProjectionMatrix, CAMERA_PROJECTION_MATRIX);
-    IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, MaterialIDSketch, "MaterialIDMap");
-
-    if (_has_lighting_map)
-    {
-        IPxlSdrBuf.add_uniform_from_renderer(ret, _rdr, LightingSketch, "LightingMap");
-    }
-
-    EString_delete(prefix);
-    return ret;
-}
-**/
 ShaderNode create_to_camera_space_node()
 {
     ShaderNode ret = ShaderNode_new();
@@ -232,8 +173,6 @@ ShaderNode create_to_camera_space_node()
                                  "}\n");
     ShaderNode_add_input_param(ret, Float3_Obj, "Dir", 1);
     ShaderNode_add_input_param(ret, Matrix4x4_Obj, "CamWorldMat", 1);
-    ///ShaderNode_add_input_param(ret, Matrix4x4_Obj, "CamProjMat", 1);
-    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
 	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
@@ -263,7 +202,6 @@ ShaderNode create_point_array_lighting_node()
     snprintf(mbuf, STRING_BUFFER_SIZE - 1,
              "{\n"
              "    vec3 ret = Lighting;\n"
-             ///"    for (int i = 0; i < LightCount; i++)\n"
              "    {\n"
              "%s"
              "        vec3 lit_dir = LightPos - TargetPos;\n"
@@ -290,37 +228,11 @@ ShaderNode create_point_array_lighting_node()
     ShaderNode_add_input_param(ret, Float4_Obj, "LightColorArray", MAX_LIGHTS_PER_PASS);
     ShaderNode_add_input_param(ret, Float_Obj, "LightAtteCoefArray", MAX_LIGHTS_PER_PASS);
     ShaderNode_add_input_param(ret, Float_Obj, "TargetSpecular", 1);
-    ///ShaderNode_add_input_param(ret, Int_Obj, "LightCount", 1);
 
-    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
 	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
-/**
-ShaderNode create_point_lighting_node()
-{
-    ShaderNode ret = ShaderNode_new();
-    ShaderNode_set_name(ret, "PointLighting");
 
-    ShaderNode_set_function(ret,
-                            "{\n"
-                            "    vec3 lit_dir = normalize(LightPos - TargetPos);\n"
-                            "    float d = dot(lit_dir, TargetNor);\n"
-                            "    d = -d;\n"
-                            "    vec3 c = LightColor.rgb * d * 5.0f;\n"
-                            "    return c.rgb;\n"
-                            "}\n");
-
-    ShaderNode_add_input_param(ret, Float3_Obj, "TargetPos", 1);
-    ShaderNode_add_input_param(ret, Float3_Obj, "TargetNor", 1);
-    ShaderNode_add_input_param(ret, Float3_Obj, "LightPos", 1);
-    ShaderNode_add_input_param(ret, Float4_Obj, "LightColor", 1);
-    ShaderNode_add_input_param(ret, Float_Obj, "AtteCoef", 1);
-
-    ShaderNode_set_return_type(ret, Float3_Obj, 1);
-    return ret;
-}
-**/
 ShaderNode create_lighting_accumulator_node()
 {
     ShaderNode ret = ShaderNode_new();
@@ -333,7 +245,7 @@ ShaderNode create_lighting_accumulator_node()
 
     ShaderNode_add_input_param(ret, Float3_Obj, "LightingValue0", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightingValue1", 1);
-    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    
 	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
     return ret;
 }
@@ -377,7 +289,6 @@ ParamTable ParamTable_new()
 void ParamTable_delete(ParamTable _self)
 {
     Tree_Dest(_self.param_entries);
-    ///Efree(_self.param_entries);
 }
 void ParamTable_add_entry(ParamTable _self, const char* _name, esint32 _src)
 {

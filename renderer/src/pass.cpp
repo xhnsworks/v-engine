@@ -536,7 +536,12 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
                     switch (VertexElement_get_type(element))
                     {
                     case Float32_3:
-                        glVertexAttribPointer(pos_loc, 3, GL_FLOAT, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(pos_loc,
+                                              3,
+                                              GL_FLOAT,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     default:
@@ -550,7 +555,12 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
                     switch (VertexElement_get_type(element))
                     {
                     case Float32_3:
-                        glVertexAttribPointer(nor_loc, 3, GL_FLOAT, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(nor_loc,
+                                              3,
+                                              GL_FLOAT,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     default:
@@ -564,11 +574,21 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
                     switch (VertexElement_get_type(element))
                     {
                     case Ubyte_4:
-                        glVertexAttribPointer(col_loc, 4, GL_UNSIGNED_BYTE, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(col_loc,
+                                              4,
+                                              GL_UNSIGNED_BYTE,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     case Float32_4:
-                        glVertexAttribPointer(col_loc, 4, GL_FLOAT, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(col_loc,
+                                              4,
+                                              GL_FLOAT,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     default:
@@ -582,7 +602,12 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
                     switch (VertexElement_get_type(element))
                     {
                     case Float32_2:
-                        glVertexAttribPointer(tex_loc, 2, GL_FLOAT, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(tex_loc,
+                                              2,
+                                              GL_FLOAT,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     default:
@@ -596,7 +621,12 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
                     switch (VertexElement_get_type(element))
                     {
                     case Float32_3:
-                        glVertexAttribPointer(tgt_loc, 3, GL_FLOAT, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(tgt_loc,
+                                              3,
+                                              GL_FLOAT,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     default:
@@ -610,7 +640,12 @@ void _Pass_render(Pass _self, VertexBuffer _vbf, IndexBuffer _ibf, euint32 _num_
                     switch (VertexElement_get_type(element))
                     {
                     case Float32_3:
-                        glVertexAttribPointer(bin_loc, 3, GL_FLOAT, GL_FALSE, VertexBuffer_get_vertex_size(_vbf), (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
+                        glVertexAttribPointer(bin_loc,
+                                              3,
+                                              GL_FLOAT,
+                                              GL_FALSE,
+                                              VertexBuffer_get_vertex_size(_vbf),
+                                              (GLvoid*)((ref_ptr)vtx_ele_offs[i]) );
                         ERROR_PROC;
                         break;
                     default:
@@ -892,8 +927,6 @@ void _auto_set_uniform_params(Tree _param_source_tree, Pass _self, RendererBase*
 					}
 					else
 					{
-						///EFloat2* p = shader_object_value;
-						///Pass_set_uniform_param_float2s(_self, name, p, array_size);
 						EFloat2* p = (EFloat2*)shader_object_value.value;
 						Pass_set_uniform_param_float2s(_self, name, p, array_size);
 						if (_write_log)

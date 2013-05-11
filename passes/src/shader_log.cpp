@@ -9,9 +9,15 @@ char g_shader_log_buffer[SHADER_LOG_BUFFER_SIZE];
 void ShaderLog_Init()
 {
 #ifdef USE_LOG_SYSTEM
+#if defined(_WIN32) || defined(_WIN64)
     g_std_pass_log_file = SafeFOpen("std_pass_log.log", "w+");
     g_lighting_pass_log_file = SafeFOpen("lighting_pass_log.log", "w+");
     g_post_pass_log_file = SafeFOpen("post_pass_log.log", "w+");
+#elif defined(__APPLE__)
+    g_std_pass_log_file = SafeFOpen("/Users/joumining/v-engine/std_pass_log.log", "w+");
+    g_lighting_pass_log_file = SafeFOpen("/Users/joumining/v-engine/lighting_pass_log.log", "w+");
+    g_post_pass_log_file = SafeFOpen("/Users/joumining/v-engine/post_pass_log.log", "w+");
+#endif
 #endif
 }
 

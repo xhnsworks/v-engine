@@ -4,13 +4,18 @@
 #include "sprite.h"
 #include "sprite_factory.h"
 #include "gui_panel.h"
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SpriteRenderer;
 class GUIButton;
 class GUIButtonLayer : public GUIPanelLayer
 {
 	DeclareRTTI;
 public:
-	GUIButtonLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle);
+	GUIButtonLayer(const xhn::static_string name,
+                   AttributeHandle pivotHandle,
+                   AttributeHandle sizeHandle);
 };
 class GUIButtonTextLayer : public SpriteTextLayer
 {
@@ -92,10 +97,14 @@ class GUIButtonFactory : public SpriteFactory
 public:
 	int m_buttonCount;
 public:
-	GUIButtonFactory(SpriteRenderer* renderer, const char* cfgName)
+	GUIButtonFactory(SpriteRenderer* renderer,
+                     const char* cfgName)
 		: m_buttonCount(0)
 		, SpriteFactory(renderer, cfgName)
 	{}
     virtual Sprite* MakeSpriteImpl();
 };
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif

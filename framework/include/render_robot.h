@@ -1,8 +1,8 @@
 #ifndef RENDER_ROBOT_H
 #define RENDER_ROBOT_H
-///*************************************************************************************************************************///
-///                                                     include begin                                                       ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                           include begin                              ///
+///**********************************************************************///
 #include "common.h"
 #include "etypes.h"
 #include "robot.h"
@@ -21,13 +21,14 @@
 #include "gui_panel.h"
 #include "gui_edit.h"
 #include "gui_bar.h"
+#include "gui_container.h"
 #include "input_robot.h"
-///*************************************************************************************************************************///
-///                                                     include end                                                         ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                           include end                                ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class ModifyAttrCommand : public RobotCommand
 {
 	DeclareRTTI;
@@ -35,7 +36,9 @@ public:
 	Attribute* m_attr;
 	Attribute* m_newValue;
 	Attribute::Type m_attrType;
-	ModifyAttrCommand(Attribute* attr, Attribute* newValue, Attribute::Type attrType)
+	ModifyAttrCommand(Attribute* attr,
+                      Attribute* newValue,
+                      Attribute::Type attrType)
 		: m_attr(attr)
 		, m_newValue(newValue)
 		, m_attrType(attrType)
@@ -46,35 +49,36 @@ public:
 	virtual void Do(Robot* rob, xhn::static_string sender);
 };
 
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  marco define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       marco define begin                             ///
+///**********************************************************************///
 #define W_Width  1280
 #define W_Height 720
-///*************************************************************************************************************************///
-///                                                  marco define end                                                       ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       marco define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 template <typename RENDERER>
 class RendererChainBase
 {
 protected:
 	ViewportPtr m_viewport;
-	/// 需要维护两个容器间的同步
-	xhn::map<xhn::static_string, RENDERER*> m_rendererMap;
-	xhn::list<RENDERER*> m_rendererChain;
+    typedef xhn::map<xhn::static_string, RENDERER*> RendererMap;
+    typedef xhn::list<RENDERER*> RendererList;
+	RendererMap m_rendererMap;
+	RendererList m_rendererChain;
 public:
 	RendererChainBase()
 	{}
 	~RendererChainBase()
 	{
-		typename xhn::list<RENDERER*>::iterator iter = m_rendererChain.begin();
-		typename xhn::list<RENDERER*>::iterator end = m_rendererChain.end();
+		typename RendererList::iterator iter = m_rendererChain.begin();
+		typename RendererList::iterator end = m_rendererChain.end();
 		for (; iter != end; iter++)
 		{
 			RENDERER* rdr = *iter;
@@ -100,8 +104,8 @@ public:
 	}
 	void Render()
 	{
-		typename xhn::list<RENDERER*>::iterator iter = m_rendererChain.begin();
-		typename xhn::list<RENDERER*>::iterator end = m_rendererChain.end();
+		typename RendererList::iterator iter = m_rendererChain.begin();
+		typename RendererList::iterator end = m_rendererChain.end();
 		for (; iter != end; iter++)
 		{
 			RENDERER* rdr = *iter;
@@ -110,7 +114,7 @@ public:
 	}
 	RENDERER* GetRenderer(const xhn::static_string name)
 	{
-		typename xhn::map<xhn::static_string, RENDERER*>::iterator iter = m_rendererMap.find(name);
+		typename RendererMap::iterator iter = m_rendererMap.find(name);
 		if (iter != m_rendererMap.end()) {
 			return iter->second;
 		}
@@ -131,12 +135,12 @@ class GUIRendererChain : public RendererChainBase<SpriteRenderer>
 public:
     virtual void Init();
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SwapBuffersAction;
 class InputAction;
 class ResourceAction : public Action
@@ -186,6 +190,7 @@ private:
 	GUIEditFactory* m_editFactory;
 	GUIHoriBarFactory* m_horiBarFactory;
 	GUIVertBarFactory* m_vertBarFactory;
+    GUIContainerFactory* m_containerFactory;
 
 	GUIButton* m_guiButton;
 	GUICursor* m_guiCursor;
@@ -193,40 +198,46 @@ private:
 	GUIEdit* m_guiEdit;
 	GUIHoriBar* m_guiHoriBar;
     GUIVertBar* m_guiVertBar;
+    GUIContainer* m_guiContainer;
 
 	bool m_isInited;
 public:
 #if defined(_WIN32) || defined(_WIN64)
-	ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain, SwapBuffersAction* swpAct, HWND window)
-		: m_mouseRay(NULL)
-		, m_mat0(NULL)
-		, m_mat1(NULL)
-		, m_pureLightingMat(NULL)
-		, m_coverMat(NULL)
-		, m_locator(NULL)
-		, m_lineDrawer(NULL)
-		, m_guiMat(NULL)
-		, m_defaultVtxDec(NULL)
-		, m_rendererChain(rdrChain)
-		, m_guiRendererChain(guiRdrChain)
-		, m_lightMatrix(NULL)
-		, m_lightPos(2.0f, 0.0f, 2.0f)
-		, m_light(NULL)
-		, m_window(window)
-		, m_swpAct(swpAct)
-        , m_buttonFactory(NULL)
-		, m_cursorFactory(NULL)
-		, m_panelFactory(NULL)
-		, m_editFactory(NULL)
-		, m_horiBarFactory(NULL)
-		, m_vertBarFactory(NULL)
-		, m_guiButton(NULL)
-		, m_guiCursor(NULL)
-		, m_guiPanel(NULL)
-		, m_guiEdit(NULL)
-		, m_guiHoriBar(NULL)
-		, m_guiVertBar(NULL)
-		, m_isInited(false)
+	ResourceAction(RendererChain* rdrChain,
+                   GUIRendererChain* guiRdrChain,
+                   SwapBuffersAction* swpAct,
+                   HWND window)
+    : m_mouseRay(NULL)
+    , m_mat0(NULL)
+    , m_mat1(NULL)
+    , m_pureLightingMat(NULL)
+    , m_coverMat(NULL)
+    , m_locator(NULL)
+    , m_lineDrawer(NULL)
+    , m_guiMat(NULL)
+    , m_defaultVtxDec(NULL)
+    , m_rendererChain(rdrChain)
+    , m_guiRendererChain(guiRdrChain)
+    , m_lightMatrix(NULL)
+    , m_lightPos(2.0f, 0.0f, 2.0f)
+    , m_light(NULL)
+    , m_window(window)
+    , m_swpAct(swpAct)
+    , m_buttonFactory(NULL)
+    , m_cursorFactory(NULL)
+    , m_panelFactory(NULL)
+    , m_editFactory(NULL)
+    , m_horiBarFactory(NULL)
+    , m_vertBarFactory(NULL)
+    , m_containerFactory(NULL)
+    , m_guiButton(NULL)
+    , m_guiCursor(NULL)
+    , m_guiPanel(NULL)
+    , m_guiEdit(NULL)
+    , m_guiHoriBar(NULL)
+    , m_guiVertBar(NULL)
+    , m_guiContainer(NULL)
+    , m_isInited(false)
 	{}
 #else
     ResourceAction(RendererChain* rdrChain, GUIRendererChain* guiRdrChain)
@@ -249,24 +260,26 @@ public:
 	, m_panelFactory(NULL)
 	, m_horiBarFactory(NULL)
 	, m_vertBarFactory(NULL)
+    , m_containerFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
 	, m_guiEdit(NULL)
 	, m_guiHoriBar(NULL)
     , m_guiVertBar(NULL)
+    , m_guiContainer(NULL)
     , m_isInited(false)
 	{}
 #endif
 	~ResourceAction();
 	virtual void DoImpl();
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class LogicAction : public Action
 {
 	DeclareRTTI;
@@ -283,12 +296,12 @@ public:
 	}
 	virtual void DoImpl();
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                             ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class RenderRobot;
 class RenderAction : public Action
 {
@@ -304,13 +317,13 @@ public:
 	~RenderAction();
     virtual void DoImpl();
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #if defined(_WIN32) || defined(_WIN64)
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SwapBuffersAction : public Action
 {
 	DeclareRTTI;
@@ -326,13 +339,13 @@ public:
 	}
 	virtual void DoImpl();
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class RenderRobot : public Robot
 {
 	DeclareRTTI;
@@ -356,11 +369,12 @@ public:
 	virtual void InitChannels();
 	virtual xhn::static_string GetName();
 	virtual void CommandProcImpl(xhn::static_string sender, RobotCommand* command);
-	virtual void CommandReceiptProcImpl(xhn::static_string sender, RobotCommandReceipt* receipt);
+	virtual void CommandReceiptProcImpl(xhn::static_string sender,
+                                        RobotCommandReceipt* receipt);
     Camera GetMainCamera();
     SpriteRenderer* GetGUIRenderer();
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                             ///
+///**********************************************************************///
 #endif

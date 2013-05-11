@@ -264,9 +264,17 @@ void Camera_set(Camera _self, bool _is_orthogonal, float _width, float _height, 
 	SELF.plane_near = _near;
 	SELF.plane_far = _far;
 	if (_is_orthogonal)
-	    Matrix4x4_orthogonal(SELF.cam_proj_mat, SELF.width, SELF.height, SELF.plane_near, SELF.plane_far);
+	    Matrix4x4_orthogonal(SELF.cam_proj_mat,
+                             SELF.width,
+                             SELF.height,
+                             SELF.plane_near,
+                             SELF.plane_far);
 	else
-		Matrix4x4_projection(SELF.cam_proj_mat, SELF.width, SELF.height, SELF.plane_near, SELF.plane_far);
+		Matrix4x4_projection(SELF.cam_proj_mat,
+                             SELF.width,
+                             SELF.height,
+                             SELF.plane_near,
+                             SELF.plane_far);
 	SELF.is_orthogonal = _is_orthogonal;
 	Camera_updata(_self);
 }
@@ -436,7 +444,6 @@ void Camera_set_radian(Camera _self, float radian)
     float h = w;
     matrix4x4* mat = Matrix4x4_new();
     Matrix4x4_projection(mat, w, h, n, f);
-    ///Camera_set_proj_matrix(_self, mat);
 	Camera_set(_self, _self.self->is_orthogonal, w, h, n, f);
     Matrix4x4_delete(mat);
 }

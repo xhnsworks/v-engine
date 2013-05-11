@@ -37,8 +37,10 @@ void GUICursor::GetScopeImpl(SpriteRect& result)
 
 void GUICursorMouseEventProc::Proc(const SpriteEvent* evt)
 {
-	const SpriteMouseMoveEvent* mouseEvt = evt->DynamicCast<SpriteMouseMoveEvent>();
-	m_cursor->SetCoord((float)mouseEvt->m_curtMousePos.x, (float)mouseEvt->m_curtMousePos.y);
+	const SpriteMouseMoveEvent* mouseEvt =
+    evt->DynamicCast<SpriteMouseMoveEvent>();
+	m_cursor->SetCoord((float)mouseEvt->m_curtMousePos.x,
+                       (float)mouseEvt->m_curtMousePos.y);
 	///Ray_log((const Ray)&mouseEvt->m_mouseRay);
 }
 
@@ -49,7 +51,9 @@ Sprite* GUICursorFactory::MakeSpriteImpl()
 	m_cursorCount++;
 	GUICursor* ret = ENEW GUICursor(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI, ENEW GUICursorMouseEventProc(ret));
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI,
+                                     ENEW GUICursorMouseEventProc(ret));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+                                     ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }

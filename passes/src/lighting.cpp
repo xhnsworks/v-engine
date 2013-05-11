@@ -19,14 +19,6 @@
 #include "math_base.h"
 #include <math.h>
 
-/**
-typedef void (*LightDelete)(struct _light_base_2*);
-typedef void (*LightUpdate)(struct _light_base_2*);
-typedef void (*LightSetPosition)(struct _light_base_2*, EFloat3);
-typedef void (*LightLookAt)(struct _light_base_2*, EFloat3);
-typedef void (*LightDrawShape)(struct _light_base_2*, struct _line_drawer*);
-**/
-
 void light_base_2::Init()
 {
     pos.x = 0.0f;
@@ -49,112 +41,9 @@ void light_base_2::Init()
 }
 void light_base_2::Delete(LightBase2 _self)
 {
-   ///_self->Delete(_self);
-	_self->Dest();
-	///Mfree(_self);
-	delete _self;
+    _self->Dest();
+    light_base_2::Delete(_self);
 }
-/**
-EFloat3 LightBase2_get_pos(LightBase2 _self)
-{
-    return _self->pos;
-}
-EFloat3 LightBase2_get_dir(LightBase2 _self)
-{
-    return _self->dir;
-}
-EFloat4 LightBase2_get_color(LightBase2 _self)
-{
-    return _self->color;
-}
-float LightBase2_get_atte_coef(LightBase2 _self)
-{
-    return _self->atte_coef;
-}
-**/
-/**
-int LightBase2_get_num_shadow_emitters(LightBase2 _self)
-{
-    return _self->num_shadow_emitters;
-}
-matrix4x4* LightBase2_get_proj_matrix(LightBase2 _self, euint i)
-{
-    if (i < _self->num_shadow_emitters)
-        return Camera_get_render_matrix(_self->shadow_emitter_param_array[i].light_cam);
-    else
-        return NULL;
-}
-matrix4x4* LightBase2_get_world_matrix(LightBase2 _self, euint i)
-{
-    if (i < _self->num_shadow_emitters)
-        return Camera_get_world_matrix(_self->shadow_emitter_param_array[i].light_cam);
-    else
-        return NULL;
-}
-**/
-/**
-Camera LightBase2_get_camera(LightBase2 _self, euint i)
-{
-    _self->Update(_self);
-    if (i < _self->num_shadow_emitters) {
-        return _self->shadow_emitter_param_array[i].light_cam;
-    }
-    else {
-        Camera null_cam = {NULL};
-        return null_cam;
-    }
-}
-EFloat3 LightBase2_get_shadow_dir(LightBase2 _self, euint i)
-{
-    _self->Update(_self);
-    if (i < _self->num_shadow_emitters)
-        return Camera_get_direction(_self->shadow_emitter_param_array[i].light_cam);
-    else {
-        EFloat3 zero = {0.0f, 0.0f, 0.0f};
-        return zero;
-    }
-}
-**/
-/**
-float LightBase2_get_inner_cos(LightBase2 _self)
-{
-    return _self->inner_cos;
-}
-float LightBase2_get_outer_cos(LightBase2 _self)
-{
-    return _self->outer_cos;
-}
-float LightBase2_get_influence(LightBase2 _self)
-{
-    return _self->influence;
-}
-**/
-/**
-void LightBase2_set_light_color(LightBase2 _self, EFloat4 color)
-{
-    _self->color = color;
-}
-
-void LightBase2_set_position(LightBase2 _self, EFloat3 _pos)
-{
-    _self->SetPosition(_self, _pos);
-}
-void LightBase2_look_at(LightBase2 _self, EFloat3 _pt)
-{
-    _self->LookAt(_self, _pt);
-}
-
-void LightBase2_draw_shape(LightBase2 _self, struct _line_drawer* _drawer)
-{
-    _self->DrawShape(_self, _drawer);
-}
-**/
-/**
-sketch_type LightBase2_get_shadow_type(LightBase2 _self)
-{
-    return _self->shadow_type;
-}
-**/
 void light_base_2::draw_shape(struct _line_drawer* _drawer)
 {
     Camera_draw_shape(shadow_emitter_param_array[0].light_cam, _drawer);
@@ -187,15 +76,9 @@ void light_base_2::look_at(EFloat3 _pt)
 
     dir = SFloat3_convert(tgt_dir);
 }
-/**
-typedef struct _direction_light
-{
-    light_base_2 base;
-} direction_light;
-**/
+
 DirLight direction_light::New()
 {
-    ///DirLight ret = (DirLight)SMalloc(sizeof(direction_light));
 	DirLight ret = ENEW direction_light;
     ret->Init();
     ret->num_shadow_emitters = 1;
@@ -204,18 +87,11 @@ DirLight direction_light::New()
     matrix4x4* ortho_mat = Matrix4x4_new();
     Matrix4x4_orthogonal(ortho_mat, 10.0f, 10.0f, 0.1f, 100.0f);
 
-    ///Camera_set_proj_matrix(light_cam, ortho_mat);
 	Camera_set(light_cam, true, 10.0f, 10.0f, 0.1f, 100.0f);
     Matrix4x4_delete(ortho_mat);
 
     ret->shadow_emitter_param_array[0].light_cam = light_cam;
-	/**
-    ret->base.Delete = (LightDelete)DirLight_delete;
-    ret->base.Update = _LightBase2_update;
-    ret->base.SetPosition = _LightBase2_set_position;
-    ret->base.LookAt = _LightBase2_look_at;
-    ret->base.DrawShape = _LightBase_draw_shape;
-	**/
+
     return ret;
 }
 void direction_light::Dest()
@@ -331,12 +207,6 @@ PointLight point_light::New()
         Matrix4x4_log(cam_world_mat);
     }
     elog("####");
-/**
-    ret->base.Delete = (LightDelete)PointLight_delete;
-    ret->base.Update = (LightUpdate)PointLight_update;
-    ret->base.SetPosition = _LightBase2_set_position;
-    ret->base.LookAt = _LightBase2_look_at;
-    ret->base.DrawShape = _LightBase_draw_shape;
-	**/
+
     return ret;
 }

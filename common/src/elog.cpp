@@ -10,7 +10,11 @@ static FILE* g_elog_file = NULL;
 void ELog_Init()
 {
 #ifdef USE_LOG_SYSTEM
+#if defined(_WIN32) || defined(_WIN64)
 	g_elog_file = SafeFOpen("log.log", "w+");
+#elif defined(__APPLE__)
+    g_elog_file = SafeFOpen("/Users/joumining/v-engine/log.log", "w+");
+#endif
 	pthread_rwlock_init(&g_lock, NULL);
 #endif
 }

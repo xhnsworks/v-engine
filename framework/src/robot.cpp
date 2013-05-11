@@ -19,7 +19,9 @@ void Action::Tick()
 void Action::Tock()
 {
 	TimeCheckpoint tcp = TimeCheckpoint::Tick();
-	m_lastProcessingTime = TimeCheckpoint::CaleElapsedTime(m_prevTimeCheckPoint, tcp);
+	m_lastProcessingTime =
+    TimeCheckpoint::CaleElapsedTime(m_prevTimeCheckPoint, tcp);
+    
 	m_prevTimeCheckPoint = tcp;
 }
 
@@ -27,8 +29,8 @@ RobotManager* RobotManager::s_RobotManager = NULL;
 
 void Robot::RunOnce()
 {
-	xhn::vector<ActionPtr>::iterator iter = m_actionQueue.begin();
-	xhn::vector<ActionPtr>::iterator end = m_actionQueue.end();
+	ActionQueue::iterator iter = m_actionQueue.begin();
+	ActionQueue::iterator end = m_actionQueue.end();
 	for (; iter != end; iter++) {
 		ActionPtr act = *iter;
 		act->Do();
@@ -39,8 +41,8 @@ void Robot::RunOnce()
 
 void Robot::CommandProc()
 {
-	xhn::map<xhn::static_string, RWBuffer>::iterator iter = m_commandReceivingChannels.begin();
-    xhn::map<xhn::static_string, RWBuffer>::iterator end = m_commandReceivingChannels.end();
+	ChannelMap::iterator iter = m_commandReceivingChannels.begin();
+    ChannelMap::iterator end = m_commandReceivingChannels.end();
     for (; iter != end; iter++)
 	{
 		RobotCommandBase* cmdBase[2];
@@ -49,13 +51,15 @@ void Robot::CommandProc()
 		while (RWBuffer_Read(channel, (euint*)cmdBase, &size))
 		{
 			if (size >= sizeof(RobotCommandBase*)) {
-				RobotCommand* cmd = cmdBase[0]->DynamicCast<RobotCommand>();
+				RobotCommand* cmd =
+                cmdBase[0]->DynamicCast<RobotCommand>();
 				if (cmd) {
                     CommandProcImpl(iter->first, cmd);
 				    delete cmd;
 					break;
 				}
-				RobotCommandReceipt* rec = cmdBase[0]->DynamicCast<RobotCommandReceipt>();
+				RobotCommandReceipt* rec =
+                cmdBase[0]->DynamicCast<RobotCommandReceipt>();
 				if (rec) {
 					CommandReceiptProcImpl(iter->first, rec);
 					delete rec;
@@ -73,7 +77,7 @@ RobotManager::RobotManager()
 Robot* RobotManager::GetRobot(xhn::static_string robName)
 {
     xhn::RWLock2::Instance inst = m_readwriteLock.GetReadLock();
-    xhn::map<xhn::static_string, Robot*>::iterator iter = m_robotMap.find(robName);
+    RobotMap::iterator iter = m_robotMap.find(robName);
     if (iter != m_robotMap.end()) {
         return iter->second;
     }
@@ -81,24 +85,28 @@ Robot* RobotManager::GetRobot(xhn::static_string robName)
         return NULL;
 }
 
-void RobotManager::MakeChannel(xhn::static_string sender, xhn::static_string receiver)
+void RobotManager::MakeChannel(xhn::static_string sender,
+                               xhn::static_string receiver)
 {
     xhn::RWLock2::Instance inst = m_readwriteLock.GetWriteLock();
-	xhn::map<xhn::static_string, Robot*>::iterator s = m_robotMap.find(sender);
+	RobotMap::iterator s = m_robotMap.find(sender);
 	if (s == m_robotMap.end())
 		return;
-	xhn::map<xhn::static_string, Robot*>::iterator r = m_robotMap.find(receiver);
+	RobotMap::iterator r = m_robotMap.find(receiver);
     if (r == m_robotMap.end())
 		return;
 	//////////////////////////////////////////////////////////////////////////
 	Robot* sRob = s->second;
-	xhn::map<xhn::static_string, RWBuffer>::iterator iter = sRob->m_commandTransmissionChannels.find(receiver);
+    Robot::ChannelMap::iterator iter =
+    sRob->m_commandTransmissionChannels.find(receiver);
 	RWBuffer channel = NULL;
 	if (iter != sRob->m_commandTransmissionChannels.end())
 		channel = iter->second;
 	else {
 		channel = RWBuffer_new(1024 * 1024);
-		sRob->m_commandTransmissionChannels.insert(xhn::make_pair(receiver, channel));
+		sRob->m_commandTransmissionChannels.insert(
+            xhn::make_pair(receiver, channel)
+        );
 	}
 	//////////////////////////////////////////////////////////////////////////
 	Robot* rRob = r->second;
@@ -106,20 +114,25 @@ void RobotManager::MakeChannel(xhn::static_string sender, xhn::static_string rec
     if (iter != rRob->m_commandReceivingChannels.end())
 		return;
 	else
-		rRob->m_commandReceivingChannels.insert(xhn::make_pair(sender, channel));
+		rRob->m_commandReceivingChannels.insert(
+            xhn::make_pair(sender, channel)
+        );
 }
-void RobotManager::BreakChannel(xhn::static_string sender, xhn::static_string receiver)
+void RobotManager::BreakChannel(xhn::static_string sender,
+                                xhn::static_string receiver)
 {
 	xhn::RWLock2::Instance inst = m_readwriteLock.GetWriteLock();
-	xhn::map<xhn::static_string, Robot*>::iterator r = m_robotMap.find(receiver);
+	RobotMap::iterator r = m_robotMap.find(receiver);
 	if (r != m_robotMap.end()) {
 		Robot* rRob = r->second;
 		rRob->m_commandReceivingChannels.erase(sender);
 	}
-	xhn::map<xhn::static_string, Robot*>::iterator s = m_robotMap.find(sender);
+	RobotMap::iterator s = m_robotMap.find(sender);
 	if (s != m_robotMap.end()) {
 		Robot* sRob = r->second;
-		xhn::map<xhn::static_string, RWBuffer>::iterator iter = sRob->m_commandTransmissionChannels.find(receiver);
+		Robot::ChannelMap::iterator iter =
+        sRob->m_commandTransmissionChannels.find(receiver);
+        
 		if (iter != sRob->m_commandTransmissionChannels.end()) {
 			RobotCommand* cmd[2];
 			euint size = 0;
@@ -132,14 +145,18 @@ void RobotManager::BreakChannel(xhn::static_string sender, xhn::static_string re
 		}
 	}
 }
-RWBuffer RobotManager::GetChannel(xhn::static_string sender, xhn::static_string receiver)
+RWBuffer RobotManager::GetChannel(xhn::static_string sender,
+                                  xhn::static_string receiver)
 {
     xhn::RWLock2::Instance inst = m_readwriteLock.GetReadLock();
-	xhn::map<xhn::static_string, Robot*>::iterator s = m_robotMap.find(sender);
+	RobotMap::iterator s = m_robotMap.find(sender);
 	if (s == m_robotMap.end())
 		return NULL;
 	Robot* sRob = s->second;
-	xhn::map<xhn::static_string, RWBuffer>::iterator iter = sRob->m_commandTransmissionChannels.find(receiver);
+    
+	Robot::ChannelMap::iterator iter =
+    sRob->m_commandTransmissionChannels.find(receiver);
+    
 	if (iter != sRob->m_commandTransmissionChannels.end())
 		return iter->second;
 	else

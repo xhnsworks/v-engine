@@ -13,9 +13,9 @@
 #include "sprite.h"
 #include "sprite_factory.h"
 
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SpriteRenderer;
 class GUIHoriBarLayer : public SpriteNormalLayer
 {
@@ -24,7 +24,9 @@ private:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_sizeHandle;
 public:
-	GUIHoriBarLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+	GUIHoriBarLayer(const xhn::static_string name,
+                    AttributeHandle pivotHandle,
+                    AttributeHandle sizeHandle)
     : m_pivotHandle(pivotHandle)
     , m_sizeHandle(sizeHandle)
     , SpriteNormalLayer(name)
@@ -57,15 +59,20 @@ public:
     , SpriteFactory(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl();
-	static void CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName,
-                                  const SpriteRect& panelRect, float cornerSize, const SpriteRect& areaRect, float areaCornerSize);
+	static void CreateSheetConfig(const char* cfgName,
+                                  const char* sheetName,
+                                  const char* textureName,
+                                  const SpriteRect& panelRect,
+                                  float cornerSize,
+                                  const SpriteRect& areaRect,
+                                  float areaCornerSize);
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class GUIVertBarLayer : public SpriteNormalLayer
 {
 	DeclareRTTI;
@@ -73,7 +80,9 @@ private:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_sizeHandle;
 public:
-	GUIVertBarLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+	GUIVertBarLayer(const xhn::static_string name,
+                    AttributeHandle pivotHandle,
+                    AttributeHandle sizeHandle)
 		: m_pivotHandle(pivotHandle)
 		, m_sizeHandle(sizeHandle)
 		, SpriteNormalLayer(name)
@@ -106,10 +115,15 @@ public:
 		, SpriteFactory(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl();
-	static void CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName,
-		const SpriteRect& panelRect, float cornerSize, const SpriteRect& areaRect, float areaCornerSize);
+	static void CreateSheetConfig(const char* cfgName,
+                                  const char* sheetName,
+                                  const char* textureName,
+		                          const SpriteRect& panelRect,
+                                  float cornerSize,
+                                  const SpriteRect& areaRect,
+                                  float areaCornerSize);
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif /* defined(__ecg__gui_bar__) */

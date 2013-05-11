@@ -16,7 +16,7 @@ ShaderNode create_shadow2d_test_node()
     ShaderNode_add_input_param(ret, Matrix4x4_Obj, "LightProjectionMatrix", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightPosition", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightDirection", 1);
-    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    
 	ShaderNode_add_output_param(ret, Float3_Obj, "LightValue", 1);
 
     const char* func =
@@ -62,18 +62,12 @@ ShaderNode create_shadowcube_test_node()
 {
     ShaderNode ret = ShaderNode_new();
     ShaderNode_set_name(ret, "ShadowCubeTest");
-    /**
-    ShaderNode_add_input_link(shadow_test_node, shadow_cube_map, INVALID_ARRAY_INDEX);
-            ShaderNode_add_input_link(shadow_test_node, tgt_pos, INVALID_ARRAY_INDEX);
-            ShaderNode_add_input_link(shadow_test_node, light_pos, INVALID_ARRAY_INDEX);
-            ShaderNode_set_result_link(shadow_test_node, light_weight, INVALID_ARRAY_INDEX);
-    **/
+
     ShaderNode_add_input_param(ret, TextureCube_Obj, "ShadowMap", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "PixelWorldPosition", 1);
     ShaderNode_add_input_param(ret, Float3_Obj, "LightPosition", 1);
     ShaderNode_add_input_param(ret, Float_Obj, "LightInfluence", 1);
-    ///ShaderNode_add_input_param(ret, Float3_Obj, "LightDirection", 1);
-    ///ShaderNode_set_return_type(ret, Float3_Obj, 1);
+    
 	ShaderNode_add_output_param(ret, Float3_Obj, "Result", 1);
 
     const char* func =

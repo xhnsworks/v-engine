@@ -5,13 +5,17 @@
 #include "sprite.h"
 #include "sprite_factory.h"
 #include "gui_panel.h"
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SpriteRenderer;
 class GUIEdit;
 class GUIEditBackgroundLayer : public GUIPanelLayer
 {
 	DeclareRTTI;
 public:
-	GUIEditBackgroundLayer(AttributeHandle pivotHandle, AttributeHandle sizeHandle);
+	GUIEditBackgroundLayer(AttributeHandle pivotHandle,
+                           AttributeHandle sizeHandle);
 };
 class GUIEditTextLayer : public SpriteTextLayer
 {
@@ -58,4 +62,7 @@ public:
 	{}
 	virtual Sprite* MakeSpriteImpl();
 };
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif

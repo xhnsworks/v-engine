@@ -1,8 +1,8 @@
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
-///*************************************************************************************************************************///
-///                                                     include begin                                                       ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                           include begin                              ///
+///**********************************************************************///
 #include "common.h"
 #include "etypes.h"
 #include "xhn_map.hpp"
@@ -16,12 +16,12 @@
 #include "ecg2pugi.h"
 #include "xml_resource.h"
 #include "attribute.h"
-///*************************************************************************************************************************///
-///                                                     include end                                                         ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                           include end                                ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class AnimationRobot;
 class AnimTimer
 {
@@ -31,12 +31,20 @@ public:
     virtual void Tock() = 0;
 };
 
-template <typename ATTR_CLONER, typename ATTR_LOADER, typename INTERPOLATION, typename COMMAND_SENDER>
+template <
+typename ATTR_CLONER,
+typename ATTR_LOADER,
+typename INTERPOLATION,
+typename COMMAND_SENDER
+>
 class Animation
 {
 public:
 	typedef xhn::map<double, Attribute*> TimeLine;
 	typedef typename xhn::map<double, Attribute*>::iterator Frame;
+    typedef typename xhn::map<double, Attribute*>::const_iterator ConstFrame;
+    typedef typename xhn::map<double, Attribute*>::const_reverse_iterator
+    ConstReverseFrame;
 public:
 	AttributeHandle m_target;
 	Attribute::Type m_attrType;
@@ -69,7 +77,9 @@ public:
 		, m_status(Stopped)
 		, m_timer(timer)
 	{}
-	Animation(AttributeHandle target, Attribute::Type attrType, AnimTimer* timer)
+	Animation(AttributeHandle target,
+              Attribute::Type attrType,
+              AnimTimer* timer)
 		: m_target(target)
 		, m_attrType(attrType)
 		, m_prevFrame(NULL, 0)
@@ -94,7 +104,9 @@ public:
 		Clear();
 	}
 	void InsertKeyFrame(double time, Attribute* attr) {
-		m_timeLine.insert(xhn::make_pair(time, m_attrCloner(attr, m_attrType)));
+		m_timeLine.insert(
+            xhn::make_pair(time, m_attrCloner(attr, m_attrType))
+        );
 		Frame beginFrame = m_timeLine.begin();
 		m_beginTime = beginFrame->first;
 	}
@@ -110,16 +122,19 @@ public:
 			if (periodCount > m_periodCount) {
 				m_periodCount = periodCount;
 				m_prevFrame = m_timeLine.begin();
-				Attribute* attr = m_attrCloner(m_prevFrame->second, m_attrType);
+				Attribute* attr =
+                m_attrCloner(m_prevFrame->second, m_attrType);
 				m_commandSender(m_target, attr, m_attrType);
 				return;
 			}
-			double realTotelElapsedTime = totelElapsedTime - ((double)periodCount * periodTime);
+			double realTotelElapsedTime =
+            totelElapsedTime - ((double)periodCount * periodTime);
 
 			Frame nextFrame = m_prevFrame;
 			nextFrame++;
 			if (nextFrame == m_timeLine.end()) {
-				Attribute* attr = m_attrCloner(m_prevFrame->second, m_attrType);
+				Attribute* attr =
+                m_attrCloner(m_prevFrame->second, m_attrType);
 				m_commandSender(m_target, attr, m_attrType);
 				m_prevFrame = m_timeLine.begin();
 				///m_beginTime = m_curtTime;
@@ -130,7 +145,8 @@ public:
 				m_prevFrame++;
 				nextFrame++;
 				if (nextFrame == m_timeLine.end()) {
-					Attribute* attr = m_attrCloner(m_prevFrame->second, m_attrType);
+					Attribute* attr =
+                    m_attrCloner(m_prevFrame->second, m_attrType);
 					m_commandSender(m_target, attr, m_attrType);
 					m_prevFrame = m_timeLine.begin();
 					///m_beginTime = m_curtTime;
@@ -144,7 +160,11 @@ public:
 				double timeBlock0 = realTotelElapsedTime - prevTime;
 				double timeBlock1 = nextTime - realTotelElapsedTime;
 				double ratio = timeBlock0 / (timeBlock0 + timeBlock1);
-				Attribute* attr = m_interpolation(m_prevFrame->second, nextFrame->second, ratio, m_attrType);
+				Attribute* attr =
+                m_interpolation(m_prevFrame->second,
+                                nextFrame->second,
+                                ratio,
+                                m_attrType);
 				m_commandSender(m_target, attr, m_attrType);
 			}
 		}
@@ -152,7 +172,8 @@ public:
 	void Stop() {
 		if (m_timeLine.size()) {
 			Frame beginFrame = m_timeLine.begin();
-			Attribute* attr = m_attrCloner(beginFrame->second, m_attrType);
+			Attribute* attr =
+            m_attrCloner(beginFrame->second, m_attrType);
 		    m_commandSender(m_target, attr, m_attrType);
 			m_prevFrame = m_timeLine.end();
 			m_curtTime = 0.0;
@@ -177,8 +198,8 @@ public:
 	}
 	void Clear()
 	{
-		typename xhn::map<double, Attribute*>::iterator iter = m_timeLine.begin();
-		typename xhn::map<double, Attribute*>::iterator end = m_timeLine.end();
+		Frame iter = m_timeLine.begin();
+		Frame end = m_timeLine.end();
 		for (; iter != end; iter++)
 		{
 			delete iter->second;
@@ -192,8 +213,8 @@ public:
 	double GetPeriodTime() const {
 		double ret = 0.0;
 		if (m_timeLine.size() > 1) {
-			typename xhn::map<double, Attribute*>::const_iterator begin = m_timeLine.begin();
-			typename xhn::map<double, Attribute*>::const_reverse_iterator end = m_timeLine.rbegin();
+			ConstFrame begin = m_timeLine.begin();
+			ConstReverseFrame end = m_timeLine.rbegin();
 			double beginTime = begin->first;
 			double endTime = end->first;
 			ret = endTime - beginTime;
@@ -219,12 +240,12 @@ public:
 		return m_status;
 	}
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class FAttrCloneProc
 {
 public:
@@ -247,7 +268,8 @@ public:
 class FAttrLoaderProc
 {
 public:
-	inline Attribute* operator () (const pugi::xml_node& from, const Attribute::Type type) {
+	inline Attribute* operator () (const pugi::xml_node& from,
+                                   const Attribute::Type type) {
 		switch (type)
 		{
 		case Attribute::Float:
@@ -286,31 +308,50 @@ public:
 class FInterpolationProc
 {
 public:
-	inline Attribute* operator() (Attribute* a, Attribute* b, double factor, Attribute::Type type) {
+	inline Attribute* operator() (Attribute* a,
+                                  Attribute* b,
+                                  double factor,
+                                  Attribute::Type type) {
         switch (type)
 		{
 		case Attribute::Float:
 		    {
 			    EFloat* ret = ENEW EFloat;
-			    *ret = EFloat::Lerp( *((EFloat*)a), *((EFloat*)b), (float)factor );
+			    *ret = EFloat::Lerp(
+                    *((EFloat*)a),
+                    *((EFloat*)b),
+                    (float)factor
+                );
 			    return ret;
 			}
 		case Attribute::Float2:
 			{
 				EFloat2* ret = ENEW EFloat2;
-				*ret = EFloat2::Lerp( *((EFloat2*)a), *((EFloat2*)b), (float)factor );
+				*ret = EFloat2::Lerp(
+                    *((EFloat2*)a),
+                    *((EFloat2*)b),
+                    (float)factor
+                );
 				return ret;
 			}
 		case Attribute::Float3:
 			{
 				EFloat3* ret = ENEW EFloat3;
-				*ret = EFloat3::Lerp( *((EFloat3*)a), *((EFloat3*)b), (float)factor );
+				*ret = EFloat3::Lerp(
+                    *((EFloat3*)a),
+                    *((EFloat3*)b),
+                    (float)factor
+                );
 				return ret;
 			}
 		case Attribute::Float4:
 			{
 				EFloat4* ret = ENEW EFloat4;
-				*ret = EFloat4::Lerp( *((EFloat4*)a), *((EFloat4*)b), (float)factor );
+				*ret = EFloat4::Lerp(
+                    *((EFloat4*)a),
+                    *((EFloat4*)b),
+                    (float)factor
+                );
 				return ret;
 			}
 		default:
@@ -326,10 +367,14 @@ public:
 public:
     FCommandSenderProc()
 	{
-		m_commandChannel = RobotManager::Get()->GetChannel("AnimationRobot", "RenderRobot");
+		m_commandChannel =
+        RobotManager::Get()->GetChannel("AnimationRobot",
+                                        "RenderRobot");
 	}
 public:
-	inline void operator () (AttributeHandle tgt, Attribute* v, Attribute::Type type) {
+	inline void operator () (AttributeHandle tgt,
+                             Attribute* v,
+                             Attribute::Type type) {
 		xhn::RWLock::Instance inst = tgt.GetWriteLock();
 		switch (type)
 		{
@@ -349,22 +394,28 @@ public:
 		delete v;
 	}
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+typedef Animation<
+FAttrCloneProc,
+FAttrLoaderProc,
+FInterpolationProc,
+FCommandSenderProc
+> AnimationInstance;
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class AnimAction : public Action
 {
 	DeclareRTTI;
 public:
-	AnimAction(AnimTimer* timer, Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc>* anim)
+	AnimAction(AnimTimer* timer, AnimationInstance* anim)
 		: m_timer(timer)
 		, m_animation(anim)
 	{}
 	AnimTimer* m_timer;
-	Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc>* m_animation;
+	AnimationInstance* m_animation;
 	virtual void DoImpl() {
         double t = m_timer->Tick();
 		m_animation->Update(t);
@@ -372,12 +423,12 @@ public:
 	}
 };
 
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 
 class CreateAnimCommand : public RobotCommand
 {
@@ -413,7 +464,9 @@ class AnimStatusChangeReceipt : public RobotCommandReceipt
 	DeclareRTTI;
 public:
 	AnimInfo m_animInfo;
-    AnimStatusChangeReceipt(int animID, AnimationStatus prevStatus, AnimationStatus curtStatus)
+    AnimStatusChangeReceipt(int animID,
+                            AnimationStatus prevStatus,
+                            AnimationStatus curtStatus)
 		: m_animInfo(animID, prevStatus, curtStatus)
 	{}
 	virtual var ShowDetails() {
@@ -436,12 +489,12 @@ public:
 	virtual void Do(Robot* exeRob, xhn::static_string sender);
 };
 
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class AnimationRobot : public Robot, public AnimTimer
 {
 	DeclareRTTI;
@@ -449,7 +502,8 @@ public:
 	int m_animationStamp;
 	double m_timer;
 	TimeCheckpoint m_prevCheckpoint;
-	xhn::map< int, Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc> > m_animations;
+    typedef xhn::map< int, AnimationInstance > AnimationMap;
+	AnimationMap m_animations;
 public:
 	AnimationRobot();
 	virtual double GetCurrentTime();
@@ -457,15 +511,19 @@ public:
 	virtual void Tock();
 	virtual xhn::static_string GetName();
 	virtual void InitChannels();
-	virtual void CommandProcImpl(xhn::static_string sender, RobotCommand* command);
-	virtual void CommandReceiptProcImpl(xhn::static_string sender, RobotCommandReceipt* receipt);
+	virtual void CommandProcImpl(xhn::static_string sender,
+                                 RobotCommand* command);
+	virtual void CommandReceiptProcImpl(xhn::static_string sender,
+                                        RobotCommandReceipt* receipt);
 	int CreateAnimation(AttributeHandle attr, Attribute::Type attrType);
-	void LoadAnimation(int animID, XMLResourcePtr file, xhn::static_string animName);
+	void LoadAnimation(int animID,
+                       XMLResourcePtr file,
+                       xhn::static_string animName);
 	void StopAnimation(int animID);
 	void DestroyAnimation(int animID);
 	AnimationStatus GetAnimationStatus(int animID);
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif

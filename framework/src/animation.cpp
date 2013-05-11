@@ -18,13 +18,28 @@ void CreateAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 		xhn::static_string emptyStr;
 		if (m_animFileName != emptyStr && m_animName != emptyStr)
 		{
-	        XMLResourcePtr cfg = RenderSystem_load_gui_config(m_animFileName);
-			animRob->LoadAnimation(animID, cfg, m_animName);
+	        XMLResourcePtr cfg =
+            RenderSystem_load_gui_config(m_animFileName);
+			animRob->LoadAnimation(
+                animID,
+                cfg,
+                m_animName
+            );
 		}
-		RWBuffer receiptChannel = RobotManager::Get()->GetChannel(animRob->GetName(), sender);
+		RWBuffer receiptChannel =
+        RobotManager::Get()->GetChannel(animRob->GetName(), sender);
 		if (receiptChannel) {
-			AnimStatusChangeReceipt* rec = ENEW AnimStatusChangeReceipt(animID, NotExist, animRob->GetAnimationStatus(animID));
-			RWBuffer_Write(receiptChannel, (const euint*)&rec, sizeof(rec));
+			AnimStatusChangeReceipt* rec =
+            ENEW AnimStatusChangeReceipt(
+                animID,
+                NotExist,
+                animRob->GetAnimationStatus(animID)
+            );
+			RWBuffer_Write(
+                receiptChannel,
+                (const euint*)&rec,
+                sizeof(rec)
+            );
 		}
 	}
 }
@@ -37,12 +52,28 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 {
 	AnimationRobot* animRob = exeRob->DynamicCast<AnimationRobot>();
 	if (animRob) {
-		///AnimationStatus prevStatus = animRob->GetAnimationStatus(m_animID);
+		
 		animRob->StopAnimation(m_animID);
-		RWBuffer receiptChannel = RobotManager::Get()->GetChannel(animRob->GetName(), sender);
+        
+		RWBuffer receiptChannel =
+        RobotManager::Get()->GetChannel(
+            animRob->GetName(),
+            sender
+        );
+        
 		if (receiptChannel) {
-			AnimStatusChangeReceipt* rec = ENEW AnimStatusChangeReceipt(m_animID, NotExist, animRob->GetAnimationStatus(m_animID));
-			RWBuffer_Write(receiptChannel, (const euint*)&rec, sizeof(rec));
+			AnimStatusChangeReceipt* rec =
+            ENEW AnimStatusChangeReceipt(
+                m_animID,
+                NotExist,
+                animRob->GetAnimationStatus(m_animID)
+            );
+            
+			RWBuffer_Write(
+                receiptChannel,
+                (const euint*)&rec,
+                sizeof(rec)
+            );
 		}
 	}
 }
@@ -60,7 +91,8 @@ double AnimationRobot::GetCurrentTime()
 double AnimationRobot::Tick()
 {
 	TimeCheckpoint checkpoint = TimeCheckpoint::Tick();
-	double elapsedTime = TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkpoint);
+	double elapsedTime =
+    TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkpoint);
 	m_prevCheckpoint = checkpoint;
 	m_timer += elapsedTime;
 	return elapsedTime;
@@ -74,25 +106,30 @@ xhn::static_string AnimationRobot::GetName()
 }
 void AnimationRobot::InitChannels()
 {
-	RobotManager::Get()->MakeChannel("RenderRobot", "AnimationRobot");
-	RobotManager::Get()->MakeChannel("AnimationRobot", "RenderRobot");
+	RobotManager::Get()->MakeChannel("RenderRobot",
+                                     "AnimationRobot");
+	RobotManager::Get()->MakeChannel("AnimationRobot",
+                                     "RenderRobot");
 }
 
-void AnimationRobot::CommandProcImpl(xhn::static_string sender, RobotCommand* command)
+void AnimationRobot::CommandProcImpl(xhn::static_string sender,
+                                     RobotCommand* command)
 {
     CreateAnimCommand* cac = command->DynamicCast<CreateAnimCommand>();
 	if (cac) {
         cac->Do(this, sender);
 	}
 }
-void AnimationRobot::CommandReceiptProcImpl(xhn::static_string sender, RobotCommandReceipt* receipt)
+void AnimationRobot::CommandReceiptProcImpl(xhn::static_string sender,
+                                            RobotCommandReceipt* receipt)
 {
 }
 int AnimationRobot::CreateAnimation(AttributeHandle attr, Attribute::Type attrType)
 {
 	int ret = -1;
-	Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc> anim(attr, attrType, this);
-	xhn::map< int, Animation<FAttrCloneProc,FAttrLoaderProc,  FInterpolationProc, FCommandSenderProc> >::iterator iter = m_animations.insert(xhn::make_pair(m_animationStamp, anim));
+	AnimationInstance anim(attr, attrType, this);
+	AnimationMap::iterator iter =
+    m_animations.insert(xhn::make_pair(m_animationStamp, anim));
 	ActionPtr act = ENEW AnimAction(this, &iter->second);
 	m_actionQueue.push_back(act);
 	ret = m_animationStamp;
@@ -100,9 +137,10 @@ int AnimationRobot::CreateAnimation(AttributeHandle attr, Attribute::Type attrTy
 
 	return ret;
 }
-void AnimationRobot::LoadAnimation(int animID, XMLResourcePtr file, xhn::static_string animName)
+void AnimationRobot::LoadAnimation(int animID, XMLResourcePtr file,
+                                   xhn::static_string animName)
 {
-	xhn::map< int, Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc> >::iterator iter = m_animations.find(animID);
+    AnimationMap::iterator iter = m_animations.find(animID);
 	if (iter != m_animations.end()) {
 		pugi::xml_document& doc = file->GetDocument();
 		pugi::xml_node root = doc.child("root");
@@ -121,7 +159,7 @@ void AnimationRobot::LoadAnimation(int animID, XMLResourcePtr file, xhn::static_
 }
 void AnimationRobot::StopAnimation(int animID)
 {
-	xhn::map< int, Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc> >::iterator iter = m_animations.find(animID);
+	AnimationMap::iterator iter = m_animations.find(animID);
 	if (iter != m_animations.end()) {
 		iter->second.Stop();
 	}
@@ -129,7 +167,7 @@ void AnimationRobot::StopAnimation(int animID)
 
 void AnimationRobot::DestroyAnimation(int animID)
 {
-	xhn::map< int, Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc> >::iterator iter = m_animations.find(animID);
+	AnimationMap::iterator iter = m_animations.find(animID);
 	if (iter != m_animations.end()) {
 		xhn::vector<ActionPtr>::iterator actIter = m_actionQueue.begin();
 		xhn::vector<ActionPtr>::iterator actEnd = m_actionQueue.end();
@@ -149,7 +187,7 @@ void AnimationRobot::DestroyAnimation(int animID)
 
 AnimationStatus AnimationRobot::GetAnimationStatus(int animID)
 {
-	xhn::map< int, Animation<FAttrCloneProc, FAttrLoaderProc, FInterpolationProc, FCommandSenderProc> >::iterator iter = m_animations.find(animID);
+	AnimationMap::iterator iter = m_animations.find(animID);
 	if (iter != m_animations.end()) {
 		return iter->second.GetStatus();
 	}

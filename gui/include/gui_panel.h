@@ -3,9 +3,9 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
-///*************************************************************************************************************************///
-///                                                  class define begin                                                     ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SpriteRenderer;
 class GUIPanelLayer : public SpriteNormalLayer
 {
@@ -14,7 +14,9 @@ private:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_sizeHandle;
 public:
-	GUIPanelLayer(const xhn::static_string name, AttributeHandle pivotHandle, AttributeHandle sizeHandle)
+	GUIPanelLayer(const xhn::static_string name,
+                  AttributeHandle pivotHandle,
+                  AttributeHandle sizeHandle)
 		: m_pivotHandle(pivotHandle)
 	    , m_sizeHandle(sizeHandle)
 		, SpriteNormalLayer(name)
@@ -47,10 +49,15 @@ public:
 		, SpriteFactory(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl();
-	static void CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName, 
-		const SpriteRect& panelRect, const SpriteSize& cornerSize, const SpriteRect& areaRect, const SpriteSize& areaCornerSize);
+	static void CreateSheetConfig(const char* cfgName,
+                                  const char* sheetName,
+                                  const char* textureName,
+		                          const SpriteRect& panelRect,
+                                  const SpriteSize& cornerSize,
+                                  const SpriteRect& areaRect,
+                                  const SpriteSize& areaCornerSize);
 };
-///*************************************************************************************************************************///
-///                                                   class define end                                                      ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif

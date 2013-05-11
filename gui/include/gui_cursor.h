@@ -3,7 +3,9 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
-
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class GUICursorLayer : public SpriteNormalLayer
 {
 	DeclareRTTI;
@@ -48,4 +50,7 @@ public:
 	{}
 	virtual Sprite* MakeSpriteImpl();
 };
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif

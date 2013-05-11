@@ -67,30 +67,38 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 	{
 		if (m_keyboardListener->m_left_alt_key_down && m_rightButtonDown)
 		{
-			sfloat3 vec = SFloat3( (float)event.info.mouse_info.mouse_move_info.x,
-                                  (float)event.info.mouse_info.mouse_move_info.y,
-                                  0.0f );
+			sfloat3 vec = SFloat3(
+                (float)event.info.mouse_info.mouse_move_info.x,
+                (float)event.info.mouse_info.mouse_move_info.y,
+                0.0f
+            );
+            
 			float dist = SFloat3_length(vec);
             
 			if (event.info.mouse_info.mouse_move_info.x < 0)
 				dist = -dist;
-			///CameraUtility_dolly_shot(m_cameraUtil, dist);
             if (m_camUtil) {
                 CameraUtility_dolly_shot(m_camUtil, dist);
             }
 		}
 		else if (m_keyboardListener->m_left_alt_key_down && m_middleButtonDown)
 		{
-			///CameraUtility_pan(m_cameraUtil, (float)event.info.mouse_info.mouse_move_info.x, (float)event.info.mouse_info.mouse_move_info.y);
             if (m_camUtil) {
-                CameraUtility_pan(m_camUtil, (float)event.info.mouse_info.mouse_move_info.x, (float)event.info.mouse_info.mouse_move_info.y);
+                CameraUtility_pan(
+                    m_camUtil,
+                    (float)event.info.mouse_info.mouse_move_info.x,
+                    (float)event.info.mouse_info.mouse_move_info.y
+                );
             }
 		}
 		else if (m_keyboardListener->m_left_alt_key_down && m_leftButtonDown)
 		{
-			///CameraUtility_rotate(m_cameraUtil, (float)-event.info.mouse_info.mouse_move_info.x, 0.0f);
             if (m_camUtil) {
-                CameraUtility_rotate(m_camUtil, (float)-event.info.mouse_info.mouse_move_info.x, 0.0f);
+                CameraUtility_rotate(
+                    m_camUtil,
+                    (float)-event.info.mouse_info.mouse_move_info.x,
+                    0.0f
+                );
             }
 		}
 	}
@@ -102,22 +110,16 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 #elif defined(__APPLE__)
         m_mouseY = event.info.mouse_info.mouse_abs_pos.y;
 #endif
-        /**
-		SpriteMouseMoveEvent sptEvt;
-		sptEvt.m_curtMousePos.x = m_mouseX;
-		sptEvt.m_curtMousePos.y = m_mouseY;
-		///m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
-		SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
-         **/
         if (m_guiRenderer) {
             SpriteMouseMoveEvent sptEvt;
             sptEvt.m_curtMousePos.x = m_mouseX;
             sptEvt.m_curtMousePos.y = m_mouseY;
             printf("mouse x %d, y %d\n", m_mouseX, m_mouseY);
-            /**
-            m_guiRenderer->get_mouse_ray(m_mouseX, m_mouseY, &guiEvt.m_mouseRay.origin, &guiEvt.m_mouseRay.direction);
-             **/
-			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+
+			SpriteEventHub::Get()->BroadcastPublicEvent(
+                sptEvt,
+                SpriteEventHub::Get()->GetAllReceivers()
+            );
         }
 	}
 	else if (event.type == MouseButtonDownEvent)
@@ -126,7 +128,10 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 			m_leftButtonDown = true;
 			SpriteMouseButtonDownEvent sptEvt;
 			sptEvt.m_leftButtomDown = true;
-			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+			SpriteEventHub::Get()->BroadcastPublicEvent(
+                sptEvt,
+                SpriteEventHub::Get()->GetAllReceivers()
+            );
 		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = true;
@@ -139,7 +144,10 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 			m_leftButtonDown = false;
 			SpriteMouseButtonUpEvent sptEvt;
 			sptEvt.m_leftButtomUp = true;
-			SpriteEventHub::Get()->BroadcastPublicEvent(sptEvt, SpriteEventHub::Get()->GetAllReceivers());
+			SpriteEventHub::Get()->BroadcastPublicEvent(
+                sptEvt,
+                SpriteEventHub::Get()->GetAllReceivers()
+            );
 		}
 		else if (event.info.mouse_info.mouse_button_info == RightButton)
 			m_rightButtonDown = false;

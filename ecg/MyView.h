@@ -33,9 +33,11 @@
     CVDisplayLinkRef displayLink;
     
     double    deltaTime;
-    double    outputTime;
+    ///double    outputTime;
+    double    timer;
     float    viewWidth;
     float    viewHeight;
+    float    fps;
     
     RenderRobot* renderRobot;
     RWBuffer rwbuffer;

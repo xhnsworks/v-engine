@@ -17,11 +17,14 @@
 #include "sprite_factory.h"
 #include "font_renderer.h"
 #include "color.h"
+
 namespace pugi
 {
     class xml_node;
 }
-
+///**********************************************************************///
+///                       strcut define begin                            ///
+///**********************************************************************///
 class SpriteRenderer;
 struct FourBorders;
 struct SpriteSize
@@ -87,6 +90,12 @@ struct SpriteRect
 	}
 	void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
 };
+///**********************************************************************///
+///                       strcut define end                              ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SpriteElement
 {
 public:
@@ -159,9 +168,13 @@ public:
 	}
 	void ApplyTransform(const matrix4x4* transform);
     Mesh Build(SpriteRenderer* sprite_renderer) const;
-	///void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
 };
-
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class SpriteLayer : public RefObject
 {
 	DeclareRootRTTI;
@@ -184,17 +197,25 @@ public:
 		return m_name;
 	}
 	virtual void GetMatrix(matrix4x4* result) = 0;
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
+	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
+                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
 	void SetTransparent(float t);
 	void GetScope(SpriteRect& result);
 	virtual void GetScopeImpl(SpriteRect& result) = 0;
 };
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
+typedef xhn::map<xhn::static_string, SpriteElement> SpriteElementMap;
 class SpriteNormalLayer : public SpriteLayer
 {
 	DeclareRTTI;
 protected:
-	xhn::map<xhn::static_string, SpriteElement> m_elementBuffer;
+	SpriteElementMap m_elementBuffer;
 public:
 	SpriteNormalLayer(const xhn::static_string name)
 		: SpriteLayer(name)
@@ -209,15 +230,16 @@ public:
 	}
 	inline SpriteElement* NewElement(const char* name) {
 		SpriteElement ele;
-		xhn::pair<xhn::static_string, SpriteElement> p = xhn::make_pair(xhn::static_string(name), ele);
-		xhn::map<xhn::static_string, SpriteElement>::iterator iter = m_elementBuffer.insert(p);
+        xhn::static_string staticName = name;
+		SpriteElementMap::iterator iter =
+        m_elementBuffer.insert(xhn::make_pair(staticName, ele));
 		if (iter != m_elementBuffer.end())
 			return &iter->second;
 		else
 			return NULL;
 	}
 	inline SpriteElement* GetElement(const xhn::static_string& name) {
-		xhn::map<xhn::static_string, SpriteElement>::iterator iter = m_elementBuffer.find(name);
+		SpriteElementMap::iterator iter = m_elementBuffer.find(name);
 		if (iter != m_elementBuffer.end())
 			return &iter->second;
 		else
@@ -225,7 +247,9 @@ public:
 	}
 	virtual void GetMatrix(matrix4x4* result) {
 	}
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) {}
+	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
+                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
+    {}
 	virtual void GetScopeImpl(SpriteRect& result);
 };
 
@@ -254,9 +278,16 @@ public:
 	virtual void Clear();
 	virtual void GetMatrix(matrix4x4* result) {
 	}
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) {}
+	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
+                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
+    {}
 };
-
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class Sprite : public SpriteLayer
 {
 	DeclareRTTI;
@@ -279,7 +310,8 @@ public:
     virtual void Init() {}
     void LoadConfig(const char* configName);
     void SaveConfig(const char* configName);
-    void RegisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc);
+    void RegisterPublicEventCallback(const RTTI* type,
+                                     SpriteEventProcPtr proc);
     void PublicEventCallback(const SpriteEvent* evt);
     void AttachToGeomBuffer(SpriteGeomBufferPtr buffer);
 	void SetCoord(float x, float y);
@@ -323,9 +355,12 @@ public:
 	virtual void Clear();
 	virtual void GetMatrix(matrix4x4* result);
 	virtual void Build();
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
+	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
+                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
 	virtual void Tick(double elapsedTime) {}
 	virtual void Tock() {}
 };
-
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
 #endif

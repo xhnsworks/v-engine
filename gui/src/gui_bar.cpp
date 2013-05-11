@@ -13,18 +13,18 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-///*************************************************************************************************************************///
-///                                                  class implement begin                                                  ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 ImplementRTTI(GUIHoriBarLayer, SpriteNormalLayer);
 ImplementRTTI(GUIHoriBar, Sprite);
 
 void GUIHoriBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 {
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterLeft = m_elementBuffer.find("left");
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterRight = m_elementBuffer.find("right");
+	SpriteElementMap::iterator iterLeft = m_elementBuffer.find("left");
+	SpriteElementMap::iterator iterRight = m_elementBuffer.find("right");
     
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterCenter = m_elementBuffer.find("center");
+	SpriteElementMap::iterator iterCenter = m_elementBuffer.find("center");
     
 	SpriteElement tmpLeft = iterLeft->second;
 	SpriteElement tmpRight = iterRight->second;
@@ -44,7 +44,8 @@ void GUIHoriBarLayer::BuildElements(xhn::list<SpriteElement>& to)
     
 	float left = tmpLeft.m_rect.left - pivot.x;
 	float top = tmpCenter.m_rect.top - pivot.y;
-	float right = tmpRight.m_rect.left + tmpRight.m_rect.size.width - pivot.x;
+	float right =
+    tmpRight.m_rect.left + tmpRight.m_rect.size.width - pivot.x;
     
 	float realWidth = right - left;
     
@@ -61,7 +62,8 @@ void GUIHoriBarLayer::BuildElements(xhn::list<SpriteElement>& to)
     
     tmpCenter.m_rect.left = left + tmpLeft.m_rect.size.width;
 	tmpCenter.m_rect.top = top;
-	tmpCenter.m_rect.size.width = right - left - tmpRight.m_rect.size.width - tmpLeft.m_rect.size.width;
+	tmpCenter.m_rect.size.width =
+    right - left - tmpRight.m_rect.size.width - tmpLeft.m_rect.size.width;
     
 	to.push_back(tmpCenter);
     
@@ -71,10 +73,10 @@ void GUIHoriBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)
 {    
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterLeft = m_elementBuffer.find("left");
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterRight = m_elementBuffer.find("right");
+	SpriteElementMap::iterator iterLeft = m_elementBuffer.find("left");
+	SpriteElementMap::iterator iterRight = m_elementBuffer.find("right");
     
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterCenter = m_elementBuffer.find("center");
+	SpriteElementMap::iterator iterCenter = m_elementBuffer.find("center");
     
 	SpriteElement tmpLeft = iterLeft->second;
 	SpriteElement tmpRight = iterRight->second;
@@ -110,7 +112,8 @@ void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)
 	result.size.height = bottom - top;
 }
 
-GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer, const xhn::static_string name)
+GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
+                       const xhn::static_string name)
 : Sprite(renderer, name)
 {
 	///m_sizeHandle.m_attr = &m_size;
@@ -128,7 +131,9 @@ void GUIHoriBar::Init(const xhn::static_string configName)
 		pugi::xml_node baselayer = layers.child("base");
 		if (!baselayer)
 			return;
-		SpriteLayerPtr layer = ENEW GUIHoriBarLayer("base", m_pivotHandle, m_sizeHandle);
+		SpriteLayerPtr layer = ENEW GUIHoriBarLayer("base",
+                                                    m_pivotHandle,
+                                                    m_sizeHandle);
 		layer->LoadConfig(baselayer);
 		m_children.push_back(layer);
 		SetSize(100.0f);
@@ -157,12 +162,20 @@ Sprite* GUIHoriBarFactory::MakeSpriteImpl()
 	m_horiBarCount++;
 	GUIHoriBar* ret = ENEW GUIHoriBar(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+                                     ENEW SpriteFrameStartEventProc(
+                                         ret, m_renderer)
+                                     );
 	return ret;
 }
 
-void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName,
-										const SpriteRect& panelRect, float cornerSize, const SpriteRect& areaRect, float areaCornerSize)
+void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
+                                          const char* sheetName,
+                                          const char* textureName,
+										  const SpriteRect& panelRect,
+                                          float cornerSize,
+                                          const SpriteRect& areaRect,
+                                          float areaCornerSize)
 {
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();
@@ -195,68 +208,71 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName, const char* sheet
 	float areaRight = areaRect.left + areaRect.size.width;
 	float areaBottom = areaRect.top + areaRect.size.height;
     
-	{
-		left.append_attribute("name").set_value("left");
-		right.append_attribute("name").set_value("right");
-        
-		left.append_attribute("left").set_value(panelLeft);
-		right.append_attribute("left").set_value(panelRight - cornerSize);
-        
-		left.append_attribute("top").set_value(panelTop);
-		right.append_attribute("top").set_value(panelTop);
-        
-		left.append_attribute("width").set_value(cornerSize);
-		right.append_attribute("width").set_value(cornerSize);
-        
-		left.append_attribute("height").set_value(panelRect.size.height);
-		right.append_attribute("height").set_value(panelRect.size.height);
-        
-		left.append_attribute("area_x0").set_value(areaLeft);
-        right.append_attribute("area_x0").set_value(areaRight - areaCornerSize);
-		        
-		left.append_attribute("area_x1").set_value(areaLeft + areaCornerSize);
-		right.append_attribute("area_x1").set_value(areaRight);
-        
-		left.append_attribute("area_y0").set_value(areaTop);
-        right.append_attribute("area_y0").set_value(areaTop);
-        
-		left.append_attribute("area_y1").set_value(areaBottom);
-		right.append_attribute("area_y1").set_value(areaBottom);
-        
-		left.append_attribute("transparent").set_value(1.0f);
-		right.append_attribute("transparent").set_value(1.0f);
-	}
-	{
-		center.append_attribute("name").set_value("center");
-        
-        center.append_attribute("left").set_value(panelLeft + cornerSize);
-		center.append_attribute("top").set_value(panelTop);
-		center.append_attribute("width").set_value(panelRect.size.width - cornerSize - cornerSize);
-		center.append_attribute("height").set_value(panelRect.size.height);
-        
-		center.append_attribute("area_x0").set_value(areaLeft + areaCornerSize);
-		center.append_attribute("area_x1").set_value(areaRight - areaCornerSize);
-		center.append_attribute("area_y0").set_value(areaTop);
-		center.append_attribute("area_y1").set_value(areaBottom);
-        
-		center.append_attribute("transparent").set_value(1.0f);
-	}
+	left.append_attribute("name").set_value("left");
+    right.append_attribute("name").set_value("right");
+    
+    left.append_attribute("left").set_value(panelLeft);
+    right.append_attribute("left").set_value(panelRight - cornerSize);
+    
+    left.append_attribute("top").set_value(panelTop);
+    right.append_attribute("top").set_value(panelTop);
+    
+    left.append_attribute("width").set_value(cornerSize);
+    right.append_attribute("width").set_value(cornerSize);
+    
+    left.append_attribute("height").set_value(panelRect.size.height);
+    right.append_attribute("height").set_value(panelRect.size.height);
+    
+    left.append_attribute("area_x0").set_value(areaLeft);
+    right.append_attribute("area_x0").set_value(areaRight -
+                                                areaCornerSize);
+    
+    left.append_attribute("area_x1").set_value(areaLeft +
+                                               areaCornerSize);
+    right.append_attribute("area_x1").set_value(areaRight);
+    
+    left.append_attribute("area_y0").set_value(areaTop);
+    right.append_attribute("area_y0").set_value(areaTop);
+    
+    left.append_attribute("area_y1").set_value(areaBottom);
+    right.append_attribute("area_y1").set_value(areaBottom);
+    
+    left.append_attribute("transparent").set_value(1.0f);
+    right.append_attribute("transparent").set_value(1.0f);
+    
+	center.append_attribute("name").set_value("center");
+    
+    center.append_attribute("left").set_value(panelLeft + cornerSize);
+    center.append_attribute("top").set_value(panelTop);
+    center.append_attribute("width").set_value(panelRect.size.width -
+                                               cornerSize -
+                                               cornerSize);
+    center.append_attribute("height").set_value(panelRect.size.height);
+    
+    center.append_attribute("area_x0").set_value(areaLeft +
+                                                 areaCornerSize);
+    center.append_attribute("area_x1").set_value(areaRight -
+                                                 areaCornerSize);
+    center.append_attribute("area_y0").set_value(areaTop);
+    center.append_attribute("area_y1").set_value(areaBottom);
+    
+    center.append_attribute("transparent").set_value(1.0f);
 }
-///*************************************************************************************************************************///
-///                                                  class implement end                                                    ///
-///*************************************************************************************************************************///
-///*************************************************************************************************************************///
-///                                                  class implement begin                                                  ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 ImplementRTTI(GUIVertBarLayer, SpriteNormalLayer);
 ImplementRTTI(GUIVertBar, Sprite);
 
 void GUIVertBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 {
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterTop = m_elementBuffer.find("top");
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterBottom = m_elementBuffer.find("bottom");
+	SpriteElementMap::iterator iterTop = m_elementBuffer.find("top");
+	SpriteElementMap::iterator iterBottom = m_elementBuffer.find("bottom");
 
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterCenter = m_elementBuffer.find("center");
+	SpriteElementMap::iterator iterCenter = m_elementBuffer.find("center");
 
 	SpriteElement tmpTop = iterTop->second;
 	SpriteElement tmpBottom = iterBottom->second;
@@ -276,10 +292,12 @@ void GUIVertBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 	float left = tmpCenter.m_rect.left - pivot.x;
 	float top = tmpTop.m_rect.top - pivot.y;
-	float right = tmpCenter.m_rect.left + tmpCenter.m_rect.size.width - pivot.x;
-	float bottom = tmpBottom.m_rect.top + tmpBottom.m_rect.size.height - pivot.y;
+	///float right =
+    ///tmpCenter.m_rect.left + tmpCenter.m_rect.size.width - pivot.x;
+	float bottom =
+    tmpBottom.m_rect.top + tmpBottom.m_rect.size.height - pivot.y;
 
-	float realWidth = right - left;
+	///float realWidth = right - left;
 	float realHeight = bottom - top;
 
 	float scaleY = size.x / realHeight;
@@ -295,7 +313,8 @@ void GUIVertBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 	tmpCenter.m_rect.left = left;
 	tmpCenter.m_rect.top = top + tmpTop.m_rect.size.height;
-	tmpCenter.m_rect.size.height = bottom - top - tmpTop.m_rect.size.height - tmpBottom.m_rect.size.height;
+	tmpCenter.m_rect.size.height =
+    bottom - top - tmpTop.m_rect.size.height - tmpBottom.m_rect.size.height;
 
 	to.push_back(tmpCenter);
 
@@ -305,10 +324,10 @@ void GUIVertBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 void GUIVertBarLayer::GetScopeImpl(SpriteRect& result)
 {    
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterTop = m_elementBuffer.find("top");
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterBottom = m_elementBuffer.find("bottom");
+	SpriteElementMap::iterator iterTop = m_elementBuffer.find("top");
+	SpriteElementMap::iterator iterBottom = m_elementBuffer.find("bottom");
 
-	xhn::map<xhn::static_string, SpriteElement>::iterator iterCenter = m_elementBuffer.find("center");
+	SpriteElementMap::iterator iterCenter = m_elementBuffer.find("center");
     
 	SpriteElement tmpTop = iterTop->second;
 	SpriteElement tmpBottom = iterBottom->second;
@@ -344,11 +363,11 @@ void GUIVertBarLayer::GetScopeImpl(SpriteRect& result)
 	result.size.height = bottom - top;
 }
 
-GUIVertBar::GUIVertBar(SpriteRenderer* renderer, const xhn::static_string name)
+GUIVertBar::GUIVertBar(SpriteRenderer* renderer,
+                       const xhn::static_string name)
 : Sprite(renderer, name)
 {
-	///m_sizeHandle.m_attr = &m_size;
-	m_sizeHandle.m_lock = ENEW xhn::RWLock;
+    m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<EFloat>();
 }
 
@@ -362,7 +381,9 @@ void GUIVertBar::Init(const xhn::static_string configName)
 		pugi::xml_node baselayer = layers.child("base");
 		if (!baselayer)
 			return;
-		SpriteLayerPtr layer = ENEW GUIVertBarLayer("base", m_pivotHandle, m_sizeHandle);
+		SpriteLayerPtr layer = ENEW GUIVertBarLayer("base",
+                                                    m_pivotHandle,
+                                                    m_sizeHandle);
 		layer->LoadConfig(baselayer);
 		m_children.push_back(layer);
 		SetSize(100.0f);
@@ -391,12 +412,20 @@ Sprite* GUIVertBarFactory::MakeSpriteImpl()
 	m_vertBarCount++;
 	GUIVertBar* ret = ENEW GUIVertBar(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+                                     ENEW SpriteFrameStartEventProc(
+                                         ret, m_renderer)
+                                     );
 	return ret;
 }
 
-void GUIVertBarFactory::CreateSheetConfig(const char* cfgName, const char* sheetName, const char* textureName,
-										  const SpriteRect& panelRect, float cornerSize, const SpriteRect& areaRect, float areaCornerSize)
+void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
+                                          const char* sheetName,
+                                          const char* textureName,
+										  const SpriteRect& panelRect,
+                                          float cornerSize,
+                                          const SpriteRect& areaRect,
+                                          float areaCornerSize)
 {
 	
 	XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
@@ -423,7 +452,7 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName, const char* sheet
 
 	float panelLeft = panelRect.left;
 	float panelTop = panelRect.top;
-	float panelRight = panelRect.left + panelRect.size.width;
+	///float panelRight = panelRect.left + panelRect.size.width;
 	float panelBottom = panelRect.top + panelRect.size.height;
 
 	float areaLeft = areaRect.left;
@@ -431,53 +460,55 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName, const char* sheet
 	float areaRight = areaRect.left + areaRect.size.width;
 	float areaBottom = areaRect.top + areaRect.size.height;
 
-	{
-		top.append_attribute("name").set_value("top");
-		bottom.append_attribute("name").set_value("bottom");
+	top.append_attribute("name").set_value("top");
+    bottom.append_attribute("name").set_value("bottom");
+    
+    top.append_attribute("left").set_value(panelLeft);
+    bottom.append_attribute("left").set_value(panelLeft);
+    
+    top.append_attribute("top").set_value(panelTop);
+    bottom.append_attribute("top").set_value(panelBottom - cornerSize);
+    
+    top.append_attribute("width").set_value(panelRect.size.width);
+    bottom.append_attribute("width").set_value(panelRect.size.width);
+    
+    top.append_attribute("height").set_value(cornerSize);
+    bottom.append_attribute("height").set_value(cornerSize);
+    
+    top.append_attribute("area_x0").set_value(areaLeft);
+    bottom.append_attribute("area_x0").set_value(areaLeft);
+    
+    top.append_attribute("area_x1").set_value(areaRight);
+    bottom.append_attribute("area_x1").set_value(areaRight);
+    
+    top.append_attribute("area_y0").set_value(areaTop);
+    bottom.append_attribute("area_y0").set_value(areaBottom -
+                                                 areaCornerSize);
+    
+    top.append_attribute("area_y1").set_value(areaTop + areaCornerSize);
+    bottom.append_attribute("area_y1").set_value(areaBottom);
+    
+    top.append_attribute("transparent").set_value(1.0f);
+    bottom.append_attribute("transparent").set_value(1.0f);
 
-		top.append_attribute("left").set_value(panelLeft);
-		bottom.append_attribute("left").set_value(panelLeft);
-
-		top.append_attribute("top").set_value(panelTop);
-		bottom.append_attribute("top").set_value(panelBottom - cornerSize);
-
-		top.append_attribute("width").set_value(panelRect.size.width);
-		bottom.append_attribute("width").set_value(panelRect.size.width);
-
-		top.append_attribute("height").set_value(cornerSize);
-		bottom.append_attribute("height").set_value(cornerSize);
-
-		top.append_attribute("area_x0").set_value(areaLeft);
-		bottom.append_attribute("area_x0").set_value(areaLeft);
-
-		top.append_attribute("area_x1").set_value(areaRight);
-		bottom.append_attribute("area_x1").set_value(areaRight);
-
-		top.append_attribute("area_y0").set_value(areaTop);
-		bottom.append_attribute("area_y0").set_value(areaBottom - areaCornerSize);
-
-		top.append_attribute("area_y1").set_value(areaTop + areaCornerSize);
-		bottom.append_attribute("area_y1").set_value(areaBottom);
-
-		top.append_attribute("transparent").set_value(1.0f);
-		bottom.append_attribute("transparent").set_value(1.0f);
-	}
-	{
-		center.append_attribute("name").set_value("center");
-
-		center.append_attribute("left").set_value(panelLeft);
-		center.append_attribute("top").set_value(panelTop + cornerSize);
-		center.append_attribute("width").set_value(panelRect.size.width);
-		center.append_attribute("height").set_value(panelRect.size.height - cornerSize - cornerSize);
-
-		center.append_attribute("area_x0").set_value(areaLeft);
-		center.append_attribute("area_x1").set_value(areaRight);
-		center.append_attribute("area_y0").set_value(areaTop + areaCornerSize);
-		center.append_attribute("area_y1").set_value(areaBottom - areaCornerSize);
-
-		center.append_attribute("transparent").set_value(1.0f);
-	}
+	center.append_attribute("name").set_value("center");
+    
+    center.append_attribute("left").set_value(panelLeft);
+    center.append_attribute("top").set_value(panelTop + cornerSize);
+    center.append_attribute("width").set_value(panelRect.size.width);
+    center.append_attribute("height").set_value(panelRect.size.height -
+                                                cornerSize -
+                                                cornerSize);
+    
+    center.append_attribute("area_x0").set_value(areaLeft);
+    center.append_attribute("area_x1").set_value(areaRight);
+    center.append_attribute("area_y0").set_value(areaTop +
+                                                 areaCornerSize);
+    center.append_attribute("area_y1").set_value(areaBottom -
+                                                 areaCornerSize);
+    
+    center.append_attribute("transparent").set_value(1.0f);
 }
-///*************************************************************************************************************************///
-///                                                  class implement end                                                    ///
-///*************************************************************************************************************************///
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///

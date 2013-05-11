@@ -87,12 +87,6 @@ const char* BranchNode_compile(BranchNode _self)
         condition cond = _self->branch_blocks[i].cond;
         if (!ShaderObject_equal(cond.left_obj, cond.right_obj))
         {
-            ///const char* left_name = ShaderObject_get_name(cond.left_obj);
-            ///const char* right_name = ShaderObject_get_name(cond.right_obj);
-            ///euint32 left_array_size, left_array_index;
-            ///euint32 right_array_size, right_array_index;
-            ///shader_object_type left_type = ShaderObject_get_type(cond.left_obj, &left_array_size, &left_array_index);
-            ///shader_object_type right_type = ShaderObject_get_type(cond.right_obj, &right_array_size, &right_array_index);
             return NULL;
         }
         if (i == 0)
@@ -220,7 +214,10 @@ void BranchNode_delete(BranchNode _self)
     ShaderNodeBase_delete((ShaderNodeBase)_self);
 }
 
-CircuitBoard BranchNode_add_branch(BranchNode _self, ShaderObject _a, compare_operation _op, ShaderObject _b)
+CircuitBoard BranchNode_add_branch(BranchNode _self,
+                                   ShaderObject _a,
+                                   compare_operation _op,
+                                   ShaderObject _b)
 {
     CircuitBoard board = CircuitBoard_new();
     branch_block block = {{ShaderObject_clone(_a), _op, ShaderObject_clone(_b)}, board};

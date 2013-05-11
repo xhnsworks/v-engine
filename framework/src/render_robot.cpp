@@ -93,14 +93,14 @@ ShaderNode pure_color_material_proc(PxlSdrBuf _psb, int _id)
     ShaderNode_set_name(psn, mbuf);
 
     ShaderNode_set_function(psn,
-                            "{\n"
+        "{\n"
 #if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
-                            "    vec3 cmap = texture(ColorMap, vTexCoord).rgb;\n"
+        "    vec3 cmap = texture(ColorMap, vTexCoord).rgb;\n"
 #else
-							"    vec3 cmap = texture2D(ColorMap, vTexCoord).rgb;\n"
+        "    vec3 cmap = texture2D(ColorMap, vTexCoord).rgb;\n"
 #endif
-                            "    gl_FragData[0] = vec4( cmap, 1.0 );"
-                            "}\n");
+        "    gl_FragData[0] = vec4( cmap, 1.0 );"
+        "}\n");
     return psn;
 }
 
@@ -113,14 +113,14 @@ ShaderNode pure_lighting_material_proc(PxlSdrBuf _psb, int _id)
     ShaderNode_set_name(psn, mbuf);
 
     ShaderNode_set_function(psn,
-                            "{\n"
+        "{\n"
 #if GLSL_MAIN_VERSION >= 1 && GLSL_SUB_VERSION > 2
-                            "    vec3 lmap = texture(DiffuseLightingMap, vTexCoord).rgb;\n"
+        "    vec3 lmap = texture(DiffuseLightingMap, vTexCoord).rgb;\n"
 #else
-							"    vec3 lmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
+        "    vec3 lmap = texture2D(DiffuseLightingMap, vTexCoord).rgb;\n"
 #endif
-                            "    gl_FragData[0] = vec4( lmap, 1.0 );"
-                            "}\n");
+        "    gl_FragData[0] = vec4( lmap, 1.0 );"
+        "}\n");
 
     ShaderBuffer_add_prototype_node(sb, psn);
     return psn;
@@ -169,9 +169,9 @@ ShaderNode red_material_proc(PxlSdrBuf _psb, int _id)
     ShaderNode_set_name(psn, mbuf);
 
     ShaderNode_set_function(psn,
-                            "{\n"
-                            "    gl_FragData[0] = vec4( 1.0, 0.0, 0.0, 1.0 );"
-                            "}\n");
+        "{\n"
+        "    gl_FragData[0] = vec4( 1.0, 0.0, 0.0, 1.0 );"
+        "}\n");
     return psn;
 }
 
@@ -234,8 +234,13 @@ void ResourceAction::DoImpl()
 		areaCornerSize.width = 8.0f;
 		areaCornerSize.height = 8.0f;
 
-		GUIPanelFactory::CreateSheetConfig("text_edit.xml", "background", "BlackOrangeSkins.png",
-			panelRect, cornerSize, areaRect, areaCornerSize);
+		GUIPanelFactory::CreateSheetConfig("text_edit.xml",
+                                           "background",
+                                           "BlackOrangeSkins.png",
+                                           panelRect,
+                                           cornerSize,
+                                           areaRect,
+                                           areaCornerSize);
 
 		panelRect.size.width = 50.0f;
 		panelRect.size.height = 12.0f;
@@ -243,8 +248,13 @@ void ResourceAction::DoImpl()
 		areaRect.top = 198.0f;
 		areaRect.size.width = 130.0f - 113.0f;
 		areaRect.size.height = 210.0f - 198.0f;
-		GUIHoriBarFactory::CreateSheetConfig("hori_bar.xml", "base", "BlackOrangeSkins.png",
-			panelRect, 6.0f, areaRect, 6.0f);
+		GUIHoriBarFactory::CreateSheetConfig("hori_bar.xml",
+                                             "base",
+                                             "BlackOrangeSkins.png",
+			                                 panelRect,
+                                             6.0f,
+                                             areaRect,
+                                             6.0f);
 
 
 		panelRect.size.width = 12.0f;
@@ -253,12 +263,22 @@ void ResourceAction::DoImpl()
 		areaRect.top = 137.0f;
 		areaRect.size.width = 163.0f - 136.0f;
 		areaRect.size.height = 161.0f - 137.0f;
-		GUIVertBarFactory::CreateSheetConfig("vert_bar.xml", "base", "BlackOrangeSkins.png",
-			panelRect, 6.0f, areaRect, 6.0f);
+		GUIVertBarFactory::CreateSheetConfig("vert_bar.xml",
+                                             "base",
+                                             "BlackOrangeSkins.png",
+                                             panelRect,
+                                             6.0f,
+                                             areaRect,
+                                             6.0f);
+        
+        GUIContainerFactory::CreateSheetConfig("container.xml",
+                                               "rect",
+                                               panelRect);
 
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
 		m_horiBarFactory = ENEW GUIHoriBarFactory(guiRdr, "hori_bar.xml");
 		m_vertBarFactory = ENEW GUIVertBarFactory(guiRdr, "vert_bar.xml");
+        m_containerFactory = ENEW GUIContainerFactory(guiRdr, "container.xml");
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
@@ -266,6 +286,7 @@ void ResourceAction::DoImpl()
 		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();
 		m_guiHoriBar = m_horiBarFactory->MakeSprite()->DynamicCast<GUIHoriBar>();
 		m_guiVertBar = m_vertBarFactory->MakeSprite()->DynamicCast<GUIVertBar>();
+        m_guiContainer = m_containerFactory->MakeSprite()->DynamicCast<GUIContainer>();
 		m_guiEdit->SetCoord(0.0f, 200.0f);
 		m_guiHoriBar->SetCoord(0.0f, 280.0f);
 		m_guiVertBar->SetCoord(0.0f, 400.0f);
@@ -278,11 +299,13 @@ void ResourceAction::DoImpl()
 		m_guiCursor->SetCoord(10.0f, 30.0f);
 
 		///
-		m_guiPanel->AddChild(m_guiButton);
-		m_guiPanel->AddChild(m_guiEdit);
-		m_guiPanel->AddChild(m_guiHoriBar);
-		m_guiPanel->AddChild(m_guiVertBar);
+		m_guiContainer->AddChild(m_guiButton);
+		m_guiContainer->AddChild(m_guiEdit);
+		m_guiContainer->AddChild(m_guiHoriBar);
+		m_guiContainer->AddChild(m_guiVertBar);
 		m_guiPanel->SetRotate(0.2f);
+        
+        m_guiContainer->SetCoord(0.0f, 200.0f);
 
 		SpriteFactory::AlwaysOnTop(m_guiEdit);
 		SpriteFactory::AlwaysOnTop(m_guiCursor);
@@ -312,8 +335,13 @@ void ResourceAction::DoImpl()
             "Tf3"
             "Bf3");
 		if (coverRdr) {
-			m_coverMat = ENEW MaterialInstance("red_material", NULL, NULL, "Texture");
-			m_locator = coverRdr->new_renderable(m_defaultVtxDec, m_coverMat, Segment);
+			m_coverMat = ENEW MaterialInstance("red_material",
+                                               NULL,
+                                               NULL,
+                                               "Texture");
+			m_locator = coverRdr->new_renderable(m_defaultVtxDec,
+                                                 m_coverMat,
+                                                 Segment);
             coverRdr->use_renderable(m_locator);
 		}
 		{
@@ -321,9 +349,11 @@ void ResourceAction::DoImpl()
             {
                 ColladaState colSt = ColladaState_new();
 #if defined(_WIN32) || defined(_WIN64)
-                ColladaState_load_mesh(colSt, "D:\\test_scene\\test4.dae");
+                ColladaState_load_mesh(colSt,
+                    "D:\\test_scene\\test4.dae");
 #elif defined(__APPLE__)
-                ColladaState_load_mesh(colSt, "/Users/joumining/v-engine/test_scene/test4.dae");
+                ColladaState_load_mesh(colSt,
+                    "/Users/joumining/v-engine/test_scene/test4.dae");
 #endif
                 ColladaState_log(colSt);
                 m = ColladaState_create_mesh(colSt);
@@ -331,12 +361,25 @@ void ResourceAction::DoImpl()
 
             char path[260];
 #if defined(_WIN32) || defined(_WIN64)
-            snprintf(path, 259, "%s%s", BASE_DIR, "test_scene\\mesh_pos_unit1.ogl");
+            snprintf(path,
+                     259,
+                     "%s%s",
+                     BASE_DIR,
+                     "test_scene\\mesh_pos_unit1.ogl");
 #elif defined(__APPLE__)
-            snprintf(path, 259, "%s%s", BASE_DIR, "/Users/joumining/v-engine/test_scene/mesh_pos_unit1.ogl");
+            snprintf(path,
+                     259,
+                     "%s%s",
+                     BASE_DIR,
+                     "/Users/joumining/v-engine/test_scene/mesh_pos_unit1.ogl");
 #endif
-			m_mat0 = ENEW MaterialInstance("pure_lighting", NULL, NULL, "Texture");
-			Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat0, Triangular);
+			m_mat0 = ENEW MaterialInstance("pure_lighting",
+                                           NULL,
+                                           NULL,
+                                           "Texture");
+			Renderable r = mainRdr->new_renderable(m_defaultVtxDec,
+                                                   m_mat0,
+                                                   Triangular);
             Renderable_add_mesh(r, m);
             mainRdr->use_renderable(r);
         }
@@ -345,9 +388,11 @@ void ResourceAction::DoImpl()
             {
                 ColladaState colSt = ColladaState_new();
 #if defined(_WIN32) || defined(_WIN64)
-                ColladaState_load_mesh(colSt, "D:\\test_scene\\test5.dae");
+                ColladaState_load_mesh(colSt,
+                    "D:\\test_scene\\test5.dae");
 #elif defined(__APPLE__)
-                ColladaState_load_mesh(colSt, "/Users/joumining/v-engine/test_scene/test5.dae");
+                ColladaState_load_mesh(colSt,
+                    "/Users/joumining/v-engine/test_scene/test5.dae");
 #endif
                 ColladaState_log(colSt);
                 m = ColladaState_create_mesh(colSt);
@@ -355,9 +400,14 @@ void ResourceAction::DoImpl()
             /**
 		    m_mat1 = MaterialInstance_new("default_material", "GAZER789_Diffuse.png", "GAZER789_Normal-1.png", "Texture");
             **/
-            m_mat1 = ENEW MaterialInstance("pure_lighting", NULL, "GAZER789_Normal-1.png", "Texture");
+            m_mat1 = ENEW MaterialInstance("pure_lighting",
+                                           NULL,
+                                           "GAZER789_Normal-1.png",
+                                           "Texture");
 
-		    Renderable r = mainRdr->new_renderable(m_defaultVtxDec, m_mat1, Triangular);
+		    Renderable r = mainRdr->new_renderable(m_defaultVtxDec,
+                                                   m_mat1,
+                                                   Triangular);
             Renderable_add_mesh(r, m);
             mainRdr->use_renderable(r);
 
@@ -451,22 +501,34 @@ void ResourceAction::DoImpl()
 	static bool s_isCreateAnimed = false;
 	{
 
-		if (!RobotManager::Get()->GetChannel("RenderRobot", "AnimationRobot"))
-			RobotManager::Get()->MakeChannel("RenderRobot", "AnimationRobot");
-		if (!RobotManager::Get()->GetChannel("AnimationRobot", "RenderRobot"))
-			RobotManager::Get()->MakeChannel("AnimationRobot", "RenderRobot");
+		if (!RobotManager::Get()->GetChannel("RenderRobot",
+                                             "AnimationRobot"))
+			RobotManager::Get()->MakeChannel("RenderRobot",
+                                             "AnimationRobot");
+		if (!RobotManager::Get()->GetChannel("AnimationRobot",
+                                             "RenderRobot"))
+			RobotManager::Get()->MakeChannel("AnimationRobot",
+                                             "RenderRobot");
 
 		if (!s_isCreateAnimed) {
-			RWBuffer channel = RobotManager::Get()->GetChannel("RenderRobot", "AnimationRobot");
+			RWBuffer channel =
+            RobotManager::Get()->GetChannel("RenderRobot",
+                                            "AnimationRobot");
 			if (channel) {
 				{
-					CreateAnimCommand* cac = ENEW CreateAnimCommand(m_guiButton->GetScaleHandle(), Attribute::Float2);
+					CreateAnimCommand* cac =
+                    ENEW CreateAnimCommand(m_guiButton->GetScaleHandle(),
+                                           Attribute::Float2);
+                    
 					cac->m_animFileName = "anim.xml";
 					cac->m_animName = "scale";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
 				{
-					CreateAnimCommand* cac = ENEW CreateAnimCommand(m_guiButton->GetPivotHandle(), Attribute::Float2);
+					CreateAnimCommand* cac =
+                    ENEW CreateAnimCommand(m_guiButton->GetPivotHandle(),
+                                           Attribute::Float2);
+                    
 					cac->m_animFileName = "anim.xml";
 					cac->m_animName = "offset";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
@@ -488,8 +550,9 @@ ResourceAction::~ResourceAction()
 static float s_rotate = 0.0f;
 void LogicAction::DoImpl()
 {
-	Renderer* rdr = m_resAct->m_rendererChain->GetRenderer("MainRenderer");
-	SpriteRenderer* guiRdr = m_resAct->m_guiRendererChain->GetRenderer("GUIRenderer");
+	///Renderer* rdr = m_resAct->m_rendererChain->GetRenderer("MainRenderer");
+	SpriteRenderer* guiRdr =
+    m_resAct->m_guiRendererChain->GetRenderer("GUIRenderer");
 
 	m_resAct->p0 = Matrix4x4_mul_float4(m_resAct->m_lightMatrix, m_resAct->p0);
 
@@ -562,10 +625,14 @@ RenderRobot::RenderRobot(HWND window)
 	///InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
 	ActionPtr swpActPtr = swpAct;
 	///ActionPtr inputActPtr = inputAct;
-	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain, swpAct, window);
+	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain,
+                                                 &m_guiRendererChain,
+                                                 swpAct,
+                                                 window);
 	ActionPtr resActPtr = resAct;
 	ActionPtr logicActPtr = ENEW LogicAction(resAct);
-	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain, &m_guiRendererChain);
+	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain,
+                                               &m_guiRendererChain);
 	
 	AddAction(resActPtr);
 	///AddAction(inputActPtr);
@@ -577,14 +644,14 @@ RenderRobot::RenderRobot(HWND window)
 #else
 RenderRobot::RenderRobot()
 {
-	InputSystem* inputSys = ENEW InputSystem;
+	///InputSystem* inputSys = ENEW InputSystem;
     
-	///InputAction* inputAct = ENEW InputAction(inputSys, &m_rendererChain, &m_guiRendererChain);
-	///ActionPtr inputActPtr = inputAct;
-	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain, &m_guiRendererChain);
+	ResourceAction* resAct = ENEW ResourceAction(&m_rendererChain,
+                                                 &m_guiRendererChain);
 	ActionPtr resActPtr = resAct;
 	ActionPtr logicActPtr = ENEW LogicAction(resAct);
-	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain, &m_guiRendererChain);
+	ActionPtr renderActPtr = ENEW RenderAction(&m_rendererChain,
+                                               &m_guiRendererChain);
 	
 	AddAction(resActPtr);
 	///AddAction(inputActPtr);
@@ -598,8 +665,10 @@ RenderRobot::~RenderRobot()
 
 void RenderRobot::InitChannels()
 {
-	RobotManager::Get()->MakeChannel("RenderRobot", "AnimationRobot");
-	RobotManager::Get()->MakeChannel("AnimationRobot", "RenderRobot");
+	RobotManager::Get()->MakeChannel("RenderRobot",
+                                     "AnimationRobot");
+	RobotManager::Get()->MakeChannel("AnimationRobot",
+                                     "RenderRobot");
 }
 
 xhn::static_string RenderRobot::GetName()
@@ -607,7 +676,8 @@ xhn::static_string RenderRobot::GetName()
     return "RenderRobot";
 }
 
-void RenderRobot::CommandProcImpl(xhn::static_string sender, RobotCommand* command)
+void RenderRobot::CommandProcImpl(xhn::static_string sender,
+                                  RobotCommand* command)
 {
     ModifyAttrCommand* aacmd = command->DynamicCast<ModifyAttrCommand>();
 	if (aacmd) {
@@ -615,11 +685,17 @@ void RenderRobot::CommandProcImpl(xhn::static_string sender, RobotCommand* comma
 	}
 }
 
-void RenderRobot::CommandReceiptProcImpl(xhn::static_string sender, RobotCommandReceipt* receipt)
+void RenderRobot::CommandReceiptProcImpl(xhn::static_string sender,
+                                         RobotCommandReceipt* receipt)
 {
-	AnimStatusChangeReceipt* animStatusChangeRec = receipt->DynamicCast<AnimStatusChangeReceipt>();
+	AnimStatusChangeReceipt* animStatusChangeRec =
+    receipt->DynamicCast<AnimStatusChangeReceipt>();
+    
 	if (animStatusChangeRec) {
-		m_attrStatusMap.insert(xhn::make_pair(animStatusChangeRec->m_animInfo.animID, animStatusChangeRec->m_animInfo.cureStatus));
+		m_attrStatusMap.insert(
+            xhn::make_pair(animStatusChangeRec->m_animInfo.animID,
+                           animStatusChangeRec->m_animInfo.cureStatus)
+        );
 	}
 }
 
