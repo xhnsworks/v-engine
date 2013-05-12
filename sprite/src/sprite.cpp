@@ -329,6 +329,11 @@ void SpriteNormalLayer::GetScopeImpl(SpriteRect& result)
 	}
 }
 
+SpriteTextLayer::~SpriteTextLayer()
+{
+    Clear();
+}
+
 void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 {
 	Clear();
@@ -472,14 +477,6 @@ void Sprite::PublicEventCallback(const SpriteEvent* evt)
 void Sprite::Build()
 {
 	m_elements.clear();
-    /**
-	SpriteLayerArray::iterator iter = m_children.begin();
-	for (; iter != m_children.end(); iter++)
-	{
-		SpriteLayerPtr layerPtr = *iter;
-		layerPtr->BuildElements(m_elements);
-	}
-     **/
     BuildElements(m_elements);
 }
 void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
@@ -524,14 +521,6 @@ void Sprite::SetRotate(float rad)
 
 void Sprite::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
-    /**
-    SpriteList::iterator iter = m_children.begin();
-    SpriteList::iterator end = m_children.end();
-    for (; iter != end; iter++) {
-        SpriteLayerPtr& sptLayer = *iter;
-        sptLayer->BuildElements(to);
-    }
-     **/
     BuildElements(to);
 }
 void Sprite::Clear()

@@ -304,6 +304,7 @@ public:
 		: SpriteLayer(name)
 		, m_composingStick(cs)
 	{}
+    virtual ~SpriteTextLayer();
 	virtual void LoadConfigImpl(const pugi::xml_node& from);
 	virtual void SaveConfigImpl(pugi::xml_node& to) {}
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
