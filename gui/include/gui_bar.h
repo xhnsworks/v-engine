@@ -31,7 +31,7 @@ public:
     , m_sizeHandle(sizeHandle)
     , SpriteNormalLayer(name)
 	{}
-	virtual void BuildElements(xhn::list<SpriteElement>& to);
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIHoriBar : public Sprite
@@ -47,6 +47,8 @@ public:
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x);
 	virtual void GetScopeImpl(SpriteRect& result);
+    virtual void TickImpl(double elapsedTime) {}
+    virtual void TockImpl() {}
 };
 
 class GUIHoriBarFactory : public SpriteFactory
@@ -87,7 +89,7 @@ public:
 		, m_sizeHandle(sizeHandle)
 		, SpriteNormalLayer(name)
 	{}
-	virtual void BuildElements(xhn::list<SpriteElement>& to);
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIVertBar : public Sprite
@@ -103,6 +105,8 @@ public:
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x);
 	virtual void GetScopeImpl(SpriteRect& result);
+    virtual void TickImpl(double elapsedTime) {}
+    virtual void TockImpl() {}
 };
 
 class GUIVertBarFactory : public SpriteFactory

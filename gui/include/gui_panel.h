@@ -21,7 +21,7 @@ public:
 	    , m_sizeHandle(sizeHandle)
 		, SpriteNormalLayer(name)
 	{}
-	virtual void BuildElements(xhn::list<SpriteElement>& to);
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIPanel : public Sprite
@@ -37,6 +37,8 @@ public:
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x, float y);
 	virtual void GetScopeImpl(SpriteRect& result);
+    virtual void TickImpl(double elapsedTime) {}
+    virtual void TockImpl() {}
 };
 
 class GUIPanelFactory : public SpriteFactory

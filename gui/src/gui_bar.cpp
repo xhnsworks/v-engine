@@ -19,8 +19,11 @@
 ImplementRTTI(GUIHoriBarLayer, SpriteNormalLayer);
 ImplementRTTI(GUIHoriBar, Sprite);
 
-void GUIHoriBarLayer::BuildElements(xhn::list<SpriteElement>& to)
+void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
+    matrix4x4 transform;
+    GetMatrix(&transform);
+    
 	SpriteElementMap::iterator iterLeft = m_elementBuffer.find("left");
 	SpriteElementMap::iterator iterRight = m_elementBuffer.find("right");
     
@@ -64,6 +67,10 @@ void GUIHoriBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.top = top;
 	tmpCenter.m_rect.size.width =
     right - left - tmpRight.m_rect.size.width - tmpLeft.m_rect.size.width;
+    
+    tmpCenter.ApplyTransform(&transform);
+    tmpLeft.ApplyTransform(&transform);
+    tmpRight.ApplyTransform(&transform);
     
 	to.push_back(tmpCenter);
     
@@ -134,8 +141,9 @@ void GUIHoriBar::Init(const xhn::static_string configName)
 		SpriteLayerPtr layer = ENEW GUIHoriBarLayer("base",
                                                     m_pivotHandle,
                                                     m_sizeHandle);
-		layer->LoadConfig(baselayer);
-		m_children.push_back(layer);
+		layer->LoadConfigImpl(baselayer);
+		///m_children.push_back(layer);
+        AddChild(layer);
 		SetSize(100.0f);
 	}
 }
@@ -267,8 +275,11 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
 ImplementRTTI(GUIVertBarLayer, SpriteNormalLayer);
 ImplementRTTI(GUIVertBar, Sprite);
 
-void GUIVertBarLayer::BuildElements(xhn::list<SpriteElement>& to)
+void GUIVertBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
+    matrix4x4 transform;
+    GetMatrix(&transform);
+    
 	SpriteElementMap::iterator iterTop = m_elementBuffer.find("top");
 	SpriteElementMap::iterator iterBottom = m_elementBuffer.find("bottom");
 
@@ -315,6 +326,10 @@ void GUIVertBarLayer::BuildElements(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.top = top + tmpTop.m_rect.size.height;
 	tmpCenter.m_rect.size.height =
     bottom - top - tmpTop.m_rect.size.height - tmpBottom.m_rect.size.height;
+    
+    tmpCenter.ApplyTransform(&transform);
+    tmpTop.ApplyTransform(&transform);
+    tmpBottom.ApplyTransform(&transform);
 
 	to.push_back(tmpCenter);
 
@@ -384,8 +399,9 @@ void GUIVertBar::Init(const xhn::static_string configName)
 		SpriteLayerPtr layer = ENEW GUIVertBarLayer("base",
                                                     m_pivotHandle,
                                                     m_sizeHandle);
-		layer->LoadConfig(baselayer);
-		m_children.push_back(layer);
+		layer->LoadConfigImpl(baselayer);
+		///m_children.push_back(layer);
+        AddChild(layer);
 		SetSize(100.0f);
 	}
 }

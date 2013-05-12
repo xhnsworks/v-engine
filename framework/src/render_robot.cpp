@@ -305,7 +305,7 @@ void ResourceAction::DoImpl()
 		m_guiContainer->AddChild(m_guiVertBar);
 		m_guiPanel->SetRotate(0.2f);
         
-        m_guiContainer->SetCoord(0.0f, 200.0f);
+        m_guiContainer->SetCoord(150.0f, 200.0f);
 
 		SpriteFactory::AlwaysOnTop(m_guiEdit);
 		SpriteFactory::AlwaysOnTop(m_guiCursor);

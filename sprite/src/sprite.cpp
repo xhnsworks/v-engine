@@ -69,6 +69,34 @@ SpriteLayer::SpriteLayer(const xhn::static_string& name)
 	t->x = 1.0f;
 }
 
+void SpriteLayer::LoadConfig(const pugi::xml_node& from)
+{
+	xhn::vector<SpriteLayerPtr>::iterator iter = m_children.begin();
+	for (; iter != m_children.end(); iter++)
+	{
+		SpriteLayerPtr layerPtr = *iter;
+		const xhn::static_string& name = layerPtr->GetName();
+		pugi::xml_node node = from.child(name.c_str());
+		if (node) {
+			layerPtr->LoadConfigImpl(node);
+		}
+	}
+}
+void SpriteLayer::SaveConfig(pugi::xml_node& to)
+{
+	/// nothing
+}
+
+void SpriteLayer::BuildElements(xhn::list<SpriteElement>& to)
+{
+    SpriteList::iterator iter = m_children.begin();
+    SpriteList::iterator end = m_children.end();
+    for (; iter != end; iter++) {
+        SpriteLayerPtr& sptLayer = *iter;
+        sptLayer->BuildElementsImpl(to);
+    }
+}
+
 void SpriteLayer::SetTransparent(float t)
 {
     xhn::RWLock::Instance inst = m_transparentHandle.GetWriteLock();
@@ -86,6 +114,59 @@ void SpriteLayer::GetScope(SpriteRect& result)
 		SpriteRect rc;
 		(*iter)->GetScope(rc);
 		result.Merge(rc);
+	}
+}
+void SpriteLayer::BroadcastEventToBrothers(const SpriteEvent* evt)
+{
+	if (m_parent) {
+		SpriteList::iterator iter = m_parent->m_children.begin();
+		SpriteList::iterator end = m_parent->m_children.end();
+		for (; iter != end; iter++) {
+			Sprite* sp = (*iter)->DynamicCast<Sprite>();
+			if (sp && sp != this) {
+				EventProcMap& epm = sp->GetPrivateEventProcMap();
+				const RTTI* rtti = evt->GetRTTI();
+				xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> >::iterator epmIter = epm.find(rtti);
+				if (epmIter != epm.end()) {
+					xhn::set<SpriteEventProcPtr>& sepSet = epmIter->second;
+					xhn::set<SpriteEventProcPtr>::iterator i = sepSet.begin();
+					xhn::set<SpriteEventProcPtr>::iterator e = sepSet.end();
+					for (; i != e; i++) {
+						SpriteEventProcPtr sep = *i;
+						sep->Proc(evt);
+					}
+				}
+			}
+		}
+	}
+}
+
+void SpriteLayer::GetMatrix(matrix4x4* result)
+{
+    if (m_parent) {
+        m_parent->GetMatrix(result);
+    }
+    else {
+        Matrix4x4_set_one(result);
+    }
+}
+
+void SpriteLayer::Tick(double elapsedTime)
+{
+    SpriteLayerArray::iterator iter = m_children.begin();
+	for (; iter != m_children.end(); iter++)
+	{
+		SpriteLayerPtr layerPtr = *iter;
+		layerPtr->TickImpl(elapsedTime);
+	}
+}
+void SpriteLayer::Tock()
+{
+    SpriteLayerArray::iterator iter = m_children.begin();
+	for (; iter != m_children.end(); iter++)
+	{
+		SpriteLayerPtr layerPtr = *iter;
+		layerPtr->TockImpl();
 	}
 }
 
@@ -138,7 +219,7 @@ EColor _ToColor(const xhn::string& str)
 	return ret;
 }
 
-void SpriteNormalLayer::LoadConfig(const pugi::xml_node& from)
+void SpriteNormalLayer::LoadConfigImpl(const pugi::xml_node& from)
 {
 	Clear();
 	pugi::xml_node eles = from.child("elements");
@@ -192,7 +273,7 @@ void SpriteNormalLayer::LoadConfig(const pugi::xml_node& from)
 	}
 }
 
-void SpriteNormalLayer::SaveConfig(pugi::xml_node& to)
+void SpriteNormalLayer::SaveConfigImpl(pugi::xml_node& to)
 {
 	pugi::xml_node eles = to.append_child("elements");
 	pugi::xml_attribute num_elements = eles.append_attribute("num_elements");
@@ -217,21 +298,15 @@ void SpriteNormalLayer::SaveConfig(pugi::xml_node& to)
 	}
 }
 
-void SpriteNormalLayer::ApplyTransform(const matrix4x4* trans)
+void SpriteNormalLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
-	xhn::map<xhn::static_string, SpriteElement>::iterator iter = m_elementBuffer.begin();
-	for (; iter != m_elementBuffer.end(); iter++)
-	{
-		SpriteElement& ele = iter->second;
-		ele.ApplyTransform(trans);
-	}
-}
-void SpriteNormalLayer::BuildElements(xhn::list<SpriteElement>& to)
-{
+    matrix4x4 transform;
+    GetMatrix(&transform);
     xhn::map<xhn::static_string, SpriteElement>::iterator iter = m_elementBuffer.begin();
 	for (; iter != m_elementBuffer.end(); iter++)
 	{
 		SpriteElement& ele = iter->second;
+        ele.ApplyTransform(&transform);
 		to.push_back(ele);
 	}
 }
@@ -254,7 +329,7 @@ void SpriteNormalLayer::GetScopeImpl(SpriteRect& result)
 	}
 }
 
-void SpriteTextLayer::LoadConfig(const pugi::xml_node& from)
+void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 {
 	Clear();
 	pugi::xml_node styles = from.child("styles");
@@ -323,21 +398,15 @@ void SpriteTextLayer::LoadConfig(const pugi::xml_node& from)
 	}
 }
 
-void SpriteTextLayer::ApplyTransform(const matrix4x4* trans)
+void SpriteTextLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
+    matrix4x4 transform;
+    GetMatrix(&transform);
 	xhn::vector<SpriteElement>::iterator iter = m_elementBuffer.begin();
 	for (; iter != m_elementBuffer.end(); iter++)
 	{
 		SpriteElement& ele = *iter;
-		ele.ApplyTransform(trans);
-	}
-}
-void SpriteTextLayer::BuildElements(xhn::list<SpriteElement>& to)
-{
-	xhn::vector<SpriteElement>::iterator iter = m_elementBuffer.begin();
-	for (; iter != m_elementBuffer.end(); iter++)
-	{
-		SpriteElement& ele = *iter;
+        ele.ApplyTransform(&transform);
 		to.push_back(ele);
 	}
 }
@@ -380,24 +449,6 @@ Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 	scale->y = 1.0f;
 }
 
-void Sprite::LoadConfig(const char* configName)
-{
-	XMLResourcePtr res = RenderSystem_load_gui_config(configName);
-	if (!res) {
-		return;
-	}
-	pugi::xml_document& doc = res->GetDocument();
-	pugi::xml_node root = doc.child("root");
-	pugi::xml_node layers = root.child("layers");
-
-	LoadConfig(layers);
-}
-
-void Sprite::SaveConfig(const char* configName)
-{
-    /// nothing
-}
-
 void Sprite::RegisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc)
 {
     m_publicEventProcs[type].insert(proc);
@@ -421,15 +472,15 @@ void Sprite::PublicEventCallback(const SpriteEvent* evt)
 void Sprite::Build()
 {
 	m_elements.clear();
-	matrix4x4 transform;
-	GetMatrix(&transform);
+    /**
 	SpriteLayerArray::iterator iter = m_children.begin();
 	for (; iter != m_children.end(); iter++)
 	{
 		SpriteLayerPtr layerPtr = *iter;
-		layerPtr->ApplyTransform(&transform);
 		layerPtr->BuildElements(m_elements);
 	}
+     **/
+    BuildElements(m_elements);
 }
 void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 {
@@ -470,59 +521,49 @@ void Sprite::SetRotate(float rad)
 	rotation->x = rad;
 }
 
-void Sprite::BroadcastEventToBrothers(const SpriteEvent* evt)
-{
-	if (m_parent) {
-		xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator iter = m_parent->m_children.begin();
-		xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator end = m_parent->m_children.end();
-		for (; iter != end; iter++) {
-			Sprite* sp = (*iter)->DynamicCast<Sprite>();
-			if (sp && sp != this) {
-				EventProcMap& epm = sp->GetPrivateEventProcMap();
-				const RTTI* rtti = evt->GetRTTI();
-				xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> >::iterator epmIter = epm.find(rtti);
-				if (epmIter != epm.end()) {
-					xhn::set<SpriteEventProcPtr>& sepSet = epmIter->second;
-					xhn::set<SpriteEventProcPtr>::iterator i = sepSet.begin();
-					xhn::set<SpriteEventProcPtr>::iterator e = sepSet.end();
-					for (; i != e; i++) {
-						SpriteEventProcPtr sep = *i;
-						sep->Proc(evt);
-					}
-				}
-			}
-		}
-	}
-}
 
-void Sprite::LoadConfig(const pugi::xml_node& from)
+void Sprite::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
-	xhn::vector<SpriteLayerPtr>::iterator iter = m_children.begin();
-	for (; iter != m_children.end(); iter++)
-	{
-		SpriteLayerPtr layerPtr = *iter;
-		const xhn::static_string& name = layerPtr->GetName();
-		pugi::xml_node node = from.child(name.c_str());
-		if (node) {
-			layerPtr->LoadConfig(node);
-		}
-	}
-}
-void Sprite::SaveConfig(pugi::xml_node& to)
-{
-	/// nothing
-}
-void Sprite::ApplyTransform(const matrix4x4* trans)
-{
-	/// nothing
-}
-void Sprite::BuildElements(xhn::list<SpriteElement>& to)
-{
-	/// nothing
+    /**
+    SpriteList::iterator iter = m_children.begin();
+    SpriteList::iterator end = m_children.end();
+    for (; iter != end; iter++) {
+        SpriteLayerPtr& sptLayer = *iter;
+        sptLayer->BuildElements(to);
+    }
+     **/
+    BuildElements(to);
 }
 void Sprite::Clear()
 {
     /// nothing
+}
+
+void Sprite::LoadConfig(const char* configName)
+{
+	XMLResourcePtr res = RenderSystem_load_gui_config(configName);
+	if (!res) {
+		return;
+	}
+	pugi::xml_document& doc = res->GetDocument();
+	pugi::xml_node root = doc.child("root");
+	pugi::xml_node layers = root.child("layers");
+    
+    SpriteLayer::LoadConfig(layers);
+}
+
+void Sprite::SaveConfig(const char* configName)
+{
+    /// nothing
+}
+
+void Sprite::LoadConfigImpl(const pugi::xml_node& from)
+{
+    SpriteLayer::LoadConfig(from);
+}
+void Sprite::SaveConfigImpl(pugi::xml_node& to)
+{
+    SpriteLayer::SaveConfig(to);
 }
 
 void Sprite::GetMatrix(matrix4x4* result)

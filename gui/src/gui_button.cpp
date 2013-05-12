@@ -49,7 +49,7 @@ void GUIButton::Init(const xhn::static_string configName)
 			SpriteLayerPtr layer = ENEW GUIButtonLayer("normal",
                                                        m_pivotHandle,
                                                        m_sizeHandle);
-			layer->LoadConfig(baselayer);
+			layer->LoadConfigImpl(baselayer);
 			AddChild(layer);
 		}
 		{
@@ -59,7 +59,7 @@ void GUIButton::Init(const xhn::static_string configName)
 			SpriteLayerPtr layer = ENEW GUIButtonLayer("selected",
                                                        m_pivotHandle,
                                                        m_sizeHandle);
-			layer->LoadConfig(baselayer);
+			layer->LoadConfigImpl(baselayer);
 			AddChild(layer);
 		}
 		{
@@ -69,7 +69,7 @@ void GUIButton::Init(const xhn::static_string configName)
 			SpriteLayerPtr layer = ENEW GUIButtonLayer("pressed",
                                                        m_pivotHandle,
                                                        m_sizeHandle);
-			layer->LoadConfig(baselayer);
+			layer->LoadConfigImpl(baselayer);
 			AddChild(layer);
 		}
 		{
@@ -85,8 +85,9 @@ void GUIButton::Init(const xhn::static_string configName)
                 fr->set_font_size(Pixel30);
                 ComposingStick* cs = ENEW ComposingStick(fr, 256);
                 SpriteLayerPtr layer = ENEW GUIButtonTextLayer(cs);
-                layer->LoadConfig(textlayer);
-                m_children.push_back(layer);
+                layer->LoadConfigImpl(textlayer);
+                ///m_children.push_back(layer);
+                AddChild(layer);
             }
 		}
 	}
@@ -99,76 +100,55 @@ void GUIButton::GetScopeImpl(SpriteRect& result)
 	result.size.height = 0.0f;
 }
 
-void GUIButton::BuildBackgroundLayer(const matrix4x4& transform)
+void GUIButton::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 {
 	switch (m_curtState)
 	{
 	case Normal:
 		{
-			SpriteLayerArray::iterator iter = m_children.begin();
-			for (; iter != m_children.end(); iter++)
-			{
-				SpriteLayerPtr layerPtr = *iter;
-				if (layerPtr->GetName() == "normal") {
-					layerPtr->ApplyTransform(&transform);
-					layerPtr->BuildElements(m_elements);
-				}
-			}
+            SpriteLayerPtr layerPtr = GetLayer("normal");
+            if (layerPtr.get())
+                layerPtr->BuildElementsImpl(to);
 		}
 		break;
 	case Selected:
 		{
-			SpriteLayerArray::iterator iter = m_children.begin();
-			for (; iter != m_children.end(); iter++)
-			{
-				SpriteLayerPtr layerPtr = *iter;
-				if (layerPtr->GetName() == "selected") {
-					layerPtr->ApplyTransform(&transform);
-					layerPtr->BuildElements(m_elements);
-				}
-			}
+            SpriteLayerPtr layerPtr = GetLayer("selected");
+            if (layerPtr.get())
+                layerPtr->BuildElementsImpl(to);
 		}
 		break;
 	case Pressed:
 	default:
 		{
-			SpriteLayerArray::iterator iter = m_children.begin();
-			for (; iter != m_children.end(); iter++)
-			{
-				SpriteLayerPtr layerPtr = *iter;
-				if (layerPtr->GetName() == "pressed") {
-					layerPtr->ApplyTransform(&transform);
-					layerPtr->BuildElements(m_elements);
-				}
-			}
+            SpriteLayerPtr layerPtr = GetLayer("pressed");
+            if (layerPtr.get())
+                layerPtr->BuildElementsImpl(to);
 		}
 		break;
 	}
 }
-void GUIButton::BuildTextLayer(const matrix4x4& transform)
+void GUIButton::BuildTextLayer(xhn::list<SpriteElement>& to)
 {
-	SpriteLayerArray::iterator iter = m_children.begin();
-	for (; iter != m_children.end(); iter++)
-	{
-		SpriteLayerPtr layerPtr = *iter;
-		if (layerPtr->GetName() == "text") {
-			layerPtr->ApplyTransform(&transform);
-			layerPtr->BuildElements(m_elements);
-		}
-	}
+    SpriteLayerPtr layerPtr = GetLayer("text");
+    if (layerPtr.get())
+        layerPtr->BuildElementsImpl(to);
 }
 
 void GUIButton::Build()
 {
 	m_elements.clear();
-	matrix4x4 transform;
-	GetMatrix(&transform);
-    
-	BuildTextLayer(transform);
-	BuildBackgroundLayer(transform);
+	BuildTextLayer(m_elements);
+	BuildBackgroundLayer(m_elements);
 }
 
-void GUIButton::Tick(double elapsedTime)
+void GUIButton::BuildElementsImpl(xhn::list<SpriteElement>& to)
+{
+	BuildTextLayer(to);
+	BuildBackgroundLayer(to);
+}
+
+void GUIButton::TickImpl(double elapsedTime)
 {
 	if (m_curtState == Pressed) {
 		m_releaseTimer -= elapsedTime;

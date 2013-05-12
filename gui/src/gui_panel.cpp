@@ -10,8 +10,11 @@ ImplementRTTI(GUIPanel, Sprite);
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
+void GUIPanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
+    matrix4x4 transform;
+    GetMatrix(&transform);
+    
 	SpriteElementMap::iterator iterLowerLeft =
     m_elementBuffer.find("lower_left_corner");
 	SpriteElementMap::iterator iterUpperLeft =
@@ -117,6 +120,16 @@ void GUIPanelLayer::BuildElements(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.top = top + tmpTop.m_rect.size.height;
 	tmpCenter.m_rect.size.width = tmpTop.m_rect.size.width;
 	tmpCenter.m_rect.size.height = tmpRight.m_rect.size.height;
+    
+    tmpCenter.ApplyTransform(&transform);
+    tmpLeft.ApplyTransform(&transform);
+    tmpTop.ApplyTransform(&transform);
+    tmpRight.ApplyTransform(&transform);
+    tmpBottom.ApplyTransform(&transform);
+    tmpLowerLeft.ApplyTransform(&transform);
+    tmpLowerRight.ApplyTransform(&transform);
+    tmpUpperLeft.ApplyTransform(&transform);
+    tmpUpperRight.ApplyTransform(&transform);
 
 	to.push_back(tmpCenter);
 
@@ -230,8 +243,9 @@ void GUIPanel::Init(const xhn::static_string configName)
 			return;
 		SpriteLayerPtr layer =
         ENEW GUIPanelLayer("base", m_pivotHandle, m_sizeHandle);
-		layer->LoadConfig(baselayer);
-		m_children.push_back(layer);
+		layer->LoadConfigImpl(baselayer);
+		///m_children.push_back(layer);
+        AddChild(layer);
 	}
 }
 

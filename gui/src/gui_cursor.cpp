@@ -22,8 +22,8 @@ void GUICursor::Init(const xhn::static_string configName)
 		if (!baselayer)
 			return;
 		SpriteLayerPtr layer = ENEW GUICursorLayer;
-		layer->LoadConfig(baselayer);
-		m_children.push_back(layer);
+		layer->LoadConfigImpl(baselayer);
+		AddChild(layer);
 	}
 }
 
@@ -33,6 +33,20 @@ void GUICursor::GetScopeImpl(SpriteRect& result)
 	result.top = 0.0f;
 	result.size.width = 0.0f;
 	result.size.height = 0.0f;
+}
+
+void GUICursor::Build()
+{
+    m_elements.clear();
+    /**
+	SpriteLayerArray::iterator iter = m_children.begin();
+	for (; iter != m_children.end(); iter++)
+	{
+		SpriteLayerPtr layerPtr = *iter;
+		layerPtr->BuildElements(m_elements);
+	}
+     **/
+    BuildElements(m_elements);
 }
 
 void GUICursorMouseEventProc::Proc(const SpriteEvent* evt)

@@ -53,7 +53,7 @@ void GUIEdit::Init(const xhn::static_string configName)
                 fr->set_font_size(Pixel30);
                 ComposingStick* cs = ENEW ComposingStick(fr, 256);
                 SpriteLayerPtr layer = ENEW GUIEditTextLayer(cs);
-                layer->LoadConfig(textlayer);
+                layer->LoadConfigImpl(textlayer);
                 AddChild(layer);
             }
 		}
@@ -62,7 +62,7 @@ void GUIEdit::Init(const xhn::static_string configName)
 			pugi::xml_node baselayer = layers.child("background");
 			if (baselayer) {
                 SpriteLayerPtr layer = ENEW GUIEditBackgroundLayer(m_pivotHandle, m_sizeHandle);
-                layer->LoadConfig(baselayer);
+                layer->LoadConfigImpl(baselayer);
                 AddChild(layer);
             }
 		}

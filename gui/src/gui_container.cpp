@@ -72,7 +72,6 @@ void GUIContainerFactory::CreateSheetConfig(const char* cfgName,
                                             const char* sheetName,
                                             const SpriteRect& panelRect)
 {
-
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();
 	pugi::xml_node root = doc.child("root");

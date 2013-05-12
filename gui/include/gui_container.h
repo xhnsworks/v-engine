@@ -20,6 +20,8 @@ public:
 	virtual void Init(const xhn::static_string configName);
 	void SetRect(float left, float top, float width, float height);
 	virtual void GetScopeImpl(SpriteRect& result);
+    virtual void TickImpl(double elapsedTime) {}
+    virtual void TockImpl() {}
 };
 
 class GUIContainerFactory : public SpriteFactory

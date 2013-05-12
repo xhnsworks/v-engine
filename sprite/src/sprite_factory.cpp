@@ -84,9 +84,13 @@ void SpriteFactory::FrameEnd(double elapsedTime)
 	RenderList::iterator end = s_renderList.end();
 	for (; iter != end; iter++) {
 		Sprite* spt = *iter;
-		spt->Tick(elapsedTime);
-		spt->Build();
-		spt->AttachToGeomBuffer(spt->m_renderer->GetGeomBuffer());
+        if (!spt->m_parent) {
+            ///xhn::static_string name = spt->GetName();
+            ///printf("sprite name %s\n", name.c_str());
+            spt->Tick(elapsedTime);
+            spt->Build();
+            spt->AttachToGeomBuffer(spt->m_renderer->GetGeomBuffer());
+        }
 	}
 }
 

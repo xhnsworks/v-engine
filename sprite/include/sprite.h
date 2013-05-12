@@ -178,38 +178,74 @@ public:
 class SpriteLayer : public RefObject
 {
 	DeclareRootRTTI;
+    friend struct FSpriteDestProc;
 public:
-	/// perhaps loop reference, must to check
-	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> > m_children;
-	SpriteLayer* m_parent;
 	AttributeHandle m_transparentHandle;
+    typedef xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> > SpriteList;
+    SpriteLayer* m_parent;
+private:
+	/// perhaps loop reference, must to check
+	SpriteList m_children;
 private:
 	xhn::static_string m_name;
 public:
 	SpriteLayer(const xhn::static_string& name);
 	virtual ~SpriteLayer() {}
-	virtual void LoadConfig(const pugi::xml_node& from) = 0;
-	virtual void SaveConfig(pugi::xml_node& to) = 0;
-	virtual void ApplyTransform(const matrix4x4* trans) = 0;
-	virtual void BuildElements(xhn::list<SpriteElement>& to) = 0;
-	virtual void Clear() = 0;
-	inline const xhn::static_string& GetName() const {
+    void LoadConfig(const pugi::xml_node& from);
+	void SaveConfig(pugi::xml_node& to);
+    void BuildElements(xhn::list<SpriteElement>& to);
+    void Tick(double elapsedTime);
+    void Tock();
+    void BroadcastEventToBrothers(const SpriteEvent* evt);
+    void SetTransparent(float t);
+	void GetScope(SpriteRect& result);
+    virtual void GetMatrix(matrix4x4* result);
+	
+    inline const xhn::static_string& GetName() const {
 		return m_name;
 	}
-	virtual void GetMatrix(matrix4x4* result) = 0;
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
+    inline void AddChild(xhn::SmartPtr< SpriteLayer, FSpriteDestProc> spriteLayer) {
+        m_children.push_back(spriteLayer);
+		spriteLayer->m_parent = this;
+	}
+    
+    inline xhn::SmartPtr< SpriteLayer, FSpriteDestProc> GetLayer(euint index) {
+		xhn::SmartPtr< SpriteLayer, FSpriteDestProc> ret;
+		if (index < m_children.size()) {
+			ret = m_children[index];
+		}
+		return ret;
+	}
+    inline xhn::SmartPtr< SpriteLayer, FSpriteDestProc> GetLayer(xhn::static_string layerName) {
+		xhn::SmartPtr< SpriteLayer, FSpriteDestProc> ret;
+        SpriteList::iterator iter = m_children.begin();
+        SpriteList::iterator end = m_children.end();
+		for (; iter != end; iter++) {
+			xhn::SmartPtr< SpriteLayer, FSpriteDestProc>& sptLayerPtr = *iter;
+            if (sptLayerPtr->GetName() == layerName)
+                return sptLayerPtr;
+		}
+		return ret;
+	}
+    
+    virtual void BuildElementsImpl(xhn::list<SpriteElement>& to) = 0;
+    virtual void GetScopeImpl(SpriteRect& result) = 0;
+    virtual void TickImpl(double elapsedTime) = 0;
+    virtual void TockImpl() = 0;
+    virtual void LoadConfigImpl(const pugi::xml_node& from) = 0;
+	virtual void SaveConfigImpl(pugi::xml_node& to) = 0;
+    virtual void Build() = 0;
+	virtual void Clear() = 0;
+    virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
-	void SetTransparent(float t);
-	void GetScope(SpriteRect& result);
-	virtual void GetScopeImpl(SpriteRect& result) = 0;
 };
+typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
-typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
 typedef xhn::map<xhn::static_string, SpriteElement> SpriteElementMap;
 class SpriteNormalLayer : public SpriteLayer
 {
@@ -220,14 +256,7 @@ public:
 	SpriteNormalLayer(const xhn::static_string name)
 		: SpriteLayer(name)
 	{}
-	virtual void LoadConfig(const pugi::xml_node& from);
-	virtual void SaveConfig(pugi::xml_node& to);
-	virtual void ApplyTransform(const matrix4x4* trans);
-	virtual void BuildElements(xhn::list<SpriteElement>& to);
 	virtual void Clear();
-	inline void ClearBuffer() {
-		m_elementBuffer.clear();
-	}
 	inline SpriteElement* NewElement(const char* name) {
 		SpriteElement ele;
         xhn::static_string staticName = name;
@@ -245,12 +274,16 @@ public:
 		else
 			return NULL;
 	}
-	virtual void GetMatrix(matrix4x4* result) {
-	}
+    virtual void LoadConfigImpl(const pugi::xml_node& from);
+	virtual void SaveConfigImpl(pugi::xml_node& to);
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
+    virtual void TickImpl(double elapsedTime) {}
+    virtual void TockImpl() {}
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
     {}
 	virtual void GetScopeImpl(SpriteRect& result);
+    virtual void Build() {}
 };
 
 typedef xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> > EventProcMap;
@@ -271,16 +304,16 @@ public:
 		: SpriteLayer(name)
 		, m_composingStick(cs)
 	{}
-	virtual void LoadConfig(const pugi::xml_node& from);
-	virtual void SaveConfig(pugi::xml_node& to) {}
-	virtual void ApplyTransform(const matrix4x4* trans);
-	virtual void BuildElements(xhn::list<SpriteElement>& to);
+	virtual void LoadConfigImpl(const pugi::xml_node& from);
+	virtual void SaveConfigImpl(pugi::xml_node& to) {}
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void Clear();
-	virtual void GetMatrix(matrix4x4* result) {
-	}
+    virtual void TickImpl(double elapsedTime) {}
+    virtual void TockImpl() {}
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
     {}
+    virtual void Build() {}
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -324,17 +357,6 @@ public:
 	inline EventProcMap& GetPrivateEventProcMap() {
 		return m_privateEventProcs;
 	}
-	inline SpriteLayerPtr GetLayer(euint index) {
-		SpriteLayerPtr ret;
-		if (index < m_children.size()) {
-			ret = m_children[index];
-		}
-		return ret;
-	}
-	inline void AddChild(SpriteLayerPtr spriteLayer) {
-        m_children.push_back(spriteLayer);
-		spriteLayer->m_parent = this;
-	}
 	inline AttributeHandle GetPivotHandle() {
 		return m_pivotHandle;
 	}
@@ -348,17 +370,14 @@ public:
 		return m_scaleHandle;
 	}
 public:
-	virtual void LoadConfig(const pugi::xml_node& from);
-	virtual void SaveConfig(pugi::xml_node& to);
-	virtual void ApplyTransform(const matrix4x4* trans);
-	virtual void BuildElements(xhn::list<SpriteElement>& to);
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
+    virtual void LoadConfigImpl(const pugi::xml_node& from);
+	virtual void SaveConfigImpl(pugi::xml_node& to);
+    virtual void Build();
 	virtual void Clear();
 	virtual void GetMatrix(matrix4x4* result);
-	virtual void Build();
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
-	virtual void Tick(double elapsedTime) {}
-	virtual void Tock() {}
 };
 ///**********************************************************************///
 ///                       class define end                               ///
