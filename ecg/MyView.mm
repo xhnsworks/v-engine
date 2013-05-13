@@ -122,6 +122,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     RobotManager::Init();
     RobotThreadManager::Init();
     SpriteEventHub::Init();
+    ComposingStickManager::Init();
     renderRobot = RobotManager::Get()->AddRobot<RenderRobot>();
     RobotManager::Get()->AddRobot<InputRobot, vptr>((vptr)self);
     RobotManager::Get()->AddRobot<AnimationRobot>();

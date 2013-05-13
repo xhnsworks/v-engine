@@ -34,9 +34,9 @@ void GUIContainer::Init(const xhn::static_string configName)
 }
 
 void GUIContainer::SetRect(float left,
-                            float top,
-                            float width,
-                            float height)
+                           float top,
+                           float width,
+                           float height)
 {
     xhn::RWLock::Instance inst = m_rectHandle.GetWriteLock();
 	EFloat4* rect = (EFloat4*)m_rectHandle.GetAttribute();
