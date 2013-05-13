@@ -21,7 +21,7 @@ class GUIEditTextLayer : public SpriteTextLayer
 {
 	DeclareRTTI;
 public:
-	GUIEditTextLayer(ComposingStick* cs);
+	GUIEditTextLayer();
 	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIEdit : public GUIPanel

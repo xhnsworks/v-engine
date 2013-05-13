@@ -48,6 +48,7 @@ protected:
 	sketch_type shadow_type;
 	shadow_emitter_param shadow_emitter_param_array[MAX_SHADOW_EMITTERS];
 
+	virtual ~light_base_2() {}
 	virtual void Dest() = 0;
 	virtual void update();
 	void Init();

@@ -39,11 +39,16 @@ euint32 _MByteToWChar(const char* _src_str, wchar_t* _dst_str)
 #endif
 /****************/
 
-ComposingStick::ComposingStick(FontRenderer* renderer, euint32 numChars)
+ComposingStick::ComposingStick(FontRenderer* renderer, 
+							   PixelSize size, 
+							   euint32 numChars,
+							   xhn::static_string filename)
 : m_renderer(renderer)
+, m_pixelSize(size)
+, m_filename(filename)
 {
 	int numCharsPerRow = (int)sqrtf((float)numChars + 0.5f);
-	euint32 fontPixelWidth = renderer->get_font_size();
+	euint32 fontPixelWidth = (euint32)size;
 	euint32 fontPixelHeight = fontPixelWidth;
     euint32 texPixelWidth = (euint32)(numCharsPerRow + 1) * fontPixelWidth;
 	euint32 texPixelHeight = texPixelWidth;
@@ -64,7 +69,7 @@ ComposingStick::ComposingStick(FontRenderer* renderer, euint32 numChars)
 		}
 	}
 	/// here create texture
-	m_texture = RenderSystem_new_texture2d("ComposingStick.png", "Texture");
+	m_texture = RenderSystem_new_texture2d(filename.c_str(), "Texture");
 	m_texture->Create(RGBA8, texPixelWidth, texPixelHeight);
 	EColor color;
 	color.red = 0.0f;
@@ -73,16 +78,37 @@ ComposingStick::ComposingStick(FontRenderer* renderer, euint32 numChars)
 	color.alpha = 0.0f;
 	m_texture->LoadFromColor(color);
 }
-xhn::static_string ComposingStick::GetFilename()
+ComposingStick::~ComposingStick()
 {
-    return "ComposingStick.png";
+	{
+		xhn::list<GlyphInfo*>::iterator iter = m_freeGlyphPool.begin();
+		xhn::list<GlyphInfo*>::iterator end = m_freeGlyphPool.end();
+		for (; iter != end; iter++) {
+			GlyphInfo* info = *iter;
+			delete info;
+		}
+		m_freeGlyphPool.clear();
+	}
+	{
+		xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphMap.begin();
+		xhn::map<wchar_t, GlyphInfo*>::iterator end = m_glyphMap.end();
+		for (; iter != end; iter++) {
+			GlyphInfo* info = iter->second;
+			delete info;
+		}
+		m_glyphMap.clear();
+	}
+}
+xhn::static_string ComposingStick::GetFilename() const
+{
+    return m_filename;
 }
 ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 {
 	ComposingStick::GlyphHandle ret;
 	ret.owner = this;
-	xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphIndex.find(ch);
-	if (iter != m_glyphIndex.end()) {
+	xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphMap.find(ch);
+	if (iter != m_glyphMap.end()) {
 		ret.glyph = iter->second;
 	}
 	else {
@@ -93,6 +119,7 @@ ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 		wbuf[1] = 0;
         GlyphInfo* info = m_freeGlyphPool.front();
 		m_freeGlyphPool.pop_front();
+		m_renderer->set_font_size(m_pixelSize);
 		Tex2DRect rect;
 		rect.x = info->x;
 		rect.y = info->y;
@@ -101,7 +128,7 @@ ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 		Tex2DLockedRect* lock = m_texture->Lock(rect);
 		euint32 letterWidth = m_renderer->draw_letter(ch, lock->GetAt(0, 0), lock->GetWidth());
 		m_texture->Unlock(lock);
-		m_glyphIndex.insert(xhn::make_pair(ch, info));
+		m_glyphMap.insert(xhn::make_pair(ch, info));
 		info->letter = ch;
 		ret.glyph = info;
 		ret.letterWidth = letterWidth;
@@ -109,22 +136,32 @@ ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 	return ret;
 }
 
+bool ComposingStick::HasGlyph(wchar_t ch)
+{
+	return m_glyphMap.find(ch) != m_glyphMap.end();
+}
+
+bool ComposingStick::HasFreeGlyphs()
+{
+    return m_freeGlyphPool.size() > 0;
+}
+
 void ComposingStick::IncreaseGlyph(wchar_t ch)
 {
-	xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphIndex.find(ch);
-	if (iter != m_glyphIndex.end()) {
+	xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphMap.find(ch);
+	if (iter != m_glyphMap.end()) {
 		ComposingStick::GlyphInfo* glyph = iter->second;
 		glyph->usageCount++;
 	}
 }
 void ComposingStick::DecreaseGlyph(wchar_t ch)
 {
-	xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphIndex.find(ch);
-	if (iter != m_glyphIndex.end()) {
+	xhn::map<wchar_t, GlyphInfo*>::iterator iter = m_glyphMap.find(ch);
+	if (iter != m_glyphMap.end()) {
 		ComposingStick::GlyphInfo* glyph = iter->second;
 		glyph->usageCount--;
 		if (!glyph->usageCount) {
-			m_glyphIndex.erase(iter);
+			m_glyphMap.erase(iter);
 			m_freeGlyphPool.push_back(glyph);
 		}
 	}
@@ -134,6 +171,102 @@ xhn::wstring ComposingStick::Convert(const xhn::string& str)
 	wchar_t wbuf[256];
 	_MByteToWChar(str.c_str(), wbuf);
 	return wbuf;
+}
+
+ComposingStickManager* ComposingStickManager::s_ComposingStickManager = NULL;
+void ComposingStickManager::Init()
+{
+    s_ComposingStickManager = ENEW ComposingStickManager;
+}
+void ComposingStickManager::Dest()
+{
+	if (s_ComposingStickManager) {
+		delete s_ComposingStickManager;
+		s_ComposingStickManager = NULL;
+	}
+}
+ComposingStickManager* ComposingStickManager::Get()
+{
+    return s_ComposingStickManager;
+}
+ComposingStickManager::ComposingStickManager()
+{
+#if defined(_WIN32) || defined(_WIN64)
+	FontRenderer* fr =
+		ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
+#else
+	FontRenderer* fr =
+		ENEW FontRenderer("/Users/joumining/v-engine/test_scene/Earthbound-Condensed-Bold.otf");
+#endif
+	m_renderer = fr;
+	m_composingStickCount = 0;
+}
+ComposingStickManager::~ComposingStickManager()
+{
+	ComposingStickMap::iterator iter = m_composingStickMap.begin();
+	ComposingStickMap::iterator end = m_composingStickMap.end();
+	for (; iter != end; iter++) {
+		xhn::list<ComposingStick*>& composingStickList = iter->second;
+		xhn::list<ComposingStick*>::iterator csIter = composingStickList.begin();
+        xhn::list<ComposingStick*>::iterator csEnd = composingStickList.end();
+		for (; csIter != csEnd; csIter++) {
+            ComposingStick* cs = *csIter;
+			delete cs;
+		}
+	}
+	m_composingStickMap.clear();
+	delete m_renderer;
+}
+ComposingStick::GlyphHandle ComposingStickManager::AllocGlyph(wchar_t ch, PixelSize size)
+{
+	xhn::list<ComposingStick*>& composingStickList = m_composingStickMap[size];
+	xhn::list<ComposingStick*>::iterator iter = composingStickList.begin();
+	xhn::list<ComposingStick*>::iterator end = composingStickList.end();
+	for (; iter != end; iter++) {
+        ComposingStick* cs = *iter;
+		if (cs->HasGlyph(ch))
+			return cs->AllocGlyph(ch);
+	}
+	iter = composingStickList.begin();
+	end = composingStickList.end();
+	for (; iter != end; iter++) {
+		ComposingStick* cs = *iter;
+		if (cs->HasFreeGlyphs())
+			return cs->AllocGlyph(ch);
+	}
+	char mbuf[256];
+	snprintf(mbuf, 255, "ComposingStick%d.png", m_composingStickCount);
+	m_composingStickCount++;
+    ComposingStick* cs = ENEW ComposingStick(m_renderer, size, 256, mbuf);
+    ComposingStick::GlyphHandle ret = cs->AllocGlyph(ch);
+	composingStickList.push_back(cs);
+	return ret;
+}
+void ComposingStickManager::IncreaseGlyph(wchar_t ch, PixelSize size)
+{
+	xhn::list<ComposingStick*>& composingStickList = m_composingStickMap[size];
+	xhn::list<ComposingStick*>::iterator iter = composingStickList.begin();
+	xhn::list<ComposingStick*>::iterator end = composingStickList.end();
+	for (; iter != end; iter++) {
+		ComposingStick* cs = *iter;
+		if (cs->HasGlyph(ch)) {
+			cs->IncreaseGlyph(ch);
+			break;
+		}
+	}
+}
+void ComposingStickManager::DecreaseGlyph(wchar_t ch, PixelSize size)
+{
+	xhn::list<ComposingStick*>& composingStickList = m_composingStickMap[size];
+	xhn::list<ComposingStick*>::iterator iter = composingStickList.begin();
+	xhn::list<ComposingStick*>::iterator end = composingStickList.end();
+	for (; iter != end; iter++) {
+		ComposingStick* cs = *iter;
+		if (cs->HasGlyph(ch)) {
+			cs->DecreaseGlyph(ch);
+			break;
+		}
+	}
 }
 
 void FontRenderer::Init(const char* _font_name)

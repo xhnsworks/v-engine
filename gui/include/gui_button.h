@@ -21,7 +21,7 @@ class GUIButtonTextLayer : public SpriteTextLayer
 {
     DeclareRTTI;
 public:
-    GUIButtonTextLayer(ComposingStick* cs);
+    GUIButtonTextLayer();
 	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIButton : public GUIPanel

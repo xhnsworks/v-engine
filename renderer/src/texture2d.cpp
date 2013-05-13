@@ -306,7 +306,6 @@ void Texture2D::Unlock(Tex2DLockedRect* rect)
 	if (is_locked)
 	{
         is_locked = 0;
-
 		unsigned char* src = (unsigned char*)rect->pxl_buffer.get();
 		unsigned char* dst = (unsigned char*)pxl_buffer.get();
 		for (euint y = 0; y < rect->height; y++)

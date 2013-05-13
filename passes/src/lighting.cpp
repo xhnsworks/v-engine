@@ -42,7 +42,7 @@ void light_base_2::Init()
 void light_base_2::Delete(LightBase2 _self)
 {
     _self->Dest();
-    light_base_2::Delete(_self);
+    delete _self;
 }
 void light_base_2::draw_shape(struct _line_drawer* _drawer)
 {

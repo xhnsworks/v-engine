@@ -295,14 +295,12 @@ class SpriteTextLayer : public SpriteLayer
 {
 	DeclareRTTI;
 public:
-	ComposingStick* m_composingStick;
 	xhn::string m_text;
 	xhn::vector<ComposingStick::GlyphHandle> m_letters;
 	xhn::vector<SpriteElement> m_elementBuffer;
 public:
-	SpriteTextLayer(const xhn::static_string& name, ComposingStick* cs)
+	SpriteTextLayer(const xhn::static_string& name)
 		: SpriteLayer(name)
-		, m_composingStick(cs)
 	{}
     virtual ~SpriteTextLayer();
 	virtual void LoadConfigImpl(const pugi::xml_node& from);

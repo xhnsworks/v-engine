@@ -347,7 +347,13 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 		pugi::xml_attribute text = node.attribute("text");
 		pugi::xml_attribute interval = node.attribute("interval");
 		pugi::xml_attribute color = node.attribute("color");
+		pugi::xml_attribute size = node.attribute("size");
 		pugi::xml_attribute transparent = node.attribute("transparent");
+
+		PixelSize pixelSize = Pixel30;
+		if (size) {
+			pixelSize = (PixelSize)size.as_uint();
+		}
 
 		xhn::string colorStr = color.value();
 		EColor textColor = _ToColor(colorStr);
@@ -370,11 +376,11 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 			else if (ch == (wchar_t)'\r')
 				continue;
 
-			ComposingStick::GlyphHandle handle = m_composingStick->AllocGlyph(ch);
+			ComposingStick::GlyphHandle handle = ComposingStickManager::Get()->AllocGlyph(ch, pixelSize);
 			m_letters.push_back(handle);
 
 			SpriteElement sprite_ele;
-			sprite_ele.SetFilename(m_composingStick->GetFilename());
+			sprite_ele.SetFilename(handle.GetFilename());
 			sprite_ele.m_rect.left = x;
 			sprite_ele.m_rect.top = y;
 			sprite_ele.m_rect.size.width = (float)handle.GetGlyph()->width;

@@ -96,6 +96,8 @@
 
 #include "sprite_event_hub.h"
 
+#include "font_renderer.h"
+
 Mesh g_mesh0 = {NULL};
 Mesh g_mesh1 = {NULL};
 
@@ -185,6 +187,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	RobotManager::Get()->Remove("RenderRobot");
 	RobotThreadManager::Get()->AddRobotThread();
 	///RobotThreadManager::Get()->AddRobotThread();
+	ComposingStickManager::Init();
 
     while (!bQuit)
     {

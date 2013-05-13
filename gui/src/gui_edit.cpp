@@ -14,8 +14,8 @@ GUIEditBackgroundLayer::GUIEditBackgroundLayer(AttributeHandle pivotHandle, Attr
 {
 }
 
-GUIEditTextLayer::GUIEditTextLayer(ComposingStick* cs)
-: SpriteTextLayer("text", cs)
+GUIEditTextLayer::GUIEditTextLayer()
+: SpriteTextLayer("text")
 {
 }
 void GUIEditTextLayer::GetScopeImpl(SpriteRect& result)
@@ -43,16 +43,7 @@ void GUIEdit::Init(const xhn::static_string configName)
 		{
 			pugi::xml_node textlayer = layers.child("text");
 			if (textlayer) {
-#if defined(_WIN32) || defined(_WIN64)
-                FontRenderer* fr =
-                ENEW FontRenderer("..\\test_scene\\Earthbound-Condensed-Bold.otf");
-#else
-                FontRenderer* fr =
-                ENEW FontRenderer("/Users/joumining/v-engine/test_scene/Earthbound-Condensed-Bold.otf");
-#endif
-                fr->set_font_size(Pixel30);
-                ComposingStick* cs = ENEW ComposingStick(fr, 256);
-                SpriteLayerPtr layer = ENEW GUIEditTextLayer(cs);
+                SpriteLayerPtr layer = ENEW GUIEditTextLayer();
                 layer->LoadConfigImpl(textlayer);
                 AddChild(layer);
             }
