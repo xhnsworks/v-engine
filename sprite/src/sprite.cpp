@@ -53,6 +53,40 @@ Mesh SpriteElement::Build(SpriteRenderer* sprite_renderer) const
 		return ret;
 	}
 }
+bool SpriteElement::CutOut(const SpriteRect& rect)
+{
+	float left = m_rect.left;
+	float top = m_rect.top;
+    float right = m_rect.left + m_rect.size.width;
+	float bottom = m_rect.top + m_rect.size.height;
+	float rectLeft = rect.left;
+	float rectTop = rect.top;
+	float rectRight = rect.left + rect.size.width;
+	float rectBottom = rect.top + rect.size.height;
+	float area_x0 = m_area_x0;
+	float area_x1 = m_area_x1;
+	float area_y0 = m_area_y0;
+	float area_y1 = m_area_y1;
+	EColor color_u0v0 = m_color_u0v0;
+	EColor color_u1v0 = m_color_u1v0;
+	EColor color_u1v1 = m_color_u1v1;
+	EColor color_u0v1 = m_color_u0v1;
+	if (right < rectLeft || top > rectBottom)
+		return false;
+	if (rectLeft > left) {
+		m_area_x0 += ((rectLeft - left) / m_rect.size.width) * (area_x1 - area_x0);
+		m_color_u0v0 += ((rectLeft - left) / m_rect.size.width) * (color_u1v0 - color_u0v0);
+		m_rect.left = rectLeft;
+	}
+	if (rectRight < right) {
+		m_area_x1 -= ((right - rectRight) / m_rect.size.width) * (area_x1 - area_x0);
+		m_color_u1v0 -= ((rectLeft - left) / m_rect.size.width) * (color_u1v0 - color_u0v0);
+		m_rect.size.width = rectRight - m_rect.left;
+	}
+	/// to be continue...
+	///
+	return true;
+}
 
 ImplementRootRTTI(SpriteLayer);
 ImplementRTTI(SpriteNormalLayer, SpriteLayer);

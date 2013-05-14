@@ -168,6 +168,7 @@ public:
 	}
 	void ApplyTransform(const matrix4x4* transform);
     Mesh Build(SpriteRenderer* sprite_renderer) const;
+    bool CutOut(const SpriteRect& rect);
 };
 ///**********************************************************************///
 ///                       class define end                               ///
