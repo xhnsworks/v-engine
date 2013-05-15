@@ -173,6 +173,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	TRY(0)
 
+	SpriteElement::Test();
+
 	RobotManager::Init();
 	RobotThreadManager::Init();
 	SpriteEventHub::Init();

@@ -15,6 +15,12 @@ public:
 		, blue(1.0f)
 		, alpha(1.0f)
 	{}
+	EColor(float r, float g, float b, float a)
+		: red(r)
+		, green(g)
+		, blue(b)
+		, alpha(a)
+	{}
 	EColor(const EColor& c)
 		: red(c.red)
 		, green(c.green)
@@ -26,6 +32,13 @@ public:
 		green += c.green;
 		blue += c.blue;
 		alpha += c.alpha;
+		return *this;
+	}
+	inline EColor& operator -=(const EColor& c) {
+		red -= c.red;
+		green -= c.green;
+		blue -= c.blue;
+		alpha -= c.alpha;
 		return *this;
 	}
 	inline EColor operator *(const EColor& c) const {

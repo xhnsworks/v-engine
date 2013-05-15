@@ -75,17 +75,44 @@ bool SpriteElement::CutOut(const SpriteRect& rect)
 		return false;
 	if (rectLeft > left) {
 		m_area_x0 += ((rectLeft - left) / m_rect.size.width) * (area_x1 - area_x0);
-		m_color_u0v0 += ((rectLeft - left) / m_rect.size.width) * (color_u1v0 - color_u0v0);
+		m_color_u0v0 += (color_u1v0 - color_u0v0) * ((rectLeft - left) / m_rect.size.width);
+		m_color_u0v1 += (color_u1v1 - color_u0v1) * ((rectLeft - left) / m_rect.size.width);
 		m_rect.left = rectLeft;
 	}
 	if (rectRight < right) {
 		m_area_x1 -= ((right - rectRight) / m_rect.size.width) * (area_x1 - area_x0);
-		m_color_u1v0 -= ((rectLeft - left) / m_rect.size.width) * (color_u1v0 - color_u0v0);
+		m_color_u1v0 -= (color_u1v0 - color_u0v0) * ((rectLeft - left) / m_rect.size.width);
+		m_color_u1v1 -= (color_u1v1 - color_u0v1) * ((rectLeft - left) / m_rect.size.width);
 		m_rect.size.width = rectRight - m_rect.left;
 	}
-	/// to be continue...
-	///
+	if (rectTop > top) {
+		m_area_y0 += ((rectTop - top) / m_rect.size.height) * (area_y1 - area_y0);
+		m_color_u0v0 += (color_u0v1 - color_u0v0) * ((rectTop - top) / m_rect.size.height);
+		m_color_u1v0 += (color_u1v1 - color_u1v0) * ((rectTop - top) / m_rect.size.height);
+		m_rect.top = rectTop;
+	}
+	if (rectBottom < bottom) {
+		m_area_y1 -= ((bottom - rectBottom) / m_rect.size.height) * (area_y1 - area_y0);
+		m_color_u0v1 -= (color_u0v1 - color_u0v0) * ((rectBottom - bottom) / m_rect.size.height);
+		m_color_u1v1 -= (color_u1v1 - color_u1v0) * ((rectBottom - bottom) / m_rect.size.height);
+		m_rect.size.height = rectBottom - m_rect.top;
+	}
 	return true;
+}
+
+void SpriteElement::Test()
+{
+    SpriteElement ele(10.0f, 20.0f, 32.0f, 32.0f);
+	ele.m_area_x0 = 10.0f;
+	ele.m_area_x1 = 42.0f;
+	ele.m_area_y0 = 20.0f;
+	ele.m_area_y1 = 52.0f;
+	ele.m_color_u0v0 = EColor(0.0f, 0.0f, 0.0f, 0.0f);
+	ele.m_color_u1v0 = EColor(1.0f, 0.0f, 0.0f, 0.0f);
+	ele.m_color_u0v1 = EColor(0.0f, 1.0f, 0.0f, 0.0f);
+	ele.m_color_u1v1 = EColor(0.0f, 0.0f, 1.0f, 0.0f);
+    SpriteRect rect0(5.0f, 30.0f, 45.0f, 10.0f);
+	ele.CutOut(rect0);
 }
 
 ImplementRootRTTI(SpriteLayer);
