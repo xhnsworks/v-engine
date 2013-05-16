@@ -71,11 +71,10 @@ void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
     tmpCenter.ApplyTransform(&transform);
     tmpLeft.ApplyTransform(&transform);
     tmpRight.ApplyTransform(&transform);
-    
+
 	to.push_back(tmpCenter);
-    
-	to.push_back(tmpLeft);
-	to.push_back(tmpRight);
+    to.push_back(tmpLeft);
+    to.push_back(tmpRight);
 }
 
 void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)

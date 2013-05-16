@@ -8,6 +8,19 @@
 #include "pugixml.hpp"
 #include "clamp.h"
 
+void SpriteRect::ApplyTransform(const matrix4x4* transform)
+{
+	sfloat4 ft4Pos = SFloat4(left, top, 0.0f, 1.0f);
+    sfloat4 ft4Size = SFloat4(size.width, size.height, 0.0f, 1.0f);
+	ft4Pos = Matrix4x4_mul_float4(transform, ft4Pos);
+	ft4Size = Matrix4x4_mul_float4(transform, ft4Size);
+	left = SFloat4_get_x(&ft4Pos);
+	top = SFloat4_get_y(&ft4Pos);
+	ft4Size = SFloat4_sub(ft4Size, ft4Pos);
+	size.width = SFloat4_get_x(&ft4Size);
+	size.height = SFloat4_get_y(&ft4Size);
+}
+
 void SpriteRect::GetFourBorders(SpriteRenderer* renderer, FourBorders& borders)
 {
 	renderer->get_four_borders(left, top, size.width, size.height, borders);
@@ -53,7 +66,7 @@ Mesh SpriteElement::Build(SpriteRenderer* sprite_renderer) const
 		return ret;
 	}
 }
-bool SpriteElement::CutOut(const SpriteRect& rect)
+bool SpriteElement::Trim(const SpriteRect& rect)
 {
 	float left = m_rect.left;
 	float top = m_rect.top;
@@ -71,7 +84,7 @@ bool SpriteElement::CutOut(const SpriteRect& rect)
 	EColor color_u1v0 = m_color_u1v0;
 	EColor color_u1v1 = m_color_u1v1;
 	EColor color_u0v1 = m_color_u0v1;
-	if (right < rectLeft || top > rectBottom)
+	if (right < rectLeft || top > rectBottom || left > rectRight || bottom < rectTop)
 		return false;
 	if (rectLeft > left) {
 		m_area_x0 += ((rectLeft - left) / m_rect.size.width) * (area_x1 - area_x0);
@@ -112,7 +125,7 @@ void SpriteElement::Test()
 	ele.m_color_u0v1 = EColor(0.0f, 1.0f, 0.0f, 0.0f);
 	ele.m_color_u1v1 = EColor(0.0f, 0.0f, 1.0f, 0.0f);
     SpriteRect rect0(5.0f, 30.0f, 45.0f, 10.0f);
-	ele.CutOut(rect0);
+	ele.Trim(rect0);
 }
 
 ImplementRootRTTI(SpriteLayer);
@@ -153,6 +166,7 @@ void SpriteLayer::BuildElements(xhn::list<SpriteElement>& to)
     SpriteList::iterator iter = m_children.begin();
     SpriteList::iterator end = m_children.end();
     for (; iter != end; iter++) {
+		xhn::list<SpriteElement> buf;
         SpriteLayerPtr& sptLayer = *iter;
         sptLayer->BuildElementsImpl(to);
     }
@@ -668,6 +682,14 @@ void Sprite::GetMatrix(matrix4x4* result)
 	Matrix4x4_mul_matrix4(result, &tran, result);
 	
 	Matrix4x4_mul_matrix4(result, &parentMatrix, result);
+
+	///TEST///
+	/**
+	SpriteRect sptRect;
+	GetScope(sptRect);
+	sptRect.ApplyTransform(result);
+	**/
+	///
 }
 
 void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)

@@ -88,10 +88,11 @@ struct SpriteRect
 		size.width = right - left;
 		size.height = bottom - top;
 	}
+	void ApplyTransform(const matrix4x4* transform);
 	void GetFourBorders(SpriteRenderer* renderer, FourBorders& borders);
 };
 ///**********************************************************************///
-///                       strcut define end                              ///
+///                       struct define end                              ///
 ///**********************************************************************///
 ///**********************************************************************///
 ///                       class define begin                             ///
@@ -168,7 +169,7 @@ public:
 	}
 	void ApplyTransform(const matrix4x4* transform);
     Mesh Build(SpriteRenderer* sprite_renderer) const;
-    bool CutOut(const SpriteRect& rect);
+    bool Trim(const SpriteRect& rect);
 	static void Test();
 };
 ///**********************************************************************///
