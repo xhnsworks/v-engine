@@ -14,9 +14,9 @@ void SpriteRect::ApplyTransform(const matrix4x4* transform)
     sfloat4 ft4Size = SFloat4(size.width, size.height, 0.0f, 1.0f);
 	ft4Pos = Matrix4x4_mul_float4(transform, ft4Pos);
 	ft4Size = Matrix4x4_mul_float4(transform, ft4Size);
-	left = SFloat4_get_x(&ft4Pos);
-	top = SFloat4_get_y(&ft4Pos);
 	ft4Size = SFloat4_sub(ft4Size, ft4Pos);
+    left = SFloat4_get_x(&ft4Pos);
+	top = SFloat4_get_y(&ft4Pos);
 	size.width = SFloat4_get_x(&ft4Size);
 	size.height = SFloat4_get_y(&ft4Size);
 }
@@ -648,6 +648,7 @@ void Sprite::GetMatrix(matrix4x4* result)
 	matrix4x4 scal;
 	matrix4x4 rota;
 	matrix4x4 tran;
+    matrix4x4 tmp;
 	EFloat2 p = m_renderer->get_real_position(0.0f, 0.0f);
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.m_lock->GetReadLock();
@@ -676,20 +677,24 @@ void Sprite::GetMatrix(matrix4x4* result)
 		///Matrix4x4_set_scale(&scal, m_scale.x, m_scale.y, 1.0f);
 		Matrix4x4_set_scale(&scal, scale->x, scale->y, 1.0f);
 	}
-	Matrix4x4_mul_matrix4(&offs, &rota, result);
-	Matrix4x4_mul_matrix4(result, &scal, result);
-	Matrix4x4_mul_matrix4(result, &inv_offs, result);
-	Matrix4x4_mul_matrix4(result, &tran, result);
+	Matrix4x4_mul_matrix4(&offs, &rota, &tmp);
+	Matrix4x4_mul_matrix4(&tmp, &scal, &tmp);
+	Matrix4x4_mul_matrix4(&tmp, &inv_offs, &tmp);
+	Matrix4x4_mul_matrix4(&tmp, &tran, result);
+    
+    if (m_parent) {
+        /**
+        SpriteRect scope;
+        GetScope(scope);
+        scope.ApplyTransform(result);
+        float x = scope.left + scope.size.width * 0.5f;
+        float y = scope.top + scope.size.height * 0.5f;
+        Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
+        Matrix4x4_mul_matrix4(&tmp, &tran, result);
+         **/
+    }
 	
 	Matrix4x4_mul_matrix4(result, &parentMatrix, result);
-
-	///TEST///
-	/**
-	SpriteRect sptRect;
-	GetScope(sptRect);
-	sptRect.ApplyTransform(result);
-	**/
-	///
 }
 
 void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)

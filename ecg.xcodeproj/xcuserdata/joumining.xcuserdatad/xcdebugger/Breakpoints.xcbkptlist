@@ -13,33 +13,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "196"
          endingLineNumber = "196"
-         landmarkName = "GUIButton::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "sprite/src/sprite.cpp"
-         timestampString = "390057913.84257"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "75"
-         endingLineNumber = "75"
-         landmarkName = "SpriteLayer::LoadConfig(const pugi::xml_node&amp; from)"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "sprite/src/sprite.cpp"
-         timestampString = "390057923.039369"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "80"
-         endingLineNumber = "80"
-         landmarkName = "SpriteLayer::LoadConfig(const pugi::xml_node&amp; from)"
+         landmarkName = "GUIButton::MouseButtonUpEventProc::Proc(const SpriteEvent* evt)"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

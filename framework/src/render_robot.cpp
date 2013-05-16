@@ -282,32 +282,36 @@ void ResourceAction::DoImpl()
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
+        /**
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
 		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();
 		m_guiHoriBar = m_horiBarFactory->MakeSprite()->DynamicCast<GUIHoriBar>();
 		m_guiVertBar = m_vertBarFactory->MakeSprite()->DynamicCast<GUIVertBar>();
+         **/
         m_guiContainer = m_containerFactory->MakeSprite()->DynamicCast<GUIContainer>();
+        /**
 		m_guiEdit->SetCoord(0.0f, 50.0f);
 		m_guiHoriBar->SetCoord(0.0f, 280.0f);
 		m_guiVertBar->SetCoord(0.0f, 400.0f);
 		m_guiPanel->SetCoord(30.0f, 50.0f);
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
+         **/
 
 		m_guiButton->SetCoord(0.0f, 0.0f);
-		///m_guiButton->SetRotate(0.5f);
+		m_guiButton->SetRotate(0.5f);
 		m_guiCursor->SetCoord(10.0f, 30.0f);
 
 		///
 		m_guiContainer->AddChild(m_guiButton);
-		m_guiContainer->AddChild(m_guiEdit);
-		m_guiContainer->AddChild(m_guiHoriBar);
-		m_guiContainer->AddChild(m_guiVertBar);
-		m_guiPanel->SetRotate(0.2f);
+		///m_guiContainer->AddChild(m_guiEdit);
+		///m_guiContainer->AddChild(m_guiHoriBar);
+		///m_guiContainer->AddChild(m_guiVertBar);
+		///m_guiPanel->SetRotate(0.2f);
         
         m_guiContainer->SetCoord(150.0f, 200.0f);
 
-		SpriteFactory::AlwaysOnTop(m_guiEdit);
+		///SpriteFactory::AlwaysOnTop(m_guiEdit);
 		SpriteFactory::AlwaysOnTop(m_guiCursor);
 		///
 
@@ -561,7 +565,7 @@ void LogicAction::DoImpl()
 	
 	guiRdr->GetGeomBuffer()->Clear();
 
-	m_resAct->m_guiPanel->SetRotate(s_rotate);
+	///m_resAct->m_guiPanel->SetRotate(s_rotate);
 	///s_rotate += 0.01f;
 
 	TimeCheckpoint checkPoint = TimeCheckpoint::Tick();
