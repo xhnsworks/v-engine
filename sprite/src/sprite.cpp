@@ -662,19 +662,19 @@ void Sprite::GetMatrix(matrix4x4* result)
 	{
 		xhn::RWLock::Instance inst = m_rotationHandle.m_lock->GetReadLock();
 		EFloat* rotation = (EFloat*)m_rotationHandle.GetAttribute();
-		///Matrix4x4_from_axis_angle(&rota, axis, m_rotation.Get());
+		
 		Matrix4x4_from_axis_angle(&rota, axis, rotation->Get());
 	}
 	{
 		xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
 		EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
-		///Matrix4x4_set_as_translate(&tran, m_coordinate.x, m_coordinate.y, 0.0f);
+		
 		Matrix4x4_set_as_translate(&tran, coord->x, coord->y, 0.0f);
 	}
 	{
 		xhn::RWLock::Instance inst = m_scaleHandle.m_lock->GetReadLock();
 		EFloat2* scale = (EFloat2*)m_scaleHandle.GetAttribute();
-		///Matrix4x4_set_scale(&scal, m_scale.x, m_scale.y, 1.0f);
+		
 		Matrix4x4_set_scale(&scal, scale->x, scale->y, 1.0f);
 	}
 	Matrix4x4_mul_matrix4(&offs, &rota, &tmp);
@@ -683,15 +683,23 @@ void Sprite::GetMatrix(matrix4x4* result)
 	Matrix4x4_mul_matrix4(&tmp, &tran, result);
     
     if (m_parent) {
-        /**
+		/// calculate the coordinates of the center
+		SpriteRect parentScope;
+		m_parent->GetScopeImpl(parentScope);
+		parentScope.ApplyTransform(&parentMatrix);
+        
         SpriteRect scope;
         GetScope(scope);
         scope.ApplyTransform(result);
-        float x = scope.left + scope.size.width * 0.5f;
-        float y = scope.top + scope.size.height * 0.5f;
+        float x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f;
+        float y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f;
+       
         Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
-        Matrix4x4_mul_matrix4(&tmp, &tran, result);
-         **/
+
+		Matrix4x4_mul_matrix4(&offs, &rota, &tmp);
+		Matrix4x4_mul_matrix4(&tmp, &scal, &tmp);
+		Matrix4x4_mul_matrix4(&tmp, &inv_offs, &tmp);
+		Matrix4x4_mul_matrix4(&tmp, &tran, result);
     }
 	
 	Matrix4x4_mul_matrix4(result, &parentMatrix, result);
