@@ -340,6 +340,8 @@ protected:
 	AttributeHandle m_scaleHandle;
 public:
     SpriteRenderer* m_renderer;
+    bool m_isHorizontalAlignment;
+    bool m_isVerticalAlignment;
 public:
 	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
     virtual void Init() {}

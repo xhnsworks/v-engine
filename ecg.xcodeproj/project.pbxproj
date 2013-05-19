@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6815E768172FE5A400463B2A /* pugixml.cpp */; };
+		682A679F1748B68B009D1393 /* gui_simple_panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 682A679D1748B68B009D1393 /* gui_simple_panel.cpp */; };
 		68814BE4173D55A900710D15 /* gui_container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68814BE3173D55A900710D15 /* gui_container.cpp */; };
 		688ED9851733E77C00940811 /* gui_edit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9841733E77C00940811 /* gui_edit.cpp */; };
 		688ED98A1733F95700940811 /* xhn_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688ED9881733F95700940811 /* xhn_exception.cpp */; };
@@ -145,6 +146,8 @@
 		6815E767172FE5A400463B2A /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugiconfig.hpp; sourceTree = "<group>"; };
 		6815E768172FE5A400463B2A /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
 		6815E769172FE5A400463B2A /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
+		682A679D1748B68B009D1393 /* gui_simple_panel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_simple_panel.cpp; sourceTree = "<group>"; };
+		682A67A01748B72A009D1393 /* gui_simple_panel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_simple_panel.h; sourceTree = "<group>"; };
 		68814BE2173D559F00710D15 /* gui_container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_container.h; sourceTree = "<group>"; };
 		68814BE3173D55A900710D15 /* gui_container.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_container.cpp; sourceTree = "<group>"; };
 		688ED9841733E77C00940811 /* gui_edit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_edit.cpp; sourceTree = "<group>"; };
@@ -2239,6 +2242,7 @@
 		68A35E67172FE2B4007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				682A67A01748B72A009D1393 /* gui_simple_panel.h */,
 				68814BE2173D559F00710D15 /* gui_container.h */,
 				6892B29E173BDF2500A5ED22 /* gui_bar.h */,
 				688ED9861733E78300940811 /* gui_edit.h */,
@@ -2262,6 +2266,7 @@
 				68A35E71172FE2B4007D0C45 /* gui_panel.cpp */,
 				68A35E72172FE2B4007D0C45 /* gui_pch.cpp */,
 				6892B29B173BDEDF00A5ED22 /* gui_bar.cpp */,
+				682A679D1748B68B009D1393 /* gui_simple_panel.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2873,6 +2878,7 @@
 				68FE5BFB173A798800094CEB /* MyView.mm in Sources */,
 				6892B29D173BDEDF00A5ED22 /* gui_bar.cpp in Sources */,
 				68814BE4173D55A900710D15 /* gui_container.cpp in Sources */,
+				682A679F1748B68B009D1393 /* gui_simple_panel.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

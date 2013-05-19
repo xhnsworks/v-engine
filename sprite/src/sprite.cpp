@@ -505,6 +505,8 @@ void SpriteTextLayer::Clear()
 
 Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 : m_renderer(renderer)
+, m_isHorizontalAlignment(false)
+, m_isVerticalAlignment(false)
 , SpriteLayer(name)
 {
 	//m_pivotHandle.m_attr = &m_pivot;
@@ -682,7 +684,8 @@ void Sprite::GetMatrix(matrix4x4* result)
 	Matrix4x4_mul_matrix4(&tmp, &inv_offs, &tmp);
 	Matrix4x4_mul_matrix4(&tmp, &tran, result);
     
-    if (m_parent) {
+    if ((m_isHorizontalAlignment || m_isVerticalAlignment) &&
+        m_parent) {
 		/// calculate the coordinates of the center
 		SpriteRect parentScope;
 		m_parent->GetScopeImpl(parentScope);
