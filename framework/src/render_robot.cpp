@@ -271,9 +271,12 @@ void ResourceAction::DoImpl()
                                              areaRect,
                                              6.0f);
         
+		panelRect.size.width = 100.0f;
+		panelRect.size.height = 100.0f;
         GUIContainerFactory::CreateSheetConfig("container.xml",
                                                "rect",
-                                               panelRect);
+                                               panelRect,
+											   true);
 
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
 		m_horiBarFactory = ENEW GUIHoriBarFactory(guiRdr, "hori_bar.xml");
@@ -298,12 +301,14 @@ void ResourceAction::DoImpl()
 		m_guiPanel->SetSize(100.0f, 100.0f);
          **/
 
-		m_guiButton->SetCoord(0.0f, 0.0f);
+		m_guiButton->SetCoord(100.0f, 50.0f);
 		m_guiButton->SetRotate(0.5f);
+		m_guiButton->m_alignmentMode = Sprite::CenterAligned;
+		
 		m_guiCursor->SetCoord(10.0f, 30.0f);
-
 		///
 		m_guiContainer->AddChild(m_guiButton);
+		m_guiContainer->AlwaysOnTop(m_guiButton);
 		///m_guiContainer->AddChild(m_guiEdit);
 		///m_guiContainer->AddChild(m_guiHoriBar);
 		///m_guiContainer->AddChild(m_guiVertBar);

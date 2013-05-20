@@ -3,114 +3,6 @@
 #include "common.h"
 #include "etypes.h"
 #include "attribute.h"
-class EFloat4 : public Attribute
-{
-public:
-    float x, y, z, w;
-public:
-	EFloat4()
-		: x(0.0f)
-		, y(0.0f)
-		, z(0.0f)
-		, w(0.0f)
-	{}
-	EFloat4(float _x, float _y, float _z, float _w)
-		: x(_x)
-		, y(_y)
-		, z(_z)
-		, w(_w)
-	{}
-	inline EFloat4 operator *(const EFloat4& f) const {
-        return EFloat4(x * f.x, y * f.y, z * f.z, w * f.w);
-	}
-	inline EFloat4 operator *(float f) const {
-		return EFloat4(x * f, y * f, z * f, w * f);
-	}
-	inline EFloat4 operator /(const EFloat4& f) const {
-		return EFloat4(x / f.x, y / f.y, z / f.z, w / f.w);
-	}
-	inline EFloat4 operator +(const EFloat4& f) const {
-		return EFloat4(x + f.x, y + f.y, z + f.z, w + f.w);
-	}
-	inline EFloat4 operator -(const EFloat4& f) const {
-		return EFloat4(x - f.x, y - f.y, z - f.z, w - f.w);
-	}
-	static inline EFloat4 Lerp(const EFloat4& a, const EFloat4& b, float factor) {
-		EFloat4 delt = b - a;
-		EFloat4 ret = a + delt * factor;
-		return ret;
-	}
-};
-class EFloat3 : public Attribute
-{
-public:
-    float x, y, z;
-public:
-	EFloat3()
-		: x(0.0f)
-		, y(0.0f)
-		, z(0.0f)
-	{}
-	EFloat3(float _x, float _y, float _z)
-		: x(_x)
-		, y(_y)
-		, z(_z)
-	{}
-	inline EFloat3 operator *(const EFloat3& f) const {
-		return EFloat3(x * f.x, y * f.y, z * f.z);
-	}
-	inline EFloat3 operator *(float f) const {
-		return EFloat3(x * f, y * f, z * f);
-	}
-	inline EFloat3 operator /(const EFloat3& f) const {
-		return EFloat3(x / f.x, y / f.y, z / f.z);
-	}
-	inline EFloat3 operator +(const EFloat3& f) const {
-		return EFloat3(x + f.x, y + f.y, z + f.z);
-	}
-	inline EFloat3 operator -(const EFloat3& f) const {
-		return EFloat3(x - f.x, y - f.y, z - f.z);
-	}
-	static inline EFloat3 Lerp(const EFloat3& a, const EFloat3& b, float factor) {
-		EFloat3 delt = b - a;
-		EFloat3 ret = a + delt * factor;
-		return ret;
-	}
-};
-class EFloat2 : public Attribute
-{
-public:
-    float x, y;
-public:
-	EFloat2()
-		: x(0.0f)
-		, y(0.0f)
-	{}
-	EFloat2(float _x, float _y)
-		: x(_x)
-		, y(_y)
-	{}
-	inline EFloat2 operator *(const EFloat2& f) const {
-		return EFloat2(x * f.x, y * f.y);
-	}
-	inline EFloat2 operator *(float f) const {
-		return EFloat2(x * f, y * f);
-	}
-	inline EFloat2 operator /(const EFloat2& f) const {
-		return EFloat2(x / f.x, y / f.y);
-	}
-	inline EFloat2 operator +(const EFloat2& f) const {
-		return EFloat2(x + f.x, y + f.y);
-	}
-	inline EFloat2 operator -(const EFloat2& f) const {
-		return EFloat2(x - f.x, y - f.y);
-	}
-	static inline EFloat2 Lerp(const EFloat2& a, const EFloat2& b, float factor) {
-		EFloat2 delt = b - a;
-		EFloat2 ret = a + delt * factor;
-		return ret;
-	}
-};
 class EFloat : public Attribute
 {
 public:
@@ -143,6 +35,120 @@ public:
 	static inline EFloat Lerp(const EFloat& a, const EFloat& b, float factor) {
 		EFloat delt = b - a;
 		EFloat ret = a + delt * factor;
+		return ret;
+	}
+};
+class EFloat2 : public Attribute
+{
+public:
+	float x, y;
+public:
+	EFloat2()
+		: x(0.0f)
+		, y(0.0f)
+	{}
+	EFloat2(float _x, float _y)
+		: x(_x)
+		, y(_y)
+	{}
+	inline EFloat2 operator *(const EFloat2& f) const {
+		return EFloat2(x * f.x, y * f.y);
+	}
+	inline EFloat2 operator *(float f) const {
+		return EFloat2(x * f, y * f);
+	}
+	inline EFloat2 operator /(const EFloat2& f) const {
+		return EFloat2(x / f.x, y / f.y);
+	}
+	inline EFloat2 operator +(const EFloat2& f) const {
+		return EFloat2(x + f.x, y + f.y);
+	}
+	inline EFloat2 operator -(const EFloat2& f) const {
+		return EFloat2(x - f.x, y - f.y);
+	}
+	static inline EFloat2 Lerp(const EFloat2& a, const EFloat2& b, float factor) {
+		EFloat2 delt = b - a;
+		EFloat2 ret = a + delt * factor;
+		return ret;
+	}
+};
+class EFloat3 : public Attribute
+{
+public:
+	float x, y, z;
+public:
+	EFloat3()
+		: x(0.0f)
+		, y(0.0f)
+		, z(0.0f)
+	{}
+	EFloat3(float _x, float _y, float _z)
+		: x(_x)
+		, y(_y)
+		, z(_z)
+	{}
+	inline EFloat3 operator *(const EFloat3& f) const {
+		return EFloat3(x * f.x, y * f.y, z * f.z);
+	}
+	inline EFloat3 operator *(float f) const {
+		return EFloat3(x * f, y * f, z * f);
+	}
+	inline EFloat3 operator /(const EFloat3& f) const {
+		return EFloat3(x / f.x, y / f.y, z / f.z);
+	}
+	inline EFloat3 operator +(const EFloat3& f) const {
+		return EFloat3(x + f.x, y + f.y, z + f.z);
+	}
+	inline EFloat3 operator -(const EFloat3& f) const {
+		return EFloat3(x - f.x, y - f.y, z - f.z);
+	}
+	static inline EFloat3 Lerp(const EFloat3& a, const EFloat3& b, float factor) {
+		EFloat3 delt = b - a;
+		EFloat3 ret = a + delt * factor;
+		return ret;
+	}
+};
+class EFloat4 : public Attribute
+{
+public:
+    float x, y, z, w;
+public:
+	EFloat4()
+		: x(0.0f)
+		, y(0.0f)
+		, z(0.0f)
+		, w(0.0f)
+	{}
+	EFloat4(const EFloat3& nor, float w) 
+		: x(nor.x)
+		, y(nor.y)
+		, z(nor.z)
+		, w(w)
+	{}
+	EFloat4(float _x, float _y, float _z, float _w)
+		: x(_x)
+		, y(_y)
+		, z(_z)
+		, w(_w)
+	{}
+	inline EFloat4 operator *(const EFloat4& f) const {
+        return EFloat4(x * f.x, y * f.y, z * f.z, w * f.w);
+	}
+	inline EFloat4 operator *(float f) const {
+		return EFloat4(x * f, y * f, z * f, w * f);
+	}
+	inline EFloat4 operator /(const EFloat4& f) const {
+		return EFloat4(x / f.x, y / f.y, z / f.z, w / f.w);
+	}
+	inline EFloat4 operator +(const EFloat4& f) const {
+		return EFloat4(x + f.x, y + f.y, z + f.z, w + f.w);
+	}
+	inline EFloat4 operator -(const EFloat4& f) const {
+		return EFloat4(x - f.x, y - f.y, z - f.z, w - f.w);
+	}
+	static inline EFloat4 Lerp(const EFloat4& a, const EFloat4& b, float factor) {
+		EFloat4 delt = b - a;
+		EFloat4 ret = a + delt * factor;
 		return ret;
 	}
 };

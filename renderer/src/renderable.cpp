@@ -13,6 +13,15 @@
 #include "mesh_base.h"
 #include "render_system.h"
 
+void renderable::add_clip_plane(const plane& p)
+{
+	clip_planes.push_back(p);
+}
+void renderable::clear_clip_planes()
+{
+	clip_planes.clear();
+}
+
 renderable::renderable()
 {
 }

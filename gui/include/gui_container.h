@@ -3,6 +3,7 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
+#include "gui_simple_panel.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
@@ -12,9 +13,11 @@ class GUIContainer : public Sprite
 	DeclareRTTI;
 	friend class GUIContantnerFactory;
 protected:
-	~GUIContainer() {}
+	~GUIContainer();
 public:
 	AttributeHandle m_rectHandle;
+	SpriteLayerPtr m_simplePanel;
+    GUISimplePanelFactory* m_simplePanelFactory;
 public:
 	GUIContainer(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual void Init(const xhn::static_string configName);
@@ -36,7 +39,8 @@ public:
 	virtual Sprite* MakeSpriteImpl();
 	static void CreateSheetConfig(const char* cfgName,
                                   const char* sheetName,
-                                  const SpriteRect& panelRect);
+                                  const SpriteRect& panelRect,
+								  bool isDebugMode);
 };
 ///**********************************************************************///
 ///                       class define begin                             ///

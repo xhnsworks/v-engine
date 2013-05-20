@@ -68,3 +68,11 @@ EFloat3 Plane_ray_cross(Plane self, Ray ray)
         return ret;
     }
 }
+
+GLPlane Plane_to_glplane(Plane self)
+{
+    sfloat3 nor = SFloat3_assign_from_efloat3(&self->normal);
+	sfloat3 pos = SFloat3_assign_from_efloat3(&self->origin);
+	float d = - SFloat3_dot(nor, pos);
+	return GLPlane(self->normal, d);
+}

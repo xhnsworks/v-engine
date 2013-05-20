@@ -699,6 +699,24 @@ void Renderer::render_std_passes()
         euint32 face_count = IndexBuffer_get_num_faces ( rbl->idx_buf );
         e_mesh_mode mode = IndexBuffer_get_mesh_mode ( rbl->idx_buf );
 
+		euint32 clip_plane_count = 0;
+		xhn::vector<plane>::iterator cpIter = clip_planes.begin();
+		xhn::vector<plane>::iterator cpEnd = clip_planes.end();
+		for (; cpIter != cpEnd; cpIter++, clip_plane_count++) {
+			plane& p = *cpIter;
+            GLPlane glplane = Plane_to_glplane(&p); 
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
+		}
+		cpIter = rbl->clip_planes.begin();
+		cpEnd = rbl->clip_planes.end();
+		for (; cpIter != cpEnd; cpIter++, clip_plane_count++) {
+			plane& p = *cpIter;
+			GLPlane glplane = Plane_to_glplane(&p); 
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
+		}
+		
         if ( mode == Triangular ) {
             Pass_render ( std_pass, rbl->vtx_buf, rbl->idx_buf, face_count * 3, mode );
         }
@@ -706,8 +724,12 @@ void Renderer::render_std_passes()
             Pass_render ( std_pass, rbl->vtx_buf, rbl->idx_buf, face_count * 2, mode );
         }
 
+		for (euint32 i = 0; i < clip_plane_count; i++) {
+			glDisable(GL_CLIP_PLANE0 + i);
+		}
+		
         ERROR_PROC;
-
+		
         if ( use_deferred_shading ) {
             SketchBook_draw_end ( prev_render_skb );
             ERROR_PROC;
@@ -1051,6 +1073,16 @@ void Renderer::clear_sketchbook()
     glViewport ( x, y, width, height );
     Pass_render_plane ( clear_sketchbook_pass, render_plane );
     SketchBook_draw_end ( render_skb );
+}
+
+void Renderer::add_clip_plane(const plane& p)
+{
+    clip_planes.push_back(p);
+}
+
+void Renderer::clear_clip_planes()
+{
+    clip_planes.clear();
 }
 
 Renderable Renderer::new_renderable ( VertexDecl _dec, MaterialInstance* _m_inst, e_mesh_mode _mesh_mode )

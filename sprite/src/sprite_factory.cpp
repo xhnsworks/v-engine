@@ -4,8 +4,8 @@
 #include "sprite_renderer.h"
 
 bool FSpriteDestProc::Test(SpriteLayer* ptr, xhn::set<SpriteLayer*>& testBuffer) {
-	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator iter = ptr->m_children.begin();
-	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator end = ptr->m_children.end();
+	SpriteLayerList::iterator iter = ptr->m_children.begin();
+	SpriteLayerList::iterator end = ptr->m_children.end();
 	for (; iter != end; iter++) {
 		SpriteLayer* p = (*iter).get();
 		if (testBuffer.find(p) != testBuffer.end())
@@ -17,8 +17,8 @@ bool FSpriteDestProc::Test(SpriteLayer* ptr, xhn::set<SpriteLayer*>& testBuffer)
 	return true;
 }
 bool FSpriteDestProc::Test(SpriteLayer* ptr) {
-	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator iter = ptr->m_children.begin();
-	xhn::vector< xhn::SmartPtr<SpriteLayer, FSpriteDestProc> >::iterator end = ptr->m_children.end();
+	SpriteLayerList::iterator iter = ptr->m_children.begin();
+	SpriteLayerList::iterator end = ptr->m_children.end();
 	xhn::set<SpriteLayer*> buffer;
 	buffer.insert(ptr);
 	for (; iter != end; iter++) {	

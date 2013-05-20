@@ -8,10 +8,19 @@
 ImplementRTTI(GUIContainer, Sprite);
 
 GUIContainer::GUIContainer(SpriteRenderer* renderer, const xhn::static_string name)
-: Sprite(renderer, name)
+: m_simplePanel(NULL)
+, m_simplePanelFactory(NULL)
+, Sprite(renderer, name)
 {
 	m_rectHandle.m_lock = ENEW xhn::RWLock;
 	m_rectHandle.AttachAttribute<EFloat4>();
+}
+
+GUIContainer::~GUIContainer()
+{
+	if (m_simplePanelFactory) {
+		delete m_simplePanelFactory;
+	}
 }
 
 void GUIContainer::Init(const xhn::static_string configName)
@@ -30,6 +39,28 @@ void GUIContainer::Init(const xhn::static_string configName)
                 top.as_float(),
                 width.as_float(),
                 height.as_float());
+		pugi::xml_attribute isDebugMode = rect.attribute("debug_mode");
+		if (isDebugMode.as_bool()) {
+			///
+			SpriteRect rect(left.as_float(),
+				            top.as_float(),
+							width.as_float(),
+							height.as_float());
+			SpriteRect areaRect(0.0f, 0.0f, 32.0f, 32.0f);
+
+			xhn::string simplePanelConfigName = "background_";
+			simplePanelConfigName += configName.c_str();
+			GUISimplePanelFactory::CreateSheetConfig(simplePanelConfigName.c_str(), 
+				                                     "base", 
+													 "default",
+													 rect,
+													 areaRect);
+			m_simplePanelFactory = 
+				ENEW GUISimplePanelFactory(m_renderer, 
+				                           simplePanelConfigName.c_str());
+			m_simplePanel = m_simplePanelFactory->MakeSprite();
+			AddChild(m_simplePanel);
+		}
 	}
 }
 
@@ -70,7 +101,8 @@ Sprite* GUIContainerFactory::MakeSpriteImpl()
 
 void GUIContainerFactory::CreateSheetConfig(const char* cfgName,
                                             const char* sheetName,
-                                            const SpriteRect& panelRect)
+                                            const SpriteRect& panelRect,
+											bool isDebugMode)
 {
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();
@@ -85,4 +117,5 @@ void GUIContainerFactory::CreateSheetConfig(const char* cfgName,
 	sheet.append_attribute("top").set_value(panelRect.top);
 	sheet.append_attribute("width").set_value(panelRect.size.width);
 	sheet.append_attribute("height").set_value(panelRect.size.height);
+	sheet.append_attribute("debug_mode").set_value(isDebugMode);
 }

@@ -1729,11 +1729,11 @@
 			Name="tmp"
 			>
 			<File
-				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
+				RelativePath="..\glew\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath="..\glew\GL\glew.h"
+				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
 				>
 			</File>
 			<File
@@ -2251,6 +2251,10 @@
 					RelativePath="..\gui\include\gui_pch.h"
 					>
 				</File>
+				<File
+					RelativePath="..\gui\include\gui_simple_panel.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="src"
@@ -2366,6 +2370,10 @@
 							PrecompiledHeaderFile="$(IntDir)\gui_pch.pch"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\gui\src\gui_simple_panel.cpp"
+					>
 				</File>
 			</Filter>
 		</Filter>
@@ -2761,19 +2769,19 @@
 			Name="glsl_complier"
 			>
 			<File
-				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
+				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
 				>
 			</File>
 			<File

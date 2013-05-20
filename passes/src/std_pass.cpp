@@ -122,6 +122,10 @@ ShaderNode create_std_vertex_shader_node(VertexDecl _dec, VtxSdrBuf _vsb,
         }
     }
 
+	count = snprintf(str, remainder, "    gl_ClipVertex = vPosition;\n");
+	str += count;
+	remainder -= count;
+	
     snprintf(str, remainder, " }\n");
 
     ShaderNode ret = ShaderNode_new();

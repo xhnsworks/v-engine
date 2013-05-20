@@ -32,6 +32,7 @@
 #include "shader_node_generator.h"
 #include "shadow_renderer.h"
 #include "renderer_base.h"
+#include "plane.h"
 
 #define MAX_SKETCHBOOKS 8
 #define NUM_LIGHTING_SKETCH_BOOKS 2
@@ -100,6 +101,8 @@ private:
     SketchBook prev_render_skb;
     SketchBook prev_lighting_skb;
 
+	xhn::vector<plane> clip_planes;
+
     bool dirty_flag;
 
     bool clear_color_buffer_flag;
@@ -114,6 +117,9 @@ public:
     void RendererDest();
 
     void clear_sketchbook();
+
+	void add_clip_plane(const plane& p);
+	void clear_clip_planes();
 private:
     void prepare_sketchbooks();
     void prepare_display_passes();

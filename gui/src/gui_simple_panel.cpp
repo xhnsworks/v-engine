@@ -28,14 +28,9 @@ void GUISimplePanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	SpriteElement tmpCenter = iterCenter->second;
     
 	EFloat2 pivot;
-	EFloat2 size;
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
 		pivot = *((EFloat2*)m_pivotHandle.GetAttribute());
-	}
-	{
-		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *((EFloat2*)m_sizeHandle.GetAttribute());
 	}
     
 	float left = tmpCenter.m_rect.left - pivot.x;
@@ -47,14 +42,6 @@ void GUISimplePanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
     
 	float realWidth = right - left;
 	float realHeight = bottom - top;
-    
-	float scaleX = size.x / realWidth;
-	float scaleY = size.y / realHeight;
-    
-	left *= scaleX;
-	top *= scaleY;
-	right *= scaleX;
-	bottom *= scaleY;
     
     tmpCenter.m_rect.left = left;
 	tmpCenter.m_rect.top = top;
@@ -78,14 +65,9 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
 	SpriteElement tmpCenter = iterCenter->second;
     
 	EFloat2 pivot;
-	EFloat2 size;
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
 		pivot = *((EFloat2*)m_pivotHandle.GetAttribute());
-	}
-	{
-		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *((EFloat2*)m_sizeHandle.GetAttribute());
 	}
     
 	float left = tmpCenter.m_rect.left - pivot.x;
@@ -102,14 +84,6 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
 	float realWidth = right - left;
 	float realHeight = bottom - top;
     
-	float scaleX = size.x / realWidth;
-	float scaleY = size.y / realHeight;
-    
-	left *= scaleX;
-	top *= scaleY;
-	right *= scaleX;
-	bottom *= scaleY;
-    
 	result.left = left;
 	result.top = top;
 	result.size.width = right - left;
@@ -124,9 +98,6 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
 GUISimplePanel::GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name)
 : Sprite(renderer, name)
 {
-	///m_sizeHandle.m_attr = &m_size;
-	m_sizeHandle.m_lock = ENEW xhn::RWLock;
-	m_sizeHandle.AttachAttribute<EFloat2>();
 }
 
 void GUISimplePanel::Init(const xhn::static_string configName)
@@ -140,19 +111,11 @@ void GUISimplePanel::Init(const xhn::static_string configName)
 		if (!baselayer)
 			return;
 		SpriteLayerPtr layer =
-        ENEW GUISimplePanelLayer("base", m_pivotHandle, m_sizeHandle);
+        ENEW GUISimplePanelLayer("base", m_pivotHandle);
 		layer->LoadConfigImpl(baselayer);
 		///m_children.push_back(layer);
         AddChild(layer);
 	}
-}
-
-void GUISimplePanel::SetSize(float x, float y)
-{
-    xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
-	size->x = x;
-	size->y = y;
 }
 
 void GUISimplePanel::GetScopeImpl(SpriteRect& result)
@@ -184,9 +147,7 @@ void GUISimplePanelFactory::CreateSheetConfig(const char* cfgName,
                                               const char* sheetName,
                                               const char* textureName,
 										      const SpriteRect& panelRect,
-                                              const SpriteSize& cornerSize,
-                                              const SpriteRect& areaRect,
-                                              const SpriteSize& areaCornerSize)
+                                              const SpriteRect& areaRect)
 {
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();
@@ -216,23 +177,15 @@ void GUISimplePanelFactory::CreateSheetConfig(const char* cfgName,
 	
     center.append_attribute("name").set_value("center");
     
-    center.append_attribute("left").set_value(panelLeft + cornerSize.width);
-    center.append_attribute("top").set_value(panelTop + cornerSize.height);
-    center.append_attribute("width").set_value(panelRect.size.width -
-                                               cornerSize.width -
-                                               cornerSize.width);
-    center.append_attribute("height").set_value(panelRect.size.height -
-                                                cornerSize.height -
-                                                cornerSize.height);
+    center.append_attribute("left").set_value(panelLeft);
+    center.append_attribute("top").set_value(panelTop);
+    center.append_attribute("width").set_value(panelRect.size.width);
+    center.append_attribute("height").set_value(panelRect.size.height);
     
-    center.append_attribute("area_x0").set_value(areaLeft +
-                                                 areaCornerSize.width);
-    center.append_attribute("area_x1").set_value(areaRight -
-                                                 areaCornerSize.width);
-    center.append_attribute("area_y0").set_value(areaTop +
-                                                 areaCornerSize.height);
-    center.append_attribute("area_y1").set_value(areaBottom -
-                                                 areaCornerSize.height);
+    center.append_attribute("area_x0").set_value(areaLeft);
+    center.append_attribute("area_x1").set_value(areaRight);
+    center.append_attribute("area_y0").set_value(areaTop);
+    center.append_attribute("area_y1").set_value(areaBottom);
     
     center.append_attribute("transparent").set_value(1.0f);
 }

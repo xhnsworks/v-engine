@@ -24,7 +24,8 @@
 #include "index_buffer.h"
 #include "emem.hpp"
 #include "xhn_list.hpp"
-#include <list>
+#include "xhn_vector.hpp"
+#include "plane.h"
 typedef enum _renderable_proc_result
 {
     proc_continue,
@@ -40,6 +41,7 @@ public:
     IndexBuffer idx_buf;
     ///List mesh_list;
 	xhn::list<MeshPtr> mesh_list;
+	xhn::vector<plane> clip_planes;
     Pass std_pass;
     Pass depth_pass;
     Pass point_depth_pass;
@@ -52,6 +54,9 @@ public:
     bool std_pass_dirty_flag;
     bool depth_pass_dirty_flag;
     bool shadow_pass_dirty_flag;
+public:
+	void add_clip_plane(const plane& p);
+	void clear_clip_planes();
 private:
 	renderable();
 	~renderable();

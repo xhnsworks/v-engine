@@ -6,10 +6,16 @@
 #include "map.hpp"
 #include "sprite_geom_buffer.h"
 #include "matrix4x4.h"
-struct Border : public MemObject
+#include "plane.h"
+class Border : public MemObject
 {
+public:
 	sfloat3 origin;
 	sfloat3 normal;
+	inline GLPlane ToGLPlane() {
+		float d = - SFloat3_dot(normal, origin);
+		return GLPlane(normal, d);
+	}
 };
 
 struct FourBorders : public MemObject

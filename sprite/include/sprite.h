@@ -178,17 +178,19 @@ public:
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
+class SpriteLayer;
+typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
+typedef xhn::list< SpriteLayerPtr > SpriteLayerList;
 class SpriteLayer : public RefObject
 {
 	DeclareRootRTTI;
     friend struct FSpriteDestProc;
 public:
 	AttributeHandle m_transparentHandle;
-    typedef xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> > SpriteList;
     SpriteLayer* m_parent;
 private:
 	/// perhaps loop reference, must to check
-	SpriteList m_children;
+	SpriteLayerList m_children;
 private:
 	xhn::static_string m_name;
 public:
@@ -207,29 +209,14 @@ public:
     inline const xhn::static_string& GetName() const {
 		return m_name;
 	}
-    inline void AddChild(xhn::SmartPtr< SpriteLayer, FSpriteDestProc> spriteLayer) {
+    inline void AddChild(SpriteLayerPtr spriteLayer) {
         m_children.push_back(spriteLayer);
 		spriteLayer->m_parent = this;
 	}
     
-    inline xhn::SmartPtr< SpriteLayer, FSpriteDestProc> GetLayer(euint index) {
-		xhn::SmartPtr< SpriteLayer, FSpriteDestProc> ret;
-		if (index < m_children.size()) {
-			ret = m_children[index];
-		}
-		return ret;
-	}
-    inline xhn::SmartPtr< SpriteLayer, FSpriteDestProc> GetLayer(xhn::static_string layerName) {
-		xhn::SmartPtr< SpriteLayer, FSpriteDestProc> ret;
-        SpriteList::iterator iter = m_children.begin();
-        SpriteList::iterator end = m_children.end();
-		for (; iter != end; iter++) {
-			xhn::SmartPtr< SpriteLayer, FSpriteDestProc>& sptLayerPtr = *iter;
-            if (sptLayerPtr->GetName() == layerName)
-                return sptLayerPtr;
-		}
-		return ret;
-	}
+    SpriteLayerPtr GetLayer(euint index);
+    SpriteLayerPtr GetLayer(xhn::static_string layerName);
+	void AlwaysOnTop(SpriteLayerPtr layer);
     
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to) = 0;
     virtual void GetScopeImpl(SpriteRect& result) = 0;
@@ -242,7 +229,7 @@ public:
     virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
 };
-typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
+
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///
@@ -291,7 +278,6 @@ public:
 
 typedef xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> > EventProcMap;
 typedef xhn::list< SpriteElement > ElementList;
-typedef xhn::vector< SpriteLayerPtr > SpriteLayerArray;
 typedef xhn::set< const RTTI* > ReceiverSet;
 
 class SpriteTextLayer : public SpriteLayer
@@ -333,6 +319,16 @@ public:
     ElementList m_elements;
     EventProcMap m_publicEventProcs;
 	EventProcMap m_privateEventProcs;
+public:
+	enum AlignmentMode
+	{
+        NotAligned,
+		LeftAligned,
+		RightAligned,
+		TopAligned,
+		BottomAligned,
+		CenterAligned,
+	};
 protected:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_coordinateHandle;
@@ -340,8 +336,9 @@ protected:
 	AttributeHandle m_scaleHandle;
 public:
     SpriteRenderer* m_renderer;
-    bool m_isHorizontalAlignment;
-    bool m_isVerticalAlignment;
+    ///bool m_isHorizontalAlignment;
+    ///bool m_isVerticalAlignment;
+	AlignmentMode m_alignmentMode;
 public:
 	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
     virtual void Init() {}

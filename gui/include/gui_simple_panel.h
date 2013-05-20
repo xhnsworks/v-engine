@@ -21,13 +21,10 @@ class GUISimplePanelLayer : public SpriteNormalLayer
 	DeclareRTTI;
 private:
 	AttributeHandle m_pivotHandle;
-	AttributeHandle m_sizeHandle;
 public:
 	GUISimplePanelLayer(const xhn::static_string name,
-                        AttributeHandle pivotHandle,
-                        AttributeHandle sizeHandle)
+                        AttributeHandle pivotHandle)
     : m_pivotHandle(pivotHandle)
-    , m_sizeHandle(sizeHandle)
     , SpriteNormalLayer(name)
 	{}
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
@@ -36,15 +33,12 @@ public:
 class GUISimplePanel : public Sprite
 {
 	DeclareRTTI;
-	friend class GUIPanelFactory;
+	friend class GUISimplePanelFactory;
 protected:
 	~GUISimplePanel() {}
-public:
-	AttributeHandle m_sizeHandle;
-public:
 	GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name);
+public:
 	virtual void Init(const xhn::static_string configName);
-	void SetSize(float x, float y);
 	virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
@@ -64,9 +58,7 @@ public:
                                   const char* sheetName,
                                   const char* textureName,
 		                          const SpriteRect& panelRect,
-                                  const SpriteSize& cornerSize,
-                                  const SpriteRect& areaRect,
-                                  const SpriteSize& areaCornerSize);
+                                  const SpriteRect& areaRect);
 };
 ///**********************************************************************///
 ///                       class define end                               ///

@@ -5,6 +5,22 @@
 #include "elog.h"
 #include "eassert.h"
 
+static inline sfloat4 SFloat4_max(sfloat4 f4_0, sfloat4 f4_1)
+{
+#ifdef USE_SSE
+	return _mm_max_ps(f4_0, f4_1);
+#else
+#endif
+}
+
+static inline sfloat4 SFloat4_min(sfloat4 f4_0, sfloat4 f4_1)
+{
+#ifdef USE_SSE
+	return _mm_min_ps(f4_0, f4_1);
+#else
+#endif
+}
+
 static inline sfloat4 SFloat4(float _x, float _y, float _z, float _w)
 {
 #ifdef USE_SSE

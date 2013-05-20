@@ -10,15 +10,30 @@
 
 void SpriteRect::ApplyTransform(const matrix4x4* transform)
 {
+	/**
 	sfloat4 ft4Pos = SFloat4(left, top, 0.0f, 1.0f);
     sfloat4 ft4Size = SFloat4(size.width, size.height, 0.0f, 1.0f);
-	ft4Pos = Matrix4x4_mul_float4(transform, ft4Pos);
-	ft4Size = Matrix4x4_mul_float4(transform, ft4Size);
-	ft4Size = SFloat4_sub(ft4Size, ft4Pos);
-    left = SFloat4_get_x(&ft4Pos);
-	top = SFloat4_get_y(&ft4Pos);
-	size.width = SFloat4_get_x(&ft4Size);
-	size.height = SFloat4_get_y(&ft4Size);
+	**/
+	sfloat4 pos0 = SFloat4(left, top, 0.0f, 1.0f);
+	sfloat4 pos1 = SFloat4(left, top + size.height, 0.0f, 1.0f);
+	sfloat4 pos2 = SFloat4(left + size.width, top + size.height, 0.0f, 1.0f);
+	sfloat4 pos3 = SFloat4(left + size.width, top, 0.0f, 1.0f);
+	pos0 = Matrix4x4_mul_float4(transform, pos0);
+	pos1 = Matrix4x4_mul_float4(transform, pos1);
+	pos2 = Matrix4x4_mul_float4(transform, pos2);
+	pos3 = Matrix4x4_mul_float4(transform, pos3);
+	sfloat4 maxCoord = SFloat4_max(pos0, pos1);
+	maxCoord = SFloat4_max(maxCoord, pos2);
+	maxCoord = SFloat4_max(maxCoord, pos3);
+
+	sfloat4 minCoord = SFloat4_min(pos0, pos1);
+	minCoord = SFloat4_min(minCoord, pos2);
+	minCoord = SFloat4_min(minCoord, pos3);
+
+	left = SFloat4_get_x(&minCoord);
+	top = SFloat4_get_y(&minCoord);
+	size.width = SFloat4_get_x(&maxCoord) - SFloat4_get_x(&minCoord);
+	size.height = SFloat4_get_y(&maxCoord) - SFloat4_get_y(&minCoord);
 }
 
 void SpriteRect::GetFourBorders(SpriteRenderer* renderer, FourBorders& borders)
@@ -145,7 +160,7 @@ SpriteLayer::SpriteLayer(const xhn::static_string& name)
 
 void SpriteLayer::LoadConfig(const pugi::xml_node& from)
 {
-	xhn::vector<SpriteLayerPtr>::iterator iter = m_children.begin();
+	SpriteLayerList::iterator iter = m_children.begin();
 	for (; iter != m_children.end(); iter++)
 	{
 		SpriteLayerPtr layerPtr = *iter;
@@ -163,8 +178,8 @@ void SpriteLayer::SaveConfig(pugi::xml_node& to)
 
 void SpriteLayer::BuildElements(xhn::list<SpriteElement>& to)
 {
-    SpriteList::iterator iter = m_children.begin();
-    SpriteList::iterator end = m_children.end();
+    SpriteLayerList::iterator iter = m_children.begin();
+    SpriteLayerList::iterator end = m_children.end();
     for (; iter != end; iter++) {
 		xhn::list<SpriteElement> buf;
         SpriteLayerPtr& sptLayer = *iter;
@@ -182,8 +197,8 @@ void SpriteLayer::SetTransparent(float t)
 void SpriteLayer::GetScope(SpriteRect& result)
 {
 	GetScopeImpl(result);
-	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator iter = m_children.begin();
-	xhn::vector< xhn::SmartPtr< SpriteLayer, FSpriteDestProc> >::iterator end = m_children.end();
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
 	///euint size = m_children.size();
 	for (; iter != end; iter++) {
 		SpriteRect rc;
@@ -194,8 +209,8 @@ void SpriteLayer::GetScope(SpriteRect& result)
 void SpriteLayer::BroadcastEventToBrothers(const SpriteEvent* evt)
 {
 	if (m_parent) {
-		SpriteList::iterator iter = m_parent->m_children.begin();
-		SpriteList::iterator end = m_parent->m_children.end();
+		SpriteLayerList::iterator iter = m_parent->m_children.begin();
+		SpriteLayerList::iterator end = m_parent->m_children.end();
 		for (; iter != end; iter++) {
 			Sprite* sp = (*iter)->DynamicCast<Sprite>();
 			if (sp && sp != this) {
@@ -226,9 +241,47 @@ void SpriteLayer::GetMatrix(matrix4x4* result)
     }
 }
 
+SpriteLayerPtr SpriteLayer::GetLayer(euint index) 
+{
+	SpriteLayerPtr ret;
+	if (index < m_children.size()) {
+		SpriteLayerList::iterator iter = m_children.begin();
+		SpriteLayerList::iterator end = m_children.end();
+		for (euint count = 0; iter != end; iter++, count++) {
+			if (count == index)
+				return *iter;
+		}
+	}
+	return ret;
+}
+SpriteLayerPtr SpriteLayer::GetLayer(xhn::static_string layerName) 
+{
+	SpriteLayerPtr ret;
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
+	for (; iter != end; iter++) {
+		SpriteLayerPtr& sptLayerPtr = *iter;
+		if (sptLayerPtr->GetName() == layerName)
+			return sptLayerPtr;
+	}
+	return ret;
+}
+void SpriteLayer::AlwaysOnTop(SpriteLayerPtr layer)
+{
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
+	for (; iter != end; iter++) {
+		SpriteLayerPtr& sptLayerPtr = *iter;
+		if (sptLayerPtr == layer) {
+			m_children.throw_front(iter);
+			return;
+		}
+	}
+}
+
 void SpriteLayer::Tick(double elapsedTime)
 {
-    SpriteLayerArray::iterator iter = m_children.begin();
+    SpriteLayerList::iterator iter = m_children.begin();
 	for (; iter != m_children.end(); iter++)
 	{
 		SpriteLayerPtr layerPtr = *iter;
@@ -237,7 +290,7 @@ void SpriteLayer::Tick(double elapsedTime)
 }
 void SpriteLayer::Tock()
 {
-    SpriteLayerArray::iterator iter = m_children.begin();
+    SpriteLayerList::iterator iter = m_children.begin();
 	for (; iter != m_children.end(); iter++)
 	{
 		SpriteLayerPtr layerPtr = *iter;
@@ -505,8 +558,7 @@ void SpriteTextLayer::Clear()
 
 Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 : m_renderer(renderer)
-, m_isHorizontalAlignment(false)
-, m_isVerticalAlignment(false)
+, m_alignmentMode(NotAligned)
 , SpriteLayer(name)
 {
 	//m_pivotHandle.m_attr = &m_pivot;
@@ -683,8 +735,9 @@ void Sprite::GetMatrix(matrix4x4* result)
 	Matrix4x4_mul_matrix4(&tmp, &scal, &tmp);
 	Matrix4x4_mul_matrix4(&tmp, &inv_offs, &tmp);
 	Matrix4x4_mul_matrix4(&tmp, &tran, result);
+	///
     
-    if ((m_isHorizontalAlignment || m_isVerticalAlignment) &&
+    if (m_alignmentMode != NotAligned &&
         m_parent) {
 		/// calculate the coordinates of the center
 		SpriteRect parentScope;
@@ -694,17 +747,43 @@ void Sprite::GetMatrix(matrix4x4* result)
         SpriteRect scope;
         GetScope(scope);
         scope.ApplyTransform(result);
-        float x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f;
-        float y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f;
-       
-        Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
+		sfloat4 zero = SFloat4(0.0f, 0.0f, 0.0f, 1.0f);
+		zero = Matrix4x4_mul_float4(result, zero);
+		float x = 0.0f;
+		float y = 0.0f;
 
-		Matrix4x4_mul_matrix4(&offs, &rota, &tmp);
-		Matrix4x4_mul_matrix4(&tmp, &scal, &tmp);
-		Matrix4x4_mul_matrix4(&tmp, &inv_offs, &tmp);
+		if (m_alignmentMode == CenterAligned) {
+			x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f + (SFloat4_get_x(&zero) - scope.left);
+			y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f + (SFloat4_get_y(&zero) - scope.top);
+		}
+		else if (m_alignmentMode == LeftAligned) {
+			x = SFloat4_get_x(&zero) - scope.left;
+			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
+			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
+			y = coord->y;
+		}
+		else if (m_alignmentMode == RightAligned) {
+			x = parentScope.size.width - scope.size.width + (SFloat4_get_x(&zero) - scope.left);
+			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
+			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
+			y = coord->y;
+		}
+		else if (m_alignmentMode == TopAligned) {
+			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
+			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
+			x = coord->x;
+			y = SFloat4_get_y(&zero) - scope.top;
+		}
+		else if (m_alignmentMode == BottomAligned) {
+			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
+			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
+			x = coord->x;
+			y = parentScope.size.height - scope.size.height + (SFloat4_get_y(&zero) - scope.top);
+		}
+        Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
 		Matrix4x4_mul_matrix4(&tmp, &tran, result);
     }
-	
+
 	Matrix4x4_mul_matrix4(result, &parentMatrix, result);
 }
 
