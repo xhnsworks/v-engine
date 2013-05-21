@@ -14,7 +14,7 @@ public:
 	InterRWBuffer m_inter_input_buffer;
 public:
 	InputListener();
-	~InputListener();
+	virtual ~InputListener();
 	void Init();
 	virtual void ListenImpl(const input_event& event) = 0;
 	void Listen();

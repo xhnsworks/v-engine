@@ -762,7 +762,6 @@ void Sprite::GetMatrix(matrix4x4* result)
 		/// calculate the coordinates of the center
 		SpriteRect parentScope;
 		m_parent->GetScopeImpl(parentScope);
-		parentScope.ApplyTransform(&parentMatrix);
         
         SpriteRect scope;
         GetScope(scope);
@@ -773,13 +772,15 @@ void Sprite::GetMatrix(matrix4x4* result)
 		float y = 0.0f;
 
 		if (m_horizontalAlignmentMode == CenterHorizontalAligned) {
-			x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f + (SFloat4_get_x(&zero) - scope.left);
+			x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f +
+            (SFloat4_get_x(&zero) - scope.left);
 		}
 		else if (m_horizontalAlignmentMode == LeftHorizontalAligned) {
 			x = SFloat4_get_x(&zero) - scope.left;
 		}
 		else if (m_horizontalAlignmentMode == RightHorizontalAligned) {
-			x = parentScope.size.width - scope.size.width + (SFloat4_get_x(&zero) - scope.left);
+			x = parentScope.size.width - scope.size.width +
+            (SFloat4_get_x(&zero) - scope.left);
 		}
 		else if (m_horizontalAlignmentMode == NotHorizontalAligned) {
 			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
@@ -788,13 +789,15 @@ void Sprite::GetMatrix(matrix4x4* result)
 		}
 
 		if (m_verticalAlignmentMode == CenterVerticalAligned) {
-            y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f + (SFloat4_get_y(&zero) - scope.top);
+            y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f +
+            (SFloat4_get_y(&zero) - scope.top);
 		}
 		else if (m_verticalAlignmentMode == TopVerticalAligned) {
 			y = SFloat4_get_y(&zero) - scope.top;
 		}
 		else if (m_verticalAlignmentMode == BottomVerticalAligned) {
-			y = parentScope.size.height - scope.size.height + (SFloat4_get_y(&zero) - scope.top);
+			y = parentScope.size.height - scope.size.height +
+            (SFloat4_get_y(&zero) - scope.top);
 		}
 		else if (m_verticalAlignmentMode == NotVerticalAligned) {
 			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
@@ -804,8 +807,8 @@ void Sprite::GetMatrix(matrix4x4* result)
         Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
 		Matrix4x4_mul_matrix4(&tmp, &tran, result);
     }
-
-	Matrix4x4_mul_matrix4(result, &parentMatrix, result);
+    
+    Matrix4x4_mul_matrix4(result, &parentMatrix, result);
 }
 
 void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)

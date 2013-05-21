@@ -40,8 +40,8 @@ void GUISimplePanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	float bottom =
     tmpCenter.m_rect.top + tmpCenter.m_rect.size.height - pivot.y;
     
-	float realWidth = right - left;
-	float realHeight = bottom - top;
+	///float realWidth = right - left;
+	///float realHeight = bottom - top;
     
     tmpCenter.m_rect.left = left;
 	tmpCenter.m_rect.top = top;
@@ -81,8 +81,8 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
     tmpCenter.m_rect.size.height -
     pivot.y;
     
-	float realWidth = right - left;
-	float realHeight = bottom - top;
+	///float realWidth = right - left;
+	///float realHeight = bottom - top;
     
 	result.left = left;
 	result.top = top;
