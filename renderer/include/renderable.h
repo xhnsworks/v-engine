@@ -26,6 +26,32 @@
 #include "xhn_list.hpp"
 #include "xhn_vector.hpp"
 #include "plane.h"
+class Border : public MemObject
+{
+public:
+	sfloat3 origin;
+	sfloat3 normal;
+	inline GLPlane ToGLPlane() const {
+		float d = - SFloat3_dot(normal, origin);
+		return GLPlane(normal, d);
+	}
+	inline GLPlane ToReversedGLPlane() const {
+		sfloat3 tmp = SFloat3_mul_float(-1.0f, normal);
+		float d = - SFloat3_dot(tmp, origin);
+		return GLPlane(normal, d);
+	}
+};
+
+struct FourBorders : public MemObject
+{
+	Border leftBorder;
+	Border topBorder;
+	Border rightBorder;
+	Border bottomBorder;
+	void ApplyTranform(Matrix4x4 tran);
+	bool IsInBorders(const sfloat3& point) const;
+};
+
 typedef enum _renderable_proc_result
 {
     proc_continue,
@@ -42,6 +68,7 @@ public:
     ///List mesh_list;
 	xhn::list<MeshPtr> mesh_list;
 	xhn::vector<plane> clip_planes;
+	const FourBorders* four_borders;
     Pass std_pass;
     Pass depth_pass;
     Pass point_depth_pass;

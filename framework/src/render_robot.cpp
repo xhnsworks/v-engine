@@ -303,7 +303,8 @@ void ResourceAction::DoImpl()
 
 		m_guiButton->SetCoord(100.0f, 50.0f);
 		m_guiButton->SetRotate(0.5f);
-		m_guiButton->m_alignmentMode = Sprite::CenterAligned;
+		m_guiButton->m_horizontalAlignmentMode = Sprite::CenterHorizontalAligned;
+		m_guiButton->m_verticalAlignmentMode = Sprite::CenterVerticalAligned;
 		
 		m_guiCursor->SetCoord(10.0f, 30.0f);
 		///

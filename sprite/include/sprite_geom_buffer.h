@@ -8,6 +8,7 @@
 #include "emem.hpp"
 #include "xhn_smart_ptr.hpp"
 #include "renderable.h"
+
 class SpriteRenderer;
 class SpriteGeomBuffer : public RefObject
 {
@@ -17,6 +18,7 @@ public:
 	public:
 		MeshPtr m_mesh;
 		MaterialInstancePtr m_matInst;
+		const FourBorders* m_fourBorders;
 		SpriteSubGeomBuffer()
 		{}
 		~SpriteSubGeomBuffer()
@@ -31,7 +33,9 @@ public:
 		: m_renderer(renderer)
 	{}
 	~SpriteGeomBuffer();
-	void Attach(xhn::static_string& filename, Mesh mesh);
+	void Attach(xhn::static_string& filename, 
+		        Mesh mesh, 
+				const FourBorders* fourBorders);
 	void Sort();
 	const xhn::list<Renderable>& GetSortedRenderables() const {
 		return m_sortedRenderables;

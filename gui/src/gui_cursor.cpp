@@ -38,15 +38,18 @@ void GUICursor::GetScopeImpl(SpriteRect& result)
 void GUICursor::Build()
 {
     m_elements.clear();
-    /**
-	SpriteLayerArray::iterator iter = m_children.begin();
-	for (; iter != m_children.end(); iter++)
-	{
-		SpriteLayerPtr layerPtr = *iter;
-		layerPtr->BuildElements(m_elements);
-	}
-     **/
+
     BuildElements(m_elements);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
 }
 
 void GUICursorMouseEventProc::Proc(const SpriteEvent* evt)

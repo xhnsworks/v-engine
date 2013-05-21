@@ -125,6 +125,33 @@ void SpriteRenderer::render()
 			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
 			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
 		}
+		if (rbl->four_borders) {
+			///GLPlane glplane;
+			/**
+			glplane = rbl->four_borders->leftBorder.ToReversedGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
+			clip_plane_count++;
+            **/
+			/**
+			glplane = rbl->four_borders->topBorder.ToGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
+			clip_plane_count++;
+			**/
+/**
+			glplane = rbl->four_borders->rightBorder.ToGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
+			clip_plane_count++;
+			**/
+/**
+			glplane = rbl->four_borders->bottomBorder.ToReversedGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
+			clip_plane_count++;
+			**/
+		}
 
         if ( mode == Triangular ) {
             Pass_render ( std_pass, rbl->vtx_buf, rbl->idx_buf, face_count * 3, mode );

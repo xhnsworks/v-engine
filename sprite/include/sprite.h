@@ -17,7 +17,7 @@
 #include "sprite_factory.h"
 #include "font_renderer.h"
 #include "color.h"
-
+#include "sprite_renderer.h"
 namespace pugi
 {
     class xml_node;
@@ -320,25 +320,30 @@ public:
     EventProcMap m_publicEventProcs;
 	EventProcMap m_privateEventProcs;
 public:
-	enum AlignmentMode
+	enum HorizontalAlignmentMode
 	{
-        NotAligned,
-		LeftAligned,
-		RightAligned,
-		TopAligned,
-		BottomAligned,
-		CenterAligned,
+        NotHorizontalAligned,
+		LeftHorizontalAligned,
+		RightHorizontalAligned,
+		CenterHorizontalAligned,
+	};
+	enum VerticalAlignmentMode
+	{
+		NotVerticalAligned,
+		TopVerticalAligned,
+		BottomVerticalAligned,
+		CenterVerticalAligned,
 	};
 protected:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_coordinateHandle;
 	AttributeHandle m_rotationHandle;
 	AttributeHandle m_scaleHandle;
+	FourBorders m_fourBorders;
 public:
     SpriteRenderer* m_renderer;
-    ///bool m_isHorizontalAlignment;
-    ///bool m_isVerticalAlignment;
-	AlignmentMode m_alignmentMode;
+	HorizontalAlignmentMode m_horizontalAlignmentMode;
+    VerticalAlignmentMode m_verticalAlignmentMode;
 public:
 	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
     virtual void Init() {}
@@ -369,6 +374,9 @@ public:
 	}
 	inline AttributeHandle GetScaleHandle() {
 		return m_scaleHandle;
+	}
+	inline const FourBorders& GetFourBorders() {
+		return m_fourBorders;
 	}
 public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);

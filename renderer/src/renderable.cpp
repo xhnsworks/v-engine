@@ -23,6 +23,7 @@ void renderable::clear_clip_planes()
 }
 
 renderable::renderable()
+: four_borders(NULL)
 {
 }
 renderable::~renderable()

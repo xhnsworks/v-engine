@@ -86,6 +86,21 @@ void GUIContainer::GetScopeImpl(SpriteRect& result)
 	result.size.width = rect->z;
     result.size.height = rect->w;
 }
+void GUIContainer::Build()
+{
+	m_elements.clear();
+	BuildElements(m_elements);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
+}
 
 Sprite* GUIContainerFactory::MakeSpriteImpl()
 {

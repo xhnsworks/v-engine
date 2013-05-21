@@ -4,12 +4,15 @@
 SpriteGeomBuffer::~SpriteGeomBuffer()
 {
 }
-void SpriteGeomBuffer::Attach(xhn::static_string& filename, Mesh mesh)
+void SpriteGeomBuffer::Attach(xhn::static_string& filename, 
+							  Mesh mesh, 
+							  const FourBorders* fourBorders)
 {
 	MaterialInstance* mat = ENEW MaterialInstance("default_material", filename.c_str(), NULL, "Texture");
 	SpriteSubGeomBuffer subGeomBuf;
 	subGeomBuf.m_mesh = mesh;
 	subGeomBuf.m_matInst = mat;
+	subGeomBuf.m_fourBorders = fourBorders;
 	m_subGeomBuffers.push_back(subGeomBuf);
 }
 void SpriteGeomBuffer::Sort()
@@ -26,18 +29,21 @@ void SpriteGeomBuffer::Sort()
 	while (iter != m_subGeomBuffers.end()) {
 		SpriteSubGeomBuffer* curtSubGeomBuffer = &(*iter);
 		if (rbl) {
-			if (rbl->material->GetColorTexture() == curtSubGeomBuffer->m_matInst->GetColorTexture()) {
+			if (rbl->material->GetColorTexture() == curtSubGeomBuffer->m_matInst->GetColorTexture() &&
+				rbl->four_borders == curtSubGeomBuffer->m_fourBorders) {
 				/// do nothing
 			}
 			else {
 				m_sortedRenderables.push_front(rbl);
 				MaterialInstance mat(curtSubGeomBuffer->m_matInst);
 				rbl = m_renderer->new_renderable(vdec, &mat, Triangular);
+				rbl->four_borders = curtSubGeomBuffer->m_fourBorders;
 			}
 		}
 		else {
 			MaterialInstance mat(curtSubGeomBuffer->m_matInst);
 			rbl = m_renderer->new_renderable(vdec, &mat, Triangular);
+			rbl->four_borders = curtSubGeomBuffer->m_fourBorders;
 		}
 		Renderable_add_mesh(rbl, curtSubGeomBuffer->m_mesh);
 		iter++;

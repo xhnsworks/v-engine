@@ -25,6 +25,7 @@ public:
 	virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
+	virtual void Build();
 };
 
 class GUIContainerFactory : public SpriteFactory

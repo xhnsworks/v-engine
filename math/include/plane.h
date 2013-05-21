@@ -26,6 +26,12 @@ struct GLPlane
 		, z(nor.z)
 		, w(w)
 	{}
+	GLPlane()
+		: x(0.0)
+		, y(0.0)
+		, z(0.0)
+		, w(0.0)
+	{}
 	GLPlane(const sfloat3& nor, float w)
 		: x(SFloat3_get_x(&nor))
 		, y(SFloat3_get_y(&nor))

@@ -131,12 +131,32 @@ void GUIButton::Build()
 	m_elements.clear();
 	BuildTextLayer(m_elements);
 	BuildBackgroundLayer(m_elements);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
 }
 
 void GUIButton::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
 	BuildTextLayer(to);
 	BuildBackgroundLayer(to);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
 }
 
 void GUIButton::TickImpl(double elapsedTime)
@@ -156,16 +176,8 @@ void GUIButton::MouseMoveEventProc::Proc(const SpriteEvent* evt)
 		return;
 	const SpriteMouseMoveEvent* mouseEvt =
     evt->DynamicCast<SpriteMouseMoveEvent>();
-	FourBorders borders;
-	SpriteRect rect;
-	m_button->GetScope(rect);
-	rect.GetFourBorders(m_button->m_renderer, borders);
 
-	matrix4x4 mat;
-	Matrix4x4_set_one(&mat);
-	m_button->GetMatrix(&mat);
-
-	borders.ApplyTranform(&mat);
+	const FourBorders& borders = m_button->GetFourBorders();
 	EFloat2 realCrd =
     m_button->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
                                             (float)mouseEvt->m_curtMousePos.y);

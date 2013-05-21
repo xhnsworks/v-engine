@@ -558,7 +558,8 @@ void SpriteTextLayer::Clear()
 
 Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 : m_renderer(renderer)
-, m_alignmentMode(NotAligned)
+, m_horizontalAlignmentMode(NotHorizontalAligned)
+, m_verticalAlignmentMode(NotVerticalAligned)
 , SpriteLayer(name)
 {
 	//m_pivotHandle.m_attr = &m_pivot;
@@ -613,6 +614,16 @@ void Sprite::Build()
 {
 	m_elements.clear();
     BuildElements(m_elements);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
 }
 void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 {
@@ -621,7 +632,7 @@ void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 	{
 		SpriteElement& ele = *iter;
 		Mesh mesh = ele.Build(m_renderer);
-		buffer->Attach(ele.m_filename, mesh);
+		buffer->Attach(ele.m_filename, mesh, &GetFourBorders());
 	}
 }
 
@@ -653,10 +664,19 @@ void Sprite::SetRotate(float rad)
 	rotation->x = rad;
 }
 
-
 void Sprite::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
     BuildElements(to);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
 }
 void Sprite::Clear()
 {
@@ -735,9 +755,9 @@ void Sprite::GetMatrix(matrix4x4* result)
 	Matrix4x4_mul_matrix4(&tmp, &scal, &tmp);
 	Matrix4x4_mul_matrix4(&tmp, &inv_offs, &tmp);
 	Matrix4x4_mul_matrix4(&tmp, &tran, result);
-	///
     
-    if (m_alignmentMode != NotAligned &&
+    if ((m_horizontalAlignmentMode != NotHorizontalAligned ||
+		 m_verticalAlignmentMode != NotVerticalAligned) &&
         m_parent) {
 		/// calculate the coordinates of the center
 		SpriteRect parentScope;
@@ -752,33 +772,34 @@ void Sprite::GetMatrix(matrix4x4* result)
 		float x = 0.0f;
 		float y = 0.0f;
 
-		if (m_alignmentMode == CenterAligned) {
+		if (m_horizontalAlignmentMode == CenterHorizontalAligned) {
 			x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f + (SFloat4_get_x(&zero) - scope.left);
-			y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f + (SFloat4_get_y(&zero) - scope.top);
 		}
-		else if (m_alignmentMode == LeftAligned) {
+		else if (m_horizontalAlignmentMode == LeftHorizontalAligned) {
 			x = SFloat4_get_x(&zero) - scope.left;
-			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
-			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
-			y = coord->y;
 		}
-		else if (m_alignmentMode == RightAligned) {
+		else if (m_horizontalAlignmentMode == RightHorizontalAligned) {
 			x = parentScope.size.width - scope.size.width + (SFloat4_get_x(&zero) - scope.left);
-			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
-			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
-			y = coord->y;
 		}
-		else if (m_alignmentMode == TopAligned) {
+		else if (m_horizontalAlignmentMode == NotHorizontalAligned) {
 			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
 			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
 			x = coord->x;
+		}
+
+		if (m_verticalAlignmentMode == CenterVerticalAligned) {
+            y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f + (SFloat4_get_y(&zero) - scope.top);
+		}
+		else if (m_verticalAlignmentMode == TopVerticalAligned) {
 			y = SFloat4_get_y(&zero) - scope.top;
 		}
-		else if (m_alignmentMode == BottomAligned) {
+		else if (m_verticalAlignmentMode == BottomVerticalAligned) {
+			y = parentScope.size.height - scope.size.height + (SFloat4_get_y(&zero) - scope.top);
+		}
+		else if (m_verticalAlignmentMode == NotVerticalAligned) {
 			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
 			EFloat2* coord = (EFloat2*)m_coordinateHandle.GetAttribute();
-			x = coord->x;
-			y = parentScope.size.height - scope.size.height + (SFloat4_get_y(&zero) - scope.top);
+			y = coord->y;
 		}
         Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
 		Matrix4x4_mul_matrix4(&tmp, &tran, result);
