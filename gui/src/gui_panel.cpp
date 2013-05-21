@@ -121,15 +121,15 @@ void GUIPanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.size.width = tmpTop.m_rect.size.width;
 	tmpCenter.m_rect.size.height = tmpRight.m_rect.size.height;
     
-    tmpCenter.ApplyTransform(&transform);
-    tmpLeft.ApplyTransform(&transform);
-    tmpTop.ApplyTransform(&transform);
-    tmpRight.ApplyTransform(&transform);
-    tmpBottom.ApplyTransform(&transform);
-    tmpLowerLeft.ApplyTransform(&transform);
-    tmpLowerRight.ApplyTransform(&transform);
-    tmpUpperLeft.ApplyTransform(&transform);
-    tmpUpperRight.ApplyTransform(&transform);
+    tmpCenter.SetTransform(&transform);
+    tmpLeft.SetTransform(&transform);
+    tmpTop.SetTransform(&transform);
+    tmpRight.SetTransform(&transform);
+    tmpBottom.SetTransform(&transform);
+    tmpLowerLeft.SetTransform(&transform);
+    tmpLowerRight.SetTransform(&transform);
+    tmpUpperLeft.SetTransform(&transform);
+    tmpUpperRight.SetTransform(&transform);
 
 	to.push_back(tmpCenter);
 

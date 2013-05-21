@@ -167,7 +167,7 @@ public:
 	{
 		m_transparent = t;
 	}
-	void ApplyTransform(const matrix4x4* transform);
+	void SetTransform(const matrix4x4* transform);
     Mesh Build(SpriteRenderer* sprite_renderer) const;
     bool Trim(const SpriteRect& rect);
 	static void Test();

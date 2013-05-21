@@ -68,9 +68,9 @@ void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.size.width =
     right - left - tmpRight.m_rect.size.width - tmpLeft.m_rect.size.width;
     
-    tmpCenter.ApplyTransform(&transform);
-    tmpLeft.ApplyTransform(&transform);
-    tmpRight.ApplyTransform(&transform);
+    tmpCenter.SetTransform(&transform);
+    tmpLeft.SetTransform(&transform);
+    tmpRight.SetTransform(&transform);
 
 	to.push_back(tmpCenter);
     to.push_back(tmpLeft);
@@ -326,9 +326,9 @@ void GUIVertBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.size.height =
     bottom - top - tmpTop.m_rect.size.height - tmpBottom.m_rect.size.height;
     
-    tmpCenter.ApplyTransform(&transform);
-    tmpTop.ApplyTransform(&transform);
-    tmpBottom.ApplyTransform(&transform);
+    tmpCenter.SetTransform(&transform);
+    tmpTop.SetTransform(&transform);
+    tmpBottom.SetTransform(&transform);
 
 	to.push_back(tmpCenter);
 

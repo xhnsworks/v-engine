@@ -41,7 +41,7 @@ void SpriteRect::GetFourBorders(SpriteRenderer* renderer, FourBorders& borders)
 	renderer->get_four_borders(left, top, size.width, size.height, borders);
 }
 
-void SpriteElement::ApplyTransform(const matrix4x4* transform)
+void SpriteElement::SetTransform(const matrix4x4* transform)
 {
     Matrix4x4_assign(&m_transform, transform);
 }
@@ -434,7 +434,7 @@ void SpriteNormalLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	for (; iter != m_elementBuffer.end(); iter++)
 	{
 		SpriteElement& ele = iter->second;
-        ele.ApplyTransform(&transform);
+        ele.SetTransform(&transform);
 		to.push_back(ele);
 	}
 }
@@ -545,7 +545,7 @@ void SpriteTextLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	for (; iter != m_elementBuffer.end(); iter++)
 	{
 		SpriteElement& ele = *iter;
-        ele.ApplyTransform(&transform);
+        ele.SetTransform(&transform);
 		to.push_back(ele);
 	}
 }

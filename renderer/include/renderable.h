@@ -35,11 +35,6 @@ public:
 		float d = - SFloat3_dot(normal, origin);
 		return GLPlane(normal, d);
 	}
-	inline GLPlane ToReversedGLPlane() const {
-		sfloat3 tmp = SFloat3_mul_float(-1.0f, normal);
-		float d = - SFloat3_dot(tmp, origin);
-		return GLPlane(normal, d);
-	}
 };
 
 struct FourBorders : public MemObject

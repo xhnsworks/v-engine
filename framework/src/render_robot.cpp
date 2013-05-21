@@ -316,6 +316,7 @@ void ResourceAction::DoImpl()
 		///m_guiPanel->SetRotate(0.2f);
         
         m_guiContainer->SetCoord(150.0f, 200.0f);
+		///m_guiContainer->SetRotate(0.5f);
 
 		///SpriteFactory::AlwaysOnTop(m_guiEdit);
 		SpriteFactory::AlwaysOnTop(m_guiCursor);
@@ -520,7 +521,7 @@ void ResourceAction::DoImpl()
 			RobotManager::Get()->MakeChannel("AnimationRobot",
                                              "RenderRobot");
 
-		if (!s_isCreateAnimed) {
+		if (!s_isCreateAnimed && m_guiButton) {
 			RWBuffer channel =
             RobotManager::Get()->GetChannel("RenderRobot",
                                             "AnimationRobot");

@@ -48,7 +48,7 @@ void GUISimplePanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	tmpCenter.m_rect.size.width = right - left;
 	tmpCenter.m_rect.size.height = bottom - top;
     
-    tmpCenter.ApplyTransform(&transform);
+    tmpCenter.SetTransform(&transform);
 
 	to.push_back(tmpCenter);
 }
