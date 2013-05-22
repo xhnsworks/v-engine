@@ -50,7 +50,7 @@
     </pressed>
     <text>
       <styles num_styles="1">
-        <style name="default" text="kill you!" size="30" color="ff00ffff" interval="2.0" transparent="1.0"/>
+        <style name="default" text="hello!" size="30" color="ff00ffff" interval="2.0" transparent="1.0"/>
       </styles>
     </text>
   </layers>

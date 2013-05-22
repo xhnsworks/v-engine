@@ -20,13 +20,7 @@ GUIButtonTextLayer::GUIButtonTextLayer()
 : SpriteTextLayer("text")
 {
 }
-void GUIButtonTextLayer::GetScopeImpl(SpriteRect& result)
-{
-	result.left = 0.0f;
-	result.top = 0.0f;
-	result.size.width = 0.0f;
-	result.size.height = 0.0f;
-}
+
 void GUIButton::Init(const xhn::static_string configName)
 {
 	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
@@ -78,6 +72,8 @@ void GUIButton::Init(const xhn::static_string configName)
                 SpriteLayerPtr layer = ENEW GUIButtonTextLayer();
                 layer->LoadConfigImpl(textlayer);
                 ///m_children.push_back(layer);
+				layer->m_horizontalAlignmentMode = CenterHorizontalAligned;
+				layer->m_verticalAlignmentMode = CenterVerticalAligned;
                 AddChild(layer);
             }
 		}
@@ -85,10 +81,12 @@ void GUIButton::Init(const xhn::static_string configName)
 }
 void GUIButton::GetScopeImpl(SpriteRect& result)
 {
+	xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
+	EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
 	result.left = 0.0f;
 	result.top = 0.0f;
-	result.size.width = 0.0f;
-	result.size.height = 0.0f;
+	result.size.width = size->x;
+	result.size.height = size->y;
 }
 
 void GUIButton::BuildBackgroundLayer(xhn::list<SpriteElement>& to)

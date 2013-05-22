@@ -364,10 +364,9 @@ euint32 FontRenderer::draw_text(FT_Bitmap* bitmap, vptr _target, euint32 _x, eui
         for ( j = (FT_Int)m_char_ptr, q = 0; j < x_max; j++, q++ )
         {
             _gray = bitmap->buffer[p * bitmap->width + q];
+			_c = (euint8*)( ( (i + _y + _offset_y) * _w + j + _x ) * _32BIT_PIXEL_SIZE_ + (ref_ptr)_target );
             if (_gray)
             {
-                _c = (euint8*)( ( (i + _y + _offset_y) * _w + j + _x ) * _32BIT_PIXEL_SIZE_ + (ref_ptr)_target );
-	
 				_c[3] = _gray;
 				_c[2] = 255;
 				_c[1] = 255;

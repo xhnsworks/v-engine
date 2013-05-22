@@ -302,9 +302,9 @@ void ResourceAction::DoImpl()
          **/
 
 		m_guiButton->SetCoord(100.0f, 50.0f);
-		m_guiButton->SetRotate(0.5f);
-		m_guiButton->m_horizontalAlignmentMode = Sprite::CenterHorizontalAligned;
-		m_guiButton->m_verticalAlignmentMode = Sprite::CenterVerticalAligned;
+		///m_guiButton->SetRotate(0.5f);
+		m_guiButton->m_horizontalAlignmentMode = SpriteLayer::CenterHorizontalAligned;
+		m_guiButton->m_verticalAlignmentMode = SpriteLayer::CenterVerticalAligned;
 		
 		m_guiCursor->SetCoord(10.0f, 30.0f);
 		///
@@ -316,7 +316,7 @@ void ResourceAction::DoImpl()
 		///m_guiPanel->SetRotate(0.2f);
         
         m_guiContainer->SetCoord(150.0f, 200.0f);
-		m_guiContainer->SetRotate(0.5f);
+		///m_guiContainer->SetRotate(0.5f);
 
 		///SpriteFactory::AlwaysOnTop(m_guiEdit);
 		SpriteFactory::AlwaysOnTop(m_guiCursor);

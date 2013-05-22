@@ -150,6 +150,8 @@ ImplementRTTI(Sprite, SpriteLayer);
 
 SpriteLayer::SpriteLayer(const xhn::static_string& name)
 : m_name(name)
+, m_horizontalAlignmentMode(NotHorizontalAligned)
+, m_verticalAlignmentMode(NotVerticalAligned)
 , m_parent(NULL)
 {
 	m_transparentHandle.m_lock = ENEW xhn::RWLock;
@@ -239,6 +241,48 @@ void SpriteLayer::GetMatrix(matrix4x4* result)
     else {
         Matrix4x4_set_one(result);
     }
+
+	if ((m_horizontalAlignmentMode != NotHorizontalAligned ||
+		m_verticalAlignmentMode != NotVerticalAligned) &&
+		m_parent) {
+		/// calculate the coordinates of the center
+		SpriteRect parentScope;
+		m_parent->GetScopeImpl(parentScope);
+
+		SpriteRect scope;
+		GetScope(scope);
+		float x = 0.0f;
+		float y = 0.0f;
+
+		if (m_horizontalAlignmentMode == CenterHorizontalAligned) {
+			x = -scope.size.width * 0.5f + parentScope.size.width * 0.5f;
+		}
+		else if (m_horizontalAlignmentMode == LeftHorizontalAligned) {
+			x = 0.0f;
+		}
+		else if (m_horizontalAlignmentMode == RightHorizontalAligned) {
+			x = parentScope.size.width - scope.size.width;
+		}
+		else if (m_horizontalAlignmentMode == NotHorizontalAligned) {
+			x = 0.0f;
+		}
+
+		if (m_verticalAlignmentMode == CenterVerticalAligned) {
+			y = -scope.size.height * 0.5f + parentScope.size.height * 0.5f;
+		}
+		else if (m_verticalAlignmentMode == TopVerticalAligned) {
+			y = 0.0f;
+		}
+		else if (m_verticalAlignmentMode == BottomVerticalAligned) {
+			y = parentScope.size.height - scope.size.height;
+		}
+		else if (m_verticalAlignmentMode == NotVerticalAligned) {
+			y = 0.0f;
+		}
+		matrix4x4 tran;
+		Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
+		Matrix4x4_mul_matrix4(&tran, result, result);
+	}
 }
 
 SpriteLayerPtr SpriteLayer::GetLayer(euint index) 
@@ -465,6 +509,14 @@ SpriteTextLayer::~SpriteTextLayer()
 void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 {
 	Clear();
+	float x = 0.0f;
+	float y = 0.0f;
+	
+	float maxHeight = 0.0f;
+
+	float width = 0.0f;
+	float height = 0.0f;
+
 	pugi::xml_node styles = from.child("styles");
 	pugi::xml_node::iterator iter = styles.begin();
 	pugi::xml_node::iterator end = styles.end();
@@ -488,9 +540,7 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 
 		m_text = text.value();
 		xhn::wstring wtext = ComposingStick::Convert(m_text);
-		float x = 0.0f;
-		float y = 0.0f;
-		float maxHeight = 0.0f;
+		
 		for (euint i = 0; i < wtext.size(); i++)
 		{
 			wchar_t ch = wtext[i];
@@ -499,10 +549,27 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 				x = 0.0f;
 				y += maxHeight;
 				y += interval.as_float();
+				height += maxHeight;
 				continue;
 			}
 			else if (ch == (wchar_t)'\r')
 				continue;
+			else if (ch == (wchar_t)'\\') {
+				if (i + 1 < wtext.size()) {
+					if (wtext[i + 1] == (wchar_t)'r') {
+					    i++;
+					    continue;
+					}
+					else if (wtext[i + 1] == (wchar_t)'n') {
+						i++;
+						x = 0.0f;
+						y += maxHeight;
+						y += interval.as_float();
+						height += maxHeight;
+						continue;
+					}
+				}
+			}
 
 			ComposingStick::GlyphHandle handle = ComposingStickManager::Get()->AllocGlyph(ch, pixelSize);
 			m_letters.push_back(handle);
@@ -533,8 +600,13 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 
 			x += (float)handle.GetWidth();
 			x += interval.as_float();
+
+			if (x > width)
+				width = x;
 		}
 	}
+	m_size.x = width;
+	m_size.y = height + maxHeight;
 }
 
 void SpriteTextLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
@@ -556,10 +628,16 @@ void SpriteTextLayer::Clear()
 	m_elementBuffer.clear();
 }
 
+void SpriteTextLayer::GetScopeImpl(SpriteRect& result)
+{
+	result.left = 0.0f;
+	result.top = 0.0f;
+	result.size.width = m_size.x;
+	result.size.height = m_size.y;
+}
+
 Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 : m_renderer(renderer)
-, m_horizontalAlignmentMode(NotHorizontalAligned)
-, m_verticalAlignmentMode(NotVerticalAligned)
 , SpriteLayer(name)
 {
 	//m_pivotHandle.m_attr = &m_pivot;
@@ -593,6 +671,10 @@ Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 void Sprite::RegisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc)
 {
     m_publicEventProcs[type].insert(proc);
+}
+void Sprite::UnregisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc)
+{
+	m_publicEventProcs[type].erase(proc);
 }
 
 void Sprite::PublicEventCallback(const SpriteEvent* evt)

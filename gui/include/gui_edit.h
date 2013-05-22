@@ -22,7 +22,6 @@ class GUIEditTextLayer : public SpriteTextLayer
 	DeclareRTTI;
 public:
 	GUIEditTextLayer();
-	virtual void GetScopeImpl(SpriteRect& result);
 };
 class GUIEdit : public GUIPanel
 {

@@ -122,7 +122,6 @@ GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
                        const xhn::static_string name)
 : Sprite(renderer, name)
 {
-	///m_sizeHandle.m_attr = &m_size;
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<EFloat>();
 }
@@ -141,7 +140,6 @@ void GUIHoriBar::Init(const xhn::static_string configName)
                                                     m_pivotHandle,
                                                     m_sizeHandle);
 		layer->LoadConfigImpl(baselayer);
-		///m_children.push_back(layer);
         AddChild(layer);
 		SetSize(100.0f);
 	}
@@ -302,12 +300,9 @@ void GUIVertBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 
 	float left = tmpCenter.m_rect.left - pivot.x;
 	float top = tmpTop.m_rect.top - pivot.y;
-	///float right =
-    ///tmpCenter.m_rect.left + tmpCenter.m_rect.size.width - pivot.x;
 	float bottom =
     tmpBottom.m_rect.top + tmpBottom.m_rect.size.height - pivot.y;
 
-	///float realWidth = right - left;
 	float realHeight = bottom - top;
 
 	float scaleY = size.x / realHeight;
@@ -399,7 +394,6 @@ void GUIVertBar::Init(const xhn::static_string configName)
                                                     m_pivotHandle,
                                                     m_sizeHandle);
 		layer->LoadConfigImpl(baselayer);
-		///m_children.push_back(layer);
         AddChild(layer);
 		SetSize(100.0f);
 	}
@@ -467,7 +461,6 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
 
 	float panelLeft = panelRect.left;
 	float panelTop = panelRect.top;
-	///float panelRight = panelRect.left + panelRect.size.width;
 	float panelBottom = panelRect.top + panelRect.size.height;
 
 	float areaLeft = areaRect.left;

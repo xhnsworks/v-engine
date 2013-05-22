@@ -18,13 +18,7 @@ GUIEditTextLayer::GUIEditTextLayer()
 : SpriteTextLayer("text")
 {
 }
-void GUIEditTextLayer::GetScopeImpl(SpriteRect& result)
-{
-	result.left = 0.0f;
-	result.top = 0.0f;
-	result.size.width = 0.0f;
-	result.size.height = 0.0f;
-}
+
 void GUIEdit::Init(const xhn::static_string configName)
 {
 	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);

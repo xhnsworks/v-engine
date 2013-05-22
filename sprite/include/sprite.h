@@ -194,6 +194,24 @@ private:
 private:
 	xhn::static_string m_name;
 public:
+	enum HorizontalAlignmentMode
+	{
+		NotHorizontalAligned,
+		LeftHorizontalAligned,
+		RightHorizontalAligned,
+		CenterHorizontalAligned,
+	};
+	enum VerticalAlignmentMode
+	{
+		NotVerticalAligned,
+		TopVerticalAligned,
+		BottomVerticalAligned,
+		CenterVerticalAligned,
+	};
+public:
+	HorizontalAlignmentMode m_horizontalAlignmentMode;
+	VerticalAlignmentMode m_verticalAlignmentMode;
+public:
 	SpriteLayer(const xhn::static_string& name);
 	virtual ~SpriteLayer() {}
     void LoadConfig(const pugi::xml_node& from);
@@ -287,6 +305,7 @@ public:
 	xhn::string m_text;
 	xhn::vector<ComposingStick::GlyphHandle> m_letters;
 	xhn::vector<SpriteElement> m_elementBuffer;
+	EFloat2 m_size;
 public:
 	SpriteTextLayer(const xhn::static_string& name)
 		: SpriteLayer(name)
@@ -298,6 +317,7 @@ public:
 	virtual void Clear();
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
+	virtual void GetScopeImpl(SpriteRect& result);
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
     {}
@@ -319,21 +339,6 @@ public:
     ElementList m_elements;
     EventProcMap m_publicEventProcs;
 	EventProcMap m_privateEventProcs;
-public:
-	enum HorizontalAlignmentMode
-	{
-        NotHorizontalAligned,
-		LeftHorizontalAligned,
-		RightHorizontalAligned,
-		CenterHorizontalAligned,
-	};
-	enum VerticalAlignmentMode
-	{
-		NotVerticalAligned,
-		TopVerticalAligned,
-		BottomVerticalAligned,
-		CenterVerticalAligned,
-	};
 protected:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_coordinateHandle;
@@ -342,8 +347,6 @@ protected:
 	FourBorders m_fourBorders;
 public:
     SpriteRenderer* m_renderer;
-	HorizontalAlignmentMode m_horizontalAlignmentMode;
-    VerticalAlignmentMode m_verticalAlignmentMode;
 public:
 	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
     virtual void Init() {}
@@ -351,6 +354,8 @@ public:
     void SaveConfig(const char* configName);
     void RegisterPublicEventCallback(const RTTI* type,
                                      SpriteEventProcPtr proc);
+	void UnregisterPublicEventCallback(const RTTI* type,
+		                               SpriteEventProcPtr proc);
     void PublicEventCallback(const SpriteEvent* evt);
     void AttachToGeomBuffer(SpriteGeomBufferPtr buffer);
 	void SetCoord(float x, float y);
