@@ -52,12 +52,36 @@ public:
 		AttributeHandle pivotHandle,
 		AttributeHandle sizeHandle);
 };
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
+class GUIComboBoxMenuBackground : public GUIPanelLayer
+{
+	DeclareRTTI;
+public:
+	GUIComboBoxMenuBackground(const xhn::static_string name,
+		AttributeHandle pivotHandle,
+		AttributeHandle sizeHandle)
+		: GUIPanelLayer(name, pivotHandle, sizeHandle)
+	{}
+};
 class GUIComboBoxDropDownMenu : public GUIContainer
 {
 	DeclareRTTI;
 public:
+	AttributeHandle m_sizeHandle;
+public:
 	GUIComboBoxDropDownMenu();
 };
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class GUIComboBox : public GUIHoriBar
 {
 	DeclareRTTI;

@@ -3,6 +3,7 @@
 ImplementRTTI(GUIComboBoxLayer, GUIHoriBarLayer);
 ImplementRTTI(GUIComboBoxTextLayer, SpriteTextLayer);
 ImplementRTTI(GUIComboBoxEntry, GUIContainer);
+ImplementRTTI(GUIComboBoxMenuBackground, GUIPanelLayer);
 ImplementRTTI(GUIComboBoxDropDownMenu, GUIContainer);
 ImplementRTTI(GUIComboBox, GUIHoriBar);
 
@@ -26,4 +27,10 @@ GUIComboBoxEntry::GUIComboBoxEntry(
 	SpriteLayerPtr text = ENEW GUIComboBoxTextLayer;
 	AddChild(panel);
 	AddChild(text);
+}
+
+GUIComboBoxDropDownMenu::GUIComboBoxDropDownMenu()
+{
+	m_sizeHandle.m_lock = ENEW xhn::RWLock;
+	m_sizeHandle.AttachAttribute<EFloat2>();
 }
