@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68017D5F174CF94F009FB42C /* prime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68017D5D174CF94F009FB42C /* prime.cpp */; };
 		6815E76A172FE5A400463B2A /* pugixml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6815E768172FE5A400463B2A /* pugixml.cpp */; };
 		682A679F1748B68B009D1393 /* gui_simple_panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 682A679D1748B68B009D1393 /* gui_simple_panel.cpp */; };
 		68814BE4173D55A900710D15 /* gui_container.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68814BE3173D55A900710D15 /* gui_container.cpp */; };
@@ -143,6 +144,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		68017D5D174CF94F009FB42C /* prime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = prime.cpp; sourceTree = "<group>"; };
+		68017D60174CFF01009FB42C /* prime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prime.h; sourceTree = "<group>"; };
 		6815E767172FE5A400463B2A /* pugiconfig.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugiconfig.hpp; sourceTree = "<group>"; };
 		6815E768172FE5A400463B2A /* pugixml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pugixml.cpp; sourceTree = "<group>"; };
 		6815E769172FE5A400463B2A /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
@@ -2090,6 +2093,7 @@
 		68A35D86172FE26E007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				68017D60174CFF01009FB42C /* prime.h */,
 				68A35D87172FE26E007D0C45 /* apple_file_manager.h */,
 				68A35D88172FE26E007D0C45 /* array.h */,
 				68A35D89172FE26E007D0C45 /* common.h */,
@@ -2164,6 +2168,7 @@
 				68A35DDC172FE26E007D0C45 /* xhn_static_string.cpp */,
 				68A35DDD172FE26E007D0C45 /* xhn_test.cpp */,
 				688ED9881733F95700940811 /* xhn_exception.cpp */,
+				68017D5D174CF94F009FB42C /* prime.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2879,6 +2884,7 @@
 				6892B29D173BDEDF00A5ED22 /* gui_bar.cpp in Sources */,
 				68814BE4173D55A900710D15 /* gui_container.cpp in Sources */,
 				682A679F1748B68B009D1393 /* gui_simple_panel.cpp in Sources */,
+				68017D5F174CF94F009FB42C /* prime.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

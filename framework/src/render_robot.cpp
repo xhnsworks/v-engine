@@ -201,6 +201,9 @@ void ResourceAction::DoImpl()
 #else
         RenderSystem_Init(W_Width, W_Height);
 #endif
+        
+        euint32 maxClipPlanes = (euint32)getMaxClipPlanes();
+        printf("max clip planes %d\n", maxClipPlanes);
 
 		m_rendererChain->Init();
 		m_guiRendererChain->Init();

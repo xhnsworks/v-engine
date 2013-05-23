@@ -420,6 +420,13 @@ bool checkFramebufferStatus()
     }
 }
 
+euint getMaxClipPlanes()
+{
+    GLint ret;
+    glGetIntegerv(GL_MAX_CLIP_PLANES, &ret);
+    return (euint)ret;
+}
+
 void _error_proc(const char* _file, euint32 _line)
 {
 	/**

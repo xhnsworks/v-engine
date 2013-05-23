@@ -20,6 +20,7 @@ API_EXPORT const char* getRenderbufferParameters(GLuint id);
 API_EXPORT const char* getTextureParameters(GLuint id);
 API_EXPORT void printFramebufferInfo();
 API_EXPORT bool checkFramebufferStatus();
+API_EXPORT euint getMaxClipPlanes();
 API_EXPORT void _error_proc(const char* _file, euint32 _line);
 #define ERROR_PROC _error_proc(__FILE__, __LINE__)
 API_EXPORT void _shader_log(const char* _file, euint32 _line, euint32 _id);
