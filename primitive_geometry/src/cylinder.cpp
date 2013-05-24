@@ -1,8 +1,5 @@
 #include "cylinder.h"
 #include "math_base.h"
-#include "float2.h"
-#include "float3.h"
-#include "float4.h"
 #include "matrix4x4.h"
 #include "sfloat3.h"
 #include "sfloat4.h"

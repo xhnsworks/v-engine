@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "camera.h"
-#include "float3.h"
-#include "float4.h"
 #include "sfloat3.h"
 #include "sfloat4.h"
 #include "matrix4x4.h"

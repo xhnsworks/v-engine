@@ -37,18 +37,20 @@ public:
 		EFloat ret = a + delt * factor;
 		return ret;
 	}
+    inline void Export(float* mem) {
+        mem[0] = x;
+    }
 };
-class EFloat2 : public Attribute
+class EFloat2 : public EFloat
 {
 public:
-	float x, y;
+	float y;
 public:
 	EFloat2()
-		: x(0.0f)
-		, y(0.0f)
+		: y(0.0f)
 	{}
 	EFloat2(float _x, float _y)
-		: x(_x)
+		: EFloat(_x)
 		, y(_y)
 	{}
 	inline EFloat2 operator *(const EFloat2& f) const {
@@ -71,20 +73,21 @@ public:
 		EFloat2 ret = a + delt * factor;
 		return ret;
 	}
+    inline void Export(float* mem) {
+        mem[0] = x;
+        mem[1] = y;
+    }
 };
-class EFloat3 : public Attribute
+class EFloat3 : public EFloat2
 {
 public:
-	float x, y, z;
+	float z;
 public:
 	EFloat3()
-		: x(0.0f)
-		, y(0.0f)
-		, z(0.0f)
+		: z(0.0f)
 	{}
 	EFloat3(float _x, float _y, float _z)
-		: x(_x)
-		, y(_y)
+		: EFloat2(_x, _y)
 		, z(_z)
 	{}
 	inline EFloat3 operator *(const EFloat3& f) const {
@@ -107,28 +110,26 @@ public:
 		EFloat3 ret = a + delt * factor;
 		return ret;
 	}
+    inline void Export(float* mem) {
+        mem[0] = x;
+        mem[1] = y;
+        mem[2] = z;
+    }
 };
-class EFloat4 : public Attribute
+class EFloat4 : public EFloat3
 {
 public:
-    float x, y, z, w;
+    float w;
 public:
 	EFloat4()
-		: x(0.0f)
-		, y(0.0f)
-		, z(0.0f)
-		, w(0.0f)
+		: w(0.0f)
 	{}
 	EFloat4(const EFloat3& nor, float w) 
-		: x(nor.x)
-		, y(nor.y)
-		, z(nor.z)
+		: EFloat3(nor.x, nor.y, nor.z)
 		, w(w)
 	{}
 	EFloat4(float _x, float _y, float _z, float _w)
-		: x(_x)
-		, y(_y)
-		, z(_z)
+		: EFloat3(_x, _y, _z)
 		, w(_w)
 	{}
 	inline EFloat4 operator *(const EFloat4& f) const {
@@ -151,11 +152,13 @@ public:
 		EFloat4 ret = a + delt * factor;
 		return ret;
 	}
+    inline void Export(float* mem) {
+        mem[0] = x;
+        mem[1] = y;
+        mem[2] = z;
+        mem[3] = w;
+    }
 };
-
-typedef EFloat4* float4;
-typedef EFloat3* float3;
-typedef EFloat2* float2;
 
 #ifdef USE_SSE
 #include <xmmintrin.h>

@@ -54,9 +54,6 @@
 		68A36003172FE2B5007D0C45 /* gui_panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E71172FE2B4007D0C45 /* gui_panel.cpp */; };
 		68A36004172FE2B5007D0C45 /* gui_pch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E72172FE2B4007D0C45 /* gui_pch.cpp */; };
 		68A36005172FE2B5007D0C45 /* cone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E86172FE2B4007D0C45 /* cone.cpp */; };
-		68A36007172FE2B5007D0C45 /* float2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E88172FE2B4007D0C45 /* float2.cpp */; };
-		68A36009172FE2B5007D0C45 /* float3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E8A172FE2B4007D0C45 /* float3.cpp */; };
-		68A3600B172FE2B5007D0C45 /* float4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E8C172FE2B4007D0C45 /* float4.cpp */; };
 		68A3600D172FE2B5007D0C45 /* float_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E8E172FE2B4007D0C45 /* float_base.cpp */; };
 		68A3600F172FE2B5007D0C45 /* matrix4x3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E90172FE2B4007D0C45 /* matrix4x3.cpp */; };
 		68A36011172FE2B5007D0C45 /* matrix4x4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68A35E92172FE2B4007D0C45 /* matrix4x4.cpp */; };
@@ -569,9 +566,6 @@
 		68A35E72172FE2B4007D0C45 /* gui_pch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_pch.cpp; sourceTree = "<group>"; };
 		68A35E75172FE2B4007D0C45 /* clamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = clamp.h; sourceTree = "<group>"; };
 		68A35E76172FE2B4007D0C45 /* cone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cone.h; sourceTree = "<group>"; };
-		68A35E77172FE2B4007D0C45 /* float2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = float2.h; sourceTree = "<group>"; };
-		68A35E78172FE2B4007D0C45 /* float3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = float3.h; sourceTree = "<group>"; };
-		68A35E79172FE2B4007D0C45 /* float4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = float4.h; sourceTree = "<group>"; };
 		68A35E7A172FE2B4007D0C45 /* float_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = float_base.h; sourceTree = "<group>"; };
 		68A35E7B172FE2B4007D0C45 /* math_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math_base.h; sourceTree = "<group>"; };
 		68A35E7C172FE2B4007D0C45 /* matrix4x3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix4x3.h; sourceTree = "<group>"; };
@@ -584,9 +578,6 @@
 		68A35E83172FE2B4007D0C45 /* sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sphere.h; sourceTree = "<group>"; };
 		68A35E84172FE2B4007D0C45 /* triangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triangle.h; sourceTree = "<group>"; };
 		68A35E86172FE2B4007D0C45 /* cone.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cone.cpp; sourceTree = "<group>"; };
-		68A35E88172FE2B4007D0C45 /* float2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float2.cpp; sourceTree = "<group>"; };
-		68A35E8A172FE2B4007D0C45 /* float3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float3.cpp; sourceTree = "<group>"; };
-		68A35E8C172FE2B4007D0C45 /* float4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float4.cpp; sourceTree = "<group>"; };
 		68A35E8E172FE2B4007D0C45 /* float_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = float_base.cpp; sourceTree = "<group>"; };
 		68A35E90172FE2B4007D0C45 /* matrix4x3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = matrix4x3.cpp; sourceTree = "<group>"; };
 		68A35E92172FE2B4007D0C45 /* matrix4x4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = matrix4x4.cpp; sourceTree = "<group>"; };
@@ -2290,9 +2281,6 @@
 			children = (
 				68A35E75172FE2B4007D0C45 /* clamp.h */,
 				68A35E76172FE2B4007D0C45 /* cone.h */,
-				68A35E77172FE2B4007D0C45 /* float2.h */,
-				68A35E78172FE2B4007D0C45 /* float3.h */,
-				68A35E79172FE2B4007D0C45 /* float4.h */,
 				68A35E7A172FE2B4007D0C45 /* float_base.h */,
 				68A35E7B172FE2B4007D0C45 /* math_base.h */,
 				68A35E7C172FE2B4007D0C45 /* matrix4x3.h */,
@@ -2312,9 +2300,6 @@
 			isa = PBXGroup;
 			children = (
 				68A35E86172FE2B4007D0C45 /* cone.cpp */,
-				68A35E88172FE2B4007D0C45 /* float2.cpp */,
-				68A35E8A172FE2B4007D0C45 /* float3.cpp */,
-				68A35E8C172FE2B4007D0C45 /* float4.cpp */,
 				68A35E8E172FE2B4007D0C45 /* float_base.cpp */,
 				68A35E90172FE2B4007D0C45 /* matrix4x3.cpp */,
 				68A35E92172FE2B4007D0C45 /* matrix4x4.cpp */,
@@ -2792,9 +2777,6 @@
 				68A36003172FE2B5007D0C45 /* gui_panel.cpp in Sources */,
 				68A36004172FE2B5007D0C45 /* gui_pch.cpp in Sources */,
 				68A36005172FE2B5007D0C45 /* cone.cpp in Sources */,
-				68A36007172FE2B5007D0C45 /* float2.cpp in Sources */,
-				68A36009172FE2B5007D0C45 /* float3.cpp in Sources */,
-				68A3600B172FE2B5007D0C45 /* float4.cpp in Sources */,
 				68A3600D172FE2B5007D0C45 /* float_base.cpp in Sources */,
 				68A3600F172FE2B5007D0C45 /* matrix4x3.cpp in Sources */,
 				68A36011172FE2B5007D0C45 /* matrix4x4.cpp in Sources */,

@@ -1,7 +1,6 @@
 #include "matrix4x4.h"
 #include <math.h>
 #include "array.h"
-#include "float3.h"
 #include "sfloat3.h"
 #include "sfloat4.h"
 #ifndef __APPLE__

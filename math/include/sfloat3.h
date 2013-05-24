@@ -26,7 +26,7 @@ static inline sfloat3 SFloat3_assign_from_int3(int x, int y, int z)
 #else
 #endif
 }
-
+/**
 static inline sfloat3 SFloat3_assign_from_float3(float3 ft3)
 {
 #ifdef USE_SSE
@@ -34,7 +34,7 @@ static inline sfloat3 SFloat3_assign_from_float3(float3 ft3)
 #else
 #endif
 }
-
+**/
 static inline sfloat3 SFloat3_assign_from_efloat3(EFloat3* ft3)
 {
 #ifdef USE_SSE

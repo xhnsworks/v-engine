@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "pass.h"
 ///#include <GL/gl.h>
-#include "float3.h"
-#include "float4.h"
 #include "array.h"
 #include "tree.h"
 #include "gl_utility.h"

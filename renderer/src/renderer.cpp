@@ -5,7 +5,6 @@
 #include "camera.h"
 #include "sketch.h"
 #include "pass_console.h"
-#include "float3.h"
 #include "gl_utility.h"
 #include "shader_buffer.h"
 #include "renderable_base.h"

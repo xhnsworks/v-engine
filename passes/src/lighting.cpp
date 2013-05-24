@@ -9,8 +9,6 @@
 #include "pass_console.h"
 #include "shader_buffer.h"
 #include "estring.h"
-#include "float3.h"
-#include "float4.h"
 #include "sfloat3.h"
 
 #include "renderer.h"

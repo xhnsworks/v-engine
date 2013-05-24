@@ -1,5 +1,5 @@
 #include "version_0004_data.h"
-#include "float3.h"
+///#include "float3.h"
 #include "sfloat3.h"
 #include "emem.h"
 void version_0004_tangent_calculate(struct version_0004_data* data)
@@ -73,19 +73,19 @@ void version_0004_tangent_calculate(struct version_0004_data* data)
         float x = data->vtx_tgt[a * 3];
         float y = data->vtx_tgt[a * 3 + 1];
         float z = data->vtx_tgt[a * 3 + 2];
-        float3 tgt = Float3(x, y, z);
-        tgt = Float3_normalize(tgt);
+        sfloat3 tgt = SFloat3(x, y, z);
+        tgt = SFloat3_normalize(tgt);
 
         x = data->vtx_nor[a * 3];
         y = data->vtx_nor[a * 3 + 1];
         z = data->vtx_nor[a * 3 + 2];
 
-        float3 nor = Float3(x, y, z);
-        float3 binor = Float3_cross(tgt, nor);
-        tgt = Float3_cross(nor, binor);
+        sfloat3 nor = SFloat3(x, y, z);
+        sfloat3 binor = SFloat3_cross(tgt, nor);
+        tgt = SFloat3_cross(nor, binor);
 
-        Float3_export(binor, &data->vtx_binor[a * 3]);
-        Float3_export(tgt, &data->vtx_tgt[a * 3]);
+        SFloat3_export(binor, &data->vtx_binor[a * 3]);
+        SFloat3_export(tgt, &data->vtx_tgt[a * 3]);
     }
 }
 

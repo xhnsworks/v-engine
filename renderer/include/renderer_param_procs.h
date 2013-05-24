@@ -18,32 +18,32 @@ renderer_param_value getCameraDirectionProc(RendererBase* _self)
 renderer_param_value getCameraPlaneNearProc(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
-    *tmp = Camera_get_plane_near(_self->curt_render_cam);
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
+    tmp->x = Camera_get_plane_near(_self->curt_render_cam);
     ret.value = tmp;
     return ret;
 }
 renderer_param_value getCameraPlaneFarProc(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
-    *tmp = Camera_get_plane_far(_self->curt_render_cam);
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
+    tmp->x = Camera_get_plane_far(_self->curt_render_cam);
     ret.value = tmp;
     return ret;
 }
 renderer_param_value getCameraPlaneWidthProc(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
-    *tmp = Camera_get_width(_self->curt_render_cam);
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
+    tmp->x = Camera_get_width(_self->curt_render_cam);
     ret.value = tmp;
     return ret;
 }
 renderer_param_value getCameraPlaneHeightProc(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
-    *tmp = Camera_get_height(_self->curt_render_cam);
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
+    tmp->x = Camera_get_height(_self->curt_render_cam);
     ret.value = tmp;
     return ret;
 }
@@ -91,7 +91,7 @@ renderer_param_value getInvertCameraWorldMatrixProc(RendererBase* _self)
 renderer_param_value getCurrentMaterialIDProc(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
     MaterialPrototype mp = _self->curt_mat_proto;
     *tmp = (float)mp->material_id;
     ret.value = tmp;
@@ -148,7 +148,7 @@ renderer_param_value getMaterialIDSketchProc(RendererBase* _self)
 renderer_param_value getLightInnerCos(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
     ///*tmp = LightBase2_get_inner_cos(_self->curt_light);
 	*tmp = _self->curt_light->get_inner_cos();
     ret.value = tmp;
@@ -229,7 +229,7 @@ renderer_param_value getLightColor(RendererBase* _self)
 renderer_param_value getLightAtteCoef(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = (float*)SMalloc(sizeof(float));
+    EFloat* tmp = (EFloat*)SMalloc(sizeof(EFloat));
     ///*tmp = LightBase2_get_atte_coef(_self->curt_light);
 	*tmp = _self->curt_light->get_atte_coef();
     ret.value = tmp;
@@ -337,8 +337,8 @@ renderer_param_value getShadowCubeMap(RendererBase* _self)
 renderer_param_value getLightInfluence(RendererBase* _self)
 {
     renderer_param_value ret;
-    float* tmp = NULL;
-    tmp = (float*)SMalloc(sizeof(float));
+    EFloat* tmp = NULL;
+    tmp = (EFloat*)SMalloc(sizeof(EFloat));
     *tmp = _self->curt_light->get_influence();
     ret.value = tmp;
     return ret;
