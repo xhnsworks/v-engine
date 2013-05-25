@@ -43,15 +43,15 @@ void GUIPanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 
 	SpriteElement tmpCenter = iterCenter->second;
 
-	EFloat2 pivot;
-	EFloat2 size;
+	Float2Attr pivot;
+	Float2Attr size;
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *((EFloat2*)m_pivotHandle.GetAttribute());
+		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
 	}
 	{
 		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *((EFloat2*)m_sizeHandle.GetAttribute());
+		size = *(m_sizeHandle.GetAttribute<Float2Attr>());
 	}
 
 	float left = tmpUpperLeft.m_rect.left - pivot.x;
@@ -179,15 +179,15 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 
 	SpriteElement tmpCenter = iterCenter->second;
 
-	EFloat2 pivot;
-	EFloat2 size;
+	Float2Attr pivot;
+	Float2Attr size;
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *((EFloat2*)m_pivotHandle.GetAttribute());
+		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
 	}
 	{
 		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *((EFloat2*)m_sizeHandle.GetAttribute());
+		size = *(m_sizeHandle.GetAttribute<Float2Attr>());
 	}
 
 	float left = tmpUpperLeft.m_rect.left - pivot.x;
@@ -228,7 +228,7 @@ GUIPanel::GUIPanel(SpriteRenderer* renderer, const xhn::static_string name)
 {
 	///m_sizeHandle.m_attr = &m_size;
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
-	m_sizeHandle.AttachAttribute<EFloat2>();
+	m_sizeHandle.AttachAttribute<Float2Attr>();
 }
 
 void GUIPanel::Init(const xhn::static_string configName)
@@ -252,7 +252,7 @@ void GUIPanel::Init(const xhn::static_string configName)
 void GUIPanel::SetSize(float x, float y)
 {
     xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
+	Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
 	size->x = x;
 	size->y = y;
 }

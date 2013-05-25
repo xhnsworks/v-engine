@@ -27,10 +27,10 @@ void GUISimplePanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
     
 	SpriteElement tmpCenter = iterCenter->second;
     
-	EFloat2 pivot;
+	Float2Attr pivot;
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *((EFloat2*)m_pivotHandle.GetAttribute());
+		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
 	}
     
 	float left = tmpCenter.m_rect.left - pivot.x;
@@ -64,10 +64,10 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
     
 	SpriteElement tmpCenter = iterCenter->second;
     
-	EFloat2 pivot;
+	Float2Attr pivot;
 	{
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *((EFloat2*)m_pivotHandle.GetAttribute());
+		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
 	}
     
 	float left = tmpCenter.m_rect.left - pivot.x;

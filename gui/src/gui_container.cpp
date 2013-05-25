@@ -13,7 +13,7 @@ GUIContainer::GUIContainer(SpriteRenderer* renderer, const xhn::static_string na
 , Sprite(renderer, name)
 {
 	m_rectHandle.m_lock = ENEW xhn::RWLock;
-	m_rectHandle.AttachAttribute<EFloat4>();
+	m_rectHandle.AttachAttribute<Float4Attr>();
 }
 
 GUIContainer::~GUIContainer()
@@ -70,7 +70,7 @@ void GUIContainer::SetRect(float left,
                            float height)
 {
     xhn::RWLock::Instance inst = m_rectHandle.GetWriteLock();
-	EFloat4* rect = (EFloat4*)m_rectHandle.GetAttribute();
+	Float4Attr* rect = m_rectHandle.GetAttribute<Float4Attr>();
 	rect->x = left;
 	rect->y = top;
 	rect->z = width;
@@ -80,7 +80,7 @@ void GUIContainer::SetRect(float left,
 void GUIContainer::GetScopeImpl(SpriteRect& result)
 {
 	xhn::RWLock::Instance inst = m_rectHandle.GetReadLock();
-	EFloat4* rect = (EFloat4*)m_rectHandle.GetAttribute();
+	Float4Attr* rect = m_rectHandle.GetAttribute<Float4Attr>();
 	result.left = rect->x;
 	result.top = rect->y;
 	result.size.width = rect->z;

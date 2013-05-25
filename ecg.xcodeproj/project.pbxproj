@@ -137,6 +137,8 @@
 		68B4966B1730EC0800AAB72D /* input_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68B4965F1730EC0800AAB72D /* input_system.cpp */; };
 		68B4966F1730EC7E00AAB72D /* input_system_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68B4966D1730EC7E00AAB72D /* input_system_osx.mm */; };
 		68BA0C5B1735451F00E1FAE2 /* input_robot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68BA0C591735451F00E1FAE2 /* input_robot.cpp */; };
+		68C54F99174FA7F2005E6FEE /* attribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68C54F97174FA7F2005E6FEE /* attribute.cpp */; };
+		68C54F9C174FB58F005E6FEE /* gui_combo_box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 68C54F9B174FB58F005E6FEE /* gui_combo_box.cpp */; };
 		68FE5BFB173A798800094CEB /* MyView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68FE5BFA173A798800094CEB /* MyView.mm */; };
 /* End PBXBuildFile section */
 
@@ -744,6 +746,9 @@
 		68B496701730ECA900AAB72D /* input_system_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_system_osx.h; sourceTree = "<group>"; };
 		68BA0C591735451F00E1FAE2 /* input_robot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = input_robot.cpp; sourceTree = "<group>"; };
 		68BA0C5C1735458E00E1FAE2 /* input_robot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = input_robot.h; sourceTree = "<group>"; };
+		68C54F97174FA7F2005E6FEE /* attribute.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = attribute.cpp; sourceTree = "<group>"; };
+		68C54F9A174FB586005E6FEE /* gui_combo_box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_combo_box.h; sourceTree = "<group>"; };
+		68C54F9B174FB58F005E6FEE /* gui_combo_box.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_combo_box.cpp; sourceTree = "<group>"; };
 		68FE5BF9173A798800094CEB /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
 		68FE5BFA173A798800094CEB /* MyView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2195,6 +2200,7 @@
 				68A35E19172FE2B4007D0C45 /* robot.cpp */,
 				68A35E1A172FE2B4007D0C45 /* robot_thread.cpp */,
 				68BA0C591735451F00E1FAE2 /* input_robot.cpp */,
+				68C54F97174FA7F2005E6FEE /* attribute.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2238,6 +2244,7 @@
 		68A35E67172FE2B4007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				68C54F9A174FB586005E6FEE /* gui_combo_box.h */,
 				682A67A01748B72A009D1393 /* gui_simple_panel.h */,
 				68814BE2173D559F00710D15 /* gui_container.h */,
 				6892B29E173BDF2500A5ED22 /* gui_bar.h */,
@@ -2254,6 +2261,7 @@
 		68A35E6D172FE2B4007D0C45 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				68C54F9B174FB58F005E6FEE /* gui_combo_box.cpp */,
 				68814BE3173D55A900710D15 /* gui_container.cpp */,
 				688ED9841733E77C00940811 /* gui_edit.cpp */,
 				68A35E6E172FE2B4007D0C45 /* gui_button.cpp */,
@@ -2867,6 +2875,8 @@
 				68814BE4173D55A900710D15 /* gui_container.cpp in Sources */,
 				682A679F1748B68B009D1393 /* gui_simple_panel.cpp in Sources */,
 				68017D5F174CF94F009FB42C /* prime.cpp in Sources */,
+				68C54F99174FA7F2005E6FEE /* attribute.cpp in Sources */,
+				68C54F9C174FB58F005E6FEE /* gui_combo_box.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

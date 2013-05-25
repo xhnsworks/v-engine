@@ -29,7 +29,7 @@ void GUIEdit::Init(const xhn::static_string configName)
 
 		{
 			xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-			EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
+			Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
 			size->x = 100.0f;
 			size->y = 50.0f;
 		}

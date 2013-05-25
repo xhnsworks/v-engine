@@ -2,6 +2,7 @@
 #define ECG_2_PUGI_H
 #include "xhn_string.hpp"
 #include "float_base.h"
+#include "attribute.h"
 #include "color.h"
 #include "pugixml.hpp"
 inline void _SaveColor(const EColor& from, pugi::xml_node& to, const xhn::string& name)
@@ -34,7 +35,19 @@ inline void _SaveEFloat(const EFloat& from, pugi::xml_node& to, const xhn::strin
 	x.set_value(from.x);
 }
 
+inline void _SaveEFloat(const FloatAttr& from, pugi::xml_node& to, const xhn::string& name)
+{
+	pugi::xml_attribute x = to.append_attribute( (name + "_x").c_str() );
+	x.set_value(from.x);
+}
+
 inline void _LoadEFloat(EFloat& to, const pugi::xml_node& from, const xhn::string& name)
+{
+	pugi::xml_attribute x = from.attribute( (name + "_x").c_str() );
+	to.x = x.as_float();
+}
+
+inline void _LoadEFloat(FloatAttr& to, const pugi::xml_node& from, const xhn::string& name)
 {
 	pugi::xml_attribute x = from.attribute( (name + "_x").c_str() );
 	to.x = x.as_float();
@@ -56,6 +69,14 @@ inline void _LoadEFloat2(EFloat2& to, const pugi::xml_node& from, const xhn::str
 	to.y = y.as_float();
 }
 
+inline void _LoadEFloat2(Float2Attr& to, const pugi::xml_node& from, const xhn::string& name)
+{
+	pugi::xml_attribute x = from.attribute( (name + "_x").c_str() );
+	pugi::xml_attribute y = from.attribute( (name + "_y").c_str() );
+	to.x = x.as_float();
+	to.y = y.as_float();
+}
+
 inline void _SaveEFloat3(const EFloat3& from, pugi::xml_node& to, const xhn::string& name)
 {
 	pugi::xml_attribute x = to.append_attribute( (name + "_x").c_str() );
@@ -66,7 +87,27 @@ inline void _SaveEFloat3(const EFloat3& from, pugi::xml_node& to, const xhn::str
 	z.set_value(from.z);
 }
 
+inline void _SaveEFloat3(const Float3Attr& from, pugi::xml_node& to, const xhn::string& name)
+{
+	pugi::xml_attribute x = to.append_attribute( (name + "_x").c_str() );
+	pugi::xml_attribute y = to.append_attribute( (name + "_y").c_str() );
+	pugi::xml_attribute z = to.append_attribute( (name + "_z").c_str() );
+	x.set_value(from.x);
+	y.set_value(from.y);
+	z.set_value(from.z);
+}
+
 inline void _LoadEFloat3(EFloat3& to, const pugi::xml_node& from, const xhn::string& name)
+{
+	pugi::xml_attribute x = from.attribute( (name + "_x").c_str() );
+	pugi::xml_attribute y = from.attribute( (name + "_y").c_str() );
+	pugi::xml_attribute z = from.attribute( (name + "_z").c_str() );
+	to.x = x.as_float();
+	to.y = y.as_float();
+	to.z = z.as_float();
+}
+
+inline void _LoadEFloat3(Float3Attr& to, const pugi::xml_node& from, const xhn::string& name)
 {
 	pugi::xml_attribute x = from.attribute( (name + "_x").c_str() );
 	pugi::xml_attribute y = from.attribute( (name + "_y").c_str() );
@@ -108,7 +149,19 @@ inline void _SaveEFloat4(const EFloat4& from, pugi::xml_node& to, const xhn::str
 	w.set_value(from.w);
 }
 
-inline void _LoadEFloat4(EFloat4& to, const pugi::xml_node& from, const xhn::string& name)
+inline void _SaveEFloat4(const Float4Attr& from, pugi::xml_node& to, const xhn::string& name)
+{
+	pugi::xml_attribute x = to.append_attribute( (name + "_x").c_str() );
+	pugi::xml_attribute y = to.append_attribute( (name + "_y").c_str() );
+	pugi::xml_attribute z = to.append_attribute( (name + "_z").c_str() );
+	pugi::xml_attribute w = to.append_attribute( (name + "_w").c_str() );
+	x.set_value(from.x);
+	y.set_value(from.y);
+	z.set_value(from.z);
+	w.set_value(from.w);
+}
+
+inline void _LoadEFloat4(Float4Attr& to, const pugi::xml_node& from, const xhn::string& name)
 {
 	pugi::xml_attribute x = from.attribute( (name + "_x").c_str() );
 	pugi::xml_attribute y = from.attribute( (name + "_y").c_str() );

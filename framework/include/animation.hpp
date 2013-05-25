@@ -253,13 +253,13 @@ public:
 		switch (type)
 		{
 		case Attribute::Float:
-			return ENEW EFloat( *((EFloat*)a) );
+			return ENEW FloatAttr( *((FloatAttr*)a) );
 		case Attribute::Float2:
-            return ENEW EFloat2( *((EFloat2*)a) );
+            return ENEW Float2Attr( *((Float2Attr*)a) );
 		case Attribute::Float3:
-			return ENEW EFloat3( *((EFloat3*)a) );
+			return ENEW Float3Attr( *((Float3Attr*)a) );
 		case Attribute::Float4:
-			return ENEW EFloat4( *((EFloat4*)a) );
+			return ENEW Float4Attr( *((Float4Attr*)a) );
 		default:
 			return NULL;
 		}
@@ -274,28 +274,28 @@ public:
 		{
 		case Attribute::Float:
 			{
-				EFloat* ret = ENEW EFloat;
+				FloatAttr* ret = ENEW FloatAttr;
 				_LoadEFloat(*ret, from, xhn::string("value"));
 				return ret;
 			}
 			break;
 		case Attribute::Float2:
 			{
-				EFloat2* ret = ENEW EFloat2;
+				Float2Attr* ret = ENEW Float2Attr;
 				_LoadEFloat2(*ret, from, xhn::string("value"));
 				return ret;
 			}
 			break;
 		case Attribute::Float3:
 			{
-				EFloat3* ret = ENEW EFloat3;
+				Float3Attr* ret = ENEW Float3Attr;
 				_LoadEFloat3(*ret, from, xhn::string("value"));
 				return ret;
 			}
 			break;
 		case Attribute::Float4:
 			{
-				EFloat4* ret = ENEW EFloat4;
+				Float4Attr* ret = ENEW Float4Attr;
 				_LoadEFloat4(*ret, from, xhn::string("value"));
 				return ret;
 			}
@@ -316,40 +316,40 @@ public:
 		{
 		case Attribute::Float:
 		    {
-			    EFloat* ret = ENEW EFloat;
-			    *ret = EFloat::Lerp(
-                    *((EFloat*)a),
-                    *((EFloat*)b),
+			    FloatAttr* ret = ENEW FloatAttr;
+			    *ret = FloatAttr::Lerp(
+                    *((FloatAttr*)a),
+                    *((FloatAttr*)b),
                     (float)factor
                 );
 			    return ret;
 			}
 		case Attribute::Float2:
 			{
-				EFloat2* ret = ENEW EFloat2;
-				*ret = EFloat2::Lerp(
-                    *((EFloat2*)a),
-                    *((EFloat2*)b),
+				Float2Attr* ret = ENEW Float2Attr;
+				*ret = Float2Attr::Lerp(
+                    *((Float2Attr*)a),
+                    *((Float2Attr*)b),
                     (float)factor
                 );
 				return ret;
 			}
 		case Attribute::Float3:
 			{
-				EFloat3* ret = ENEW EFloat3;
-				*ret = EFloat3::Lerp(
-                    *((EFloat3*)a),
-                    *((EFloat3*)b),
+				Float3Attr* ret = ENEW Float3Attr;
+				*ret = Float3Attr::Lerp(
+                    *((Float3Attr*)a),
+                    *((Float3Attr*)b),
                     (float)factor
                 );
 				return ret;
 			}
 		case Attribute::Float4:
 			{
-				EFloat4* ret = ENEW EFloat4;
-				*ret = EFloat4::Lerp(
-                    *((EFloat4*)a),
-                    *((EFloat4*)b),
+				Float4Attr* ret = ENEW Float4Attr;
+				*ret = Float4Attr::Lerp(
+                    *((Float4Attr*)a),
+                    *((Float4Attr*)b),
                     (float)factor
                 );
 				return ret;
@@ -379,16 +379,16 @@ public:
 		switch (type)
 		{
 		case Attribute::Float:
-			*((EFloat*)tgt.GetAttribute()) = *((EFloat*)v);
+			*(tgt.GetAttribute<FloatAttr>()) = *((FloatAttr*)v);
 			break;
 		case Attribute::Float2:
-			*((EFloat2*)tgt.GetAttribute()) = *((EFloat2*)v);
+			*(tgt.GetAttribute<Float2Attr>()) = *((Float2Attr*)v);
 			break;
 		case Attribute::Float3:
-			*((EFloat3*)tgt.GetAttribute()) = *((EFloat3*)v);
+			*(tgt.GetAttribute<Float3Attr>()) = *((Float3Attr*)v);
 			break;
 		case Attribute::Float4:
-			*((EFloat4*)tgt.GetAttribute()) = *((EFloat4*)v);
+			*(tgt.GetAttribute<Float4Attr>()) = *((Float4Attr*)v);
 			break;
 		}
 		delete v;

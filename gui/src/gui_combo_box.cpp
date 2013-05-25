@@ -1,36 +1,28 @@
 #include "gui_pch.h"
 #include "gui_combo_box.h"
-ImplementRTTI(GUIComboBoxLayer, GUIHoriBarLayer);
-ImplementRTTI(GUIComboBoxTextLayer, SpriteTextLayer);
-ImplementRTTI(GUIComboBoxEntry, GUIContainer);
+
+ImplementRTTI(GUIComboBoxEntry, GUIHoriBar);
 ImplementRTTI(GUIComboBoxMenuBackground, GUIPanelLayer);
 ImplementRTTI(GUIComboBoxDropDownMenu, GUIContainer);
 ImplementRTTI(GUIComboBox, GUIHoriBar);
 
-GUIComboBoxEntry::GUIComboBoxEntry(euint32 id,
-				 AttributeHandle pivotHandle,
-				 AttributeHandle sizeHandle)
+Sprite* GUIComboBoxEntryFactory::MakeSpriteImpl()
 {
-	char mbuf[256];
-	snprintf("combox_entry_%d", id);
-	xhn::static_string name = mbuf;
-	SpriteLayerPtr panel = ENEW GUIComboBoxLayer(name, pivotHandle, sizeHandle);
-	SpriteLayerPtr text = ENEW GUIComboBoxTextLayer;
-	AddChild(panel);
-	AddChild(text);
-}
-GUIComboBoxEntry::GUIComboBoxEntry(
-				 AttributeHandle pivotHandle,
-				 AttributeHandle sizeHandle)
-{
-	SpriteLayerPtr panel = ENEW GUIComboBoxLayer("base", pivotHandle, sizeHandle);
-	SpriteLayerPtr text = ENEW GUIComboBoxTextLayer;
-	AddChild(panel);
-	AddChild(text);
+    char mbuf[256];
+	snprintf(mbuf, 255, "GUIComboBoxEntry_%d", m_horiBarCount);
+	m_horiBarCount++;
+	GUIComboBoxEntry* ret = ENEW GUIComboBoxEntry(m_renderer, mbuf);
+	ret->Init(m_configName);
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+                                     ENEW SpriteFrameStartEventProc(
+                                         ret, m_renderer)
+                                     );
+	return ret;
 }
 
-GUIComboBoxDropDownMenu::GUIComboBoxDropDownMenu()
+GUIComboBoxDropDownMenu::GUIComboBoxDropDownMenu(SpriteRenderer* renderer)
+: GUIContainer(renderer, "drop_down_menu")
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
-	m_sizeHandle.AttachAttribute<EFloat2>();
+	m_sizeHandle.AttachAttribute<Float2Attr>();
 }

@@ -2,8 +2,7 @@
 #define FLOAT_BASE_H
 #include "common.h"
 #include "etypes.h"
-#include "attribute.h"
-class EFloat : public Attribute
+class EFloat
 {
 public:
 	float x;

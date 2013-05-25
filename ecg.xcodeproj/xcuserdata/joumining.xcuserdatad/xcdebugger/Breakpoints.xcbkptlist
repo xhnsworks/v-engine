@@ -13,7 +13,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "196"
          endingLineNumber = "196"
-         landmarkName = "GUIButton::MouseButtonUpEventProc::Proc(const SpriteEvent* evt)"
+         landmarkName = "GUIButton::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

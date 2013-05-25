@@ -8,6 +8,7 @@
 #include "sprite_factory.h"
 #include "gui_bar.h"
 #include "gui_container.h"
+#include "gui_panel.h"
 ///**********************************************************************///
 ///                           include end                                ///
 ///**********************************************************************///
@@ -16,23 +17,8 @@
 ///**********************************************************************///
 class SpriteRenderer;
 class GUIComboBox;
-class GUIComboBoxLayer : public GUIHoriBarLayer
-{
-	DeclareRTTI;
-public:
-	GUIComboBoxLayer(const xhn::static_string name,
-		AttributeHandle pivotHandle,
-		AttributeHandle sizeHandle)
-		: GUIHoriBarLayer(name, pivotHandle, sizeHandle)
-	{}
-};
-class GUIComboBoxTextLayer : public SpriteTextLayer
-{
-	DeclareRTTI;
-public:
-	GUIComboBoxTextLayer();
-};
-class GUIComboBoxEntry : public GUIContainer
+
+class GUIComboBoxEntry : public GUIHoriBar
 {
 	DeclareRTTI;
 public:
@@ -45,12 +31,18 @@ public:
 public:
 	EntryState m_curtState;
 public:
-	GUIComboBoxEntry(euint32 id,
-		AttributeHandle pivotHandle,
-		AttributeHandle sizeHandle);
-	GUIComboBoxEntry(
-		AttributeHandle pivotHandle,
-		AttributeHandle sizeHandle);
+    GUIComboBoxEntry(SpriteRenderer* renderer, const xhn::static_string name)
+    : GUIHoriBar(renderer, name)
+    {}
+};
+
+class GUIComboBoxEntryFactory : public GUIHoriBarFactory
+{
+public:
+    GUIComboBoxEntryFactory(SpriteRenderer* renderer, const char* cfgName)
+    : GUIHoriBarFactory(renderer, cfgName)
+    {}
+    virtual Sprite* MakeSpriteImpl();
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -74,7 +66,7 @@ class GUIComboBoxDropDownMenu : public GUIContainer
 public:
 	AttributeHandle m_sizeHandle;
 public:
-	GUIComboBoxDropDownMenu();
+	GUIComboBoxDropDownMenu(SpriteRenderer* renderer);
 };
 ///**********************************************************************///
 ///                       class define end                               ///

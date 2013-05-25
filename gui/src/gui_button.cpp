@@ -31,7 +31,7 @@ void GUIButton::Init(const xhn::static_string configName)
 
 		{
 			xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-            EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
+            Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
 			size->x = 100.0f;
 			size->y = 50.0f;
 		}
@@ -82,7 +82,7 @@ void GUIButton::Init(const xhn::static_string configName)
 void GUIButton::GetScopeImpl(SpriteRect& result)
 {
 	xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-	EFloat2* size = (EFloat2*)m_sizeHandle.GetAttribute();
+	Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
 	result.left = 0.0f;
 	result.top = 0.0f;
 	result.size.width = size->x;
