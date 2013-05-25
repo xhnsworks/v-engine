@@ -36,7 +36,7 @@ public:
 	GUIPanel(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x, float y);
-	virtual void GetScopeImpl(SpriteRect& result);
+	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 };

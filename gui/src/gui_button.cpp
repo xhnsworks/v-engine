@@ -79,16 +79,15 @@ void GUIButton::Init(const xhn::static_string configName)
 		}
 	}
 }
+/**
 void GUIButton::GetScopeImpl(SpriteRect& result)
 {
-	xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-	Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
-	result.left = 0.0f;
-	result.top = 0.0f;
-	result.size.width = size->x;
-	result.size.height = size->y;
+    result.left = 0.0f;
+    result.top = 0.0f;
+    result.size.width = 0.0f;
+    result.size.height = 0.0f;
 }
-
+**/
 void GUIButton::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 {
 	switch (m_curtState)

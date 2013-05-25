@@ -151,7 +151,7 @@ void GUIHoriBar::SetSize(float x)
 	FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
 	size->x = x;
 }
-
+/**
 void GUIHoriBar::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
@@ -159,7 +159,7 @@ void GUIHoriBar::GetScopeImpl(SpriteRect& result)
 	result.size.width = 0.0f;
 	result.size.height = 0.0f;
 }
-
+**/
 Sprite* GUIHoriBarFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
@@ -405,7 +405,7 @@ void GUIVertBar::SetSize(float x)
 	FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
 	size->x = x;
 }
-
+/**
 void GUIVertBar::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
@@ -413,7 +413,7 @@ void GUIVertBar::GetScopeImpl(SpriteRect& result)
 	result.size.width = 0.0f;
 	result.size.height = 0.0f;
 }
-
+**/
 Sprite* GUIVertBarFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
@@ -447,7 +447,7 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
 		layers = root.append_child("layers");
 	pugi::xml_node sheet = layers.append_child(sheetName);
 	pugi::xml_node elements = sheet.append_child("elements");
-	elements.append_attribute("num_elements").set_value(9);
+	elements.append_attribute("num_elements").set_value(3);
 
 	pugi::xml_node top = elements.append_child("element");
 	pugi::xml_node bottom = elements.append_child("element");

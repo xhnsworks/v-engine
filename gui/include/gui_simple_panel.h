@@ -39,7 +39,7 @@ protected:
 	GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name);
 public:
 	virtual void Init(const xhn::static_string configName);
-	virtual void GetScopeImpl(SpriteRect& result);
+	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 };

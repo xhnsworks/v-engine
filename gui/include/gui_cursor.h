@@ -24,7 +24,7 @@ public:
 		: Sprite(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
-	virtual void GetScopeImpl(SpriteRect& result);
+	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void Build();
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}

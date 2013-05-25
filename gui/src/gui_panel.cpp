@@ -256,7 +256,7 @@ void GUIPanel::SetSize(float x, float y)
 	size->x = x;
 	size->y = y;
 }
-
+/**
 void GUIPanel::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
@@ -264,7 +264,7 @@ void GUIPanel::GetScopeImpl(SpriteRect& result)
 	result.size.width = 0.0f;
 	result.size.height = 0.0f;
 }
-
+**/
 Sprite* GUIPanelFactory::MakeSpriteImpl()
 {
 	char mbuf[256];

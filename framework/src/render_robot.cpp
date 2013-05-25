@@ -274,8 +274,8 @@ void ResourceAction::DoImpl()
                                              areaRect,
                                              6.0f);
         
-		panelRect.size.width = 100.0f;
-		panelRect.size.height = 100.0f;
+		panelRect.size.width = 200.0f;
+		panelRect.size.height = 200.0f;
         GUIContainerFactory::CreateSheetConfig("container.xml",
                                                "rect",
                                                panelRect,

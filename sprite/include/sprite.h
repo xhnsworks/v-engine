@@ -384,6 +384,7 @@ public:
 		return m_fourBorders;
 	}
 public:
+    virtual void GetScopeImpl(SpriteRect& result);
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
     virtual void LoadConfigImpl(const pugi::xml_node& from);
 	virtual void SaveConfigImpl(pugi::xml_node& to);

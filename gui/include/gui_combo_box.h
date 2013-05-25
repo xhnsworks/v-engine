@@ -21,6 +21,9 @@ class GUIComboBox;
 class GUIComboBoxEntry : public GUIHoriBar
 {
 	DeclareRTTI;
+    friend class GUIComboBoxEntryFactory;
+protected:
+	~GUIComboBoxEntry() {}
 public:
 	enum EntryState
 	{
@@ -28,12 +31,53 @@ public:
 		Touched,
 		Selected,
 	};
+    class MouseMoveEventProc : public SpriteEventProc
+	{
+	public:
+		GUIComboBoxEntry* m_entry;
+	public:
+		MouseMoveEventProc(GUIComboBoxEntry* entry) : m_entry(entry) {}
+		~MouseMoveEventProc() {}
+	public:
+		virtual void Proc(const SpriteEvent* evt);
+	};
+    
+	class MouseButtonDownEventProc : public SpriteEventProc
+	{
+	public:
+		GUIComboBoxEntry* m_entry;
+	public:
+		MouseButtonDownEventProc(GUIComboBoxEntry* entry) : m_entry(entry) {}
+		~MouseButtonDownEventProc() {}
+	public:
+		virtual void Proc(const SpriteEvent* evt);
+	};
+    
+	class MouseButtonUpEventProc : public SpriteEventProc
+	{
+	public:
+		GUIComboBoxEntry* m_entry;
+	public:
+		MouseButtonUpEventProc(GUIComboBoxEntry* entry) : m_entry(entry) {}
+		~MouseButtonUpEventProc() {}
+	public:
+		virtual void Proc(const SpriteEvent* evt);
+	};
+
 public:
 	EntryState m_curtState;
 public:
     GUIComboBoxEntry(SpriteRenderer* renderer, const xhn::static_string name)
     : GUIHoriBar(renderer, name)
     {}
+    virtual void Init(const xhn::static_string configName);
+    inline void SetState(EntryState state) {
+        m_curtState = state;
+    }
+    ///virtual void GetScopeImpl(SpriteRect& result);
+    virtual void Build();
+    virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
+    void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
 };
 
 class GUIComboBoxEntryFactory : public GUIHoriBarFactory
@@ -43,6 +87,15 @@ public:
     : GUIHoriBarFactory(renderer, cfgName)
     {}
     virtual Sprite* MakeSpriteImpl();
+    static void CreateSheetConfig(const char* cfgName,
+                                  const char* textureName,
+                                  const SpriteRect& panelRect,
+                                  float cornerSize,
+                                  const EFloat2& areaSize,
+                                  float areaCornerSize,
+                                  const EFloat2& areaCoordNormal,
+                                  const EFloat2& areaCoordTouched,
+                                  const EFloat2& areaCoorfSelected);
 };
 ///**********************************************************************///
 ///                       class define end                               ///

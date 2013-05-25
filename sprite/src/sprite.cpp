@@ -247,7 +247,7 @@ void SpriteLayer::GetMatrix(matrix4x4* result)
 		m_parent) {
 		/// calculate the coordinates of the center
 		SpriteRect parentScope;
-		m_parent->GetScopeImpl(parentScope);
+		m_parent->GetScope(parentScope);
 
 		SpriteRect scope;
 		GetScope(scope);
@@ -744,6 +744,14 @@ void Sprite::SetRotate(float rad)
 	///m_rotation = rad;
 	FloatAttr* rotation = m_rotationHandle.GetAttribute<FloatAttr>();
 	rotation->x = rad;
+}
+
+void Sprite::GetScopeImpl(SpriteRect& result)
+{
+    result.left = FLT_MIN;
+    result.top = FLT_MIN;
+    result.size.width = FLT_MIN;
+    result.size.height = FLT_MIN;
 }
 
 void Sprite::BuildElementsImpl(xhn::list<SpriteElement>& to)

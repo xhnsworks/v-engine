@@ -128,6 +128,11 @@ or
 #define NEG_NAN 0xffc00000
 #define POS_NAN 0x7fc00000
 
+#if defined(__APPLE__)
+#define FLT_MIN __FLT_MIN__
+#define FLT_MAX __FLT_MAX__
+#endif
+
 #ifdef __GNUC__
 #define SafeFOpen fopen
 #elif defined _MSC_VER

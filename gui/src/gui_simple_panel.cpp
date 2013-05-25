@@ -117,7 +117,7 @@ void GUISimplePanel::Init(const xhn::static_string configName)
         AddChild(layer);
 	}
 }
-
+/**
 void GUISimplePanel::GetScopeImpl(SpriteRect& result)
 {
 	result.left = 0.0f;
@@ -125,7 +125,7 @@ void GUISimplePanel::GetScopeImpl(SpriteRect& result)
 	result.size.width = 0.0f;
 	result.size.height = 0.0f;
 }
-
+**/
 Sprite* GUISimplePanelFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
