@@ -22,6 +22,7 @@
 #include "gui_edit.h"
 #include "gui_bar.h"
 #include "gui_container.h"
+#include "gui_combo_box.h"
 #include "input_robot.h"
 ///**********************************************************************///
 ///                           include end                                ///
@@ -191,6 +192,7 @@ private:
 	GUIHoriBarFactory* m_horiBarFactory;
 	GUIVertBarFactory* m_vertBarFactory;
     GUIContainerFactory* m_containerFactory;
+    GUIComboBoxEntryFactory* m_comboBoxEntryFactory;
 
 	GUIButton* m_guiButton;
 	GUICursor* m_guiCursor;
@@ -199,6 +201,7 @@ private:
 	GUIHoriBar* m_guiHoriBar;
     GUIVertBar* m_guiVertBar;
     GUIContainer* m_guiContainer;
+    GUIComboBoxEntry* m_guiComboBoxEntry;
 
 	bool m_isInited;
 public:
@@ -230,6 +233,7 @@ public:
     , m_horiBarFactory(NULL)
     , m_vertBarFactory(NULL)
     , m_containerFactory(NULL)
+    , m_comboBoxEntryFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
@@ -237,6 +241,7 @@ public:
     , m_guiHoriBar(NULL)
     , m_guiVertBar(NULL)
     , m_guiContainer(NULL)
+    , m_guiComboBoxEntry(NULL)
     , m_isInited(false)
 	{}
 #else
@@ -261,6 +266,7 @@ public:
 	, m_horiBarFactory(NULL)
 	, m_vertBarFactory(NULL)
     , m_containerFactory(NULL)
+    , m_comboBoxEntryFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
@@ -268,6 +274,7 @@ public:
 	, m_guiHoriBar(NULL)
     , m_guiVertBar(NULL)
     , m_guiContainer(NULL)
+    , m_guiComboBoxEntry(NULL)
     , m_isInited(false)
 	{}
 #endif

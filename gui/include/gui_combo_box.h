@@ -67,8 +67,10 @@ public:
 public:
 	EntryState m_curtState;
 public:
-    GUIComboBoxEntry(SpriteRenderer* renderer, const xhn::static_string name)
-    : GUIHoriBar(renderer, name)
+    GUIComboBoxEntry(SpriteRenderer* renderer,
+                     const xhn::static_string name,
+                     AttributeHandle sizeHandle)
+    : GUIHoriBar(renderer, name, sizeHandle)
     {}
     virtual void Init(const xhn::static_string configName);
     inline void SetState(EntryState state) {
@@ -83,8 +85,13 @@ public:
 class GUIComboBoxEntryFactory : public GUIHoriBarFactory
 {
 public:
-    GUIComboBoxEntryFactory(SpriteRenderer* renderer, const char* cfgName)
-    : GUIHoriBarFactory(renderer, cfgName)
+    AttributeHandle m_sizeHandle;
+public:
+    GUIComboBoxEntryFactory(SpriteRenderer* renderer,
+                            const char* cfgName,
+                            AttributeHandle sizeHandle)
+    : m_sizeHandle(sizeHandle)
+    , GUIHoriBarFactory(renderer, cfgName)
     {}
     virtual Sprite* MakeSpriteImpl();
     static void CreateSheetConfig(const char* cfgName,
@@ -118,8 +125,10 @@ class GUIComboBoxDropDownMenu : public GUIContainer
 	DeclareRTTI;
 public:
 	AttributeHandle m_sizeHandle;
+    GUIComboBoxEntryFactory* m_entryFactory;
 public:
-	GUIComboBoxDropDownMenu(SpriteRenderer* renderer);
+	GUIComboBoxDropDownMenu(SpriteRenderer* renderer,
+                            const char* entryCfgName);
 };
 ///**********************************************************************///
 ///                       class define end                               ///

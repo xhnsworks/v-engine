@@ -126,6 +126,14 @@ GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
 	m_sizeHandle.AttachAttribute<FloatAttr>();
 }
 
+GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
+                       const xhn::static_string name,
+                       AttributeHandle sizeHandle)
+: m_sizeHandle(sizeHandle)
+, Sprite(renderer, name)
+{
+}
+
 void GUIHoriBar::Init(const xhn::static_string configName)
 {
 	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
@@ -192,7 +200,7 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
 		layers = root.append_child("layers");
 	pugi::xml_node sheet = layers.append_child(sheetName);
 	pugi::xml_node elements = sheet.append_child("elements");
-	elements.append_attribute("num_elements").set_value(9);
+	elements.append_attribute("num_elements").set_value(3);
     
 	pugi::xml_node left = elements.append_child("element");
 	pugi::xml_node right = elements.append_child("element");

@@ -44,6 +44,9 @@ public:
 	AttributeHandle m_sizeHandle;
 public:
 	GUIHoriBar(SpriteRenderer* renderer, const xhn::static_string name);
+    GUIHoriBar(SpriteRenderer* renderer,
+               const xhn::static_string name,
+               AttributeHandle sizeHandle);
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x);
 	///virtual void GetScopeImpl(SpriteRect& result);
