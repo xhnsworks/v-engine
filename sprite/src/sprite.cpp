@@ -154,10 +154,12 @@ SpriteLayer::SpriteLayer(const xhn::static_string& name)
 , m_verticalAlignmentMode(NotVerticalAligned)
 , m_parent(NULL)
 {
-	m_transparentHandle.m_lock = ENEW xhn::RWLock;
-	m_transparentHandle.AttachAttribute<FloatAttr>();
-	FloatAttr* t = m_transparentHandle.GetAttribute<FloatAttr>();
-	t->x = 1.0f;
+	///m_transparentHandle.m_lock = ENEW xhn::RWLock;
+	///m_transparentHandle.AttachAttribute<FloatAttr>();
+	///FloatAttr* t = m_transparentHandle.GetAttribute<FloatAttr>();
+	///t->x = 1.0f;
+	FloatAttr t(1.0f);
+	m_transparencyHandle.SetAttribute(&t);
 }
 
 void SpriteLayer::LoadConfig(const pugi::xml_node& from)
@@ -191,9 +193,11 @@ void SpriteLayer::BuildElements(xhn::list<SpriteElement>& to)
 
 void SpriteLayer::SetTransparent(float t)
 {
-    xhn::RWLock::Instance inst = m_transparentHandle.GetWriteLock();
-	FloatAttr* transparent = m_transparentHandle.GetAttribute<FloatAttr>();
-	transparent->x = t;
+    ///xhn::RWLock::Instance inst = m_transparentHandle.GetWriteLock();
+	///FloatAttr* transparent = m_transparentHandle.GetAttribute<FloatAttr>();
+	///transparent->x = t;
+	FloatAttr transparency(t);
+    m_transparencyHandle.SetAttribute(&transparency);
 }
 
 void SpriteLayer::GetScope(SpriteRect& result)
@@ -643,29 +647,37 @@ Sprite::Sprite(SpriteRenderer* renderer, const xhn::static_string name)
 	//m_pivotHandle.m_attr = &m_pivot;
 	m_pivotHandle.m_lock = ENEW xhn::RWLock;
 	m_pivotHandle.AttachAttribute<Float2Attr>();
-	Float2Attr* pivot = m_pivotHandle.GetAttribute<Float2Attr>();
-	pivot->x = 0.0f;
-	pivot->y = 0.0f;
+	///Float2Attr* pivot = m_pivotHandle.GetAttribute<Float2Attr>();
+	///pivot->x = 0.0f;
+	///pivot->y = 0.0f;
+	Float2Attr pivot(0.0f, 0.0f);
+	m_pivotHandle.SetAttribute(&pivot);
 
 	///m_coordinateHandle.m_attr = &m_coordinate;
 	m_coordinateHandle.m_lock = ENEW xhn::RWLock;
 	m_coordinateHandle.AttachAttribute<Float2Attr>();
-	Float2Attr* coordinate = m_coordinateHandle.GetAttribute<Float2Attr>();
-	coordinate->x = 0.0f;
-	coordinate->y = 0.0f;
+	///Float2Attr* coordinate = m_coordinateHandle.GetAttribute<Float2Attr>();
+	///coordinate->x = 0.0f;
+	///coordinate->y = 0.0f;
+	Float2Attr coordinate(0.0f, 0.0f);
+	m_coordinateHandle.SetAttribute(&coordinate);
 
 	///m_rotationHandle.m_attr = &m_rotation;
 	m_rotationHandle.m_lock = ENEW xhn::RWLock;
 	m_rotationHandle.AttachAttribute<FloatAttr>();
-	FloatAttr* rotation = m_rotationHandle.GetAttribute<FloatAttr>();
-	rotation->x = 0.0f;
+	///FloatAttr* rotation = m_rotationHandle.GetAttribute<FloatAttr>();
+	///rotation->x = 0.0f;
+	FloatAttr rotation(0.0f);
+	m_rotationHandle.SetAttribute(&rotation);
 
 	///m_scaleHandle.m_attr = &m_scale;
 	m_scaleHandle.m_lock = ENEW xhn::RWLock;
 	m_scaleHandle.AttachAttribute<Float2Attr>();
-	Float2Attr* scale = m_scaleHandle.GetAttribute<Float2Attr>();
-	scale->x = 1.0f;
-	scale->y = 1.0f;
+	///Float2Attr* scale = m_scaleHandle.GetAttribute<Float2Attr>();
+	///scale->x = 1.0f;
+	///scale->y = 1.0f;
+	Float2Attr scale(1.0f, 1.0f);
+	m_scaleHandle.SetAttribute(&scale);
 }
 
 void Sprite::RegisterPublicEventCallback(const RTTI* type, SpriteEventProcPtr proc)
@@ -720,30 +732,42 @@ void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 
 void Sprite::SetCoord(float x, float y)
 {
+	/**
 	xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetWriteLock();
 	///m_coordinate.x = x;
 	///m_coordinate.y = y;
 	Float2Attr* coord = m_coordinateHandle.GetAttribute<Float2Attr>();
 	coord->x = x;
 	coord->y = y;
+	**/
+    Float2Attr coord(x, y);
+	m_coordinateHandle.SetAttribute(&coord);
 }
 
 void Sprite::SetScale(float x, float y)
 {
+	/**
 	xhn::RWLock::Instance inst = m_scaleHandle.m_lock->GetWriteLock();
 	///m_scale.x = x;
 	///m_scale.y = y;
 	Float2Attr* scale = m_scaleHandle.GetAttribute<Float2Attr>();
 	scale->x = x;
 	scale->y = y;
+	**/
+    Float2Attr scale(x, y);
+	m_scaleHandle.SetAttribute(&scale);
 }
 
 void Sprite::SetRotate(float rad)
 {
+	/**
 	xhn::RWLock::Instance inst = m_rotationHandle.m_lock->GetWriteLock();
 	///m_rotation = rad;
 	FloatAttr* rotation = m_rotationHandle.GetAttribute<FloatAttr>();
 	rotation->x = rad;
+	**/
+	FloatAttr rotation(rad);
+	m_rotationHandle.SetAttribute(&rotation);
 }
 
 void Sprite::GetScopeImpl(SpriteRect& result)
@@ -815,31 +839,49 @@ void Sprite::GetMatrix(matrix4x4* result)
     matrix4x4 tmp;
 	EFloat2 p = m_renderer->get_real_position(0.0f, 0.0f);
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.m_lock->GetReadLock();
+		///xhn::RWLock::Instance inst = m_pivotHandle.m_lock->GetReadLock();
 		///p = p + m_pivot;
-		Float2Attr* pivot = m_pivotHandle.GetAttribute<Float2Attr>();
-		p = p + (pivot->ToEFloat2());
+		///Float2Attr* pivot = m_pivotHandle.GetAttribute<Float2Attr>();
+		///p = p + (pivot->ToEFloat2());
+		Float2Attr pivot;
+		m_pivotHandle.GetAttribute(&pivot);
+        p = p + (pivot.ToEFloat2());
 	}
 	sfloat3 axis = SFloat3(0.0f, 0.0f, 1.0f);
 	Matrix4x4_set_as_translate(&offs, -p.x, -p.y, 0.0f);
 	Matrix4x4_set_as_translate(&inv_offs, p.x, p.y, 0.0f);
 	{
+		/**
 		xhn::RWLock::Instance inst = m_rotationHandle.m_lock->GetReadLock();
 		FloatAttr* rotation = m_rotationHandle.GetAttribute<FloatAttr>();
 		
 		Matrix4x4_from_axis_angle(&rota, axis, rotation->Get());
+		**/
+        FloatAttr rotation;
+		m_rotationHandle.GetAttribute(&rotation);
+		Matrix4x4_from_axis_angle(&rota, axis, rotation.Get());
 	}
 	{
+		/**
 		xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
 		Float2Attr* coord = m_coordinateHandle.GetAttribute<Float2Attr>();
 		
 		Matrix4x4_set_as_translate(&tran, coord->x, coord->y, 0.0f);
+		**/
+		Float2Attr coord;
+		m_coordinateHandle.GetAttribute(&coord);
+		Matrix4x4_set_as_translate(&tran, coord.x, coord.y, 0.0f);
 	}
 	{
+		/**
 		xhn::RWLock::Instance inst = m_scaleHandle.m_lock->GetReadLock();
 		Float2Attr* scale = m_scaleHandle.GetAttribute<Float2Attr>();
 		
 		Matrix4x4_set_scale(&scal, scale->x, scale->y, 1.0f);
+		**/
+        Float2Attr scale;
+		m_scaleHandle.GetAttribute(&scale);
+        Matrix4x4_set_scale(&scal, scale.x, scale.y, 1.0f);
 	}
 	Matrix4x4_mul_matrix4(&offs, &rota, &tmp);
 	Matrix4x4_mul_matrix4(&tmp, &scal, &tmp);
@@ -873,9 +915,14 @@ void Sprite::GetMatrix(matrix4x4* result)
             (SFloat4_get_x(&zero) - scope.left);
 		}
 		else if (m_horizontalAlignmentMode == NotHorizontalAligned) {
+			/**
 			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
 			Float2Attr* coord = m_coordinateHandle.GetAttribute<Float2Attr>();
 			x = coord->x;
+			**/
+			Float2Attr coord;
+			m_coordinateHandle.GetAttribute(&coord);
+			x = coord.x;
 		}
 
 		if (m_verticalAlignmentMode == CenterVerticalAligned) {
@@ -890,9 +937,14 @@ void Sprite::GetMatrix(matrix4x4* result)
             (SFloat4_get_y(&zero) - scope.top);
 		}
 		else if (m_verticalAlignmentMode == NotVerticalAligned) {
+			/**
 			xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetReadLock();
 			Float2Attr* coord = m_coordinateHandle.GetAttribute<Float2Attr>();
 			y = coord->y;
+			**/
+			Float2Attr coord;
+			m_coordinateHandle.GetAttribute(&coord);
+			y = coord.y;
 		}
         Matrix4x4_set_as_translate(&tran, x, y, 0.0f);
 		Matrix4x4_mul_matrix4(&tmp, &tran, result);
@@ -906,6 +958,7 @@ void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, S
 	SpriteFactory::SpriteLayerAnimAttrMap::bucket* b = slaaMap.find_bucket(this);
 	if (b)
 		return;
+	/**
 	SpriteFactory::AnimAttrArray array;
 	slaaMap.insert(this, array);
     b = slaaMap.find_bucket(this);
@@ -922,4 +975,5 @@ void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, S
 	aaslMap.insert(m_coordinateHandle.GetAttribute<Attribute>(), this);
 	aaslMap.insert(m_rotationHandle.GetAttribute<Attribute>(), this);
 	aaslMap.insert(m_scaleHandle.GetAttribute<Attribute>(), this);
+	**/
 }

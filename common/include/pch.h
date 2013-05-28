@@ -24,9 +24,6 @@
 #include "map.hpp"
 #ifndef __APPLE__
 #include "cone.h"
-#include "float2.h"
-#include "float3.h"
-#include "float4.h"
 #include "float_base.h"
 #include "math_base.h"
 #include "sfloat3.h"

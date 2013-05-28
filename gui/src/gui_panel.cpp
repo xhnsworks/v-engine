@@ -46,12 +46,18 @@ void GUIPanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	Float2Attr pivot;
 	Float2Attr size;
 	{
+		/**
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
 		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		**/
+		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
+		/**
 		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
 		size = *(m_sizeHandle.GetAttribute<Float2Attr>());
+		**/
+		m_sizeHandle.GetAttribute(&size);
 	}
 
 	float left = tmpUpperLeft.m_rect.left - pivot.x;
@@ -182,12 +188,18 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 	Float2Attr pivot;
 	Float2Attr size;
 	{
+		/**
 		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
 		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		**/
+		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
+		/**
 		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
 		size = *(m_sizeHandle.GetAttribute<Float2Attr>());
+		**/
+		m_sizeHandle.GetAttribute(&size);
 	}
 
 	float left = tmpUpperLeft.m_rect.left - pivot.x;
@@ -251,10 +263,14 @@ void GUIPanel::Init(const xhn::static_string configName)
 
 void GUIPanel::SetSize(float x, float y)
 {
+	/**
     xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
 	Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
 	size->x = x;
 	size->y = y;
+	**/
+	Float2Attr size(x, y);
+	m_sizeHandle.SetAttribute(&size);
 }
 /**
 void GUIPanel::GetScopeImpl(SpriteRect& result)

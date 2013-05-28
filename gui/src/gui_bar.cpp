@@ -37,12 +37,14 @@ void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	Float2Attr pivot;
 	FloatAttr size;
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
-		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		///xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
+		///size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		m_sizeHandle.GetAttribute(&size);
 	}
     
 	float left = tmpLeft.m_rect.left - pivot.x;
@@ -92,12 +94,14 @@ void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)
 	Float2Attr pivot;
 	FloatAttr size;
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
-		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		///xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
+		///size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		m_sizeHandle.GetAttribute(&size);
 	}
     
 	float left = tmpLeft.m_rect.left - pivot.x;
@@ -155,9 +159,11 @@ void GUIHoriBar::Init(const xhn::static_string configName)
 
 void GUIHoriBar::SetSize(float x)
 {
-    xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
-	size->x = x;
+    ///xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
+	///FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
+	///size->x = x;
+	FloatAttr size(x);
+	m_sizeHandle.SetAttribute(&size);
 }
 /**
 void GUIHoriBar::GetScopeImpl(SpriteRect& result)
@@ -298,12 +304,14 @@ void GUIVertBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	Float2Attr pivot;
 	FloatAttr size;
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
-		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		///xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
+		///size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		m_sizeHandle.GetAttribute(&size);
 	}
 
 	float left = tmpCenter.m_rect.left - pivot.x;
@@ -354,12 +362,14 @@ void GUIVertBarLayer::GetScopeImpl(SpriteRect& result)
 	Float2Attr pivot;
 	FloatAttr size;
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
-		xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		///xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
+		///size = *(m_sizeHandle.GetAttribute<FloatAttr>());
+		m_sizeHandle.GetAttribute(&size);
 	}
    
 	float left = tmpCenter.m_rect.left - pivot.x;
@@ -409,9 +419,11 @@ void GUIVertBar::Init(const xhn::static_string configName)
 
 void GUIVertBar::SetSize(float x)
 {
-	xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
-	size->x = x;
+	///xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
+	///FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
+	///size->x = x;
+	FloatAttr size(x);
+	m_sizeHandle.SetAttribute(&size);
 }
 /**
 void GUIVertBar::GetScopeImpl(SpriteRect& result)

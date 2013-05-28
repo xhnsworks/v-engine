@@ -28,10 +28,12 @@ void GUIEdit::Init(const xhn::static_string configName)
 		pugi::xml_node layers = root.child("layers");
 
 		{
-			xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-			Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
-			size->x = 100.0f;
-			size->y = 50.0f;
+			///xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
+			///Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
+			Float2Attr size;
+			size.x = 100.0f;
+			size.y = 50.0f;
+			m_sizeHandle.SetAttribute(&size);
 		}
 
 		{

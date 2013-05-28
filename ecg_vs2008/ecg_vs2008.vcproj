@@ -1729,11 +1729,11 @@
 			Name="tmp"
 			>
 			<File
-				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
+				RelativePath="..\glew\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath="..\glew\GL\glew.h"
+				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
 				>
 			</File>
 			<File
@@ -1757,18 +1757,6 @@
 				</File>
 				<File
 					RelativePath="..\math\include\cone.h"
-					>
-				</File>
-				<File
-					RelativePath="..\math\include\float2.h"
-					>
-				</File>
-				<File
-					RelativePath="..\math\include\float3.h"
-					>
-				</File>
-				<File
-					RelativePath="..\math\include\float4.h"
 					>
 				</File>
 				<File
@@ -1821,18 +1809,6 @@
 				>
 				<File
 					RelativePath="..\math\src\cone.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\math\src\float2.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\math\src\float3.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\math\src\float4.cpp"
 					>
 				</File>
 				<File
@@ -2657,6 +2633,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\framework\src\attribute.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\framework\include\attribute.h"
 				>
 			</File>
@@ -2777,19 +2757,19 @@
 			Name="glsl_complier"
 			>
 			<File
-				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
+				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
 				>
 			</File>
 			<File

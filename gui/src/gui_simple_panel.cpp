@@ -29,8 +29,9 @@ void GUISimplePanelLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
     
 	Float2Attr pivot;
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		m_pivotHandle.GetAttribute(&pivot);
 	}
     
 	float left = tmpCenter.m_rect.left - pivot.x;
@@ -66,8 +67,9 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
     
 	Float2Attr pivot;
 	{
-		xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
+		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
+		m_pivotHandle.GetAttribute(&pivot);
 	}
     
 	float left = tmpCenter.m_rect.left - pivot.x;

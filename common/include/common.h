@@ -131,6 +131,8 @@ or
 #if defined(__APPLE__)
 #define FLT_MIN __FLT_MIN__
 #define FLT_MAX __FLT_MAX__
+#else
+#include "float.h"
 #endif
 
 #ifdef __GNUC__

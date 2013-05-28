@@ -28,8 +28,6 @@
 #include "texture2d.h"
 
 #include "pass_console.h"
-#include "float3.h"
-#include "float4.h"
 #include "sfloat3.h"
 #include "sfloat4.h"
 

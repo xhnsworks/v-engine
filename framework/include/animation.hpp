@@ -375,20 +375,23 @@ public:
 	inline void operator () (AttributeHandle tgt,
                              Attribute* v,
                              Attribute::Type type) {
-		xhn::RWLock::Instance inst = tgt.GetWriteLock();
 		switch (type)
 		{
 		case Attribute::Float:
-			*(tgt.GetAttribute<FloatAttr>()) = *((FloatAttr*)v);
+			///*(tgt.GetAttribute<FloatAttr>()) = *((FloatAttr*)v);
+			tgt.SetAttribute((FloatAttr*)v);
 			break;
 		case Attribute::Float2:
-			*(tgt.GetAttribute<Float2Attr>()) = *((Float2Attr*)v);
+			///*(tgt.GetAttribute<Float2Attr>()) = *((Float2Attr*)v);
+			tgt.SetAttribute((Float2Attr*)v);
 			break;
 		case Attribute::Float3:
-			*(tgt.GetAttribute<Float3Attr>()) = *((Float3Attr*)v);
+			///*(tgt.GetAttribute<Float3Attr>()) = *((Float3Attr*)v);
+			tgt.SetAttribute((Float3Attr*)v);
 			break;
 		case Attribute::Float4:
-			*(tgt.GetAttribute<Float4Attr>()) = *((Float4Attr*)v);
+			///*(tgt.GetAttribute<Float4Attr>()) = *((Float4Attr*)v);
+			tgt.SetAttribute((Float4Attr*)v);
 			break;
 		}
 		delete v;

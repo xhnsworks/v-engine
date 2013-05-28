@@ -186,7 +186,7 @@ class SpriteLayer : public RefObject
 	DeclareRootRTTI;
     friend struct FSpriteDestProc;
 public:
-	AttributeHandle m_transparentHandle;
+	AttributeHandle m_transparencyHandle;
     SpriteLayer* m_parent;
 private:
 	/// perhaps loop reference, must to check

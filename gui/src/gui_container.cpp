@@ -69,22 +69,27 @@ void GUIContainer::SetRect(float left,
                            float width,
                            float height)
 {
-    xhn::RWLock::Instance inst = m_rectHandle.GetWriteLock();
-	Float4Attr* rect = m_rectHandle.GetAttribute<Float4Attr>();
-	rect->x = left;
-	rect->y = top;
-	rect->z = width;
-	rect->w = height;
+    ///xhn::RWLock::Instance inst = m_rectHandle.GetWriteLock();
+	///Float4Attr* rect = m_rectHandle.GetAttribute<Float4Attr>();
+	Float4Attr rect;
+	rect.x = left;
+	rect.y = top;
+	rect.z = width;
+	rect.w = height;
+	m_rectHandle.SetAttribute(&rect);
 }
 
 void GUIContainer::GetScopeImpl(SpriteRect& result)
 {
-	xhn::RWLock::Instance inst = m_rectHandle.GetReadLock();
-	Float4Attr* rect = m_rectHandle.GetAttribute<Float4Attr>();
-	result.left = rect->x;
-	result.top = rect->y;
-	result.size.width = rect->z;
-    result.size.height = rect->w;
+	///xhn::RWLock::Instance inst = m_rectHandle.GetReadLock();
+	///Float4Attr* rect = m_rectHandle.GetAttribute<Float4Attr>();
+
+	Float4Attr rect;
+	m_rectHandle.GetAttribute(&rect);
+	result.left = rect.x;
+	result.top = rect.y;
+	result.size.width = rect.z;
+    result.size.height = rect.w;
 }
 void GUIContainer::Build()
 {

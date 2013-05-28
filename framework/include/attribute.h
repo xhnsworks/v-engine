@@ -213,14 +213,6 @@ public:
 	{
 		m_lock = ah.m_lock;
 	}
-	inline xhn::RWLock::Instance GetReadLock()
-	{
-		return m_lock->GetReadLock();
-	}
-	inline xhn::RWLock::Instance GetWriteLock()
-	{
-		return m_lock->GetWriteLock();
-	}
 	template <typename T>
 	void AttachAttribute()
 	{
@@ -228,6 +220,7 @@ public:
 			m_lock->SetUserdata(ENEW T);
 		}
 	}
+	/**
     template <typename T>
 	T* GetAttribute() {
 		if (m_lock.get()) {
@@ -235,6 +228,23 @@ public:
 		}
 		else
 			return NULL;
+	}
+	**/
+	template <typename T>
+	void GetAttribute(T* to) {
+		if (m_lock.get()) {
+			xhn::RWLock::Instance inst = m_lock->GetReadLock();
+			T* attr = ((Attribute*)m_lock->GetUserdata())->DynamicCast<T>();
+			*to = *attr;
+		}
+	}
+	template <typename T>
+	void SetAttribute(T* from) {
+		if (m_lock.get()) {
+			xhn::RWLock::Instance inst = m_lock->GetWriteLock();
+			T* attr = ((Attribute*)m_lock->GetUserdata())->DynamicCast<T>();
+			*attr = *from;
+		}
 	}
 };
 #endif
