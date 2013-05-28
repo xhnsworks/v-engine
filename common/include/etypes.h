@@ -522,4 +522,25 @@ enum AnimationStatus
 	Paused,
 	Stopped,
 };
+
+enum component
+{
+	CompX = 0,
+	CompY,
+	CompZ,
+	CompW,
+	CompR,
+	CompG,
+	CompB,
+	CompA,
+};
+
+struct component_index
+{
+	component_index()
+		: num_comps(0)
+	{}
+	euint num_comps;
+	component comps[4];
+};
 #endif

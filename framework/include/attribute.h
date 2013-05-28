@@ -15,6 +15,9 @@ public:
 		Float3,
 		Float4,
 	};
+	static component ComponentFormat(component comp);
+	static euint GetNumComponents(Attribute* attr);
+	static void Copy(Attribute* dst, Attribute* src, component_index bridge);
 };
 class FloatAttr : public Attribute
 {
@@ -203,6 +206,7 @@ private:
 public:
 	/// if the lock is existed, then the attribute is existed;
 	xhn::SmartPtr<xhn::RWLock, FAttrDestProc> m_lock;
+	component_index m_bridge;
 public:
 	AttributeHandle()
 	{}
@@ -220,16 +224,7 @@ public:
 			m_lock->SetUserdata(ENEW T);
 		}
 	}
-	/**
-    template <typename T>
-	T* GetAttribute() {
-		if (m_lock.get()) {
-			return ((Attribute*)m_lock->GetUserdata())->DynamicCast<T>();
-		}
-		else
-			return NULL;
-	}
-	**/
+
 	template <typename T>
 	void GetAttribute(T* to) {
 		if (m_lock.get()) {

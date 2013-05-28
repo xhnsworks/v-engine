@@ -356,7 +356,9 @@ void lighting_template(LightState _lt_state, PxlSdrBuf _psb, SdrNdGen _sng, Circ
 		ShaderNode_add_output_link(decode_node, tgt_nor, INVALID_ARRAY_INDEX);
     }
     {
-        component_index idx = {1, CompZ};
+		component_index idx;
+		idx.num_comps = 1;
+		idx.comps[0] = CompZ;
         ShaderObject spe = ShaderObject_get_component(nor, idx, 0);
 
         ShaderNode lighting_node = ISdrNdGen.add_reference_node_2(_sng, _cb, _lt_state->lighting_node_id);

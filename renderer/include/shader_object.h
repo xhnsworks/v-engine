@@ -1,7 +1,7 @@
 #ifndef SHADER_OBJECT_H
 #define SHADER_OBJECT_H
-#include <common.h>
-#include <etypes.h>
+#include "common.h"
+#include "etypes.h"
 struct _shader_object;
 typedef struct shader_object_
 {
@@ -18,23 +18,6 @@ API_EXPORT void ShaderObject_set_type(ShaderObject _so, shader_object_type _type
 API_EXPORT void ShaderObject_set_index(ShaderObject _so, euint32 _array_index);
 API_EXPORT void ShaderObject_print(ShaderObject _so);
 
-typedef enum _component
-{
-    CompX,
-    CompY,
-    CompZ,
-    CompW,
-    CompR,
-    CompG,
-    CompB,
-    CompA,
-} component;
-
-typedef struct _component_index
-{
-    euint num_comps;
-    component comps[4];
-} component_index;
 API_EXPORT ShaderObject ShaderObject_get_component(ShaderObject _so, component_index _comp_idx, euint32 _array_idx);
 API_EXPORT ShaderObject ShaderObject_float_to_int(ShaderObject _so, float _scale);
 
