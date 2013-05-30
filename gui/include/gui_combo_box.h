@@ -125,6 +125,7 @@ public:
 	void AddEntry(const xhn::string& str);
 	void RemoveAllEntries();
     void RemoveBackground();
+	void GetBackgroundRect(SpriteRect& rect);
 };
 
 class GUIDropDownMenuFactory : public GUIPanelFactory

@@ -308,7 +308,7 @@ void ResourceAction::DoImpl()
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
         ///m_guiComboBoxEntry = m_comboBoxEntryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
 		m_guiDropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
-		m_guiDropDownMenu->SetSize(100.0f, 100.0f);
+		m_guiDropDownMenu->SetSize(100.0f, 60.0f);
 		m_guiDropDownMenu->AddEntry(xhn::string("abc"));
 		m_guiDropDownMenu->AddEntry(xhn::string("edf"));
 		m_guiDropDownMenu->AddEntry(xhn::string("hij"));

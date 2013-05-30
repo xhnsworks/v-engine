@@ -203,8 +203,6 @@ void GUIComboBoxEntry::Init(const xhn::static_string configName)
         }
 		{
 			SpriteLayerPtr layer = ENEW SpriteTextLayer("text");
-			layer->m_horizontalAlignmentMode = SpriteLayer::CenterHorizontalAligned;
-			layer->m_verticalAlignmentMode = SpriteLayer::CenterVerticalAligned;
             AddChild(layer);
 		}
 		SetSize(100.0f);
@@ -261,24 +259,31 @@ void GUIComboBoxEntry::SetText(const xhn::string& text)
 void GUIComboBoxEntry::Build()
 {
 	m_elements.clear();
-	BuildTextLayer(m_elements);
-	BuildBackgroundLayer(m_elements);
-	
-	SpriteRect rect;
-	GetScope(rect);
-	rect.GetFourBorders(m_renderer, m_fourBorders);
-    
-	matrix4x4 mat;
-	Matrix4x4_set_one(&mat);
-	GetMatrix(&mat);
-    
-	m_fourBorders.ApplyTranform(&mat);
 }
 
 void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
-	BuildTextLayer(to);
-	BuildBackgroundLayer(to);
+	xhn::list<SpriteElement> buffer;
+	Float2Attr coord;
+	m_coordinateHandle.GetAttribute(&coord);
+	BuildTextLayer(buffer);
+	BuildBackgroundLayer(buffer);
+	xhn::list<SpriteElement>::iterator iter = buffer.begin();
+	xhn::list<SpriteElement>::iterator end = buffer.end();
+	for (; iter != end; iter++) {
+		SpriteElement& ele = *iter;
+		if (m_parent) {
+			ele.m_rect.left += coord.x;
+			ele.m_rect.top += coord.y;
+			SpriteRect rect;
+			GUIDropDownMenu* menu = m_parent->DynamicCast<GUIDropDownMenu>();
+			menu->GetBackgroundRect(rect);
+			ele.Trim(rect);
+			ele.m_rect.left -= coord.x;
+			ele.m_rect.top -= coord.y;
+		}
+		to.push_back(ele);
+	}
 	
 	SpriteRect rect;
 	GetScope(rect);
@@ -357,6 +362,21 @@ void GUIDropDownMenu::RemoveBackground()
 		}
 		else
 			iter++;
+	}
+}
+
+void GUIDropDownMenu::GetBackgroundRect(SpriteRect& rect)
+{
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
+	for (; iter != end; iter++) {
+		SpriteLayerPtr sptLayerPtr = *iter;
+
+		GUIPanelLayer* background = sptLayerPtr->DynamicCast<GUIPanelLayer>();
+		if (background) {
+            background->GetScope(rect);
+			return;
+		}
 	}
 }
 
