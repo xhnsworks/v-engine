@@ -3,54 +3,54 @@
     <normal>
       <elements num_elements="9">
         <!--这些坐标以Photoshop的标尺为准-->
-        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="39.0" area_y1="43.0" transparent="1.0" />
-        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="24.0" area_y1="28.0" transparent="1.0" />
-        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="24.0" area_y1="28.0" transparent="1.0" />
-        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="39.0" area_y1="43.0" transparent="1.0" />
+        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="39.0" area_y1="43.0" transparency="1.0" />
+        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="24.0" area_y1="28.0" transparency="1.0" />
+        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="24.0" area_y1="28.0" transparency="1.0" />
+        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="39.0" area_y1="43.0" transparency="1.0" />
 
-        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="28.0" area_y1="39.0" transparent="1.0" />
-        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="24.0" area_y1="28.0" transparent="1.0" />
-        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="28.0" area_y1="39.0" transparent="1.0" />
-        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="39.0" area_y1="43.0" transparent="1.0" />
+        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="28.0" area_y1="39.0" transparency="1.0" />
+        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="24.0" area_y1="28.0" transparency="1.0" />
+        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="28.0" area_y1="39.0" transparency="1.0" />
+        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="39.0" area_y1="43.0" transparency="1.0" />
 
-        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="28.0" area_y1="39.0" transparent="1.0" />
+        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="28.0" area_y1="39.0" transparency="1.0" />
       </elements>
     </normal>
     <selected>
       <elements num_elements="9">
         <!--这些坐标以Photoshop的标尺为准-->
-        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="61.0" area_y1="65.0" transparent="1.0" />
-        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="46.0" area_y1="50.0" transparent="1.0" />
-        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="46.0" area_y1="50.0" transparent="1.0" />
-        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="61.0" area_y1="65.0" transparent="1.0" />
+        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="61.0" area_y1="65.0" transparency="1.0" />
+        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="46.0" area_y1="50.0" transparency="1.0" />
+        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="46.0" area_y1="50.0" transparency="1.0" />
+        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="61.0" area_y1="65.0" transparency="1.0" />
 
-        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="50.0" area_y1="61.0" transparent="1.0" />
-        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="46.0" area_y1="50.0" transparent="1.0" />
-        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="50.0" area_y1="61.0" transparent="1.0" />
-        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="61.0" area_y1="65.0" transparent="1.0" />
+        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="50.0" area_y1="61.0" transparency="1.0" />
+        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="46.0" area_y1="50.0" transparency="1.0" />
+        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="50.0" area_y1="61.0" transparency="1.0" />
+        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="61.0" area_y1="65.0" transparency="1.0" />
 
-        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="50.0" area_y1="61.0" transparent="1.0" />
+        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="50.0" area_y1="61.0" transparency="1.0" />
       </elements>
     </selected>
     <pressed>
       <elements num_elements="9">
         <!--这些坐标以Photoshop的标尺为准-->
-        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="83.0" area_y1="87.0" transparent="1.0" />
-        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="68.0" area_y1="72.0" transparent="1.0" />
-        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="68.0" area_y1="72.0" transparent="1.0" />
-        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="83.0" area_y1="87.0" transparent="1.0" />
+        <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="83.0" area_y1="87.0" transparency="1.0" />
+        <element name="upper_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="0.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="68.0" area_y1="72.0" transparency="1.0" />
+        <element name="upper_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="0.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="68.0" area_y1="72.0" transparency="1.0" />
+        <element name="lower_right_corner" filename="BlackOrangeSkins.png" left="8.0" top="8.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="83.0" area_y1="87.0" transparency="1.0" />
 
-        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="72.0" area_y1="83.0" transparent="1.0" />
-        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="68.0" area_y1="72.0" transparent="1.0" />
-        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="72.0" area_y1="83.0" transparent="1.0" />
-        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="83.0" area_y1="87.0" transparent="1.0" />
+        <element name="left" filename="BlackOrangeSkins.png" left="0.0" top="4.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="72.0" area_y1="83.0" transparency="1.0" />
+        <element name="top" filename="BlackOrangeSkins.png" left="4.0" top="0.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="68.0" area_y1="72.0" transparency="1.0" />
+        <element name="right" filename="BlackOrangeSkins.png" left="8.0" top="4.0" width="4.0" height="4.0" area_x0="17.0" area_x1="21.0" area_y0="72.0" area_y1="83.0" transparency="1.0" />
+        <element name="bottom" filename="BlackOrangeSkins.png" left="4.0" top="8.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="83.0" area_y1="87.0" transparency="1.0" />
 
-        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="72.0" area_y1="83.0" transparent="1.0" />
+        <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="72.0" area_y1="83.0" transparency="1.0" />
       </elements>
     </pressed>
     <text>
       <styles num_styles="1">
-        <style name="default" text="hello!" size="30" color="ff00ffff" interval="2.0" transparent="1.0"/>
+        <style name="default" text="hello!" size="30" color="ff00ffff" interval="2.0" transparency="1.0"/>
       </styles>
     </text>
   </layers>

@@ -402,10 +402,10 @@ void GUIPanelFactory::CreateSheetConfig(const char* cfgName,
                                                            areaCornerSize.height);
     lowerRightCorner.append_attribute("area_y1").set_value(areaBottom);
     
-    lowerLeftCorner.append_attribute("transparent").set_value(1.0f);
-    upperLeftCorner.append_attribute("transparent").set_value(1.0f);
-    upperRightCorner.append_attribute("transparent").set_value(1.0f);
-    lowerRightCorner.append_attribute("transparent").set_value(1.0f);
+    lowerLeftCorner.append_attribute("transparency").set_value(1.0f);
+    upperLeftCorner.append_attribute("transparency").set_value(1.0f);
+    upperRightCorner.append_attribute("transparency").set_value(1.0f);
+    lowerRightCorner.append_attribute("transparency").set_value(1.0f);
 	
     left.append_attribute("name").set_value("left");
     top.append_attribute("name").set_value("top");
@@ -478,10 +478,10 @@ void GUIPanelFactory::CreateSheetConfig(const char* cfgName,
                                                 areaCornerSize.height);
     bottom.append_attribute("area_y1").set_value(areaBottom);
     
-    left.append_attribute("transparent").set_value(1.0f);
-    top.append_attribute("transparent").set_value(1.0f);
-    right.append_attribute("transparent").set_value(1.0f);
-    bottom.append_attribute("transparent").set_value(1.0f);
+    left.append_attribute("transparency").set_value(1.0f);
+    top.append_attribute("transparency").set_value(1.0f);
+    right.append_attribute("transparency").set_value(1.0f);
+    bottom.append_attribute("transparency").set_value(1.0f);
 	
     center.append_attribute("name").set_value("center");
     
@@ -503,7 +503,7 @@ void GUIPanelFactory::CreateSheetConfig(const char* cfgName,
     center.append_attribute("area_y1").set_value(areaBottom -
                                                  areaCornerSize.height);
     
-    center.append_attribute("transparent").set_value(1.0f);
+    center.append_attribute("transparency").set_value(1.0f);
 }
 ///**********************************************************************///
 ///                       class implement end                            ///

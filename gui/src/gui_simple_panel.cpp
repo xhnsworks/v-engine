@@ -181,7 +181,7 @@ void GUISimplePanelFactory::CreateSheetConfig(const char* cfgName,
     center.append_attribute("area_y0").set_value(areaTop);
     center.append_attribute("area_y1").set_value(areaBottom);
     
-    center.append_attribute("transparent").set_value(1.0f);
+    center.append_attribute("transparency").set_value(1.0f);
 }
 ///**********************************************************************///
 ///                       class implement end                            ///

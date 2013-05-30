@@ -23,7 +23,7 @@ class GUIComboBoxEntry : public GUIHoriBar
 	DeclareRTTI;
     friend class GUIComboBoxEntryFactory;
 protected:
-	~GUIComboBoxEntry() {}
+	~GUIComboBoxEntry();
 public:
 	enum EntryState
 	{
@@ -80,6 +80,8 @@ public:
     virtual void Build();
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
     void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
+	void BuildTextLayer(xhn::list<SpriteElement>& to);
+	void SetText(const xhn::string& text);
 };
 
 class GUIComboBoxEntryFactory : public GUIHoriBarFactory
@@ -115,11 +117,14 @@ class GUIDropDownMenu : public GUIPanel
 	DeclareRTTI;
 	friend class GUIDropDownMenuFactory;
 public:
+	int m_entryCount;
 	AttributeHandle m_sizeHandle;
     GUIComboBoxEntryFactory* m_entryFactory;
 public:
 	GUIDropDownMenu(SpriteRenderer* renderer);
-	void AddEntry();
+	void AddEntry(const xhn::string& str);
+	void RemoveAllEntries();
+    void RemoveBackground();
 };
 
 class GUIDropDownMenuFactory : public GUIPanelFactory

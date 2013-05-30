@@ -110,7 +110,7 @@ public:
 	EColor m_color_u1v0;
 	EColor m_color_u1v1;
 	EColor m_color_u0v1;
-	float m_transparent;
+	float m_transparency;
 	matrix4x4 m_transform;
 	SpriteElement()
         : m_filename("default")
@@ -118,7 +118,7 @@ public:
         , m_area_x1(32.0f)
         , m_area_y0(0.0f)
         , m_area_y1(32.0f)
-		, m_transparent(1.0f)
+		, m_transparency(1.0f)
     {}
     SpriteElement(float x, float y, float w, float h)
         : m_filename("default")
@@ -127,7 +127,7 @@ public:
 		, m_area_x1(32.0f)
 		, m_area_y0(0.0f)
 		, m_area_y1(32.0f)
-		, m_transparent(1.0f)
+		, m_transparency(1.0f)
     {}
     SpriteElement(const SpriteElement& e)
         : m_filename(e.m_filename)
@@ -141,7 +141,7 @@ public:
 		, m_color_u1v1(e.m_color_u1v1)
 		, m_color_u0v1(e.m_color_u0v1)
 		, m_transform(e.m_transform)
-		, m_transparent(e.m_transparent)
+		, m_transparency(e.m_transparency)
     {}
     inline SpriteElement& operator = (const SpriteElement& e)
     {
@@ -156,16 +156,16 @@ public:
 		m_color_u1v1 = e.m_color_u1v1;
 	    m_color_u0v1 = e.m_color_u0v1;
 		m_transform = e.m_transform;
-		m_transparent = e.m_transparent;
+		m_transparency = e.m_transparency;
         return *this;
     }
     inline void SetFilename(const xhn::static_string& filename)
     {
         m_filename = filename;
     }
-	inline void SetTransparent(float t)
+	inline void SetTransparency(float t)
 	{
-		m_transparent = t;
+		m_transparency = t;
 	}
 	void SetTransform(const matrix4x4* transform);
     Mesh Build(SpriteRenderer* sprite_renderer) const;
@@ -188,7 +188,7 @@ class SpriteLayer : public RefObject
 public:
 	AttributeHandle m_transparencyHandle;
     SpriteLayer* m_parent;
-private:
+protected:
 	/// perhaps loop reference, must to check
 	SpriteLayerList m_children;
 private:
@@ -220,7 +220,7 @@ public:
     void Tick(double elapsedTime);
     void Tock();
     void BroadcastEventToBrothers(const SpriteEvent* evt);
-    void SetTransparent(float t);
+    void SetTransparency(float t);
 	void GetScope(SpriteRect& result);
     virtual void GetMatrix(matrix4x4* result);
 	
@@ -231,7 +231,10 @@ public:
         m_children.push_back(spriteLayer);
 		spriteLayer->m_parent = this;
 	}
-    
+	inline void RemoveAllChildren() {
+		m_children.clear();
+	}
+	void RemoveChild(SpriteLayerPtr spriteLayer);
     SpriteLayerPtr GetLayer(euint index);
     SpriteLayerPtr GetLayer(xhn::static_string layerName);
 	void AlwaysOnTop(SpriteLayerPtr layer);
@@ -313,6 +316,11 @@ public:
     virtual ~SpriteTextLayer();
 	virtual void LoadConfigImpl(const pugi::xml_node& from);
 	virtual void SaveConfigImpl(pugi::xml_node& to) {}
+	void SetText(const xhn::string& text, 
+		const EColor& color,
+		float interval,
+		float transparency,
+		PixelSize pixelSize);
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void Clear();
     virtual void TickImpl(double elapsedTime) {}

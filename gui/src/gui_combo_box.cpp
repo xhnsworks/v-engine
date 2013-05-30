@@ -106,8 +106,8 @@ void CreateLayer(pugi::xml_node sheet,
     left.append_attribute("area_y1").set_value(areaBottom);
     right.append_attribute("area_y1").set_value(areaBottom);
     
-    left.append_attribute("transparent").set_value(1.0f);
-    right.append_attribute("transparent").set_value(1.0f);
+    left.append_attribute("transparency").set_value(1.0f);
+    right.append_attribute("transparency").set_value(1.0f);
     
 	center.append_attribute("name").set_value("center");
     
@@ -125,7 +125,7 @@ void CreateLayer(pugi::xml_node sheet,
     center.append_attribute("area_y0").set_value(areaTop);
     center.append_attribute("area_y1").set_value(areaBottom);
     
-    center.append_attribute("transparent").set_value(1.0f);
+    center.append_attribute("transparency").set_value(1.0f);
 }
 
 void GUIComboBoxEntryFactory::CreateSheetConfig(
@@ -160,6 +160,10 @@ void GUIComboBoxEntryFactory::CreateSheetConfig(
         pugi::xml_node sheet = layers.append_child("selected");
         CreateLayer(sheet, textureName, panelRect, cornerSize, areaSize, areaCornerSize, areaCoorfSelected);
     }
+}
+
+GUIComboBoxEntry::~GUIComboBoxEntry()
+{
 }
 
 void GUIComboBoxEntry::Init(const xhn::static_string configName)
@@ -197,6 +201,12 @@ void GUIComboBoxEntry::Init(const xhn::static_string configName)
             layer->LoadConfigImpl(selectedlayer);
             AddChild(layer);
         }
+		{
+			SpriteLayerPtr layer = ENEW SpriteTextLayer("text");
+			layer->m_horizontalAlignmentMode = SpriteLayer::CenterHorizontalAligned;
+			layer->m_verticalAlignmentMode = SpriteLayer::CenterVerticalAligned;
+            AddChild(layer);
+		}
 		SetSize(100.0f);
         m_curtState = Normal;
 	}
@@ -231,11 +241,29 @@ void GUIComboBoxEntry::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 	}
 }
 
+void GUIComboBoxEntry::BuildTextLayer(xhn::list<SpriteElement>& to)
+{
+	SpriteLayerPtr layerPtr = GetLayer("text");
+	if (layerPtr.get())
+		layerPtr->BuildElementsImpl(to);
+}
+
+void GUIComboBoxEntry::SetText(const xhn::string& text)
+{
+	SpriteLayerPtr layerPtr = GetLayer("text");
+	if (layerPtr.get()) {
+		SpriteTextLayer* textLayer = layerPtr->DynamicCast<SpriteTextLayer>();
+		EColor color(1.0f, 1.0f, 1.0f, 1.0f);
+		textLayer->SetText(text, color, 2.0f, 1.0f, Pixel16);
+	}
+}
+
 void GUIComboBoxEntry::Build()
 {
 	m_elements.clear();
+	BuildTextLayer(m_elements);
 	BuildBackgroundLayer(m_elements);
-    
+	
 	SpriteRect rect;
 	GetScope(rect);
 	rect.GetFourBorders(m_renderer, m_fourBorders);
@@ -249,8 +277,9 @@ void GUIComboBoxEntry::Build()
 
 void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
+	BuildTextLayer(to);
 	BuildBackgroundLayer(to);
-    
+	
 	SpriteRect rect;
 	GetScope(rect);
 	rect.GetFourBorders(m_renderer, m_fourBorders);
@@ -264,6 +293,7 @@ void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
 
 GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer)
 : GUIPanel(renderer, "drop_down_menu")
+, m_entryCount(0)
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<Float2Attr>();
@@ -289,11 +319,45 @@ GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer)
     m_entryFactory = ENEW GUIComboBoxEntryFactory(renderer, "combo_box_entry.xml", m_sizeHandle);
 }
 
-void GUIDropDownMenu::AddEntry()
+void GUIDropDownMenu::AddEntry(const xhn::string& str)
 {
-    SpriteLayerPtr entry = m_entryFactory->MakeSprite();
+    GUIComboBoxEntry* entry = m_entryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
+	entry->SetText(str);
+	SpriteRect rect;
+	entry->GetScope(rect);
+	entry->SetCoord(0.0f, rect.size.height * (float)m_entryCount);
 	AddChild(entry);
 	AlwaysOnTop(entry);
+	m_entryCount++;
+}
+
+void GUIDropDownMenu::RemoveAllEntries()
+{
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
+	for (; iter != end; ) {
+		SpriteLayerPtr sptLayerPtr = *iter;
+		if (sptLayerPtr->DynamicCast<GUIComboBoxEntry>() != NULL) {
+            iter = m_children.remove(iter);
+		}
+		else
+			iter++;
+	}
+	m_entryCount = 0;
+}
+
+void GUIDropDownMenu::RemoveBackground()
+{
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
+	for (; iter != end; ) {
+		SpriteLayerPtr sptLayerPtr = *iter;
+		if (sptLayerPtr->DynamicCast<GUIComboBoxEntry>() == NULL) {
+			iter = m_children.remove(iter);
+		}
+		else
+			iter++;
+	}
 }
 
 Sprite* GUIDropDownMenuFactory::MakeSpriteImpl()

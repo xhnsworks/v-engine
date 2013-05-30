@@ -47,17 +47,18 @@ void SpriteElement::SetTransform(const matrix4x4* transform)
 }
 Mesh SpriteElement::Build(SpriteRenderer* sprite_renderer) const
 {
-	if (m_transparent > 0.0f) {
+	if (m_transparency > 0.0f) {
 		float u0, u1, v0, v1;
 		u0 = u1 = v0 = v1 = 0.0f;
 		Texture2DPtr tex = RenderSystem_get_texture2d(m_filename, "Texture");
 		if (tex.get()) {
 			float w = (float)tex->GetWidth();
 			float h = (float)tex->GetHeight();
-			float area_x0 = clamp(m_area_x0, 0.0f, w);
-			float area_x1 = clamp(m_area_x1, 0.0f, w);
-			float area_y0 = clamp(m_area_y0, 0.0f, h);
-			float area_y1 = clamp(m_area_y1, 0.0f, h);
+            /// adjust texcoord area, removal edge
+			float area_x0 = clamp(m_area_x0 + 0.5f, 0.0f, w);
+			float area_x1 = clamp(m_area_x1 - 0.5f, 0.0f, w);
+			float area_y0 = clamp(m_area_y0 + 0.5f, 0.0f, h);
+			float area_y1 = clamp(m_area_y1 - 0.5f, 0.0f, h);
 			u0 = area_x0 / w;
 			u1 = area_x1 / w;
 			v0 = area_y0 / h;
@@ -67,10 +68,10 @@ Mesh SpriteElement::Build(SpriteRenderer* sprite_renderer) const
 		EColor u1v0 = m_color_u1v0;
 		EColor u1v1 = m_color_u1v1;
 		EColor u0v1 = m_color_u0v1;
-		u0v0.alpha *= m_transparent;
-		u1v0.alpha *= m_transparent;
-		u1v1.alpha *= m_transparent;
-		u0v1.alpha *= m_transparent;
+		u0v0.alpha *= m_transparency;
+		u1v0.alpha *= m_transparency;
+		u1v1.alpha *= m_transparency;
+		u0v1.alpha *= m_transparency;
 		Mesh ret = sprite_renderer->new_widget_mesh(m_rect.left, m_rect.top, m_rect.size.width, m_rect.size.height, u0, u1, v0, v1, 
 			u0v0, u1v0, u1v1, u0v1);
 		Mesh_apply_transform(ret, &m_transform);
@@ -191,7 +192,7 @@ void SpriteLayer::BuildElements(xhn::list<SpriteElement>& to)
     }
 }
 
-void SpriteLayer::SetTransparent(float t)
+void SpriteLayer::SetTransparency(float t)
 {
     ///xhn::RWLock::Instance inst = m_transparentHandle.GetWriteLock();
 	///FloatAttr* transparent = m_transparentHandle.GetAttribute<FloatAttr>();
@@ -288,7 +289,18 @@ void SpriteLayer::GetMatrix(matrix4x4* result)
 		Matrix4x4_mul_matrix4(&tran, result, result);
 	}
 }
-
+void SpriteLayer::RemoveChild(SpriteLayerPtr spriteLayer)
+{
+	SpriteLayerList::iterator iter = m_children.begin();
+	SpriteLayerList::iterator end = m_children.end();
+	for (; iter != end; iter++) {
+		SpriteLayerPtr& sptLayerPtr = *iter;
+		if (sptLayerPtr == spriteLayer) {
+			m_children.remove(iter);
+			return;
+		}
+	}
+}
 SpriteLayerPtr SpriteLayer::GetLayer(euint index) 
 {
 	SpriteLayerPtr ret;
@@ -414,7 +426,7 @@ void SpriteNormalLayer::LoadConfigImpl(const pugi::xml_node& from)
 		pugi::xml_attribute area_x1 = node.attribute("area_x1");
 		pugi::xml_attribute area_y0 = node.attribute("area_y0");
 		pugi::xml_attribute area_y1 = node.attribute("area_y1");
-		pugi::xml_attribute transparent = node.attribute("transparent");
+		pugi::xml_attribute transparency = node.attribute("transparency");
 
 		pugi::xml_attribute color = node.attribute("color");
 		EColor eleColor;
@@ -444,7 +456,7 @@ void SpriteNormalLayer::LoadConfigImpl(const pugi::xml_node& from)
 		sprite_ele.m_color_u0v1 = eleColor;
 		sprite_ele.m_color_u1v0 = eleColor;
 		sprite_ele.m_color_u1v1 = eleColor;
-		sprite_ele.m_transparent = transparent.as_float();
+		sprite_ele.m_transparency = transparency.as_float();
 		m_elementBuffer.insert(xhn::make_pair(xhn::static_string(name.value()), sprite_ele));
 	}
 }
@@ -470,7 +482,7 @@ void SpriteNormalLayer::SaveConfigImpl(pugi::xml_node& to)
 		ele.append_attribute("area_x1").set_value(sprite_ele.m_area_x1);
 		ele.append_attribute("area_y0").set_value(sprite_ele.m_area_y0);
 		ele.append_attribute("area_y1").set_value(sprite_ele.m_area_y1);
-		ele.append_attribute("transparent").set_value(sprite_ele.m_transparent);
+		ele.append_attribute("transparency").set_value(sprite_ele.m_transparency);
 	}
 }
 
@@ -510,21 +522,97 @@ SpriteTextLayer::~SpriteTextLayer()
     Clear();
 }
 
-void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
+void SpriteTextLayer::SetText(const xhn::string& text, 
+							  const EColor& color,
+							  float interval,
+							  float transparency,
+							  PixelSize pixelSize)
 {
 	Clear();
 	float x = 0.0f;
 	float y = 0.0f;
-	
+
 	float maxHeight = 0.0f;
 
 	float width = 0.0f;
 	float height = 0.0f;
+	m_text = text;
+	xhn::wstring wtext = ComposingStick::Convert(m_text);
 
+	for (euint i = 0; i < wtext.size(); i++)
+	{
+		wchar_t ch = wtext[i];
+		if (ch == (wchar_t)'\n')
+		{
+			x = 0.0f;
+			y += maxHeight;
+			y += interval;
+			height += maxHeight;
+			continue;
+		}
+		else if (ch == (wchar_t)'\r')
+			continue;
+		else if (ch == (wchar_t)'\\') {
+			if (i + 1 < wtext.size()) {
+				if (wtext[i + 1] == (wchar_t)'r') {
+					i++;
+					continue;
+				}
+				else if (wtext[i + 1] == (wchar_t)'n') {
+					i++;
+					x = 0.0f;
+					y += maxHeight;
+					y += interval;
+					height += maxHeight;
+					continue;
+				}
+			}
+		}
+
+		ComposingStick::GlyphHandle handle = ComposingStickManager::Get()->AllocGlyph(ch, pixelSize);
+		m_letters.push_back(handle);
+
+		SpriteElement sprite_ele;
+		sprite_ele.SetFilename(handle.GetFilename());
+		sprite_ele.m_rect.left = x;
+		sprite_ele.m_rect.top = y;
+		sprite_ele.m_rect.size.width = (float)handle.GetGlyph()->width;
+		sprite_ele.m_rect.size.height = (float)handle.GetGlyph()->height;
+
+		if ((float)handle.GetGlyph()->height > maxHeight)
+		{
+			maxHeight = (float)handle.GetGlyph()->height;
+		}
+
+		sprite_ele.m_area_x0 = (float)handle.GetGlyph()->x;
+		sprite_ele.m_area_x1 = (float)(handle.GetGlyph()->x + handle.GetGlyph()->width);
+		sprite_ele.m_area_y0 = (float)handle.GetGlyph()->y;
+		sprite_ele.m_area_y1 = (float)(handle.GetGlyph()->y + handle.GetGlyph()->height);
+		sprite_ele.m_color_u0v0 = color;
+		sprite_ele.m_color_u0v1 = color;
+		sprite_ele.m_color_u1v0 = color;
+		sprite_ele.m_color_u1v1 = color;
+		sprite_ele.m_transparency = transparency;
+
+		m_elementBuffer.push_back(sprite_ele);
+
+		x += (float)handle.GetWidth();
+		x += interval;
+
+		if (x > width)
+			width = x;
+	}
+	m_size.x = width;
+	m_size.y = height + maxHeight;
+}
+
+void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
+{
 	pugi::xml_node styles = from.child("styles");
 	pugi::xml_node::iterator iter = styles.begin();
 	pugi::xml_node::iterator end = styles.end();
-	for (; iter != end; iter++)
+	///for (; iter != end; iter++)
+	if (iter != end)
 	{
 		pugi::xml_node node = *iter;
 		///pugi::xml_attribute name = node.attribute("name");
@@ -532,7 +620,7 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 		pugi::xml_attribute interval = node.attribute("interval");
 		pugi::xml_attribute color = node.attribute("color");
 		pugi::xml_attribute size = node.attribute("size");
-		pugi::xml_attribute transparent = node.attribute("transparent");
+		pugi::xml_attribute transparency = node.attribute("transparency");
 
 		PixelSize pixelSize = Pixel30;
 		if (size) {
@@ -542,75 +630,10 @@ void SpriteTextLayer::LoadConfigImpl(const pugi::xml_node& from)
 		xhn::string colorStr = color.value();
 		EColor textColor = _ToColor(colorStr);
 
-		m_text = text.value();
-		xhn::wstring wtext = ComposingStick::Convert(m_text);
-		
-		for (euint i = 0; i < wtext.size(); i++)
-		{
-			wchar_t ch = wtext[i];
-			if (ch == (wchar_t)'\n')
-			{
-				x = 0.0f;
-				y += maxHeight;
-				y += interval.as_float();
-				height += maxHeight;
-				continue;
-			}
-			else if (ch == (wchar_t)'\r')
-				continue;
-			else if (ch == (wchar_t)'\\') {
-				if (i + 1 < wtext.size()) {
-					if (wtext[i + 1] == (wchar_t)'r') {
-					    i++;
-					    continue;
-					}
-					else if (wtext[i + 1] == (wchar_t)'n') {
-						i++;
-						x = 0.0f;
-						y += maxHeight;
-						y += interval.as_float();
-						height += maxHeight;
-						continue;
-					}
-				}
-			}
+		xhn::string t = text.value();
 
-			ComposingStick::GlyphHandle handle = ComposingStickManager::Get()->AllocGlyph(ch, pixelSize);
-			m_letters.push_back(handle);
-
-			SpriteElement sprite_ele;
-			sprite_ele.SetFilename(handle.GetFilename());
-			sprite_ele.m_rect.left = x;
-			sprite_ele.m_rect.top = y;
-			sprite_ele.m_rect.size.width = (float)handle.GetGlyph()->width;
-			sprite_ele.m_rect.size.height = (float)handle.GetGlyph()->height;
-
-			if ((float)handle.GetGlyph()->height > maxHeight)
-			{
-				maxHeight = (float)handle.GetGlyph()->height;
-			}
-			
-			sprite_ele.m_area_x0 = (float)handle.GetGlyph()->x;
-			sprite_ele.m_area_x1 = (float)(handle.GetGlyph()->x + handle.GetGlyph()->width);
-			sprite_ele.m_area_y0 = (float)handle.GetGlyph()->y;
-			sprite_ele.m_area_y1 = (float)(handle.GetGlyph()->y + handle.GetGlyph()->height);
-			sprite_ele.m_color_u0v0 = textColor;
-			sprite_ele.m_color_u0v1 = textColor;
-			sprite_ele.m_color_u1v0 = textColor;
-			sprite_ele.m_color_u1v1 = textColor;
-			sprite_ele.m_transparent = transparent.as_float();
-			
-			m_elementBuffer.push_back(sprite_ele);
-
-			x += (float)handle.GetWidth();
-			x += interval.as_float();
-
-			if (x > width)
-				width = x;
-		}
+		SetText(t, textColor, interval.as_float(), transparency.as_float(), pixelSize);
 	}
-	m_size.x = width;
-	m_size.y = height + maxHeight;
 }
 
 void SpriteTextLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)

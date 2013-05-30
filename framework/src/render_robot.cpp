@@ -309,7 +309,12 @@ void ResourceAction::DoImpl()
         ///m_guiComboBoxEntry = m_comboBoxEntryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
 		m_guiDropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
 		m_guiDropDownMenu->SetSize(100.0f, 100.0f);
-		m_guiDropDownMenu->AddEntry();
+		m_guiDropDownMenu->AddEntry(xhn::string("abc"));
+		m_guiDropDownMenu->AddEntry(xhn::string("edf"));
+		m_guiDropDownMenu->AddEntry(xhn::string("hij"));
+		///m_guiDropDownMenu->RemoveBackground();
+		///m_guiDropDownMenu->AddEntry();
+		///m_guiDropDownMenu->RemoveAllEntries();
         /**
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
 		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();

@@ -37,13 +37,9 @@ void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	Float2Attr pivot;
 	FloatAttr size;
 	{
-		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
 		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
-		///xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		///size = *(m_sizeHandle.GetAttribute<FloatAttr>());
 		m_sizeHandle.GetAttribute(&size);
 	}
     
@@ -94,13 +90,9 @@ void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)
 	Float2Attr pivot;
 	FloatAttr size;
 	{
-		///xhn::RWLock::Instance inst = m_pivotHandle.GetReadLock();
-		///pivot = *(m_pivotHandle.GetAttribute<Float2Attr>());
 		m_pivotHandle.GetAttribute(&pivot);
 	}
 	{
-		///xhn::RWLock::Instance inst = m_sizeHandle.GetReadLock();
-		///size = *(m_sizeHandle.GetAttribute<FloatAttr>());
 		m_sizeHandle.GetAttribute(&size);
 	}
     
@@ -159,9 +151,6 @@ void GUIHoriBar::Init(const xhn::static_string configName)
 
 void GUIHoriBar::SetSize(float x)
 {
-    ///xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	///FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
-	///size->x = x;
 	FloatAttr size(x);
 	m_sizeHandle.SetAttribute(&size);
 }
@@ -248,8 +237,8 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
     left.append_attribute("area_y1").set_value(areaBottom);
     right.append_attribute("area_y1").set_value(areaBottom);
     
-    left.append_attribute("transparent").set_value(1.0f);
-    right.append_attribute("transparent").set_value(1.0f);
+    left.append_attribute("transparency").set_value(1.0f);
+    right.append_attribute("transparency").set_value(1.0f);
     
 	center.append_attribute("name").set_value("center");
     
@@ -267,7 +256,7 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
     center.append_attribute("area_y0").set_value(areaTop);
     center.append_attribute("area_y1").set_value(areaBottom);
     
-    center.append_attribute("transparent").set_value(1.0f);
+    center.append_attribute("transparency").set_value(1.0f);
 }
 ///**********************************************************************///
 ///                       class implement end                            ///
@@ -508,8 +497,8 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
     top.append_attribute("area_y1").set_value(areaTop + areaCornerSize);
     bottom.append_attribute("area_y1").set_value(areaBottom);
     
-    top.append_attribute("transparent").set_value(1.0f);
-    bottom.append_attribute("transparent").set_value(1.0f);
+    top.append_attribute("transparency").set_value(1.0f);
+    bottom.append_attribute("transparency").set_value(1.0f);
 
 	center.append_attribute("name").set_value("center");
     
@@ -527,7 +516,7 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
     center.append_attribute("area_y1").set_value(areaBottom -
                                                  areaCornerSize);
     
-    center.append_attribute("transparent").set_value(1.0f);
+    center.append_attribute("transparency").set_value(1.0f);
 }
 ///**********************************************************************///
 ///                       class implement end                            ///
