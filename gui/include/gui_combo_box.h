@@ -110,25 +110,25 @@ public:
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
-class GUIComboBoxMenuBackground : public GUIPanelLayer
+class GUIDropDownMenu : public GUIPanel
 {
 	DeclareRTTI;
-public:
-	GUIComboBoxMenuBackground(const xhn::static_string name,
-		AttributeHandle pivotHandle,
-		AttributeHandle sizeHandle)
-		: GUIPanelLayer(name, pivotHandle, sizeHandle)
-	{}
-};
-class GUIComboBoxDropDownMenu : public GUIContainer
-{
-	DeclareRTTI;
+	friend class GUIDropDownMenuFactory;
 public:
 	AttributeHandle m_sizeHandle;
     GUIComboBoxEntryFactory* m_entryFactory;
 public:
-	GUIComboBoxDropDownMenu(SpriteRenderer* renderer,
-                            const char* entryCfgName);
+	GUIDropDownMenu(SpriteRenderer* renderer);
+	void AddEntry();
+};
+
+class GUIDropDownMenuFactory : public GUIPanelFactory
+{
+public:
+	GUIDropDownMenuFactory(SpriteRenderer* renderer, const char* cfgName)
+	: GUIPanelFactory(renderer, cfgName)
+	{}
+	virtual Sprite* MakeSpriteImpl();
 };
 ///**********************************************************************///
 ///                       class define end                               ///

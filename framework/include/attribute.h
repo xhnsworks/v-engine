@@ -18,6 +18,8 @@ public:
 	static component ComponentFormat(component comp);
 	static euint GetNumComponents(Attribute* attr);
 	static void Copy(Attribute* dst, Attribute* src, component_index bridge);
+	static void GetBridge(Attribute* attr, component_index& bridge);
+	static component_index GetReverseBridge(component_index bridge);
 };
 class FloatAttr : public Attribute
 {
@@ -212,16 +214,20 @@ public:
 	{}
 	AttributeHandle(const AttributeHandle& ah)
 		: m_lock(ah.m_lock)
+		, m_bridge(ah.m_bridge)
 	{}
 	inline void operator = (const AttributeHandle& ah)
 	{
 		m_lock = ah.m_lock;
+		m_bridge = ah.m_bridge;
 	}
 	template <typename T>
 	void AttachAttribute()
 	{
 		if (m_lock.get() && !m_lock->GetUserdata()) {
-			m_lock->SetUserdata(ENEW T);
+			T* attr = ENEW T;
+			m_lock->SetUserdata(attr);
+			Attribute::GetBridge(attr, m_bridge);
 		}
 	}
 
@@ -230,7 +236,8 @@ public:
 		if (m_lock.get()) {
 			xhn::RWLock::Instance inst = m_lock->GetReadLock();
 			T* attr = ((Attribute*)m_lock->GetUserdata())->DynamicCast<T>();
-			*to = *attr;
+			///*to = *attr;
+			Attribute::Copy(to, attr, m_bridge);
 		}
 	}
 	template <typename T>
@@ -238,7 +245,9 @@ public:
 		if (m_lock.get()) {
 			xhn::RWLock::Instance inst = m_lock->GetWriteLock();
 			T* attr = ((Attribute*)m_lock->GetUserdata())->DynamicCast<T>();
-			*attr = *from;
+			///*attr = *from;
+			component_index bridge = Attribute::GetReverseBridge(m_bridge);
+			Attribute::Copy(attr, from, bridge);
 		}
 	}
 };

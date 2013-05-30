@@ -280,32 +280,36 @@ void ResourceAction::DoImpl()
                                                "rect",
                                                panelRect,
 											   false);
-        
-        panelRect.size.width = 100.0f;
-        panelRect.size.height = 25.0f;
-        EFloat2 areaSize(247.0f - 204.0f, 184.0f - 174.0f);
-        EFloat2 normalCoord(204.0f, 174.0f);
-        EFloat2 touchedCoord(204.0f, 188.0f);
-        EFloat2 selectedCoord(204.0f, 202.0f);
-        GUIComboBoxEntryFactory::CreateSheetConfig("combo_box_entry.xml",
-                                                   "BlackOrangeSkins.png",
-                                                   panelRect,
-                                                   8,
-                                                   areaSize,
-                                                   8,
-                                                   normalCoord,
-                                                   touchedCoord,
-                                                   selectedCoord);
+
+		panelRect.left = 0.0f;
+		panelRect.top = 0.0f;
+		panelRect.size.width = 32.0f;
+		panelRect.size.height = 32.0f;
+		areaRect.left = 0.0f;
+		areaRect.top = 0.0f;
+		areaRect.size.width = 32.0f;
+		areaRect.size.height = 32.0f;
+		GUIDropDownMenuFactory::CreateSheetConfig("drop_down_menu.xml",
+			                                      "base",
+												  "default",
+												  panelRect,
+												  cornerSize,
+												  areaRect,
+												  areaCornerSize);
 
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
 		m_horiBarFactory = ENEW GUIHoriBarFactory(guiRdr, "hori_bar.xml");
 		m_vertBarFactory = ENEW GUIVertBarFactory(guiRdr, "vert_bar.xml");
         m_containerFactory = ENEW GUIContainerFactory(guiRdr, "container.xml");
         ///m_comboBoxEntryFactory = ENEW GUIComboBoxEntryFactory(guiRdr, "combo_box_entry.xml");
+		m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(guiRdr, "drop_down_menu.xml");
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
         ///m_guiComboBoxEntry = m_comboBoxEntryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
+		m_guiDropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
+		m_guiDropDownMenu->SetSize(100.0f, 100.0f);
+		m_guiDropDownMenu->AddEntry();
         /**
 		m_guiPanel = m_panelFactory->MakeSprite()->DynamicCast<GUIPanel>();
 		m_guiEdit = m_editFactory->MakeSprite()->DynamicCast<GUIEdit>();
@@ -331,6 +335,7 @@ void ResourceAction::DoImpl()
 		///
 		m_guiContainer->AddChild(m_guiButton);
         ///m_guiContainer->AddChild(m_guiComboBoxEntry);
+		m_guiContainer->AddChild(m_guiDropDownMenu);
 		m_guiContainer->AlwaysOnTop(m_guiButton);
 		///m_guiContainer->AddChild(m_guiEdit);
 		///m_guiContainer->AddChild(m_guiHoriBar);

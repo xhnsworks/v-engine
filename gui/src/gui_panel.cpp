@@ -272,15 +272,7 @@ void GUIPanel::SetSize(float x, float y)
 	Float2Attr size(x, y);
 	m_sizeHandle.SetAttribute(&size);
 }
-/**
-void GUIPanel::GetScopeImpl(SpriteRect& result)
-{
-	result.left = 0.0f;
-	result.top = 0.0f;
-	result.size.width = 0.0f;
-	result.size.height = 0.0f;
-}
-**/
+
 Sprite* GUIPanelFactory::MakeSpriteImpl()
 {
 	char mbuf[256];

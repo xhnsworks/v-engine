@@ -4,8 +4,7 @@
 #include "sprite_event_hub.h"
 
 ImplementRTTI(GUIComboBoxEntry, GUIHoriBar);
-ImplementRTTI(GUIComboBoxMenuBackground, GUIPanelLayer);
-ImplementRTTI(GUIComboBoxDropDownMenu, GUIContainer);
+ImplementRTTI(GUIDropDownMenu, GUIPanel);
 ImplementRTTI(GUIComboBox, GUIHoriBar);
 
 void GUIComboBoxEntry::MouseMoveEventProc::Proc(const SpriteEvent* evt)
@@ -26,7 +25,6 @@ void GUIComboBoxEntry::MouseMoveEventProc::Proc(const SpriteEvent* evt)
 	else {
 		m_entry->SetState(GUIComboBoxEntry::Normal);
 	}
-
 }
 
 Sprite* GUIComboBoxEntryFactory::MakeSpriteImpl()
@@ -232,15 +230,7 @@ void GUIComboBoxEntry::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
             break;
 	}
 }
-/**
-void GUIComboBoxEntry::GetScopeImpl(SpriteRect& result)
-{
-    result.left = 0.0f;
-    result.top = 0.0f;
-    result.size.width = 0.0f;
-    result.size.height = 0.0f;
-}
-**/
+
 void GUIComboBoxEntry::Build()
 {
 	m_elements.clear();
@@ -272,11 +262,45 @@ void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	m_fourBorders.ApplyTranform(&mat);
 }
 
-GUIComboBoxDropDownMenu::GUIComboBoxDropDownMenu(SpriteRenderer* renderer,
-                                                 const char* entryCfgName)
-: GUIContainer(renderer, "drop_down_menu")
+GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer)
+: GUIPanel(renderer, "drop_down_menu")
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<Float2Attr>();
-    m_entryFactory = ENEW GUIComboBoxEntryFactory(renderer, entryCfgName, m_sizeHandle);
+
+	SpriteRect panelRect;
+
+	panelRect.size.width = 100.0f;
+	panelRect.size.height = 25.0f;
+	EFloat2 areaSize(247.0f - 204.0f, 184.0f - 174.0f);
+	EFloat2 normalCoord(204.0f, 174.0f);
+	EFloat2 touchedCoord(204.0f, 188.0f);
+	EFloat2 selectedCoord(204.0f, 202.0f);
+	GUIComboBoxEntryFactory::CreateSheetConfig(
+		"combo_box_entry.xml",
+		"BlackOrangeSkins.png",
+		panelRect,
+		8,
+		areaSize,
+		8,
+		normalCoord,
+		touchedCoord,
+		selectedCoord);
+    m_entryFactory = ENEW GUIComboBoxEntryFactory(renderer, "combo_box_entry.xml", m_sizeHandle);
+}
+
+void GUIDropDownMenu::AddEntry()
+{
+    SpriteLayerPtr entry = m_entryFactory->MakeSprite();
+	AddChild(entry);
+	AlwaysOnTop(entry);
+}
+
+Sprite* GUIDropDownMenuFactory::MakeSpriteImpl()
+{
+	GUIDropDownMenu* ret = ENEW GUIDropDownMenu(m_renderer);
+	ret->Init(m_configName);
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+		ENEW SpriteFrameStartEventProc(ret, m_renderer));
+	return ret;
 }

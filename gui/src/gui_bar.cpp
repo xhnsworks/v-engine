@@ -165,15 +165,7 @@ void GUIHoriBar::SetSize(float x)
 	FloatAttr size(x);
 	m_sizeHandle.SetAttribute(&size);
 }
-/**
-void GUIHoriBar::GetScopeImpl(SpriteRect& result)
-{
-	result.left = 0.0f;
-	result.top = 0.0f;
-	result.size.width = 0.0f;
-	result.size.height = 0.0f;
-}
-**/
+
 Sprite* GUIHoriBarFactory::MakeSpriteImpl()
 {
 	char mbuf[256];

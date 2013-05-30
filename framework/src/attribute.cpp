@@ -226,3 +226,45 @@ void Attribute::Copy(Attribute* dst, Attribute* src, component_index bridge)
 		break;
 	}
 }
+
+void Attribute::GetBridge(Attribute* attr, component_index& bridge)
+{
+	const RTTI* rtti = attr->GetRTTI();
+	if (rtti == &FloatAttr::s_RTTI) {
+		bridge.num_comps = 1;
+		bridge.comps[0] = CompX;
+	}
+	else if (rtti == &Float2Attr::s_RTTI) {
+		bridge.num_comps = 2;
+		bridge.comps[0] = CompX;
+		bridge.comps[1] = CompY;
+	}
+	else if (rtti == &Float3Attr::s_RTTI) {
+		bridge.num_comps = 3;
+		bridge.comps[0] = CompX;
+		bridge.comps[1] = CompY;
+		bridge.comps[2] = CompZ;
+	}
+	else if (rtti == &Float4Attr::s_RTTI) {
+		bridge.num_comps = 4;
+		bridge.comps[0] = CompX;
+		bridge.comps[1] = CompY;
+		bridge.comps[2] = CompZ;
+		bridge.comps[3] = CompW;
+	}
+	else
+		bridge.num_comps = 0;
+}
+
+component_index Attribute::GetReverseBridge(component_index bridge)
+{
+	for (euint i = 0; i < bridge.num_comps; i++) {
+		bridge.comps[i] = ComponentFormat(bridge.comps[i]);
+	}
+    component_index ret;
+	ret.num_comps = bridge.num_comps;
+	for (euint i = 0; i < bridge.num_comps; i++) {
+        ret.comps[(euint)bridge.comps[i]] = (component)i;
+	}
+	return ret;
+}
