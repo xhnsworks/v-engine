@@ -408,3 +408,11 @@ Sprite* GUIDropDownMenuFactory::MakeSpriteImpl()
 		ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
+
+void GUIDropDownMenuFactory::CreateAnimationConfig(const char* cfgName,
+								  const char* showAnimName,
+								  const char* hideAnimName,
+								  float maxSize)
+{
+
+}

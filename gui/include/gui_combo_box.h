@@ -137,6 +137,10 @@ public:
 	: GUIPanelFactory(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl();
+	static void CreateAnimationConfig(const char* cfgName,
+		                              const char* showAnimName,
+									  const char* hideAnimName,
+									  float maxSize);
 };
 ///**********************************************************************///
 ///                       class define end                               ///
