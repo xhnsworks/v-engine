@@ -39,6 +39,9 @@ public:
 	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
+	inline AttributeHandle GetSizeHandle() {
+		return m_sizeHandle;
+	}
 };
 
 class GUIPanelFactory : public SpriteFactory

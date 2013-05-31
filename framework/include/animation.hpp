@@ -55,6 +55,7 @@ public:
 	int m_periodCount;
     AnimationStatus m_status;
 	AnimTimer* m_timer;
+	bool m_isLooped;
 	ATTR_CLONER m_attrCloner;
 	ATTR_LOADER m_attrLoader;
 	INTERPOLATION m_interpolation;
@@ -67,6 +68,7 @@ public:
 		, m_periodCount(0)
 		, m_status(Stopped)
 		, m_timer(NULL)
+		, m_isLooped(true)
 	{}
 	Animation(Attribute::Type attrType, AnimTimer* timer)
 		: m_attrType(attrType)
@@ -76,6 +78,7 @@ public:
 		, m_periodCount(0)
 		, m_status(Stopped)
 		, m_timer(timer)
+		, m_isLooped(true)
 	{}
 	Animation(AttributeHandle target,
               Attribute::Type attrType,
@@ -88,6 +91,7 @@ public:
 		, m_periodCount(0)
 		, m_status(Stopped)
 		, m_timer(timer)
+		, m_isLooped(true)
 	{}
 	Animation(const Animation& anim)
 		: m_target(anim.m_target)
@@ -98,6 +102,7 @@ public:
 		, m_periodCount(0)
 		, m_status(anim.m_status)
 		, m_timer(anim.m_timer)
+		, m_isLooped(true)
 	{}
 	~Animation()
 	{
@@ -121,10 +126,15 @@ public:
 			int periodCount = (int)(totelElapsedTime / periodTime);
 			if (periodCount > m_periodCount) {
 				m_periodCount = periodCount;
-				m_prevFrame = m_timeLine.begin();
-				Attribute* attr =
-                m_attrCloner(m_prevFrame->second, m_attrType);
-				m_commandSender(m_target, attr, m_attrType);
+				if (m_isLooped) {
+					m_prevFrame = m_timeLine.begin();
+					Attribute* attr =
+						m_attrCloner(m_prevFrame->second, m_attrType);
+					m_commandSender(m_target, attr, m_attrType);
+				}
+				else {
+					Stop();
+				}
 				return;
 			}
 			double realTotelElapsedTime =
@@ -133,11 +143,15 @@ public:
 			Frame nextFrame = m_prevFrame;
 			nextFrame++;
 			if (nextFrame == m_timeLine.end()) {
-				Attribute* attr =
-                m_attrCloner(m_prevFrame->second, m_attrType);
-				m_commandSender(m_target, attr, m_attrType);
-				m_prevFrame = m_timeLine.begin();
-				///m_beginTime = m_curtTime;
+				if (m_isLooped) {
+					Attribute* attr =
+						m_attrCloner(m_prevFrame->second, m_attrType);
+					m_commandSender(m_target, attr, m_attrType);
+					m_prevFrame = m_timeLine.begin();
+				}
+				else {
+					Stop();
+				}
 				return;
 			}
 
@@ -145,11 +159,15 @@ public:
 				m_prevFrame++;
 				nextFrame++;
 				if (nextFrame == m_timeLine.end()) {
-					Attribute* attr =
-                    m_attrCloner(m_prevFrame->second, m_attrType);
-					m_commandSender(m_target, attr, m_attrType);
-					m_prevFrame = m_timeLine.begin();
-					///m_beginTime = m_curtTime;
+					if (m_isLooped) {
+						Attribute* attr =
+							m_attrCloner(m_prevFrame->second, m_attrType);
+						m_commandSender(m_target, attr, m_attrType);
+						m_prevFrame = m_timeLine.begin();
+					}
+					else {
+						Stop();
+					}
 					return;
 				}
 			}
@@ -183,6 +201,8 @@ public:
 	void LoadFromXMLNode(const pugi::xml_node& node) {
 		Attribute::Type srcType;
 		_LoadAttributeType(srcType, node, xhn::string("type"));
+		pugi::xml_attribute isLooped = node.attribute("is_looped");
+		m_isLooped = isLooped.as_bool();
 		if (srcType != m_attrType)
 			return;
 		Clear();
@@ -363,14 +383,8 @@ public:
 class FCommandSenderProc
 {
 public:
-	RWBuffer m_commandChannel;
-public:
     FCommandSenderProc()
-	{
-		m_commandChannel =
-        RobotManager::Get()->GetChannel("AnimationRobot",
-                                        "RenderRobot");
-	}
+	{}
 public:
 	inline void operator () (AttributeHandle tgt,
                              Attribute* v,
@@ -409,20 +423,27 @@ FCommandSenderProc
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
-class AnimAction : public Action
+class AnimAction : public Action, public AnimTimer
 {
 	DeclareRTTI;
 public:
-	AnimAction(AnimTimer* timer, AnimationInstance* anim)
-		: m_timer(timer)
-		, m_animation(anim)
-	{}
-	AnimTimer* m_timer;
+	AnimAction(AnimationInstance* anim)
+		: m_animation(anim)
+		, m_timer(0.0)
+	{
+		anim->m_timer = this;
+		m_prevCheckpoint = TimeCheckpoint::Tick();
+	}
+	virtual double GetCurrentTime();
+	virtual double Tick();
+	virtual void Tock();
 	AnimationInstance* m_animation;
+	double m_timer;
+	TimeCheckpoint m_prevCheckpoint;
 	virtual void DoImpl() {
-        double t = m_timer->Tick();
+        double t = Tick();
 		m_animation->Update(t);
-		m_timer->Tock();
+		Tock();
 	}
 };
 
@@ -498,20 +519,16 @@ public:
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
-class AnimationRobot : public Robot, public AnimTimer
+class AnimationRobot : public Robot
 {
 	DeclareRTTI;
 public:
 	int m_animationStamp;
-	double m_timer;
-	TimeCheckpoint m_prevCheckpoint;
+	
     typedef xhn::map< int, AnimationInstance > AnimationMap;
 	AnimationMap m_animations;
 public:
 	AnimationRobot();
-	virtual double GetCurrentTime();
-	virtual double Tick();
-	virtual void Tock();
 	virtual xhn::static_string GetName();
 	virtual void InitChannels();
 	virtual void CommandProcImpl(xhn::static_string sender,

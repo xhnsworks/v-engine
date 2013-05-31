@@ -118,7 +118,6 @@ class GUIDropDownMenu : public GUIPanel
 	friend class GUIDropDownMenuFactory;
 public:
 	int m_entryCount;
-	AttributeHandle m_sizeHandle;
     GUIComboBoxEntryFactory* m_entryFactory;
 public:
 	GUIDropDownMenu(SpriteRenderer* renderer);
@@ -126,6 +125,9 @@ public:
 	void RemoveAllEntries();
     void RemoveBackground();
 	void GetBackgroundRect(SpriteRect& rect);
+	virtual void BuildFourBorders();
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
+	virtual void Build();
 };
 
 class GUIDropDownMenuFactory : public GUIPanelFactory

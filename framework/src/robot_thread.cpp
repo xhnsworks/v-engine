@@ -56,6 +56,7 @@ void RobotThreadManager::AddRobotThread()
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	pthread_attr_setstacksize(&attr, 1024);
 	pthread_create(&robThd->m_thread,
                    NULL,
                    RobotThread::Execute,

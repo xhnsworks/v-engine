@@ -145,7 +145,6 @@ void GUIHoriBar::Init(const xhn::static_string configName)
                                                     m_sizeHandle);
 		layer->LoadConfigImpl(baselayer);
         AddChild(layer);
-		SetSize(100.0f);
 	}
 }
 

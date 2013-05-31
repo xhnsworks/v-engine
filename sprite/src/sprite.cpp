@@ -727,21 +727,7 @@ void Sprite::PublicEventCallback(const SpriteEvent* evt)
 		}
 	}
 }
-void Sprite::Build()
-{
-	m_elements.clear();
-    BuildElements(m_elements);
 
-	SpriteRect rect;
-	GetScope(rect);
-	rect.GetFourBorders(m_renderer, m_fourBorders);
-
-	matrix4x4 mat;
-	Matrix4x4_set_one(&mat);
-	GetMatrix(&mat);
-
-	m_fourBorders.ApplyTranform(&mat);
-}
 void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 {
 	ElementList::iterator iter = m_elements.begin();
@@ -749,7 +735,7 @@ void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 	{
 		SpriteElement& ele = *iter;
 		Mesh mesh = ele.Build(m_renderer);
-		buffer->Attach(ele.m_filename, mesh, &GetFourBorders());
+		buffer->Attach(ele.m_filename, mesh, ele.m_fourBorders);
 	}
 }
 
@@ -801,20 +787,29 @@ void Sprite::GetScopeImpl(SpriteRect& result)
     result.size.height = FLT_MIN;
 }
 
+void Sprite::Build()
+{
+	m_elements.clear();
+	BuildElements(m_elements);
+	BuildFourBorders();
+}
 void Sprite::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
     BuildElements(to);
+	BuildFourBorders();
+}
 
+void Sprite::BuildFourBorders()
+{
 	SpriteRect rect;
 	GetScope(rect);
 	rect.GetFourBorders(m_renderer, m_fourBorders);
-
 	matrix4x4 mat;
 	Matrix4x4_set_one(&mat);
 	GetMatrix(&mat);
-
 	m_fourBorders.ApplyTranform(&mat);
 }
+
 void Sprite::Clear()
 {
     /// nothing

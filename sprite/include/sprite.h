@@ -112,6 +112,7 @@ public:
 	EColor m_color_u0v1;
 	float m_transparency;
 	matrix4x4 m_transform;
+	const FourBorders* m_fourBorders;
 	SpriteElement()
         : m_filename("default")
         , m_area_x0(0.0f)
@@ -119,6 +120,7 @@ public:
         , m_area_y0(0.0f)
         , m_area_y1(32.0f)
 		, m_transparency(1.0f)
+		, m_fourBorders(NULL)
     {}
     SpriteElement(float x, float y, float w, float h)
         : m_filename("default")
@@ -128,6 +130,7 @@ public:
 		, m_area_y0(0.0f)
 		, m_area_y1(32.0f)
 		, m_transparency(1.0f)
+		, m_fourBorders(NULL)
     {}
     SpriteElement(const SpriteElement& e)
         : m_filename(e.m_filename)
@@ -142,6 +145,7 @@ public:
 		, m_color_u0v1(e.m_color_u0v1)
 		, m_transform(e.m_transform)
 		, m_transparency(e.m_transparency)
+		, m_fourBorders(e.m_fourBorders)
     {}
     inline SpriteElement& operator = (const SpriteElement& e)
     {
@@ -157,6 +161,7 @@ public:
 	    m_color_u0v1 = e.m_color_u0v1;
 		m_transform = e.m_transform;
 		m_transparency = e.m_transparency;
+		m_fourBorders = e.m_fourBorders;
         return *this;
     }
     inline void SetFilename(const xhn::static_string& filename)
@@ -396,6 +401,7 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
     virtual void LoadConfigImpl(const pugi::xml_node& from);
 	virtual void SaveConfigImpl(pugi::xml_node& to);
+	virtual void BuildFourBorders();
     virtual void Build();
 	virtual void Clear();
 	virtual void GetMatrix(matrix4x4* result);

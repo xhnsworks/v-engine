@@ -126,22 +126,25 @@ void SpriteRenderer::render()
 			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
 		}
 		if (rbl->four_borders) {
-			GLPlane glplane;
+			GLPlane glplane0;
+			GLPlane glplane1;
+			GLPlane glplane2;
+			GLPlane glplane3;
 
-			glplane = rbl->four_borders->leftBorder.ToGLPlane();
-			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glplane0 = rbl->four_borders->leftBorder.ToGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane0.GetPointer());
 			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
 			clip_plane_count++;
-			glplane = rbl->four_borders->rightBorder.ToGLPlane();
-			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glplane1 = rbl->four_borders->rightBorder.ToGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane1.GetPointer());
 			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
 			clip_plane_count++;
-			glplane = rbl->four_borders->topBorder.ToGLPlane();
-			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glplane2 = rbl->four_borders->topBorder.ToGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane2.GetPointer());
 			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
 			clip_plane_count++;
-			glplane = rbl->four_borders->bottomBorder.ToGLPlane();
-			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane.GetPointer());
+			glplane3 = rbl->four_borders->bottomBorder.ToGLPlane();
+			glClipPlane(GL_CLIP_PLANE0 + clip_plane_count, glplane3.GetPointer());
 			glEnable(GL_CLIP_PLANE0 + clip_plane_count);
 			clip_plane_count++;
 		}

@@ -6,6 +6,23 @@ ImplementRTTI(CreateAnimCommand, RobotCommand);
 ImplementRTTI(StopAnimCommand, RobotCommand);
 ImplementRTTI(AnimStatusChangeReceipt, RobotCommandReceipt);
 
+double AnimAction::GetCurrentTime()
+{
+	return m_timer;
+}
+double AnimAction::Tick()
+{
+	TimeCheckpoint checkpoint = TimeCheckpoint::Tick();
+	double elapsedTime =
+		TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkpoint);
+	m_prevCheckpoint = checkpoint;
+	m_timer += elapsedTime;
+	return elapsedTime;
+}
+void AnimAction::Tock()
+{
+}
+
 bool CreateAnimCommand::Test(Robot* exeRob)
 {
 	return true;
@@ -80,26 +97,10 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 
 AnimationRobot::AnimationRobot()
 : m_animationStamp(0)
-, m_timer(0.0)
 {
-	m_prevCheckpoint = TimeCheckpoint::Tick();
+	
 }
-double AnimationRobot::GetCurrentTime()
-{
-    return m_timer;
-}
-double AnimationRobot::Tick()
-{
-	TimeCheckpoint checkpoint = TimeCheckpoint::Tick();
-	double elapsedTime =
-    TimeCheckpoint::CaleElapsedTime(m_prevCheckpoint, checkpoint);
-	m_prevCheckpoint = checkpoint;
-	m_timer += elapsedTime;
-	return elapsedTime;
-}
-void AnimationRobot::Tock()
-{
-}
+
 xhn::static_string AnimationRobot::GetName()
 {
     return "AnimationRobot";
@@ -127,10 +128,10 @@ void AnimationRobot::CommandReceiptProcImpl(xhn::static_string sender,
 int AnimationRobot::CreateAnimation(AttributeHandle attr, Attribute::Type attrType)
 {
 	int ret = -1;
-	AnimationInstance anim(attr, attrType, this);
+	AnimationInstance anim(attr, attrType, NULL);
 	AnimationMap::iterator iter =
     m_animations.insert(xhn::make_pair(m_animationStamp, anim));
-	ActionPtr act = ENEW AnimAction(this, &iter->second);
+	ActionPtr act = ENEW AnimAction(&iter->second);
 	m_actionQueue.push_back(act);
 	ret = m_animationStamp;
 	m_animationStamp++;

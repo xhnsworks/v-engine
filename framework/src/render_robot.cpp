@@ -553,11 +553,12 @@ void ResourceAction::DoImpl()
 			RobotManager::Get()->MakeChannel("AnimationRobot",
                                              "RenderRobot");
 
-		if (!s_isCreateAnimed && m_guiButton) {
+		if (!s_isCreateAnimed) {
 			RWBuffer channel =
             RobotManager::Get()->GetChannel("RenderRobot",
                                             "AnimationRobot");
 			if (channel) {
+		    
 				{
 					CreateAnimCommand* cac =
                     ENEW CreateAnimCommand(m_guiButton->GetScaleHandle(),
@@ -574,6 +575,16 @@ void ResourceAction::DoImpl()
                     
 					cac->m_animFileName = "anim.xml";
 					cac->m_animName = "offset";
+					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
+				}
+				
+				{
+					CreateAnimCommand* cac =
+						ENEW CreateAnimCommand(m_guiDropDownMenu->GetSizeHandle(),
+						Attribute::Float2);
+
+					cac->m_animFileName = "anim.xml";
+					cac->m_animName = "size";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
 				s_isCreateAnimed = true;

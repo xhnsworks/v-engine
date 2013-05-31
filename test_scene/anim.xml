@@ -21,5 +21,12 @@
         <keyframe time="0.8" value_x="0.0" value_y="0.0"/>
       </timeline>
     </offset>
+    <size num_timelines="1">
+      <timeline name="test" type="Float2" num_keyframes="3" is_looped="true">
+        <keyframe time="0.0" value_x="100.0" value_y="1.0"/>
+        <keyframe time="0.4" value_x="100.0" value_y="50.0"/>
+        <keyframe time="0.8" value_x="100.0" value_y="100.0"/>
+      </timeline>
+    </size>
 </animations>
 </root>
