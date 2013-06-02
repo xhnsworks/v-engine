@@ -43,6 +43,8 @@ public:
 	typedef xhn::map<double, Attribute*> TimeLine;
 	typedef typename xhn::map<double, Attribute*>::iterator Frame;
     typedef typename xhn::map<double, Attribute*>::const_iterator ConstFrame;
+    typedef typename xhn::map<double, Attribute*>::reverse_iterator
+    ReverseFrame;
     typedef typename xhn::map<double, Attribute*>::const_reverse_iterator
     ConstReverseFrame;
 public:
@@ -133,7 +135,7 @@ public:
 					m_commandSender(m_target, attr, m_attrType);
 				}
 				else {
-					Stop();
+					OnFinish();
 				}
 				return;
 			}
@@ -150,7 +152,7 @@ public:
 					m_prevFrame = m_timeLine.begin();
 				}
 				else {
-					Stop();
+					OnFinish();
 				}
 				return;
 			}
@@ -166,7 +168,7 @@ public:
 						m_prevFrame = m_timeLine.begin();
 					}
 					else {
-						Stop();
+						OnFinish();
 					}
 					return;
 				}
@@ -187,6 +189,17 @@ public:
 			}
 		}
 	}
+    void OnFinish() {
+        if (m_timeLine.size()) {
+			ReverseFrame endFrame = m_timeLine.rbegin();
+			Attribute* attr =
+            m_attrCloner(endFrame->second, m_attrType);
+		    m_commandSender(m_target, attr, m_attrType);
+			m_prevFrame = m_timeLine.end();
+			m_curtTime = 0.0;
+		}
+		m_status = Stopped;
+    }
 	void Stop() {
 		if (m_timeLine.size()) {
 			Frame beginFrame = m_timeLine.begin();

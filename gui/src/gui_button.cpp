@@ -83,15 +83,7 @@ void GUIButton::Init(const xhn::static_string configName)
 		}
 	}
 }
-/**
-void GUIButton::GetScopeImpl(SpriteRect& result)
-{
-    result.left = 0.0f;
-    result.top = 0.0f;
-    result.size.width = 0.0f;
-    result.size.height = 0.0f;
-}
-**/
+
 void GUIButton::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 {
 	switch (m_curtState)

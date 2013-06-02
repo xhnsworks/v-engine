@@ -36,7 +36,7 @@ void CreateAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 		if (m_animFileName != emptyStr && m_animName != emptyStr)
 		{
 	        XMLResourcePtr cfg =
-            RenderSystem_load_gui_config(m_animFileName);
+            RenderSystem_load_animation_config(m_animFileName);
 			animRob->LoadAnimation(
                 animID,
                 cfg,

@@ -303,6 +303,12 @@ void ResourceAction::DoImpl()
         m_containerFactory = ENEW GUIContainerFactory(guiRdr, "container.xml");
         ///m_comboBoxEntryFactory = ENEW GUIComboBoxEntryFactory(guiRdr, "combo_box_entry.xml");
 		m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(guiRdr, "drop_down_menu.xml");
+        
+        GUIDropDownMenuFactory::CreateAnimationConfig("drop_down_menu_anim.xml",
+                                                      "show",
+                                                      "hide",
+                                                      100.0f,
+                                                      100.0f);
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
@@ -583,8 +589,8 @@ void ResourceAction::DoImpl()
 						ENEW CreateAnimCommand(m_guiDropDownMenu->GetSizeHandle(),
 						Attribute::Float2);
 
-					cac->m_animFileName = "anim.xml";
-					cac->m_animName = "size";
+					cac->m_animFileName = "drop_down_menu_anim.xml";
+					cac->m_animName = "show";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
 				s_isCreateAnimed = true;

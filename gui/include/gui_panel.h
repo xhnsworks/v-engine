@@ -33,7 +33,11 @@ protected:
 public:
 	AttributeHandle m_sizeHandle;
 public:
-	GUIPanel(SpriteRenderer* renderer, const xhn::static_string name);
+	GUIPanel(SpriteRenderer* renderer,
+             const xhn::static_string name);
+    GUIPanel(SpriteRenderer* renderer,
+             const xhn::static_string name,
+             AttributeHandle sizeHandle);
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x, float y);
 	///virtual void GetScopeImpl(SpriteRect& result);

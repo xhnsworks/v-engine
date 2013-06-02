@@ -120,7 +120,7 @@ public:
 	int m_entryCount;
     GUIComboBoxEntryFactory* m_entryFactory;
 public:
-	GUIDropDownMenu(SpriteRenderer* renderer);
+	GUIDropDownMenu(SpriteRenderer* renderer, AttributeHandle sizeHandle);
 	void AddEntry(const xhn::string& str);
 	void RemoveAllEntries();
     void RemoveBackground();
@@ -133,14 +133,17 @@ public:
 class GUIDropDownMenuFactory : public GUIPanelFactory
 {
 public:
-	GUIDropDownMenuFactory(SpriteRenderer* renderer, const char* cfgName)
-	: GUIPanelFactory(renderer, cfgName)
-	{}
+    AttributeHandle m_dropDownMenuSizeHandle;
+public:
+	GUIDropDownMenuFactory(SpriteRenderer* renderer,
+                           const char* cfgName,
+                           AttributeHandle dropDownMenuSizeHandle);
 	virtual Sprite* MakeSpriteImpl();
 	static void CreateAnimationConfig(const char* cfgName,
 		                              const char* showAnimName,
 									  const char* hideAnimName,
-									  float maxSize);
+                                      float width,
+									  float maxHeight);
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -148,72 +151,29 @@ public:
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
-class GUIComboBox : public GUIHoriBar
+class GUIComboBox : public GUIComboBoxEntry
 {
 	DeclareRTTI;
 	friend class GUIComboBoxFactory;
 protected:
 	~GUIComboBox() {}
 public:
-	class MouseMoveEventProc : public SpriteEventProc
-	{
-	public:
-		GUIComboBox* m_comboBox;
-	public:
-		MouseMoveEventProc(GUIComboBox* comboBox) 
-			: m_comboBox(comboBox) {}
-		~MouseMoveEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-
-	class MouseButtonDownEventProc : public SpriteEventProc
-	{
-	public:
-		GUIComboBox* m_comboBox;
-	public:
-		MouseButtonDownEventProc(GUIComboBox* comboBox) 
-			: m_comboBox(comboBox) {}
-		~MouseButtonDownEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-
-	class MouseButtonUpEventProc : public SpriteEventProc
-	{
-	public:
-		GUIComboBox* m_comboBox;
-	public:
-		MouseButtonUpEventProc(GUIComboBox* comboBox) 
-			: m_comboBox(comboBox) {}
-		~MouseButtonUpEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
+    AttributeHandle m_dropDownMenuSizeHandle;
 public:
-	GUIComboBox(SpriteRenderer* renderer, const xhn::static_string name)
-		: GUIHoriBar(renderer, name)
-	{}
-	virtual void Init(const xhn::static_string configName);
-	virtual void GetScopeImpl(SpriteRect& result);
-	void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
-	void BuildTextLayer(xhn::list<SpriteElement>& to);
-	virtual void Build();
-	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
-	virtual void TickImpl(double elapsedTime);
-	virtual void TockImpl() {}
+	GUIComboBox(SpriteRenderer* renderer,
+                const xhn::static_string name,
+                AttributeHandle dropDownMenuSizeHandle);
 };
 
-class GUIComboBoxFactory : public SpriteFactory
+class GUIComboBoxFactory : public GUIComboBoxEntryFactory
 {
 public:
 	int m_comboBoxCount;
+    GUIDropDownMenuFactory* m_dropDownMenuFactory;
+    AttributeHandle m_dropDownMenuSizeHandle;
 public:
 	GUIComboBoxFactory(SpriteRenderer* renderer,
-		const char* cfgName)
-		: m_comboBoxCount(0)
-		, SpriteFactory(renderer, cfgName)
-	{}
+                       const char* cfgName);
 	virtual Sprite* MakeSpriteImpl();
 };
 ///**********************************************************************///

@@ -278,8 +278,8 @@ void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
 	m_fourBorders.ApplyTranform(&mat);
 }
 
-GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer)
-: GUIPanel(renderer, "drop_down_menu")
+GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer, AttributeHandle sizeHandle)
+: GUIPanel(renderer, "drop_down_menu", sizeHandle)
 , m_entryCount(0)
 {
 	Float2Attr size(100.0f, 100.0f);
@@ -400,9 +400,17 @@ void GUIDropDownMenu::Build()
 	}
 }
 
+GUIDropDownMenuFactory::GUIDropDownMenuFactory(SpriteRenderer* renderer,
+                                               const char* cfgName,
+                                               AttributeHandle dropDownMenuSizeHandle)
+: m_dropDownMenuSizeHandle(dropDownMenuSizeHandle)
+, GUIPanelFactory(renderer, cfgName)
+{
+}
+
 Sprite* GUIDropDownMenuFactory::MakeSpriteImpl()
 {
-	GUIDropDownMenu* ret = ENEW GUIDropDownMenu(m_renderer);
+	GUIDropDownMenu* ret = ENEW GUIDropDownMenu(m_renderer, m_dropDownMenuSizeHandle);
 	ret->Init(m_configName);
 	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
 		ENEW SpriteFrameStartEventProc(ret, m_renderer));
@@ -412,7 +420,90 @@ Sprite* GUIDropDownMenuFactory::MakeSpriteImpl()
 void GUIDropDownMenuFactory::CreateAnimationConfig(const char* cfgName,
 								  const char* showAnimName,
 								  const char* hideAnimName,
-								  float maxSize)
+                                  float width,
+								  float maxHeight)
 {
+    XMLResourcePtr xmlRes = RenderSystem_new_animation_config(cfgName);
+    pugi::xml_document& doc = xmlRes->GetDocument();
+	pugi::xml_node root = doc.append_child("root");
+    pugi::xml_node animations = root.append_child("animations");
+    pugi::xml_node showAnim = animations.append_child(showAnimName);
+    pugi::xml_node hideAnim = animations.append_child(hideAnimName);
+    {
+        showAnim.append_attribute("num_timelines").set_value(1);
+        pugi::xml_node timeLine = showAnim.append_child("timeline");
+        timeLine.append_attribute("name").set_value("show");
+        timeLine.append_attribute("type").set_value("Float2");
+        timeLine.append_attribute("num_keyframes").set_value(2);
+        timeLine.append_attribute("is_looped").set_value(false);
+        pugi::xml_node keyframe0 = timeLine.append_child("keyframe");
+        pugi::xml_node keyframe1 = timeLine.append_child("keyframe");
+        keyframe0.append_attribute("time").set_value(0.0f);
+        keyframe0.append_attribute("value_x").set_value(width);
+        keyframe0.append_attribute("value_y").set_value(0.0f);
+        keyframe1.append_attribute("time").set_value(1.0f);
+        keyframe1.append_attribute("value_x").set_value(width);
+        keyframe1.append_attribute("value_y").set_value(maxHeight);
+    }
+    {
+        hideAnim.append_attribute("num_timelines").set_value(1);
+        pugi::xml_node timeLine = showAnim.append_child("timeline");
+        timeLine.append_attribute("name").set_value("hide");
+        timeLine.append_attribute("type").set_value("Float2");
+        timeLine.append_attribute("num_keyframes").set_value(2);
+        timeLine.append_attribute("is_looped").set_value(false);
+        pugi::xml_node keyframe0 = timeLine.append_child("keyframe");
+        pugi::xml_node keyframe1 = timeLine.append_child("keyframe");
+        keyframe0.append_attribute("time").set_value(0.0f);
+        keyframe0.append_attribute("value_x").set_value(width);
+        keyframe0.append_attribute("value_y").set_value(maxHeight);
+        keyframe1.append_attribute("time").set_value(1.0f);
+        keyframe1.append_attribute("value_x").set_value(width);
+        keyframe1.append_attribute("value_y").set_value(0.0f);
+    }
+}
 
+GUIComboBox::GUIComboBox(SpriteRenderer* renderer,
+                         const xhn::static_string name,
+                         AttributeHandle dropDownMenuSizeHandle)
+: m_dropDownMenuSizeHandle(dropDownMenuSizeHandle)
+, GUIComboBoxEntry(renderer, name, dropDownMenuSizeHandle)
+{
+}
+
+GUIComboBoxFactory::GUIComboBoxFactory(SpriteRenderer* renderer,
+                                       const char* cfgName)
+: m_comboBoxCount(0)
+, SpriteFactory(renderer, cfgName)
+{
+    SpriteRect panelRect;
+    SpriteSize cornerSize;
+    SpriteRect areaRect;
+    SpriteSize areaCornerSize;
+    panelRect.left = 0.0f;
+    panelRect.top = 0.0f;
+    panelRect.size.width = 32.0f;
+    panelRect.size.height = 32.0f;
+    areaRect.left = 0.0f;
+    areaRect.top = 0.0f;
+    areaRect.size.width = 32.0f;
+    areaRect.size.height = 32.0f;
+    GUIDropDownMenuFactory::CreateSheetConfig("drop_down_menu.xml",
+                                              "base",
+                                              "default",
+                                              panelRect,
+                                              cornerSize,
+                                              areaRect,
+                                              areaCornerSize);
+    Float2Attr size(100.0f, 100.0f);
+    m_dropDownMenuSizeHandle.AttachAttribute<Float2Attr>();
+    m_dropDownMenuSizeHandle.SetAttribute(&size);
+    m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(m_renderer,
+                                                        "drop_down_menu.xml",
+                                                        m_dropDownMenuSizeHandle);
+}
+
+Sprite* GUIComboBoxFactory::MakeSpriteImpl()
+{
+    return NULL;
 }

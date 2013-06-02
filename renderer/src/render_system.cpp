@@ -216,12 +216,15 @@ void RenderSystem_Init(euint32 viewWidth, euint32 viewHeight)
 #endif
 	g_resource_system->NewResourceGroup("Texture", "BaseGroup", Public);
 	g_resource_system->NewResourceGroup("GUIConfig", "BaseGroup", Public);
-	///g_resource_system->NewResourceGroup("FontTexture", "BaseGroup", Public);
+    g_resource_system->NewResourceGroup("AnimationConfig", "BaseGroup", Public);
+	
 	grp = g_resource_system->GetResourceGroup("Texture");
 	grp->RegisterResourceImplement(ENEW Texture2DImplement);
 	grp->RegisterResourceImplement(ENEW DefaultTexture2DImplement);
     grp = g_resource_system->GetResourceGroup("GUIConfig");
 	grp->RegisterResourceImplement(ENEW XMLImplement);
+    grp = g_resource_system->GetResourceGroup("AnimationConfig");
+    grp->RegisterResourceImplement(ENEW XMLImplement);
 }
 #endif
 void RenderSystem_Dest()
@@ -542,6 +545,23 @@ XMLResourcePtr RenderSystem_load_gui_config(const xhn::static_string filename)
 	ResourceGroup* resGrp = g_resource_system->GetResourceGroup("GUIConfig");
 	ResourcePtr res = resGrp->Load(filename);
 
+	XMLResourcePtr ret(res->DynamicCast<XMLResource>());
+	return ret;
+}
+
+XMLResourcePtr RenderSystem_new_animation_config(const xhn::static_string filename)
+{
+	ResourceGroup* resGrp = g_resource_system->GetResourceGroup("AnimationConfig");
+	ResourcePtr res = resGrp->New(filename);
+    
+	XMLResourcePtr ret(res->DynamicCast<XMLResource>());
+	return ret;
+}
+XMLResourcePtr RenderSystem_load_animation_config(const xhn::static_string filename)
+{
+    ResourceGroup* resGrp = g_resource_system->GetResourceGroup("AnimationConfig");
+	ResourcePtr res = resGrp->Load(filename);
+    
 	XMLResourcePtr ret(res->DynamicCast<XMLResource>());
 	return ret;
 }

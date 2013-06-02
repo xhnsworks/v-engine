@@ -235,14 +235,20 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-GUIPanel::GUIPanel(SpriteRenderer* renderer, const xhn::static_string name)
+GUIPanel::GUIPanel(SpriteRenderer* renderer,
+                   const xhn::static_string name)
 : Sprite(renderer, name)
 {
-	///m_sizeHandle.m_attr = &m_size;
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<Float2Attr>();
 }
-
+GUIPanel::GUIPanel(SpriteRenderer* renderer,
+                   const xhn::static_string name,
+                   AttributeHandle sizeHandle)
+: m_sizeHandle(sizeHandle)
+, Sprite(renderer, name)
+{
+}
 void GUIPanel::Init(const xhn::static_string configName)
 {
 	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
