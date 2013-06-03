@@ -5,7 +5,9 @@ ImplementRootRTTI(RobotCommandBase);
 ImplementRTTI(RobotCommand, RobotCommandBase);
 ImplementRTTI(RobotCommandReceipt, RobotCommandBase);
 ImplementRootRTTI(Robot);
-
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 void Action::Do()
 {
 	Tick();
@@ -24,9 +26,12 @@ void Action::Tock()
     
 	m_prevTimeCheckPoint = tcp;
 }
-
-RobotManager* RobotManager::s_RobotManager = NULL;
-
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 void Robot::RunOnce()
 {
 	ActionQueue::iterator iter = m_actionQueue.begin();
@@ -68,7 +73,13 @@ void Robot::CommandProc()
 		}
 	}
 }
-
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
+RobotManager* RobotManager::s_RobotManager = NULL;
 RobotManager::RobotManager()
 {
 	m_robots = ENEW xhn::list<Robot*>;
@@ -193,3 +204,6 @@ Robot* RobotManager::Remove(xhn::static_string robName)
 	}
 	return NULL;
 }
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///

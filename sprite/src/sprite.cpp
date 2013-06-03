@@ -163,6 +163,10 @@ SpriteLayer::SpriteLayer(const xhn::static_string& name)
 	m_transparencyHandle.SetAttribute(&t);
 }
 
+SpriteLayer::~SpriteLayer()
+{
+}
+
 void SpriteLayer::LoadConfig(const pugi::xml_node& from)
 {
 	SpriteLayerList::iterator iter = m_children.begin();
@@ -187,7 +191,7 @@ void SpriteLayer::BuildElements(xhn::list<SpriteElement>& to)
     SpriteLayerList::iterator end = m_children.end();
     for (; iter != end; iter++) {
 		xhn::list<SpriteElement> buf;
-        SpriteLayerPtr& sptLayer = *iter;
+        SpriteLayerPtr sptLayer = *iter;
         sptLayer->BuildElementsImpl(to);
     }
 }
@@ -213,6 +217,7 @@ void SpriteLayer::GetScope(SpriteRect& result)
 		result.Merge(rc);
 	}
 }
+
 void SpriteLayer::BroadcastEventToBrothers(const SpriteEvent* evt)
 {
 	if (m_parent) {
@@ -294,7 +299,7 @@ void SpriteLayer::RemoveChild(SpriteLayerPtr spriteLayer)
 	SpriteLayerList::iterator iter = m_children.begin();
 	SpriteLayerList::iterator end = m_children.end();
 	for (; iter != end; iter++) {
-		SpriteLayerPtr& sptLayerPtr = *iter;
+		SpriteLayerPtr sptLayerPtr = *iter;
 		if (sptLayerPtr == spriteLayer) {
 			m_children.remove(iter);
 			return;
@@ -320,7 +325,7 @@ SpriteLayerPtr SpriteLayer::GetLayer(xhn::static_string layerName)
 	SpriteLayerList::iterator iter = m_children.begin();
 	SpriteLayerList::iterator end = m_children.end();
 	for (; iter != end; iter++) {
-		SpriteLayerPtr& sptLayerPtr = *iter;
+		SpriteLayerPtr sptLayerPtr = *iter;
 		if (sptLayerPtr->GetName() == layerName)
 			return sptLayerPtr;
 	}
@@ -331,7 +336,7 @@ void SpriteLayer::AlwaysOnTop(SpriteLayerPtr layer)
 	SpriteLayerList::iterator iter = m_children.begin();
 	SpriteLayerList::iterator end = m_children.end();
 	for (; iter != end; iter++) {
-		SpriteLayerPtr& sptLayerPtr = *iter;
+		SpriteLayerPtr sptLayerPtr = *iter;
 		if (sptLayerPtr == layer) {
 			m_children.throw_front(iter);
 			return;

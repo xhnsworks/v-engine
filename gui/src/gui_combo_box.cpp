@@ -2,6 +2,8 @@
 #include "gui_combo_box.h"
 #include "render_system.h"
 #include "sprite_event_hub.h"
+#include "robot.h"
+#include "animation.hpp"
 
 ImplementRTTI(GUIComboBoxEntry, GUIHoriBar);
 ImplementRTTI(GUIDropDownMenu, GUIPanel);
@@ -13,7 +15,7 @@ GUIComboBoxEntryFactory::GUIComboBoxEntryFactory(SpriteRenderer* renderer,
 						                         const char* cfgName)
 : GUIHoriBarFactory(renderer, cfgName)
 {
-	Float2Attr size(100.0f, 100.0f);
+	Float2Attr size(100.0f, 0.0f);
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<Float2Attr>();
 	m_sizeHandle.SetAttribute(&size);
@@ -36,6 +38,10 @@ Sprite* GUIComboBoxEntryFactory::MakeSpriteImpl()
                                      ENEW GUIComboBoxEntry::MouseMoveEventProc(
                                          ret)
                                      );
+	ret->RegisterPublicEventCallback(&SpriteMouseButtonDownEvent::s_RTTI,
+		                             ENEW GUIComboBoxEntry::MouseButtonDownEventProc(
+									     ret)
+									 );
 	return ret;
 }
 
@@ -178,6 +184,26 @@ void GUIComboBoxEntry::MouseMoveEventProc::Proc(const SpriteEvent* evt)
 		m_entry->SetState(GUIComboBoxEntry::Normal);
 	}
 }
+
+void GUIComboBoxEntry::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
+{
+	const SpriteMouseButtonDownEvent* mouseEvt =
+		evt->DynamicCast<SpriteMouseButtonDownEvent>();
+
+	if (m_entry->m_curtState == GUIComboBoxEntry::Touched) {
+		SpriteLayer* parent = m_entry->GetParent();
+		if (parent) {
+			parent = parent->GetParent();
+			if (parent) {
+				GUIComboBox* comboxBox = parent->DynamicCast<GUIComboBox>();
+				if (comboxBox) {
+					xhn::string text = m_entry->GetText();
+					comboxBox->SetText(text);
+				}
+			}
+		}
+	}
+}
 ///**********************************************************************///
 ///                       class implement end                            ///
 ///**********************************************************************///
@@ -279,6 +305,17 @@ void GUIComboBoxEntry::SetText(const xhn::string& text)
 	}
 }
 
+xhn::string GUIComboBoxEntry::GetText()
+{
+	SpriteLayerPtr layerPtr = GetLayer("text");
+	if (layerPtr.get()) {
+		SpriteTextLayer* textLayer = layerPtr->DynamicCast<SpriteTextLayer>();
+		EColor color(1.0f, 1.0f, 1.0f, 1.0f);
+		return textLayer->GetText();
+	}
+	return "";
+}
+
 void GUIComboBoxEntry::GetBackgroundRect(SpriteRect& rect)
 {
 	SpriteLayerPtr layerPtr = GetLayer("normal");
@@ -321,7 +358,7 @@ GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer,
 , GUIPanel(renderer, "drop_down_menu", sizeHandle)
 , m_entryCount(0)
 {
-	Float2Attr size(100.0f, 100.0f);
+	Float2Attr size(100.0f, 0.0f);
 	m_sizeHandle.SetAttribute(&size);
 }
 
@@ -469,25 +506,25 @@ void GUIDropDownMenuFactory::CreateAnimationConfig(const char* cfgName,
         keyframe0.append_attribute("time").set_value(0.0f);
         keyframe0.append_attribute("value_x").set_value(width);
         keyframe0.append_attribute("value_y").set_value(0.0f);
-        keyframe1.append_attribute("time").set_value(1.0f);
+        keyframe1.append_attribute("time").set_value(0.25f);
         keyframe1.append_attribute("value_x").set_value(width);
         keyframe1.append_attribute("value_y").set_value(maxHeight);
     }
     {
-        hideAnim.append_attribute("num_timelines").set_value(1);
-        pugi::xml_node timeLine = showAnim.append_child("timeline");
-        timeLine.append_attribute("name").set_value("hide");
-        timeLine.append_attribute("type").set_value("Float2");
-        timeLine.append_attribute("num_keyframes").set_value(2);
-        timeLine.append_attribute("is_looped").set_value(false);
-        pugi::xml_node keyframe0 = timeLine.append_child("keyframe");
-        pugi::xml_node keyframe1 = timeLine.append_child("keyframe");
-        keyframe0.append_attribute("time").set_value(0.0f);
-        keyframe0.append_attribute("value_x").set_value(width);
-        keyframe0.append_attribute("value_y").set_value(maxHeight);
-        keyframe1.append_attribute("time").set_value(1.0f);
-        keyframe1.append_attribute("value_x").set_value(width);
-        keyframe1.append_attribute("value_y").set_value(0.0f);
+		hideAnim.append_attribute("num_timelines").set_value(1);
+		pugi::xml_node timeLine = hideAnim.append_child("timeline");
+		timeLine.append_attribute("name").set_value("show");
+		timeLine.append_attribute("type").set_value("Float2");
+		timeLine.append_attribute("num_keyframes").set_value(2);
+		timeLine.append_attribute("is_looped").set_value(false);
+		pugi::xml_node keyframe0 = timeLine.append_child("keyframe");
+		pugi::xml_node keyframe1 = timeLine.append_child("keyframe");
+		keyframe0.append_attribute("time").set_value(0.0f);
+		keyframe0.append_attribute("value_x").set_value(width);
+		keyframe0.append_attribute("value_y").set_value(maxHeight);
+		keyframe1.append_attribute("time").set_value(0.25f);
+		keyframe1.append_attribute("value_x").set_value(width);
+		keyframe1.append_attribute("value_y").set_value(0.0f);
     }
 }
 ///**********************************************************************///
@@ -496,13 +533,48 @@ void GUIDropDownMenuFactory::CreateAnimationConfig(const char* cfgName,
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
+void GUIComboBox::MouseMoveEventProc::Proc(const SpriteEvent* evt)
+{
+	const SpriteMouseMoveEvent* mouseEvt =
+		evt->DynamicCast<SpriteMouseMoveEvent>();
+
+	SpriteRect mainRect;
+	SpriteRect menuRect;
+	FourBorders fourBorders;
+	m_comboBox->GetBackgroundRect(mainRect);
+	m_comboBox->GetDropDownMenuRect(menuRect);
+	mainRect.Merge(menuRect);
+	mainRect.GetFourBorders(m_comboBox->m_renderer, fourBorders);
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	m_comboBox->GetMatrix(&mat);
+	fourBorders.ApplyTranform(&mat);
+
+	EFloat2 realCrd =
+		m_comboBox->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
+		(float)mouseEvt->m_curtMousePos.y);
+
+	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
+	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
+
+	if (fourBorders.IsInBorders(pt)) {
+		m_comboBox->SetState(GUIComboBoxEntry::Touched);
+	}
+	else {
+		m_comboBox->SetState(GUIComboBoxEntry::Normal);
+		if (m_comboBox->m_isShowDropDownMenu) {
+			m_comboBox->HideDropDownMenu();
+		}
+	}
+}
 void GUIComboBox::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
 {
 	const SpriteMouseButtonDownEvent* mouseEvt =
 		evt->DynamicCast<SpriteMouseButtonDownEvent>();
 
-	if (mouseEvt->m_leftButtomDown && m_comboBox->m_curtState == GUIComboBoxEntry::Touched) {
-		printf("here\n");
+	if (mouseEvt->m_leftButtomDown && 
+		m_comboBox->m_curtState == GUIComboBoxEntry::Touched) {
+		m_comboBox->ShowDropDownMenu();
 	}
 }
 ///**********************************************************************///
@@ -516,6 +588,8 @@ GUIComboBox::GUIComboBox(SpriteRenderer* renderer,
 						 GUIDropDownMenuFactory* dropDownMenuFactory,
 						 AttributeHandle dropDownMenuSizeHandle)
 : m_dropDownMenuFactory(dropDownMenuFactory)
+, m_dropDownMenu(NULL)
+, m_isShowDropDownMenu(false)
 , GUIComboBoxEntry(renderer, name, dropDownMenuSizeHandle)
 {
 }
@@ -525,15 +599,51 @@ void GUIComboBox::Init(const xhn::static_string configName)
 	GUIComboBoxEntry::Init(configName);
 	SpriteRect rect;
 	GetBackgroundRect(rect);
-	GUIDropDownMenu* dropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
-	dropDownMenu->SetCoord(0.0f, rect.size.height);
-	AddChild(dropDownMenu);
+	m_dropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
+	m_dropDownMenu->SetCoord(0.0f, rect.size.height);
+	AddChild(m_dropDownMenu);
 }
 void GUIComboBox::BuildDropDownMenu(xhn::list<SpriteElement>& to)
 {
-	SpriteLayerPtr layer = GetLayer("drop_down_menu");
-	if (layer.get())
-		layer->BuildElementsImpl(to);
+	m_dropDownMenu->BuildElementsImpl(to);
+}
+void GUIComboBox::GetScope(SpriteRect& result)
+{
+    GetBackgroundRect(result);
+}
+void GUIComboBox::AddEntry(const xhn::string& str)
+{
+    m_dropDownMenu->AddEntry(str);
+}
+void GUIComboBox::ShowDropDownMenu()
+{
+	if (!m_isShowDropDownMenu) {
+		RWBuffer channel =
+			RobotManager::Get()->GetChannel("RenderRobot",
+			"AnimationRobot");
+		if (channel) {
+			PlayAnimCommand* pac = ENEW PlayAnimCommand("show");
+			RWBuffer_Write(channel, (const euint*)&pac, sizeof(pac));
+		}
+		m_isShowDropDownMenu = true;
+	}
+}
+void GUIComboBox::HideDropDownMenu()
+{
+	if (m_isShowDropDownMenu) {
+		RWBuffer channel =
+			RobotManager::Get()->GetChannel("RenderRobot",
+			"AnimationRobot");
+		if (channel) {
+			PlayAnimCommand* pac = ENEW PlayAnimCommand("hide");
+			RWBuffer_Write(channel, (const euint*)&pac, sizeof(pac));
+		}
+		m_isShowDropDownMenu = false;
+	}
+}
+void GUIComboBox::GetDropDownMenuRect(SpriteRect& rect)
+{
+    m_dropDownMenu->GetScope(rect);
 }
 ///**********************************************************************///
 ///                       class implement end                            ///
@@ -548,7 +658,7 @@ GUIComboBoxFactory::GUIComboBoxFactory(SpriteRenderer* renderer,
 									   , GUIComboBoxEntryFactory(renderer, entryCfgName)
 {
 	m_entryFactory = ENEW GUIComboBoxEntryFactory(m_renderer,
-		menuCfgName,
+		entryCfgName,
 		m_sizeHandle);
 	m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(m_renderer,
 		menuCfgName,
@@ -570,13 +680,17 @@ Sprite* GUIComboBoxFactory::MakeSpriteImpl()
 		ret, m_renderer)
 		);
 	ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI,
-		ENEW GUIComboBoxEntry::MouseMoveEventProc(
+		ENEW GUIComboBox::MouseMoveEventProc(
 		ret)
 		);
 	ret->RegisterPublicEventCallback(&SpriteMouseButtonDownEvent::s_RTTI,
 		ENEW GUIComboBox::MouseButtonDownEventProc(
 		ret)
 		);
+	ret->SetText("ggv");
+	ret->AddEntry("abc");
+	ret->AddEntry("def");
+	ret->SetText("bbx");
 	return ret;
 }
 ///**********************************************************************///

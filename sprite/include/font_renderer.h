@@ -46,6 +46,7 @@ public:
 		euint32 y;
 		euint32 width;
 		euint32 height;
+		euint32 letterWidth;
 		wchar_t letter;
 		euint32 usageCount;
 		GlyphInfo()
@@ -53,6 +54,7 @@ public:
 			, y(0)
 			, width(0)
 			, height(0)
+			, letterWidth(0)
 			, letter(0)
 			, usageCount(0)
 		{}
@@ -63,27 +65,24 @@ public:
 	private:
         GlyphInfo* glyph;
 		ComposingStick* owner;
-		euint32 letterWidth;
 	public:
 		GlyphHandle()
 			: glyph(NULL)
 			, owner(NULL)
-			, letterWidth(0)
 		{}
 		GlyphHandle(const GlyphHandle& h)
 			: glyph(h.glyph)
 			, owner(h.owner)
-			, letterWidth(h.letterWidth)
 		{
 		    GlyphHandle& n_h = (GlyphHandle&)h;
-			if (n_h.glyph)
-				n_h.glyph->usageCount++;
+			if (n_h.owner && n_h.glyph) {
+				n_h.owner->IncreaseGlyph(n_h.glyph->letter);
+			}
 		}
 		void operator= (GlyphHandle& h)
 		{
 			glyph = h.glyph;
 			owner = h.owner;
-			letterWidth = h.letterWidth;
 			if (h.owner && h.glyph) {
 				h.owner->IncreaseGlyph(h.glyph->letter);
 			}
@@ -107,7 +106,7 @@ public:
 		}
 		inline euint32 GetWidth() const
 		{
-			return letterWidth;
+			return glyph->letterWidth;
 		}
 		inline xhn::static_string GetFilename() const 
 		{

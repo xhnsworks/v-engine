@@ -1,8 +1,10 @@
 #include "animation.hpp"
 #include "render_system.h"
+#include "xhn_exception.hpp"
 ImplementRTTI(AnimAction, Action);
 ImplementRTTI(AnimationRobot, Robot);
 ImplementRTTI(CreateAnimCommand, RobotCommand);
+ImplementRTTI(PlayAnimCommand, RobotCommand);
 ImplementRTTI(StopAnimCommand, RobotCommand);
 ImplementRTTI(AnimStatusChangeReceipt, RobotCommandReceipt);
 
@@ -31,16 +33,16 @@ void CreateAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 {
 	AnimationRobot* animRob = exeRob->DynamicCast<AnimationRobot>();
 	if (animRob) {
-		int animID = animRob->CreateAnimation(m_attrHandle, m_attrType);
+		animRob->CreateAnimation(m_animName, m_attrHandle, m_attrType);
 		xhn::static_string emptyStr;
 		if (m_animFileName != emptyStr && m_animName != emptyStr)
 		{
 	        XMLResourcePtr cfg =
             RenderSystem_load_animation_config(m_animFileName);
 			animRob->LoadAnimation(
-                animID,
                 cfg,
-                m_animName
+                m_animName,
+				m_isPlayNow
             );
 		}
 		RWBuffer receiptChannel =
@@ -48,15 +50,50 @@ void CreateAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 		if (receiptChannel) {
 			AnimStatusChangeReceipt* rec =
             ENEW AnimStatusChangeReceipt(
-                animID,
+                m_animName,
                 NotExist,
-                animRob->GetAnimationStatus(animID)
+                animRob->GetAnimationStatus(m_animName)
             );
 			RWBuffer_Write(
                 receiptChannel,
                 (const euint*)&rec,
                 sizeof(rec)
             );
+		}
+	}
+}
+
+bool PlayAnimCommand::Test(Robot* exeRob)
+{
+	return true;
+}
+void PlayAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
+{
+	AnimationRobot* animRob = exeRob->DynamicCast<AnimationRobot>();
+	if (animRob) {
+
+		AnimationStatus prevStatus = animRob->GetAnimationStatus(m_animName);
+		animRob->PlayAnimation(m_animName);
+
+		RWBuffer receiptChannel =
+			RobotManager::Get()->GetChannel(
+			animRob->GetName(),
+			sender
+			);
+
+		if (receiptChannel) {
+			AnimStatusChangeReceipt* rec =
+				ENEW AnimStatusChangeReceipt(
+				m_animName,
+				prevStatus,
+				animRob->GetAnimationStatus(m_animName)
+				);
+
+			RWBuffer_Write(
+				receiptChannel,
+				(const euint*)&rec,
+				sizeof(rec)
+				);
 		}
 	}
 }
@@ -70,7 +107,8 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 	AnimationRobot* animRob = exeRob->DynamicCast<AnimationRobot>();
 	if (animRob) {
 		
-		animRob->StopAnimation(m_animID);
+		AnimationStatus prevStatus = animRob->GetAnimationStatus(m_animName);
+		animRob->StopAnimation(m_animName);
         
 		RWBuffer receiptChannel =
         RobotManager::Get()->GetChannel(
@@ -81,9 +119,9 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 		if (receiptChannel) {
 			AnimStatusChangeReceipt* rec =
             ENEW AnimStatusChangeReceipt(
-                m_animID,
-                NotExist,
-                animRob->GetAnimationStatus(m_animID)
+                m_animName,
+                prevStatus,
+                animRob->GetAnimationStatus(m_animName)
             );
             
 			RWBuffer_Write(
@@ -96,9 +134,7 @@ void StopAnimCommand::Do(Robot* exeRob, xhn::static_string sender)
 }
 
 AnimationRobot::AnimationRobot()
-: m_animationStamp(0)
 {
-	
 }
 
 xhn::static_string AnimationRobot::GetName()
@@ -120,28 +156,31 @@ void AnimationRobot::CommandProcImpl(xhn::static_string sender,
 	if (cac) {
         cac->Do(this, sender);
 	}
+	PlayAnimCommand* pac = command->DynamicCast<PlayAnimCommand>();
+	if (pac) {
+		pac->Do(this, sender);
+	}
 }
 void AnimationRobot::CommandReceiptProcImpl(xhn::static_string sender,
                                             RobotCommandReceipt* receipt)
 {
 }
-int AnimationRobot::CreateAnimation(AttributeHandle attr, Attribute::Type attrType)
+void AnimationRobot::CreateAnimation(xhn::static_string animName, AttributeHandle attr, Attribute::Type attrType)
 {
-	int ret = -1;
+	if (m_animations.find(animName) != m_animations.end()) {
+		VEngineExce(ObjectNameAlreadyExistedException, "animation name is already existed");
+	}
 	AnimationInstance anim(attr, attrType, NULL);
 	AnimationMap::iterator iter =
-    m_animations.insert(xhn::make_pair(m_animationStamp, anim));
+    m_animations.insert(xhn::make_pair(animName, anim));
 	ActionPtr act = ENEW AnimAction(&iter->second);
 	m_actionQueue.push_back(act);
-	ret = m_animationStamp;
-	m_animationStamp++;
-
-	return ret;
 }
-void AnimationRobot::LoadAnimation(int animID, XMLResourcePtr file,
-                                   xhn::static_string animName)
+void AnimationRobot::LoadAnimation(XMLResourcePtr file,
+                                   xhn::static_string animName,
+								   bool playNow)
 {
-    AnimationMap::iterator iter = m_animations.find(animID);
+    AnimationMap::iterator iter = m_animations.find(animName);
 	if (iter != m_animations.end()) {
 		pugi::xml_document& doc = file->GetDocument();
 		pugi::xml_node root = doc.child("root");
@@ -153,22 +192,30 @@ void AnimationRobot::LoadAnimation(int animID, XMLResourcePtr file,
 			if (timelineIter != timelineEnd) {
 				pugi::xml_node timelineNode = *timelineIter;
 				iter->second.LoadFromXMLNode(timelineNode);
-				iter->second.Play();
+				if (playNow)
+				    iter->second.Play();
 			}
 		}
 	}
 }
-void AnimationRobot::StopAnimation(int animID)
+void AnimationRobot::PlayAnimation(xhn::static_string animName)
 {
-	AnimationMap::iterator iter = m_animations.find(animID);
+	AnimationMap::iterator iter = m_animations.find(animName);
+	if (iter != m_animations.end()) {
+		iter->second.Play();
+	}
+}
+void AnimationRobot::StopAnimation(xhn::static_string animName)
+{
+	AnimationMap::iterator iter = m_animations.find(animName);
 	if (iter != m_animations.end()) {
 		iter->second.Stop();
 	}
 }
 
-void AnimationRobot::DestroyAnimation(int animID)
+void AnimationRobot::DestroyAnimation(xhn::static_string animName)
 {
-	AnimationMap::iterator iter = m_animations.find(animID);
+	AnimationMap::iterator iter = m_animations.find(animName);
 	if (iter != m_animations.end()) {
 		xhn::vector<ActionPtr>::iterator actIter = m_actionQueue.begin();
 		xhn::vector<ActionPtr>::iterator actEnd = m_actionQueue.end();
@@ -186,9 +233,9 @@ void AnimationRobot::DestroyAnimation(int animID)
 	}
 }
 
-AnimationStatus AnimationRobot::GetAnimationStatus(int animID)
+AnimationStatus AnimationRobot::GetAnimationStatus(xhn::static_string animName)
 {
-	AnimationMap::iterator iter = m_animations.find(animID);
+	AnimationMap::iterator iter = m_animations.find(animName);
 	if (iter != m_animations.end()) {
 		return iter->second.GetStatus();
 	}

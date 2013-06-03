@@ -218,7 +218,7 @@ public:
 	VerticalAlignmentMode m_verticalAlignmentMode;
 public:
 	SpriteLayer(const xhn::static_string& name);
-	virtual ~SpriteLayer() {}
+	virtual ~SpriteLayer();
     void LoadConfig(const pugi::xml_node& from);
 	void SaveConfig(pugi::xml_node& to);
     void BuildElements(xhn::list<SpriteElement>& to);
@@ -226,7 +226,7 @@ public:
     void Tock();
     void BroadcastEventToBrothers(const SpriteEvent* evt);
     void SetTransparency(float t);
-	void GetScope(SpriteRect& result);
+	virtual void GetScope(SpriteRect& result);
     virtual void GetMatrix(matrix4x4* result);
 	
     inline const xhn::static_string& GetName() const {
@@ -238,6 +238,9 @@ public:
 	}
 	inline void RemoveAllChildren() {
 		m_children.clear();
+	}
+	inline SpriteLayer* GetParent() {
+		return m_parent;
 	}
 	void RemoveChild(SpriteLayerPtr spriteLayer);
     SpriteLayerPtr GetLayer(euint index);
@@ -326,6 +329,9 @@ public:
 		float interval,
 		float transparency,
 		PixelSize pixelSize);
+	inline xhn::string GetText() {
+		return m_text;
+	}
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void Clear();
     virtual void TickImpl(double elapsedTime) {}

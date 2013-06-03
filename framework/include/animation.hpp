@@ -197,6 +197,7 @@ public:
 		    m_commandSender(m_target, attr, m_attrType);
 			m_prevFrame = m_timeLine.end();
 			m_curtTime = 0.0;
+			m_periodCount = 0;
 		}
 		m_status = Stopped;
     }
@@ -208,6 +209,7 @@ public:
 		    m_commandSender(m_target, attr, m_attrType);
 			m_prevFrame = m_timeLine.end();
 			m_curtTime = 0.0;
+			m_periodCount = 0;
 		}
 		m_status = Stopped;
 	}
@@ -266,6 +268,7 @@ public:
 			m_beginTime = m_timer->GetCurrentTime();
 			m_prevFrame = m_timeLine.begin();
 			m_curtTime = m_beginTime;
+			m_periodCount = 0;
 			m_status = Playing;
 		}
 	}
@@ -476,22 +479,27 @@ public:
 	xhn::static_string m_animFileName;
 	xhn::static_string m_animName;
 	xhn::static_string m_animResGrp;
+	bool m_isPlayNow;
 public:
 	CreateAnimCommand(AttributeHandle attr, Attribute::Type attrType)
 		: m_attrHandle(attr)
 		, m_attrType(attrType)
+		, m_isPlayNow(true)
 	{}
 	virtual bool Test(Robot* exeRob);
 	virtual void Do(Robot* exeRob, xhn::static_string sender);
+	inline void SetPlayNow(bool playNow) {
+		m_isPlayNow = playNow;
+	}
 };
 
 struct AnimInfo
 {
-    int animID;
+	xhn::static_string animName;
 	AnimationStatus prevStatus;
 	AnimationStatus cureStatus;
-	AnimInfo(int id, AnimationStatus ps, AnimationStatus cs)
-		: animID(id)
+	AnimInfo(xhn::static_string name, AnimationStatus ps, AnimationStatus cs)
+		: animName(name)
 		, prevStatus(ps)
 		, cureStatus(cs)
 	{}
@@ -501,10 +509,10 @@ class AnimStatusChangeReceipt : public RobotCommandReceipt
 	DeclareRTTI;
 public:
 	AnimInfo m_animInfo;
-    AnimStatusChangeReceipt(int animID,
+    AnimStatusChangeReceipt(xhn::static_string name,
                             AnimationStatus prevStatus,
                             AnimationStatus curtStatus)
-		: m_animInfo(animID, prevStatus, curtStatus)
+		: m_animInfo(name, prevStatus, curtStatus)
 	{}
 	virtual var ShowDetails() {
 		var ret;
@@ -513,14 +521,27 @@ public:
 	}
 };
 
+class PlayAnimCommand : public RobotCommand
+{
+	DeclareRTTI;
+public:
+	xhn::static_string m_animName;
+public:
+	PlayAnimCommand(xhn::static_string animName)
+		: m_animName(animName)
+	{}
+	virtual bool Test(Robot* exeRob);
+	virtual void Do(Robot* exeRob, xhn::static_string sender);
+};
+
 class StopAnimCommand : public RobotCommand
 {
 	DeclareRTTI;
 public:
-	int m_animID;
+	xhn::static_string m_animName;
 public:
-	StopAnimCommand(int animID)
-		: m_animID(animID)
+	StopAnimCommand(xhn::static_string animName)
+		: m_animName(animName)
 	{}
 	virtual bool Test(Robot* exeRob);
 	virtual void Do(Robot* exeRob, xhn::static_string sender);
@@ -535,10 +556,8 @@ public:
 class AnimationRobot : public Robot
 {
 	DeclareRTTI;
-public:
-	int m_animationStamp;
-	
-    typedef xhn::map< int, AnimationInstance > AnimationMap;
+public:	
+	typedef xhn::map< xhn::static_string, AnimationInstance > AnimationMap;
 	AnimationMap m_animations;
 public:
 	AnimationRobot();
@@ -548,13 +567,17 @@ public:
                                  RobotCommand* command);
 	virtual void CommandReceiptProcImpl(xhn::static_string sender,
                                         RobotCommandReceipt* receipt);
-	int CreateAnimation(AttributeHandle attr, Attribute::Type attrType);
-	void LoadAnimation(int animID,
-                       XMLResourcePtr file,
-                       xhn::static_string animName);
-	void StopAnimation(int animID);
-	void DestroyAnimation(int animID);
-	AnimationStatus GetAnimationStatus(int animID);
+	void CreateAnimation(
+		xhn::static_string animName,
+		AttributeHandle attr, 
+		Attribute::Type attrType);
+	void LoadAnimation(XMLResourcePtr file,
+                       xhn::static_string animName,
+					   bool playNow);
+	void PlayAnimation(xhn::static_string animName);
+	void StopAnimation(xhn::static_string animName);
+	void DestroyAnimation(xhn::static_string animName);
+	AnimationStatus GetAnimationStatus(xhn::static_string animName);
 };
 ///**********************************************************************///
 ///                       class define end                               ///

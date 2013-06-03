@@ -128,10 +128,11 @@ ComposingStick::GlyphHandle ComposingStick::AllocGlyph(wchar_t ch)
 		Tex2DLockedRect* lock = m_texture->Lock(rect);
 		euint32 letterWidth = m_renderer->draw_letter(ch, lock->GetAt(0, 0), lock->GetWidth());
 		m_texture->Unlock(lock);
-		m_glyphMap.insert(xhn::make_pair(ch, info));
+		info->usageCount = 1;
 		info->letter = ch;
+		info->letterWidth = letterWidth;
 		ret.glyph = info;
-		ret.letterWidth = letterWidth;
+		m_glyphMap.insert(xhn::make_pair(ch, info));
 	}
 	return ret;
 }

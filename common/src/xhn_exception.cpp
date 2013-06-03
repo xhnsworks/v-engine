@@ -14,5 +14,6 @@ ImplementRTTI(FunctionArgumentException, FunctionException);
 ImplementRTTI(FunctionExecutionException, FunctionException);
 ImplementRTTI(FunctionResultException, FunctionException);
 ImplementRTTI(ObjectException, Exception);
+ImplementRTTI(ObjectNameAlreadyExistedException, ObjectException);
 ImplementRTTI(ObjectUninitializedException, ObjectException);
 ImplementRTTI(InvalidEnumerationException, FunctionExecutionException);

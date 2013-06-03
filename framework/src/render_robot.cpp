@@ -586,7 +586,6 @@ void ResourceAction::DoImpl()
             RobotManager::Get()->GetChannel("RenderRobot",
                                             "AnimationRobot");
 			if (channel) {
-		    
 				{
 					CreateAnimCommand* cac =
                     ENEW CreateAnimCommand(m_guiButton->GetScaleHandle(),
@@ -605,17 +604,26 @@ void ResourceAction::DoImpl()
 					cac->m_animName = "offset";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
-				/**
 				{
 					CreateAnimCommand* cac =
-						ENEW CreateAnimCommand(m_guiDropDownMenu->GetSizeHandle(),
+						ENEW CreateAnimCommand(m_guiComboxBox->GetDropDownMenuSizeHandle(),
 						Attribute::Float2);
+					cac->SetPlayNow(false);
 
 					cac->m_animFileName = "drop_down_menu_anim.xml";
 					cac->m_animName = "show";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
-				**/
+				{
+					CreateAnimCommand* cac =
+						ENEW CreateAnimCommand(m_guiComboxBox->GetDropDownMenuSizeHandle(),
+						Attribute::Float2);
+					cac->SetPlayNow(false);
+
+					cac->m_animFileName = "drop_down_menu_anim.xml";
+					cac->m_animName = "hide";
+					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
+				}
 				s_isCreateAnimed = true;
 			}
 		}
@@ -776,7 +784,7 @@ void RenderRobot::CommandReceiptProcImpl(xhn::static_string sender,
     
 	if (animStatusChangeRec) {
 		m_attrStatusMap.insert(
-            xhn::make_pair(animStatusChangeRec->m_animInfo.animID,
+            xhn::make_pair(animStatusChangeRec->m_animInfo.animName,
                            animStatusChangeRec->m_animInfo.cureStatus)
         );
 	}

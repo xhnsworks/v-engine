@@ -363,7 +363,7 @@ class RenderRobot : public Robot
 public:
     RendererChain m_rendererChain;
 	GUIRendererChain m_guiRendererChain;
-	xhn::map<int, AnimationStatus> m_attrStatusMap;
+	xhn::map<xhn::static_string, AnimationStatus> m_attrStatusMap;
 #if defined(_WIN32) || defined(_WIN64)
     SwapBuffersAction* m_swpAct;
     RenderRobot(HWND window);

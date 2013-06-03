@@ -93,7 +93,15 @@ public:
     : FunctionExecutionException(file, line, msg)
     {}
 };
-
+/// 对象名已存在
+class ObjectNameAlreadyExistedException : public ObjectException
+{
+    DeclareRTTI;
+public:
+	ObjectNameAlreadyExistedException(const char* file, euint32 line, xhn::string msg)
+		: ObjectException(file, line, msg)
+	{}
+};
 class ObjectUninitializedException : public ObjectException
 {
 	DeclareRTTI;

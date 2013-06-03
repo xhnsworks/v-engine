@@ -82,6 +82,7 @@ public:
 	void BuildTextLayer(xhn::list<SpriteElement>& to);
 	virtual void BuildDropDownMenu(xhn::list<SpriteElement>& to) {}
 	void SetText(const xhn::string& text);
+	xhn::string GetText();
 	void GetBackgroundRect(SpriteRect& rect);
 };
 
@@ -151,6 +152,9 @@ public:
 									  const char* hideAnimName,
                                       float width,
 									  float maxHeight);
+	inline AttributeHandle GetDropDownMenuSizeHandle() {
+		return m_dropDownMenuSizeHandle;
+	}
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -166,7 +170,20 @@ protected:
 	~GUIComboBox() {}
 public:
 	GUIDropDownMenuFactory* m_dropDownMenuFactory;
+	GUIDropDownMenu* m_dropDownMenu;
+	bool m_isShowDropDownMenu;
 public:
+	class MouseMoveEventProc : public SpriteEventProc
+	{
+	public:
+		GUIComboBox* m_comboBox;
+	public:
+		MouseMoveEventProc(GUIComboBox* comboBox) : m_comboBox(comboBox) {}
+		~MouseMoveEventProc() {}
+	public:
+		virtual void Proc(const SpriteEvent* evt);
+	};
+
 	class MouseButtonDownEventProc : public SpriteEventProc
 	{
 	public:
@@ -184,6 +201,14 @@ public:
                 AttributeHandle dropDownMenuSizeHandle);
 	virtual void Init(const xhn::static_string configName);
 	virtual void BuildDropDownMenu(xhn::list<SpriteElement>& to);
+	virtual void GetScope(SpriteRect& result);
+	void AddEntry(const xhn::string& str);
+	void ShowDropDownMenu();
+	void HideDropDownMenu();
+	void GetDropDownMenuRect(SpriteRect& rect);
+	inline AttributeHandle GetDropDownMenuSizeHandle() {
+		return m_dropDownMenuFactory->GetDropDownMenuSizeHandle();
+	}
 };
 
 class GUIComboBoxFactory : public GUIComboBoxEntryFactory
