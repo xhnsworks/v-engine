@@ -281,6 +281,23 @@ void ResourceAction::DoImpl()
                                                panelRect,
 											   false);
 
+		panelRect.size.width = 100.0f;
+		panelRect.size.height = 25.0f;
+		EFloat2 areaSize(247.0f - 204.0f, 184.0f - 174.0f);
+		EFloat2 normalCoord(204.0f, 174.0f);
+		EFloat2 touchedCoord(204.0f, 188.0f);
+		EFloat2 selectedCoord(204.0f, 202.0f);
+		GUIComboBoxEntryFactory::CreateSheetConfig(
+			"combo_box_entry.xml",
+			"BlackOrangeSkins.png",
+			panelRect,
+			8,
+			areaSize,
+			8,
+			normalCoord,
+			touchedCoord,
+			selectedCoord);
+
 		panelRect.left = 0.0f;
 		panelRect.top = 0.0f;
 		panelRect.size.width = 32.0f;
@@ -302,7 +319,8 @@ void ResourceAction::DoImpl()
 		m_vertBarFactory = ENEW GUIVertBarFactory(guiRdr, "vert_bar.xml");
         m_containerFactory = ENEW GUIContainerFactory(guiRdr, "container.xml");
         ///m_comboBoxEntryFactory = ENEW GUIComboBoxEntryFactory(guiRdr, "combo_box_entry.xml");
-		m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(guiRdr, "drop_down_menu.xml");
+		///m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(guiRdr, "drop_down_menu.xml");
+		m_comboxBoxFactory = ENEW GUIComboBoxFactory(guiRdr, "combo_box_entry.xml", "drop_down_menu.xml");
         
         GUIDropDownMenuFactory::CreateAnimationConfig("drop_down_menu_anim.xml",
                                                       "show",
@@ -313,11 +331,13 @@ void ResourceAction::DoImpl()
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
         ///m_guiComboBoxEntry = m_comboBoxEntryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
+		/**
 		m_guiDropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
 		m_guiDropDownMenu->SetSize(100.0f, 60.0f);
 		m_guiDropDownMenu->AddEntry(xhn::string("abc"));
 		m_guiDropDownMenu->AddEntry(xhn::string("edf"));
 		m_guiDropDownMenu->AddEntry(xhn::string("hij"));
+		**/
 		///m_guiDropDownMenu->RemoveBackground();
 		///m_guiDropDownMenu->AddEntry();
 		///m_guiDropDownMenu->RemoveAllEntries();
@@ -336,6 +356,7 @@ void ResourceAction::DoImpl()
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
          **/
+		m_guiComboxBox = m_comboxBoxFactory->MakeSprite()->DynamicCast<GUIComboBox>();
 
 		m_guiButton->SetCoord(100.0f, 50.0f);
 		///m_guiButton->SetRotate(0.5f);
@@ -346,7 +367,8 @@ void ResourceAction::DoImpl()
 		///
 		m_guiContainer->AddChild(m_guiButton);
         ///m_guiContainer->AddChild(m_guiComboBoxEntry);
-		m_guiContainer->AddChild(m_guiDropDownMenu);
+		///m_guiContainer->AddChild(m_guiDropDownMenu);
+		m_guiContainer->AddChild(m_guiComboxBox);
 		m_guiContainer->AlwaysOnTop(m_guiButton);
 		///m_guiContainer->AddChild(m_guiEdit);
 		///m_guiContainer->AddChild(m_guiHoriBar);
@@ -583,7 +605,7 @@ void ResourceAction::DoImpl()
 					cac->m_animName = "offset";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
-				
+				/**
 				{
 					CreateAnimCommand* cac =
 						ENEW CreateAnimCommand(m_guiDropDownMenu->GetSizeHandle(),
@@ -593,6 +615,7 @@ void ResourceAction::DoImpl()
 					cac->m_animName = "show";
 					RWBuffer_Write(channel, (const euint*)&cac, sizeof(cac));
 				}
+				**/
 				s_isCreateAnimed = true;
 			}
 		}

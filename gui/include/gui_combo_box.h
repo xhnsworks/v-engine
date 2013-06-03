@@ -76,12 +76,13 @@ public:
     inline void SetState(EntryState state) {
         m_curtState = state;
     }
-    ///virtual void GetScopeImpl(SpriteRect& result);
     virtual void Build();
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
     void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
 	void BuildTextLayer(xhn::list<SpriteElement>& to);
+	virtual void BuildDropDownMenu(xhn::list<SpriteElement>& to) {}
 	void SetText(const xhn::string& text);
+	void GetBackgroundRect(SpriteRect& rect);
 };
 
 class GUIComboBoxEntryFactory : public GUIHoriBarFactory
@@ -95,6 +96,8 @@ public:
     : m_sizeHandle(sizeHandle)
     , GUIHoriBarFactory(renderer, cfgName)
     {}
+	GUIComboBoxEntryFactory(SpriteRenderer* renderer,
+		                    const char* cfgName);
     virtual Sprite* MakeSpriteImpl();
     static void CreateSheetConfig(const char* cfgName,
                                   const char* textureName,
@@ -120,7 +123,9 @@ public:
 	int m_entryCount;
     GUIComboBoxEntryFactory* m_entryFactory;
 public:
-	GUIDropDownMenu(SpriteRenderer* renderer, AttributeHandle sizeHandle);
+	GUIDropDownMenu(SpriteRenderer* renderer, 
+		            GUIComboBoxEntryFactory* entryFactory,
+		            AttributeHandle sizeHandle);
 	void AddEntry(const xhn::string& str);
 	void RemoveAllEntries();
     void RemoveBackground();
@@ -134,9 +139,11 @@ class GUIDropDownMenuFactory : public GUIPanelFactory
 {
 public:
     AttributeHandle m_dropDownMenuSizeHandle;
+	GUIComboBoxEntryFactory* m_entryFactory;
 public:
 	GUIDropDownMenuFactory(SpriteRenderer* renderer,
                            const char* cfgName,
+                           GUIComboBoxEntryFactory* entryFactory,
                            AttributeHandle dropDownMenuSizeHandle);
 	virtual Sprite* MakeSpriteImpl();
 	static void CreateAnimationConfig(const char* cfgName,
@@ -158,22 +165,37 @@ class GUIComboBox : public GUIComboBoxEntry
 protected:
 	~GUIComboBox() {}
 public:
-    AttributeHandle m_dropDownMenuSizeHandle;
+	GUIDropDownMenuFactory* m_dropDownMenuFactory;
+public:
+	class MouseButtonDownEventProc : public SpriteEventProc
+	{
+	public:
+		GUIComboBox* m_comboBox;
+	public:
+		MouseButtonDownEventProc(GUIComboBox* comboBox) : m_comboBox(comboBox) {}
+		~MouseButtonDownEventProc() {}
+	public:
+		virtual void Proc(const SpriteEvent* evt);
+	};
 public:
 	GUIComboBox(SpriteRenderer* renderer,
                 const xhn::static_string name,
+				GUIDropDownMenuFactory* dropDownMenuFactory,
                 AttributeHandle dropDownMenuSizeHandle);
+	virtual void Init(const xhn::static_string configName);
+	virtual void BuildDropDownMenu(xhn::list<SpriteElement>& to);
 };
 
 class GUIComboBoxFactory : public GUIComboBoxEntryFactory
 {
 public:
 	int m_comboBoxCount;
+	GUIComboBoxEntryFactory* m_entryFactory;
     GUIDropDownMenuFactory* m_dropDownMenuFactory;
-    AttributeHandle m_dropDownMenuSizeHandle;
 public:
 	GUIComboBoxFactory(SpriteRenderer* renderer,
-                       const char* cfgName);
+		               const char* entryCfgName,
+                       const char* menuCfgName);
 	virtual Sprite* MakeSpriteImpl();
 };
 ///**********************************************************************///

@@ -6,25 +6,17 @@
 ImplementRTTI(GUIComboBoxEntry, GUIHoriBar);
 ImplementRTTI(GUIDropDownMenu, GUIPanel);
 ImplementRTTI(GUIComboBox, GUIHoriBar);
-
-void GUIComboBoxEntry::MouseMoveEventProc::Proc(const SpriteEvent* evt)
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
+GUIComboBoxEntryFactory::GUIComboBoxEntryFactory(SpriteRenderer* renderer,
+						                         const char* cfgName)
+: GUIHoriBarFactory(renderer, cfgName)
 {
-    const SpriteMouseMoveEvent* mouseEvt =
-    evt->DynamicCast<SpriteMouseMoveEvent>();
-    
-	const FourBorders& borders = m_entry->GetFourBorders();
-	EFloat2 realCrd =
-    m_entry->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
-                                           (float)mouseEvt->m_curtMousePos.y);
-	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
-	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
-    
-	if (borders.IsInBorders(pt)) {
-		m_entry->SetState(GUIComboBoxEntry::Touched);
-	}
-	else {
-		m_entry->SetState(GUIComboBoxEntry::Normal);
-	}
+	Float2Attr size(100.0f, 100.0f);
+	m_sizeHandle.m_lock = ENEW xhn::RWLock;
+	m_sizeHandle.AttachAttribute<Float2Attr>();
+	m_sizeHandle.SetAttribute(&size);
 }
 
 Sprite* GUIComboBoxEntryFactory::MakeSpriteImpl()
@@ -161,7 +153,37 @@ void GUIComboBoxEntryFactory::CreateSheetConfig(
         CreateLayer(sheet, textureName, panelRect, cornerSize, areaSize, areaCornerSize, areaCoorfSelected);
     }
 }
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
+void GUIComboBoxEntry::MouseMoveEventProc::Proc(const SpriteEvent* evt)
+{
+	const SpriteMouseMoveEvent* mouseEvt =
+		evt->DynamicCast<SpriteMouseMoveEvent>();
 
+	const FourBorders& borders = m_entry->GetFourBorders();
+	EFloat2 realCrd =
+		m_entry->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
+		(float)mouseEvt->m_curtMousePos.y);
+	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
+	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
+
+	if (borders.IsInBorders(pt)) {
+		m_entry->SetState(GUIComboBoxEntry::Touched);
+	}
+	else {
+		m_entry->SetState(GUIComboBoxEntry::Normal);
+	}
+}
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 GUIComboBoxEntry::~GUIComboBoxEntry()
 {
 }
@@ -257,6 +279,14 @@ void GUIComboBoxEntry::SetText(const xhn::string& text)
 	}
 }
 
+void GUIComboBoxEntry::GetBackgroundRect(SpriteRect& rect)
+{
+	SpriteLayerPtr layerPtr = GetLayer("normal");
+	if (layerPtr.get()) {
+		layerPtr->GetScope(rect);
+	}
+}
+
 void GUIComboBoxEntry::Build()
 {
 	m_elements.clear();
@@ -266,6 +296,7 @@ void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
 	BuildTextLayer(to);
 	BuildBackgroundLayer(to);
+	BuildDropDownMenu(to);
 	
 	SpriteRect rect;
 	GetScope(rect);
@@ -277,33 +308,21 @@ void GUIComboBoxEntry::BuildElementsImpl(xhn::list<SpriteElement>& to)
     
 	m_fourBorders.ApplyTranform(&mat);
 }
-
-GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer, AttributeHandle sizeHandle)
-: GUIPanel(renderer, "drop_down_menu", sizeHandle)
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
+GUIDropDownMenu::GUIDropDownMenu(SpriteRenderer* renderer, 
+				                 GUIComboBoxEntryFactory* entryFactory,
+				                 AttributeHandle sizeHandle)
+: m_entryFactory(entryFactory)
+, GUIPanel(renderer, "drop_down_menu", sizeHandle)
 , m_entryCount(0)
 {
 	Float2Attr size(100.0f, 100.0f);
 	m_sizeHandle.SetAttribute(&size);
-
-	SpriteRect panelRect;
-
-	panelRect.size.width = 100.0f;
-	panelRect.size.height = 25.0f;
-	EFloat2 areaSize(247.0f - 204.0f, 184.0f - 174.0f);
-	EFloat2 normalCoord(204.0f, 174.0f);
-	EFloat2 touchedCoord(204.0f, 188.0f);
-	EFloat2 selectedCoord(204.0f, 202.0f);
-	GUIComboBoxEntryFactory::CreateSheetConfig(
-		"combo_box_entry.xml",
-		"BlackOrangeSkins.png",
-		panelRect,
-		8,
-		areaSize,
-		8,
-		normalCoord,
-		touchedCoord,
-		selectedCoord);
-    m_entryFactory = ENEW GUIComboBoxEntryFactory(renderer, "combo_box_entry.xml", m_sizeHandle);
 }
 
 void GUIDropDownMenu::AddEntry(const xhn::string& str)
@@ -399,18 +418,27 @@ void GUIDropDownMenu::Build()
 		ele.m_fourBorders = &GetFourBorders();
 	}
 }
-
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 GUIDropDownMenuFactory::GUIDropDownMenuFactory(SpriteRenderer* renderer,
-                                               const char* cfgName,
-                                               AttributeHandle dropDownMenuSizeHandle)
-: m_dropDownMenuSizeHandle(dropDownMenuSizeHandle)
+											   const char* cfgName,
+											   GUIComboBoxEntryFactory* entryFactory,
+											   AttributeHandle dropDownMenuSizeHandle)
+: m_entryFactory(entryFactory)
+, m_dropDownMenuSizeHandle(dropDownMenuSizeHandle)
 , GUIPanelFactory(renderer, cfgName)
 {
 }
 
 Sprite* GUIDropDownMenuFactory::MakeSpriteImpl()
 {
-	GUIDropDownMenu* ret = ENEW GUIDropDownMenu(m_renderer, m_dropDownMenuSizeHandle);
+	GUIDropDownMenu* ret = ENEW GUIDropDownMenu(m_renderer, 
+		                                        m_entryFactory, 
+												m_dropDownMenuSizeHandle);
 	ret->Init(m_configName);
 	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
 		ENEW SpriteFrameStartEventProc(ret, m_renderer));
@@ -462,48 +490,95 @@ void GUIDropDownMenuFactory::CreateAnimationConfig(const char* cfgName,
         keyframe1.append_attribute("value_y").set_value(0.0f);
     }
 }
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
+void GUIComboBox::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
+{
+	const SpriteMouseButtonDownEvent* mouseEvt =
+		evt->DynamicCast<SpriteMouseButtonDownEvent>();
 
+	if (mouseEvt->m_leftButtomDown && m_comboBox->m_curtState == GUIComboBoxEntry::Touched) {
+		printf("here\n");
+	}
+}
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
 GUIComboBox::GUIComboBox(SpriteRenderer* renderer,
-                         const xhn::static_string name,
-                         AttributeHandle dropDownMenuSizeHandle)
-: m_dropDownMenuSizeHandle(dropDownMenuSizeHandle)
+						 const xhn::static_string name,
+						 GUIDropDownMenuFactory* dropDownMenuFactory,
+						 AttributeHandle dropDownMenuSizeHandle)
+: m_dropDownMenuFactory(dropDownMenuFactory)
 , GUIComboBoxEntry(renderer, name, dropDownMenuSizeHandle)
 {
 }
 
-GUIComboBoxFactory::GUIComboBoxFactory(SpriteRenderer* renderer,
-                                       const char* cfgName)
-: m_comboBoxCount(0)
-, SpriteFactory(renderer, cfgName)
+void GUIComboBox::Init(const xhn::static_string configName)
 {
-    SpriteRect panelRect;
-    SpriteSize cornerSize;
-    SpriteRect areaRect;
-    SpriteSize areaCornerSize;
-    panelRect.left = 0.0f;
-    panelRect.top = 0.0f;
-    panelRect.size.width = 32.0f;
-    panelRect.size.height = 32.0f;
-    areaRect.left = 0.0f;
-    areaRect.top = 0.0f;
-    areaRect.size.width = 32.0f;
-    areaRect.size.height = 32.0f;
-    GUIDropDownMenuFactory::CreateSheetConfig("drop_down_menu.xml",
-                                              "base",
-                                              "default",
-                                              panelRect,
-                                              cornerSize,
-                                              areaRect,
-                                              areaCornerSize);
-    Float2Attr size(100.0f, 100.0f);
-    m_dropDownMenuSizeHandle.AttachAttribute<Float2Attr>();
-    m_dropDownMenuSizeHandle.SetAttribute(&size);
-    m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(m_renderer,
-                                                        "drop_down_menu.xml",
-                                                        m_dropDownMenuSizeHandle);
+	GUIComboBoxEntry::Init(configName);
+	SpriteRect rect;
+	GetBackgroundRect(rect);
+	GUIDropDownMenu* dropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
+	dropDownMenu->SetCoord(0.0f, rect.size.height);
+	AddChild(dropDownMenu);
 }
-
+void GUIComboBox::BuildDropDownMenu(xhn::list<SpriteElement>& to)
+{
+	SpriteLayerPtr layer = GetLayer("drop_down_menu");
+	if (layer.get())
+		layer->BuildElementsImpl(to);
+}
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class implement begin                          ///
+///**********************************************************************///
+GUIComboBoxFactory::GUIComboBoxFactory(SpriteRenderer* renderer,
+									   const char* entryCfgName,
+									   const char* menuCfgName)
+									   : m_comboBoxCount(0)
+									   , GUIComboBoxEntryFactory(renderer, entryCfgName)
+{
+	m_entryFactory = ENEW GUIComboBoxEntryFactory(m_renderer,
+		menuCfgName,
+		m_sizeHandle);
+	m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(m_renderer,
+		menuCfgName,
+		m_entryFactory,
+		m_sizeHandle);
+}
 Sprite* GUIComboBoxFactory::MakeSpriteImpl()
 {
-    return NULL;
+	char mbuf[256];
+	snprintf(mbuf, 255, "GUIComboBox_%d", m_horiBarCount);
+	m_horiBarCount++;
+	GUIComboBox* ret = ENEW GUIComboBox(m_renderer, 
+		                                mbuf, 
+										m_dropDownMenuFactory, 
+										m_sizeHandle);
+	ret->Init(m_configName);
+	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
+		ENEW SpriteFrameStartEventProc(
+		ret, m_renderer)
+		);
+	ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI,
+		ENEW GUIComboBoxEntry::MouseMoveEventProc(
+		ret)
+		);
+	ret->RegisterPublicEventCallback(&SpriteMouseButtonDownEvent::s_RTTI,
+		ENEW GUIComboBox::MouseButtonDownEventProc(
+		ret)
+		);
+	return ret;
 }
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///

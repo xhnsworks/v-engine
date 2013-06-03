@@ -150,11 +150,14 @@ void RenderSystem_Init(HWND h)
 #endif
 	g_resource_system->NewResourceGroup("Texture", "BaseGroup", Public);
 	g_resource_system->NewResourceGroup("GUIConfig", "BaseGroup", Public);
+	g_resource_system->NewResourceGroup("AnimationConfig", "BaseGroup", Public);
 	///g_resource_system->NewResourceGroup("FontTexture", "BaseGroup", Public);
 	grp = g_resource_system->GetResourceGroup("Texture");
 	grp->RegisterResourceImplement(ENEW Texture2DImplement);
 	grp->RegisterResourceImplement(ENEW DefaultTexture2DImplement);
     grp = g_resource_system->GetResourceGroup("GUIConfig");
+	grp->RegisterResourceImplement(ENEW XMLImplement);
+	grp = g_resource_system->GetResourceGroup("AnimationConfig");
 	grp->RegisterResourceImplement(ENEW XMLImplement);
 	/**
 	grp = g_resource_system->GetResourceGroup("FontTexture");

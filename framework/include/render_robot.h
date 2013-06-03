@@ -192,7 +192,7 @@ private:
 	GUIHoriBarFactory* m_horiBarFactory;
 	GUIVertBarFactory* m_vertBarFactory;
     GUIContainerFactory* m_containerFactory;
-	GUIDropDownMenuFactory* m_dropDownMenuFactory;
+	GUIComboBoxFactory* m_comboxBoxFactory;
 
 	GUIButton* m_guiButton;
 	GUICursor* m_guiCursor;
@@ -201,7 +201,7 @@ private:
 	GUIHoriBar* m_guiHoriBar;
     GUIVertBar* m_guiVertBar;
     GUIContainer* m_guiContainer;
-	GUIDropDownMenu* m_guiDropDownMenu;
+	GUIComboBox* m_guiComboxBox;
 
 	bool m_isInited;
 public:
@@ -233,7 +233,8 @@ public:
     , m_horiBarFactory(NULL)
     , m_vertBarFactory(NULL)
     , m_containerFactory(NULL)
-	, m_dropDownMenuFactory(NULL)
+	///, m_dropDownMenuFactory(NULL)
+	, m_comboxBoxFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
@@ -241,7 +242,8 @@ public:
     , m_guiHoriBar(NULL)
     , m_guiVertBar(NULL)
     , m_guiContainer(NULL)
-	, m_guiDropDownMenu(NULL)
+	///, m_guiDropDownMenu(NULL)
+	, m_guiComboxBox(NULL)
     , m_isInited(false)
 	{}
 #else
@@ -266,7 +268,8 @@ public:
 	, m_horiBarFactory(NULL)
 	, m_vertBarFactory(NULL)
     , m_containerFactory(NULL)
-	, m_dropDownMenuFactory(NULL)
+	///, m_dropDownMenuFactory(NULL)
+	, m_comboxBoxFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
     , m_guiPanel(NULL)
@@ -274,7 +277,8 @@ public:
 	, m_guiHoriBar(NULL)
     , m_guiVertBar(NULL)
     , m_guiContainer(NULL)
-	, m_guiDropDownMenu(NULL)
+	///, m_guiDropDownMenu(NULL)
+	, m_guiComboxBox(NULL)
     , m_isInited(false)
 	{}
 #endif
