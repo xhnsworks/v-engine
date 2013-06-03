@@ -22,6 +22,7 @@
 		689B12DD172F8E6500972582 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 689B12DB172F8E6500972582 /* MainMenu.xib */; };
 		689B12E7172F8F0800972582 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12E6172F8F0700972582 /* OpenGL.framework */; };
 		689B12E9172F8F0F00972582 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689B12E8172F8F0F00972582 /* GLUT.framework */; };
+		689D87D5175CD83F00D0C5B4 /* gui_list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 689D87D3175CD83F00D0C5B4 /* gui_list.cpp */; };
 		68A35D7A172FE166007D0C45 /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A35D79172FE166007D0C45 /* libpng.dylib */; };
 		68A35D7C172FE25A007D0C45 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 68A35D7B172FE25A007D0C45 /* libfreetype.a */; };
 		68A35DEB172FE26E007D0C45 /* apple_file_manager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 68A35DBD172FE26E007D0C45 /* apple_file_manager.mm */; };
@@ -174,6 +175,8 @@
 		689B12DC172F8E6500972582 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		689B12E6172F8F0700972582 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		689B12E8172F8F0F00972582 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		689D87D3175CD83F00D0C5B4 /* gui_list.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gui_list.cpp; sourceTree = "<group>"; };
+		689D87D6175CD87D00D0C5B4 /* gui_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gui_list.h; sourceTree = "<group>"; };
 		68A35BE2172FE129007D0C45 /* ecg.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = ecg.app; sourceTree = "<group>"; };
 		68A35BE3172FE129007D0C45 /* ecg.app.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; path = ecg.app.dSYM; sourceTree = "<group>"; };
 		68A35BE8172FE129007D0C45 /* build-state.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = "build-state.dat"; sourceTree = "<group>"; };
@@ -2244,6 +2247,7 @@
 		68A35E67172FE2B4007D0C45 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				689D87D6175CD87D00D0C5B4 /* gui_list.h */,
 				68C54F9A174FB586005E6FEE /* gui_combo_box.h */,
 				682A67A01748B72A009D1393 /* gui_simple_panel.h */,
 				68814BE2173D559F00710D15 /* gui_container.h */,
@@ -2271,6 +2275,7 @@
 				68A35E72172FE2B4007D0C45 /* gui_pch.cpp */,
 				6892B29B173BDEDF00A5ED22 /* gui_bar.cpp */,
 				682A679D1748B68B009D1393 /* gui_simple_panel.cpp */,
+				689D87D3175CD83F00D0C5B4 /* gui_list.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -2877,6 +2882,7 @@
 				68017D5F174CF94F009FB42C /* prime.cpp in Sources */,
 				68C54F99174FA7F2005E6FEE /* attribute.cpp in Sources */,
 				68C54F9C174FB58F005E6FEE /* gui_combo_box.cpp in Sources */,
+				689D87D5175CD83F00D0C5B4 /* gui_list.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
