@@ -17,7 +17,7 @@
 ///                       class implement begin                          ///
 ///**********************************************************************///
 ImplementRTTI(GUIHoriBarLayer, SpriteNormalLayer);
-ImplementRTTI(GUIHoriBar, Sprite);
+ImplementRTTI(GUIHoriBar, GUITouchable);
 
 void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
@@ -116,7 +116,7 @@ void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)
 
 GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
                        const xhn::static_string name)
-: Sprite(renderer, name)
+: GUITouchable(renderer, name)
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<FloatAttr>();
@@ -126,7 +126,7 @@ GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
                        const xhn::static_string name,
                        AttributeHandle sizeHandle)
 : m_sizeHandle(sizeHandle)
-, Sprite(renderer, name)
+, GUITouchable(renderer, name)
 {
 }
 
@@ -153,7 +153,7 @@ void GUIHoriBar::SetSize(float x)
 	FloatAttr size(x);
 	m_sizeHandle.SetAttribute(&size);
 }
-
+/**
 Sprite* GUIHoriBarFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
@@ -161,13 +161,9 @@ Sprite* GUIHoriBarFactory::MakeSpriteImpl()
 	m_horiBarCount++;
 	GUIHoriBar* ret = ENEW GUIHoriBar(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(
-                                         ret, m_renderer)
-                                     );
 	return ret;
 }
-
+**/
 void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
                                           const char* sheetName,
                                           const char* textureName,
@@ -264,7 +260,7 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
 ///                       class implement begin                          ///
 ///**********************************************************************///
 ImplementRTTI(GUIVertBarLayer, SpriteNormalLayer);
-ImplementRTTI(GUIVertBar, Sprite);
+ImplementRTTI(GUIVertBar, GUITouchable);
 
 void GUIVertBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
@@ -372,7 +368,7 @@ void GUIVertBarLayer::GetScopeImpl(SpriteRect& result)
 
 GUIVertBar::GUIVertBar(SpriteRenderer* renderer,
                        const xhn::static_string name)
-: Sprite(renderer, name)
+: GUITouchable(renderer, name)
 {
     m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<FloatAttr>();
@@ -414,6 +410,7 @@ void GUIVertBar::GetScopeImpl(SpriteRect& result)
 	result.size.height = 0.0f;
 }
 **/
+/**
 Sprite* GUIVertBarFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
@@ -421,13 +418,9 @@ Sprite* GUIVertBarFactory::MakeSpriteImpl()
 	m_vertBarCount++;
 	GUIVertBar* ret = ENEW GUIVertBar(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(
-                                         ret, m_renderer)
-                                     );
 	return ret;
 }
-
+**/
 void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
                                           const char* sheetName,
                                           const char* textureName,

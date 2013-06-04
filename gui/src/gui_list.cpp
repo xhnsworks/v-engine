@@ -36,18 +36,6 @@ Sprite* GUIListEntryFactory::MakeSpriteImpl()
                                           mbuf,
                                           m_sizeHandle);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(
-                                                                    ret, m_renderer)
-                                     );
-    ret->RegisterPublicEventCallback(&SpriteMouseMoveEvent::s_RTTI,
-                                     ENEW GUIListEntry::MouseMoveEventProc(
-                                                                           ret)
-                                     );
-	ret->RegisterPublicEventCallback(&SpriteMouseButtonDownEvent::s_RTTI,
-		                             ENEW GUIListEntry::MouseButtonDownEventProc(
-                                                                                 ret)
-									 );
 	return ret;
 }
 
@@ -189,39 +177,33 @@ void GUIListEntryFactory::CreateSheetConfig(
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-void GUIListEntry::MouseMoveEventProc::Proc(const SpriteEvent* evt)
+void GUIListEntry::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
 {
-	const SpriteMouseMoveEvent* mouseEvt =
-    evt->DynamicCast<SpriteMouseMoveEvent>();
-    
-	const FourBorders& borders = m_entry->GetFourBorders();
+	const FourBorders& borders = GetFourBorders();
 	EFloat2 realCrd =
-    m_entry->m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
-                                           (float)mouseEvt->m_curtMousePos.y);
+    m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
+                                  (float)mouseEvt->m_curtMousePos.y);
 	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
 	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
     
 	if (borders.IsInBorders(pt)) {
-		m_entry->SetState(GUIListEntry::Touched);
+		SetState(GUITouchable::Touched);
 	}
 	else {
-		m_entry->SetState(GUIListEntry::Normal);
+		SetState(GUITouchable::Normal);
 	}
 }
-
-void GUIListEntry::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
+void GUIListEntry::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
 {
-	const SpriteMouseButtonDownEvent* mouseEvt =
-    evt->DynamicCast<SpriteMouseButtonDownEvent>();
     if (mouseEvt->m_leftButtomDown) {
-        if (m_entry->m_curtState == GUIListEntry::Touched) {
-            SpriteLayer* parent = m_entry->GetParent();
+        if (GetState() == GUITouchable::Touched) {
+            SpriteLayer* parent = GetParent();
             if (parent) {
                 parent = parent->GetParent();
                 if (parent) {
                     GUIComboBox* comboxBox = parent->DynamicCast<GUIComboBox>();
                     if (comboxBox) {
-                        xhn::string text = m_entry->GetText();
+                        xhn::string text = GetText();
                         comboxBox->SetText(text);
                     }
                 }
@@ -280,13 +262,13 @@ void GUIListEntry::Init(const xhn::static_string configName)
 			layer->m_verticalAlignmentMode = SpriteLayer::CenterVerticalAligned;
             AddChild(layer);
 		}
-        m_curtState = Normal;
+        SetState(GUITouchable::Normal);
 	}
 }
 
 void GUIListEntry::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 {
-    switch (m_curtState)
+    switch (GetState())
 	{
         case Normal:
 		{
@@ -502,8 +484,6 @@ Sprite* GUIListFactory::MakeSpriteImpl()
                                 m_entryFactory,
                                 m_listSizeHandle);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
 

@@ -5,12 +5,12 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIContainer, Sprite);
+ImplementRTTI(GUIContainer, GUITouchable);
 
 GUIContainer::GUIContainer(SpriteRenderer* renderer, const xhn::static_string name)
 : m_simplePanel(NULL)
 , m_simplePanelFactory(NULL)
-, Sprite(renderer, name)
+, GUITouchable(renderer, name)
 {
 	m_rectHandle.m_lock = ENEW xhn::RWLock;
 	m_rectHandle.AttachAttribute<Float4Attr>();
@@ -114,8 +114,6 @@ Sprite* GUIContainerFactory::MakeSpriteImpl()
 	m_containerCount++;
 	GUIContainer* ret = ENEW GUIContainer(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
 

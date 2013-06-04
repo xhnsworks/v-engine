@@ -4,28 +4,30 @@
 #include "sprite.h"
 #include "sprite_factory.h"
 #include "gui_simple_panel.h"
+#include "gui_touchable.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
 class SpriteRenderer;
-class GUIContainer : public Sprite
+class GUIContainer : public GUITouchable
 {
 	DeclareRTTI;
-	friend class GUIContantnerFactory;
-protected:
-	~GUIContainer();
 public:
 	AttributeHandle m_rectHandle;
 	SpriteLayerPtr m_simplePanel;
     GUISimplePanelFactory* m_simplePanelFactory;
 public:
 	GUIContainer(SpriteRenderer* renderer, const xhn::static_string name);
+	virtual ~GUIContainer();
 	virtual void Init(const xhn::static_string configName);
 	void SetRect(float left, float top, float width, float height);
 	virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 	virtual void Build();
+	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
+	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
+	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 };
 
 class GUIContainerFactory : public SpriteFactory

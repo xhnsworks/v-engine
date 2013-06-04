@@ -175,8 +175,6 @@ ShaderNode red_material_proc(PxlSdrBuf _psb, int _id)
     return psn;
 }
 
-
-
 ImplementRTTI(ResourceAction, Action);
 
 ImplementRTTI(LogicAction, Action);
@@ -217,7 +215,7 @@ void ResourceAction::DoImpl()
 
 		m_buttonFactory = ENEW GUIButtonFactory(guiRdr, "button2.xml");
 		m_cursorFactory = ENEW GUICursorFactory(guiRdr, "cursor.xml");
-		m_panelFactory = ENEW GUIPanelFactory(guiRdr, "panel2.xml");
+		///m_panelFactory = ENEW GUIPanelFactory(guiRdr, "panel2.xml");
 		SpriteRect panelRect;
 		SpriteSize cornerSize;
 		SpriteRect areaRect;
@@ -287,7 +285,7 @@ void ResourceAction::DoImpl()
 		EFloat2 normalCoord(204.0f, 174.0f);
 		EFloat2 touchedCoord(204.0f, 188.0f);
 		EFloat2 selectedCoord(204.0f, 202.0f);
-		GUIComboBoxEntryFactory::CreateSheetConfig(
+		GUIListEntryFactory::CreateSheetConfig(
 			"combo_box_entry.xml",
 			"BlackOrangeSkins.png",
 			panelRect,
@@ -306,27 +304,27 @@ void ResourceAction::DoImpl()
 		areaRect.top = 0.0f;
 		areaRect.size.width = 32.0f;
 		areaRect.size.height = 32.0f;
-		GUIDropDownMenuFactory::CreateSheetConfig("drop_down_menu.xml",
-			                                      "base",
-												  "default",
-												  panelRect,
-												  cornerSize,
-												  areaRect,
-												  areaCornerSize);
+		GUIListFactory::CreateSheetConfig("drop_down_menu.xml",
+			                              "base",
+										  "default",
+										  panelRect,
+										  cornerSize,
+										  areaRect,
+										  areaCornerSize);
 
 		m_editFactory = ENEW GUIEditFactory(guiRdr, "text_edit.xml");
-		m_horiBarFactory = ENEW GUIHoriBarFactory(guiRdr, "hori_bar.xml");
-		m_vertBarFactory = ENEW GUIVertBarFactory(guiRdr, "vert_bar.xml");
+		///m_horiBarFactory = ENEW GUIHoriBarFactory(guiRdr, "hori_bar.xml");
+		///m_vertBarFactory = ENEW GUIVertBarFactory(guiRdr, "vert_bar.xml");
         m_containerFactory = ENEW GUIContainerFactory(guiRdr, "container.xml");
         ///m_comboBoxEntryFactory = ENEW GUIComboBoxEntryFactory(guiRdr, "combo_box_entry.xml");
 		///m_dropDownMenuFactory = ENEW GUIDropDownMenuFactory(guiRdr, "drop_down_menu.xml");
 		m_comboxBoxFactory = ENEW GUIComboBoxFactory(guiRdr, "combo_box_entry.xml", "drop_down_menu.xml");
         
-        GUIDropDownMenuFactory::CreateAnimationConfig("drop_down_menu_anim.xml",
-                                                      "show",
-                                                      "hide",
-                                                      100.0f,
-                                                      100.0f);
+        GUIListFactory::CreateAnimationConfig("drop_down_menu_anim.xml",
+                                              "show",
+                                              "hide",
+                                              100.0f,
+                                              100.0f);
 
         m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
 		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();

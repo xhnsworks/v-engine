@@ -12,6 +12,7 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
+#include "gui_touchable.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
@@ -30,18 +31,20 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
-class GUISimplePanel : public Sprite
+class GUISimplePanel : public GUITouchable
 {
 	DeclareRTTI;
 	friend class GUISimplePanelFactory;
 protected:
-	~GUISimplePanel() {}
 	GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name);
 public:
 	virtual void Init(const xhn::static_string configName);
 	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
+	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
+	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
+	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 };
 
 class GUISimplePanelFactory : public SpriteFactory

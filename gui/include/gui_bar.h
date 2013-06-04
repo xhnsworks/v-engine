@@ -12,7 +12,7 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
-
+#include "gui_touchable.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
@@ -34,12 +34,9 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
-class GUIHoriBar : public Sprite
+class GUIHoriBar : public GUITouchable
 {
 	DeclareRTTI;
-	friend class GUIHoriBarFactory;
-protected:
-	~GUIHoriBar() {}
 public:
 	AttributeHandle m_sizeHandle;
 public:
@@ -63,7 +60,7 @@ public:
     : m_horiBarCount(0)
     , SpriteFactory(renderer, cfgName)
 	{}
-	virtual Sprite* MakeSpriteImpl();
+	///virtual Sprite* MakeSpriteImpl();
 	static void CreateSheetConfig(const char* cfgName,
                                   const char* sheetName,
                                   const char* textureName,
@@ -95,12 +92,9 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
-class GUIVertBar : public Sprite
+class GUIVertBar : public GUITouchable
 {
 	DeclareRTTI;
-	friend class GUIVertBarFactory;
-protected:
-	~GUIVertBar() {}
 public:
 	AttributeHandle m_sizeHandle;
 public:
@@ -121,7 +115,7 @@ public:
 		: m_vertBarCount(0)
 		, SpriteFactory(renderer, cfgName)
 	{}
-	virtual Sprite* MakeSpriteImpl();
+	///virtual Sprite* MakeSpriteImpl();
 	static void CreateSheetConfig(const char* cfgName,
                                   const char* sheetName,
                                   const char* textureName,

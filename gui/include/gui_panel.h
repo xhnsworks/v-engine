@@ -3,6 +3,7 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
+#include "gui_touchable.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
@@ -24,12 +25,9 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
-class GUIPanel : public Sprite
+class GUIPanel : public GUITouchable
 {
 	DeclareRTTI;
-	friend class GUIPanelFactory;
-protected:
-	~GUIPanel() {}
 public:
 	AttributeHandle m_sizeHandle;
 public:
@@ -57,7 +55,7 @@ public:
 		: m_panelCount(0)
 		, SpriteFactory(renderer, cfgName)
 	{}
-	virtual Sprite* MakeSpriteImpl();
+	///virtual Sprite* MakeSpriteImpl();
 	static void CreateSheetConfig(const char* cfgName,
                                   const char* sheetName,
                                   const char* textureName,

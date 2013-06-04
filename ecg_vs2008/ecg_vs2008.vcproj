@@ -1731,11 +1731,11 @@
 			Name="tmp"
 			>
 			<File
-				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
+				RelativePath="..\glew\GL\glew.h"
 				>
 			</File>
 			<File
-				RelativePath="..\glew\GL\glew.h"
+				RelativePath="..\..\dependencies\glew-1.5.8\include\GL\glew.h"
 				>
 			</File>
 			<File
@@ -2222,6 +2222,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\gui\include\gui_list.h"
+					>
+				</File>
+				<File
 					RelativePath="..\gui\include\gui_material.h"
 					>
 				</File>
@@ -2234,7 +2238,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\gui\include\gui_scrollbar.h"
+					>
+				</File>
+				<File
 					RelativePath="..\gui\include\gui_simple_panel.h"
+					>
+				</File>
+				<File
+					RelativePath="..\gui\include\gui_touchable.h"
 					>
 				</File>
 			</Filter>
@@ -2283,6 +2295,10 @@
 				</File>
 				<File
 					RelativePath="..\gui\src\gui_edit.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\gui\src\gui_list.cpp"
 					>
 				</File>
 				<File
@@ -2358,7 +2374,15 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\gui\src\gui_scrollbar.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\gui\src\gui_simple_panel.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\gui\src\gui_touchable.cpp"
 					>
 				</File>
 			</Filter>
@@ -2759,19 +2783,19 @@
 			Name="glsl_complier"
 			>
 			<File
-				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
+				RelativePath="..\glsl_compiler\src\glsl.tab.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\glsl_compiler\yacc\bin\glsl.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\glsl_compiler\include\glsl.tab.hpp"
 				>
 			</File>
 			<File

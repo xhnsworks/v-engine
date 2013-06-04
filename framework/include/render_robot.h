@@ -187,19 +187,19 @@ private:
     
 	GUIButtonFactory* m_buttonFactory;
 	GUICursorFactory* m_cursorFactory;
-	GUIPanelFactory* m_panelFactory;
+	///GUIPanelFactory* m_panelFactory;
 	GUIEditFactory* m_editFactory;
-	GUIHoriBarFactory* m_horiBarFactory;
-	GUIVertBarFactory* m_vertBarFactory;
+	///GUIHoriBarFactory* m_horiBarFactory;
+	///GUIVertBarFactory* m_vertBarFactory;
     GUIContainerFactory* m_containerFactory;
 	GUIComboBoxFactory* m_comboxBoxFactory;
 
 	GUIButton* m_guiButton;
 	GUICursor* m_guiCursor;
-	GUIPanel* m_guiPanel;
+	///GUIPanel* m_guiPanel;
 	GUIEdit* m_guiEdit;
-	GUIHoriBar* m_guiHoriBar;
-    GUIVertBar* m_guiVertBar;
+	///GUIHoriBar* m_guiHoriBar;
+    ///GUIVertBar* m_guiVertBar;
     GUIContainer* m_guiContainer;
 	GUIComboBox* m_guiComboxBox;
 
@@ -228,19 +228,19 @@ public:
     , m_swpAct(swpAct)
     , m_buttonFactory(NULL)
     , m_cursorFactory(NULL)
-    , m_panelFactory(NULL)
+    ///, m_panelFactory(NULL)
     , m_editFactory(NULL)
-    , m_horiBarFactory(NULL)
-    , m_vertBarFactory(NULL)
+    ///, m_horiBarFactory(NULL)
+    ///, m_vertBarFactory(NULL)
     , m_containerFactory(NULL)
 	///, m_dropDownMenuFactory(NULL)
 	, m_comboxBoxFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
-    , m_guiPanel(NULL)
+    ///, m_guiPanel(NULL)
     , m_guiEdit(NULL)
-    , m_guiHoriBar(NULL)
-    , m_guiVertBar(NULL)
+    ///, m_guiHoriBar(NULL)
+    ///, m_guiVertBar(NULL)
     , m_guiContainer(NULL)
 	///, m_guiDropDownMenu(NULL)
 	, m_guiComboxBox(NULL)
@@ -264,18 +264,18 @@ public:
     , m_light(NULL)
     , m_buttonFactory(NULL)
     , m_cursorFactory(NULL)
-	, m_panelFactory(NULL)
-	, m_horiBarFactory(NULL)
-	, m_vertBarFactory(NULL)
+	///, m_panelFactory(NULL)
+	///, m_horiBarFactory(NULL)
+	///, m_vertBarFactory(NULL)
     , m_containerFactory(NULL)
 	///, m_dropDownMenuFactory(NULL)
 	, m_comboxBoxFactory(NULL)
     , m_guiButton(NULL)
     , m_guiCursor(NULL)
-    , m_guiPanel(NULL)
+    ///, m_guiPanel(NULL)
 	, m_guiEdit(NULL)
-	, m_guiHoriBar(NULL)
-    , m_guiVertBar(NULL)
+	///, m_guiHoriBar(NULL)
+    ///, m_guiVertBar(NULL)
     , m_guiContainer(NULL)
 	///, m_guiDropDownMenu(NULL)
 	, m_guiComboxBox(NULL)

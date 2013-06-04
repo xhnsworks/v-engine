@@ -6,7 +6,7 @@
 #include "sprite_renderer.h"
 #include "sfloat3.h"
 ImplementRTTI(GUIPanelLayer, SpriteNormalLayer);
-ImplementRTTI(GUIPanel, Sprite);
+ImplementRTTI(GUIPanel, GUITouchable);
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
@@ -237,7 +237,7 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 ///**********************************************************************///
 GUIPanel::GUIPanel(SpriteRenderer* renderer,
                    const xhn::static_string name)
-: Sprite(renderer, name)
+: GUITouchable(renderer, name)
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<Float2Attr>();
@@ -246,7 +246,7 @@ GUIPanel::GUIPanel(SpriteRenderer* renderer,
                    const xhn::static_string name,
                    AttributeHandle sizeHandle)
 : m_sizeHandle(sizeHandle)
-, Sprite(renderer, name)
+, GUITouchable(renderer, name)
 {
 }
 void GUIPanel::Init(const xhn::static_string configName)
@@ -278,7 +278,7 @@ void GUIPanel::SetSize(float x, float y)
 	Float2Attr size(x, y);
 	m_sizeHandle.SetAttribute(&size);
 }
-
+/**
 Sprite* GUIPanelFactory::MakeSpriteImpl()
 {
 	char mbuf[256];
@@ -286,10 +286,9 @@ Sprite* GUIPanelFactory::MakeSpriteImpl()
 	m_panelCount++;
 	GUIPanel* ret = ENEW GUIPanel(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
+**/
 ///**********************************************************************///
 ///                       class implement end                            ///
 ///**********************************************************************///

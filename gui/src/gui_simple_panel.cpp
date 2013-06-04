@@ -14,7 +14,7 @@
 #include "sprite_renderer.h"
 #include "sfloat3.h"
 ImplementRTTI(GUISimplePanelLayer, SpriteNormalLayer);
-ImplementRTTI(GUISimplePanel, Sprite);
+ImplementRTTI(GUISimplePanel, GUITouchable);
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
@@ -98,7 +98,7 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
 ///                       class implement begin                          ///
 ///**********************************************************************///
 GUISimplePanel::GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name)
-: Sprite(renderer, name)
+: GUITouchable(renderer, name)
 {
 }
 
@@ -127,8 +127,6 @@ Sprite* GUISimplePanelFactory::MakeSpriteImpl()
 	m_simplePanelCount++;
 	GUISimplePanel* ret = ENEW GUISimplePanel(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI,
-                                     ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
 ///**********************************************************************///

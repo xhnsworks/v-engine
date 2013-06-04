@@ -29,51 +29,6 @@ class GUIList;
 class GUIListEntry : public GUIHoriBar
 {
 	DeclareRTTI;
-    friend class GUIListEntryFactory;
-protected:
-	GUIListEntry();
-public:
-	enum EntryState
-	{
-		Normal,
-		Touched,
-		Selected,
-	};
-    class MouseMoveEventProc : public SpriteEventProc
-	{
-	public:
-		GUIListEntry* m_entry;
-	public:
-		MouseMoveEventProc(GUIListEntry* entry) : m_entry(entry) {}
-		~MouseMoveEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-    
-	class MouseButtonDownEventProc : public SpriteEventProc
-	{
-	public:
-		GUIListEntry* m_entry;
-	public:
-		MouseButtonDownEventProc(GUIListEntry* entry) : m_entry(entry) {}
-		~MouseButtonDownEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-    
-	class MouseButtonUpEventProc : public SpriteEventProc
-	{
-	public:
-		GUIListEntry* m_entry;
-	public:
-		MouseButtonUpEventProc(GUIListEntry* entry) : m_entry(entry) {}
-		~MouseButtonUpEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-    
-public:
-	EntryState m_curtState;
 public:
     GUIListEntry(SpriteRenderer* renderer,
                  const xhn::static_string name,
@@ -82,9 +37,6 @@ public:
     {}
     virtual ~GUIListEntry();
     virtual void Init(const xhn::static_string configName);
-    inline void SetState(EntryState state) {
-        m_curtState = state;
-    }
     virtual void Build();
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
     void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
@@ -93,6 +45,9 @@ public:
 	void SetText(const xhn::string& text);
 	xhn::string GetText();
 	void GetBackgroundRect(SpriteRect& rect);
+	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
+	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
+	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 };
 
 class GUIListEntryFactory : public GUIHoriBarFactory
@@ -128,7 +83,6 @@ public:
 class GUIList : public GUIPanel
 {
 	DeclareRTTI;
-	friend class GUIListFactory;
 public:
 	int m_entryCount;
     GUIListEntryFactory* m_entryFactory;
@@ -143,6 +97,9 @@ public:
 	virtual void BuildFourBorders();
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void Build();
+	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
+	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
+	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 };
 
 class GUIListFactory : public GUIPanelFactory

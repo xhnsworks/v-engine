@@ -9,6 +9,7 @@
 ///**********************************************************************///
 class SpriteRenderer;
 class GUIButton;
+/**
 class GUIButtonLayer : public GUIPanelLayer
 {
 	DeclareRTTI;
@@ -23,61 +24,17 @@ class GUIButtonTextLayer : public SpriteTextLayer
 public:
     GUIButtonTextLayer();
 };
+**/
 class GUIButton : public GUIPanel
 {
 	DeclareRTTI;
-	friend class GUIButtonFactory;
-protected:
-	~GUIButton() {}
-public:
-	enum ButtonState
-	{
-		Normal,
-		Selected,
-		Pressed,
-	};
 public:
 	double m_releaseDelay;
 	double m_releaseTimer;
-	ButtonState m_curtState;
-
-	class MouseMoveEventProc : public SpriteEventProc
-	{
-	public:
-		GUIButton* m_button;
-	public:
-		MouseMoveEventProc(GUIButton* button) : m_button(button) {}
-		~MouseMoveEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-
-	class MouseButtonDownEventProc : public SpriteEventProc
-	{
-	public:
-		GUIButton* m_button;
-	public:
-		MouseButtonDownEventProc(GUIButton* button) : m_button(button) {}
-		~MouseButtonDownEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
-
-	class MouseButtonUpEventProc : public SpriteEventProc
-	{
-	public:
-		GUIButton* m_button;
-	public:
-		MouseButtonUpEventProc(GUIButton* button) : m_button(button) {}
-		~MouseButtonUpEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
-	};
 public:
 	GUIButton(SpriteRenderer* renderer, const xhn::static_string name)
 	: m_releaseDelay(0.25)
 	, m_releaseTimer(0.0f)
-	, m_curtState(Normal)
 	, GUIPanel(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
@@ -88,9 +45,9 @@ public:
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void TickImpl(double elapsedTime);
     virtual void TockImpl() {}
-	inline void SetState(ButtonState state) {
-		m_curtState = state;
-	}
+	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
+	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
+	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 };
 
 class GUIButtonFactory : public SpriteFactory

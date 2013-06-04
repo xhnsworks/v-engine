@@ -63,6 +63,5 @@ Sprite* GUIEditFactory::MakeSpriteImpl()
 	m_editCount++;
 	GUIEdit* ret = ENEW GUIEdit(m_renderer, mbuf);
 	ret->Init(m_configName);
-	ret->RegisterPublicEventCallback(&SpriteFrameStartEvent::s_RTTI, ENEW SpriteFrameStartEventProc(ret, m_renderer));
 	return ret;
 }
