@@ -25,6 +25,15 @@
 #include "elog.h"
 
 #import <Cocoa/Cocoa.h>
+void MyGLLock::Lock()
+{
+    [currentContext makeCurrentContext];
+    CGLLockContext((CGLContextObj)[currentContext CGLContextObj]);
+}
+void MyGLLock::Unlock()
+{
+    CGLUnlockContext((CGLContextObj)[currentContext CGLContextObj]);
+}
 
 @interface MyView (InternalMethods)
 
@@ -112,6 +121,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     timer = .0;
     fps = 0;
     
+    NSOpenGLContext    *currentContext = [self openGLContext];
+    MyGLLock* lock = new MyGLLock(currentContext);
+    GLLock::Init(lock);
+    
     /// create render robot
     MInit();
     ELog_Init();
@@ -170,7 +183,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 - (void)drawFrame
-{
+{    
     NSOpenGLContext    *currentContext = [self openGLContext];
     [currentContext makeCurrentContext];
     

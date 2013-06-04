@@ -3,7 +3,7 @@
 #include "gl_utility.h"
 #include "emem.h"
 #include "clamp.h"
-
+#include "gl_lock.h"
 Tex2DLockedRect::Tex2DLockedRect(euint32 _x, euint32 _y, euint32 _width, euint32 _height, pixel_format _fmt)
 : x(_x)
 , y(_y)
@@ -35,11 +35,15 @@ Texture2D::Texture2D()
 , height(0)
 , is_locked(0)
 {
+    GLLock::Get()->Lock();
     glGenTextures(1, &id);
+    GLLock::Get()->Unlock();
 }
 Texture2D::~Texture2D()
 {
+    GLLock::Get()->Lock();
 	glDeleteTextures(1, &id);
+    GLLock::Get()->Unlock();
 }
 
 void Texture2D::Create(pixel_format _fmt, euint32 _w, euint32 _h)
@@ -77,16 +81,21 @@ void Texture2D::LoadFromColor(const EColor& _color)
 
 void Texture2D::Bind()
 {
+    GLLock::Get()->Lock();
 	glBindTexture(GL_TEXTURE_2D, id);
+    GLLock::Get()->Unlock();
 }
 
 void Texture2D::Unbind()
 {
+    GLLock::Get()->Lock();
 	glBindTexture(GL_TEXTURE_2D, 0);
+    GLLock::Get()->Unlock();
 }
 
 void Texture2D::SubUpdate(Tex2DLockedRect* rect)
 {
+    GLLock::Get()->Lock();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBindTexture(GL_TEXTURE_2D, id);
 	switch (format)
@@ -154,10 +163,12 @@ void Texture2D::SubUpdate(Tex2DLockedRect* rect)
 		break;
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
+    GLLock::Get()->Unlock();
 }
 
 void Texture2D::Update(bool is_compressed)
 {
+    GLLock::Get()->Lock();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBindTexture(GL_TEXTURE_2D, id);
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
@@ -277,6 +288,7 @@ void Texture2D::Update(bool is_compressed)
 			pxl_buffer.get());
 		break;
 	}
+    GLLock::Get()->Unlock();
 }
 
 Tex2DLockedRect* Texture2D::Lock(const Tex2DRect& rect)

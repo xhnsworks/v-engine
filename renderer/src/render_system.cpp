@@ -25,6 +25,7 @@
 #include "xhn_set.hpp"
 
 #include "font_renderer.h"
+#include "gl_lock.h"
 
 static Tree g_std_pass_tree = NULL;
 static Tree g_vtx_dec_tree = NULL;

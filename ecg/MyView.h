@@ -28,6 +28,18 @@
 #import <QuartzCore/QuartzCore.h>
 #include "render_robot.h"
 #include "rwbuffer.h"
+#include "gl_lock.h"
+class MyGLLock : public GLLock
+{
+public:
+    NSOpenGLContext    *currentContext;
+    MyGLLock(NSOpenGLContext* ctx)
+    : currentContext(ctx)
+    {}
+    virtual void Lock();
+    virtual void Unlock();
+};
+
 @interface MyView : NSOpenGLView
 {
     CVDisplayLinkRef displayLink;

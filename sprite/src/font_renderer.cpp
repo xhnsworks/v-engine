@@ -5,7 +5,6 @@
 #include "emem.h"
 #include "eassert.h"
 #include "clamp.h"
-
 /****************/
 /// fixed me! this function is unsafed
 #ifdef _WIN32

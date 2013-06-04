@@ -23,6 +23,7 @@
 #include "lighting_model.h"
 
 #include "clear_sketchbook_pass.h"
+#include "gl_lock.h"
 
 /** \brief LightBase树的销毁
  *
@@ -122,6 +123,7 @@ void point_light_prototype::prepare_lighting_passes ( Renderer *rdr, VertexDecl 
 
 void _render_one_frame_begin()
 {
+    GLLock::Get()->Lock();
     glShadeModel ( GL_SMOOTH );                 // shading mathod: GL_SMOOTH or GL_FLAT
     glPixelStorei ( GL_UNPACK_ALIGNMENT, 4 );   // 4-byte pixel alignment
     glBlendFunc ( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -137,6 +139,7 @@ void _render_one_frame_begin()
     glDepthFunc ( GL_LEQUAL );
     glCullFace ( GL_BACK );
     ERROR_PROC;
+    GLLock::Get()->Unlock();
 }
 
 /** \brief 生成材质的Proc函数
