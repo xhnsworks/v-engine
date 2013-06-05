@@ -9,22 +9,7 @@
 ///**********************************************************************///
 class SpriteRenderer;
 class GUIButton;
-/**
-class GUIButtonLayer : public GUIPanelLayer
-{
-	DeclareRTTI;
-public:
-	GUIButtonLayer(const xhn::static_string name,
-                   AttributeHandle pivotHandle,
-                   AttributeHandle sizeHandle);
-};
-class GUIButtonTextLayer : public SpriteTextLayer
-{
-    DeclareRTTI;
-public:
-    GUIButtonTextLayer();
-};
-**/
+
 class GUIButton : public GUIPanel
 {
 	DeclareRTTI;
@@ -38,9 +23,6 @@ public:
 	, GUIPanel(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
-	///virtual void GetScopeImpl(SpriteRect& result);
-	void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
-	void BuildTextLayer(xhn::list<SpriteElement>& to);
 	virtual void Build();
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void TickImpl(double elapsedTime);

@@ -41,6 +41,54 @@ GUITouchable::~GUITouchable()
 {
 }
 
-void GUITouchable::Dest()
+void GUITouchable::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 {
+	switch (GetState())
+	{
+	case Touched:
+		{
+			SpriteLayerPtr layerPtr = GetLayer("touched");
+			if (layerPtr.get())
+				layerPtr->BuildElementsImpl(to);
+		}
+		break;
+	case Selected:
+		{
+			SpriteLayerPtr layerPtr = GetLayer("selected");
+			if (layerPtr.get())
+				layerPtr->BuildElementsImpl(to);
+		}
+		break;
+	case Pressed:
+		{
+			SpriteLayerPtr layerPtr = GetLayer("pressed");
+			if (layerPtr.get())
+				layerPtr->BuildElementsImpl(to);
+		}
+		break;
+	case Normal:
+	default:
+		{
+			SpriteLayerPtr layerPtr = GetLayer("normal");
+			if (layerPtr.get())
+				layerPtr->BuildElementsImpl(to);
+		}
+		break;
+	}
+}
+
+void GUITouchable::BuildTextLayer(xhn::list<SpriteElement>& to)
+{
+	SpriteLayerPtr layerPtr = GetLayer("text");
+	if (layerPtr.get())
+		layerPtr->BuildElementsImpl(to);
+}
+
+SpriteTextLayer* GUITouchable::GetTextLayer()
+{
+    SpriteLayerPtr layerPtr = GetLayer("text");
+	if (layerPtr.get())
+		return layerPtr->DynamicCast<SpriteTextLayer>();
+	else
+		return NULL;
 }

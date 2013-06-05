@@ -60,7 +60,6 @@ public:
     : m_horiBarCount(0)
     , SpriteFactory(renderer, cfgName)
 	{}
-	///virtual Sprite* MakeSpriteImpl();
 	static void CreateSheetConfig(const char* cfgName,
                                   const char* sheetName,
                                   const char* textureName,
@@ -68,6 +67,15 @@ public:
                                   float cornerSize,
                                   const SpriteRect& areaRect,
                                   float areaCornerSize);
+	static void CreateSheetConfig(const char* cfgName,
+		                          const char* textureName,
+		                          const SpriteRect& panelRect,
+		                          float cornerSize,
+		                          const EFloat2& areaSize,
+		                          float areaCornerSize,
+		                          const EFloat2& areaCoordNormal,
+		                          const EFloat2& areaCoordTouched,
+		                          const EFloat2& areaCoorfSelected);
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -123,8 +131,31 @@ public:
                                   float cornerSize,
                                   const SpriteRect& areaRect,
                                   float areaCornerSize);
+	static void CreateSheetConfig(const char* cfgName,
+		                          const char* textureName,
+		                          const SpriteRect& panelRect,
+		                          float cornerSize,
+		                          const EFloat2& areaSize,
+		                          float areaCornerSize,
+		                          const EFloat2& areaCoordNormal,
+		                          const EFloat2& areaCoordTouched,
+		                          const EFloat2& areaCoorfSelected);
 };
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///
+void CreateHoriLayer(pugi::xml_node sheet,
+					 const char* textureName,
+					 const SpriteRect& panelRect,
+					 float cornerSize,
+					 const EFloat2& areaSize,
+					 float areaCornerSize,
+					 const EFloat2& areaCoord);
+void CreateVertLayer(pugi::xml_node sheet,
+					 const char* textureName,
+					 const SpriteRect& panelRect,
+					 float cornerSize,
+					 const EFloat2& areaSize,
+					 float areaCornerSize,
+					 const EFloat2& areaCoord);
 #endif /* defined(__ecg__gui_bar__) */

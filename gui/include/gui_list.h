@@ -39,8 +39,6 @@ public:
     virtual void Init(const xhn::static_string configName);
     virtual void Build();
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
-    void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
-	void BuildTextLayer(xhn::list<SpriteElement>& to);
 	virtual void BuildDropDownMenu(xhn::list<SpriteElement>& to) {}
 	void SetText(const xhn::string& text);
 	xhn::string GetText();
@@ -64,15 +62,6 @@ public:
 	GUIListEntryFactory(SpriteRenderer* renderer,
                         const char* cfgName);
     virtual Sprite* MakeSpriteImpl();
-    static void CreateSheetConfig(const char* cfgName,
-                                  const char* textureName,
-                                  const SpriteRect& panelRect,
-                                  float cornerSize,
-                                  const EFloat2& areaSize,
-                                  float areaCornerSize,
-                                  const EFloat2& areaCoordNormal,
-                                  const EFloat2& areaCoordTouched,
-                                  const EFloat2& areaCoorfSelected);
 };
 ///**********************************************************************///
 ///                       class define end                               ///

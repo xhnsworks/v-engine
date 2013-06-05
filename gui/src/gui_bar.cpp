@@ -153,17 +153,7 @@ void GUIHoriBar::SetSize(float x)
 	FloatAttr size(x);
 	m_sizeHandle.SetAttribute(&size);
 }
-/**
-Sprite* GUIHoriBarFactory::MakeSpriteImpl()
-{
-	char mbuf[256];
-	snprintf(mbuf, 255, "GUIHoriBar_%d", m_horiBarCount);
-	m_horiBarCount++;
-	GUIHoriBar* ret = ENEW GUIHoriBar(m_renderer, mbuf);
-	ret->Init(m_configName);
-	return ret;
-}
-**/
+
 void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
                                           const char* sheetName,
                                           const char* textureName,
@@ -181,77 +171,68 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
 	if (!layers)
 		layers = root.append_child("layers");
 	pugi::xml_node sheet = layers.append_child(sheetName);
-	pugi::xml_node elements = sheet.append_child("elements");
-	elements.append_attribute("num_elements").set_value(3);
-    
-	pugi::xml_node left = elements.append_child("element");
-	pugi::xml_node right = elements.append_child("element");
-    
-	pugi::xml_node center = elements.append_child("element");
-    
-	left.append_attribute("filename").set_value(textureName);
-	right.append_attribute("filename").set_value(textureName);
-	    
-	center.append_attribute("filename").set_value(textureName);
-    
-	float panelLeft = panelRect.left;
-	float panelTop = panelRect.top;
-	float panelRight = panelRect.left + panelRect.size.width;
-    
-	float areaLeft = areaRect.left;
-	float areaTop = areaRect.top;
-	float areaRight = areaRect.left + areaRect.size.width;
-	float areaBottom = areaRect.top + areaRect.size.height;
-    
-	left.append_attribute("name").set_value("left");
-    right.append_attribute("name").set_value("right");
-    
-    left.append_attribute("left").set_value(panelLeft);
-    right.append_attribute("left").set_value(panelRight - cornerSize);
-    
-    left.append_attribute("top").set_value(panelTop);
-    right.append_attribute("top").set_value(panelTop);
-    
-    left.append_attribute("width").set_value(cornerSize);
-    right.append_attribute("width").set_value(cornerSize);
-    
-    left.append_attribute("height").set_value(panelRect.size.height);
-    right.append_attribute("height").set_value(panelRect.size.height);
-    
-    left.append_attribute("area_x0").set_value(areaLeft);
-    right.append_attribute("area_x0").set_value(areaRight -
-                                                areaCornerSize);
-    
-    left.append_attribute("area_x1").set_value(areaLeft +
-                                               areaCornerSize);
-    right.append_attribute("area_x1").set_value(areaRight);
-    
-    left.append_attribute("area_y0").set_value(areaTop);
-    right.append_attribute("area_y0").set_value(areaTop);
-    
-    left.append_attribute("area_y1").set_value(areaBottom);
-    right.append_attribute("area_y1").set_value(areaBottom);
-    
-    left.append_attribute("transparency").set_value(1.0f);
-    right.append_attribute("transparency").set_value(1.0f);
-    
-	center.append_attribute("name").set_value("center");
-    
-    center.append_attribute("left").set_value(panelLeft + cornerSize);
-    center.append_attribute("top").set_value(panelTop);
-    center.append_attribute("width").set_value(panelRect.size.width -
-                                               cornerSize -
-                                               cornerSize);
-    center.append_attribute("height").set_value(panelRect.size.height);
-    
-    center.append_attribute("area_x0").set_value(areaLeft +
-                                                 areaCornerSize);
-    center.append_attribute("area_x1").set_value(areaRight -
-                                                 areaCornerSize);
-    center.append_attribute("area_y0").set_value(areaTop);
-    center.append_attribute("area_y1").set_value(areaBottom);
-    
-    center.append_attribute("transparency").set_value(1.0f);
+	
+	EFloat2 layerAreaCoord(areaRect.left, areaRect.top);
+	EFloat2 layerAreaSize(areaRect.size.width, areaRect.size.height);
+	CreateHoriLayer(sheet, 
+		            textureName, 
+					panelRect, 
+					cornerSize, 
+					layerAreaSize, 
+					areaCornerSize, 
+					layerAreaCoord);
+}
+
+void GUIHoriBarFactory::CreateSheetConfig(
+	const char* cfgName,
+	const char* textureName,
+	const SpriteRect& panelRect,
+	float cornerSize,
+	const EFloat2& areaSize,
+	float areaCornerSize,
+	const EFloat2& areaCoordNormal,
+	const EFloat2& areaCoordTouched,
+	const EFloat2& areaCoorfSelected)
+{
+	XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
+	pugi::xml_document& doc = xmlRes->GetDocument();
+	pugi::xml_node root = doc.child("root");
+	if (!root)
+		root = doc.append_child("root");
+	pugi::xml_node layers = root.child("layers");
+	if (!layers)
+		layers = root.append_child("layers");
+
+	{
+		pugi::xml_node sheet = layers.append_child("normal");
+		CreateHoriLayer(sheet,
+			textureName,
+			panelRect,
+			cornerSize,
+			areaSize,
+			areaCornerSize,
+			areaCoordNormal);
+	}
+	{
+		pugi::xml_node sheet = layers.append_child("touched");
+		CreateHoriLayer(sheet,
+			textureName,
+			panelRect,
+			cornerSize,
+			areaSize,
+			areaCornerSize,
+			areaCoordTouched);
+	}
+	{
+		pugi::xml_node sheet = layers.append_child("selected");
+		CreateHoriLayer(sheet,
+			textureName,
+			panelRect,
+			cornerSize,
+			areaSize,
+			areaCornerSize,
+			areaCoorfSelected);
+	}
 }
 ///**********************************************************************///
 ///                       class implement end                            ///
@@ -395,32 +376,10 @@ void GUIVertBar::Init(const xhn::static_string configName)
 
 void GUIVertBar::SetSize(float x)
 {
-	///xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	///FloatAttr* size = m_sizeHandle.GetAttribute<FloatAttr>();
-	///size->x = x;
 	FloatAttr size(x);
 	m_sizeHandle.SetAttribute(&size);
 }
-/**
-void GUIVertBar::GetScopeImpl(SpriteRect& result)
-{
-	result.left = 0.0f;
-	result.top = 0.0f;
-	result.size.width = 0.0f;
-	result.size.height = 0.0f;
-}
-**/
-/**
-Sprite* GUIVertBarFactory::MakeSpriteImpl()
-{
-	char mbuf[256];
-	snprintf(mbuf, 255, "GUIVertBar_%d", m_vertBarCount);
-	m_vertBarCount++;
-	GUIVertBar* ret = ENEW GUIVertBar(m_renderer, mbuf);
-	ret->Init(m_configName);
-	return ret;
-}
-**/
+
 void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
                                           const char* sheetName,
                                           const char* textureName,
@@ -439,6 +398,159 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
 	if (!layers)
 		layers = root.append_child("layers");
 	pugi::xml_node sheet = layers.append_child(sheetName);
+
+	EFloat2 layerAreaCoord(areaRect.left, areaRect.top);
+	EFloat2 layerAreaSize(areaRect.size.width, areaRect.size.height);
+	CreateVertLayer(sheet, 
+		            textureName, 
+		            panelRect, 
+		            cornerSize, 
+		            layerAreaSize, 
+		            areaCornerSize, 
+		            layerAreaCoord);
+}
+void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
+										  const char* textureName,
+										  const SpriteRect& panelRect,
+										  float cornerSize,
+										  const EFloat2& areaSize,
+										  float areaCornerSize,
+										  const EFloat2& areaCoordNormal,
+										  const EFloat2& areaCoordTouched,
+										  const EFloat2& areaCoorfSelected)
+{
+	XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
+	pugi::xml_document& doc = xmlRes->GetDocument();
+	pugi::xml_node root = doc.child("root");
+	if (!root)
+		root = doc.append_child("root");
+	pugi::xml_node layers = root.child("layers");
+	if (!layers)
+		layers = root.append_child("layers");
+	{
+		pugi::xml_node sheet = layers.append_child("normal");
+		CreateVertLayer(sheet,
+			textureName,
+			panelRect,
+			cornerSize,
+			areaSize,
+			areaCornerSize,
+			areaCoordNormal);
+	}
+	{
+		pugi::xml_node sheet = layers.append_child("touched");
+		CreateVertLayer(sheet,
+			textureName,
+			panelRect,
+			cornerSize,
+			areaSize,
+			areaCornerSize,
+			areaCoordTouched);
+	}
+	{
+		pugi::xml_node sheet = layers.append_child("selected");
+		CreateVertLayer(sheet,
+			textureName,
+			panelRect,
+			cornerSize,
+			areaSize,
+			areaCornerSize,
+			areaCoorfSelected);
+	}
+}
+///**********************************************************************///
+///                       class implement end                            ///
+///**********************************************************************///
+
+void CreateHoriLayer(pugi::xml_node sheet,
+					 const char* textureName,
+					 const SpriteRect& panelRect,
+					 float cornerSize,
+					 const EFloat2& areaSize,
+					 float areaCornerSize,
+					 const EFloat2& areaCoord)
+{
+	float panelLeft = panelRect.left;
+	float panelTop = panelRect.top;
+	float panelRight = panelRect.left + panelRect.size.width;
+
+	float areaLeft = areaCoord.x;
+	float areaTop = areaCoord.y;
+	float areaRight = areaCoord.x + areaSize.x;
+	float areaBottom = areaCoord.y + areaSize.y;
+
+	pugi::xml_node elements = sheet.append_child("elements");
+	elements.append_attribute("num_elements").set_value(3);
+
+	pugi::xml_node left = elements.append_child("element");
+	pugi::xml_node right = elements.append_child("element");
+
+	pugi::xml_node center = elements.append_child("element");
+
+	left.append_attribute("filename").set_value(textureName);
+	right.append_attribute("filename").set_value(textureName);
+
+	center.append_attribute("filename").set_value(textureName);
+
+	left.append_attribute("name").set_value("left");
+	right.append_attribute("name").set_value("right");
+
+	left.append_attribute("left").set_value(panelLeft);
+	right.append_attribute("left").set_value(panelRight - cornerSize);
+
+	left.append_attribute("top").set_value(panelTop);
+	right.append_attribute("top").set_value(panelTop);
+
+	left.append_attribute("width").set_value(cornerSize);
+	right.append_attribute("width").set_value(cornerSize);
+
+	left.append_attribute("height").set_value(panelRect.size.height);
+	right.append_attribute("height").set_value(panelRect.size.height);
+
+	left.append_attribute("area_x0").set_value(areaLeft);
+	right.append_attribute("area_x0").set_value(areaRight -
+		areaCornerSize);
+
+	left.append_attribute("area_x1").set_value(areaLeft +
+		areaCornerSize);
+	right.append_attribute("area_x1").set_value(areaRight);
+
+	left.append_attribute("area_y0").set_value(areaTop);
+	right.append_attribute("area_y0").set_value(areaTop);
+
+	left.append_attribute("area_y1").set_value(areaBottom);
+	right.append_attribute("area_y1").set_value(areaBottom);
+
+	left.append_attribute("transparency").set_value(1.0f);
+	right.append_attribute("transparency").set_value(1.0f);
+
+	center.append_attribute("name").set_value("center");
+
+	center.append_attribute("left").set_value(panelLeft + cornerSize);
+	center.append_attribute("top").set_value(panelTop);
+	center.append_attribute("width").set_value(panelRect.size.width -
+		cornerSize -
+		cornerSize);
+	center.append_attribute("height").set_value(panelRect.size.height);
+
+	center.append_attribute("area_x0").set_value(areaLeft +
+		areaCornerSize);
+	center.append_attribute("area_x1").set_value(areaRight -
+		areaCornerSize);
+	center.append_attribute("area_y0").set_value(areaTop);
+	center.append_attribute("area_y1").set_value(areaBottom);
+
+	center.append_attribute("transparency").set_value(1.0f);
+}
+
+void CreateVertLayer(pugi::xml_node sheet,
+					 const char* textureName,
+					 const SpriteRect& panelRect,
+					 float cornerSize,
+					 const EFloat2& areaSize,
+					 float areaCornerSize,
+					 const EFloat2& areaCoord)
+{
 	pugi::xml_node elements = sheet.append_child("elements");
 	elements.append_attribute("num_elements").set_value(3);
 
@@ -456,60 +568,57 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
 	float panelTop = panelRect.top;
 	float panelBottom = panelRect.top + panelRect.size.height;
 
-	float areaLeft = areaRect.left;
-	float areaTop = areaRect.top;
-	float areaRight = areaRect.left + areaRect.size.width;
-	float areaBottom = areaRect.top + areaRect.size.height;
+	float areaLeft = areaCoord.x;
+	float areaTop = areaCoord.y;
+	float areaRight = areaCoord.x + areaSize.x;
+	float areaBottom = areaCoord.y + areaSize.y;
 
 	top.append_attribute("name").set_value("top");
-    bottom.append_attribute("name").set_value("bottom");
-    
-    top.append_attribute("left").set_value(panelLeft);
-    bottom.append_attribute("left").set_value(panelLeft);
-    
-    top.append_attribute("top").set_value(panelTop);
-    bottom.append_attribute("top").set_value(panelBottom - cornerSize);
-    
-    top.append_attribute("width").set_value(panelRect.size.width);
-    bottom.append_attribute("width").set_value(panelRect.size.width);
-    
-    top.append_attribute("height").set_value(cornerSize);
-    bottom.append_attribute("height").set_value(cornerSize);
-    
-    top.append_attribute("area_x0").set_value(areaLeft);
-    bottom.append_attribute("area_x0").set_value(areaLeft);
-    
-    top.append_attribute("area_x1").set_value(areaRight);
-    bottom.append_attribute("area_x1").set_value(areaRight);
-    
-    top.append_attribute("area_y0").set_value(areaTop);
-    bottom.append_attribute("area_y0").set_value(areaBottom -
-                                                 areaCornerSize);
-    
-    top.append_attribute("area_y1").set_value(areaTop + areaCornerSize);
-    bottom.append_attribute("area_y1").set_value(areaBottom);
-    
-    top.append_attribute("transparency").set_value(1.0f);
-    bottom.append_attribute("transparency").set_value(1.0f);
+	bottom.append_attribute("name").set_value("bottom");
+
+	top.append_attribute("left").set_value(panelLeft);
+	bottom.append_attribute("left").set_value(panelLeft);
+
+	top.append_attribute("top").set_value(panelTop);
+	bottom.append_attribute("top").set_value(panelBottom - cornerSize);
+
+	top.append_attribute("width").set_value(panelRect.size.width);
+	bottom.append_attribute("width").set_value(panelRect.size.width);
+
+	top.append_attribute("height").set_value(cornerSize);
+	bottom.append_attribute("height").set_value(cornerSize);
+
+	top.append_attribute("area_x0").set_value(areaLeft);
+	bottom.append_attribute("area_x0").set_value(areaLeft);
+
+	top.append_attribute("area_x1").set_value(areaRight);
+	bottom.append_attribute("area_x1").set_value(areaRight);
+
+	top.append_attribute("area_y0").set_value(areaTop);
+	bottom.append_attribute("area_y0").set_value(areaBottom -
+		areaCornerSize);
+
+	top.append_attribute("area_y1").set_value(areaTop + areaCornerSize);
+	bottom.append_attribute("area_y1").set_value(areaBottom);
+
+	top.append_attribute("transparency").set_value(1.0f);
+	bottom.append_attribute("transparency").set_value(1.0f);
 
 	center.append_attribute("name").set_value("center");
-    
-    center.append_attribute("left").set_value(panelLeft);
-    center.append_attribute("top").set_value(panelTop + cornerSize);
-    center.append_attribute("width").set_value(panelRect.size.width);
-    center.append_attribute("height").set_value(panelRect.size.height -
-                                                cornerSize -
-                                                cornerSize);
-    
-    center.append_attribute("area_x0").set_value(areaLeft);
-    center.append_attribute("area_x1").set_value(areaRight);
-    center.append_attribute("area_y0").set_value(areaTop +
-                                                 areaCornerSize);
-    center.append_attribute("area_y1").set_value(areaBottom -
-                                                 areaCornerSize);
-    
-    center.append_attribute("transparency").set_value(1.0f);
+
+	center.append_attribute("left").set_value(panelLeft);
+	center.append_attribute("top").set_value(panelTop + cornerSize);
+	center.append_attribute("width").set_value(panelRect.size.width);
+	center.append_attribute("height").set_value(panelRect.size.height -
+		cornerSize -
+		cornerSize);
+
+	center.append_attribute("area_x0").set_value(areaLeft);
+	center.append_attribute("area_x1").set_value(areaRight);
+	center.append_attribute("area_y0").set_value(areaTop +
+		areaCornerSize);
+	center.append_attribute("area_y1").set_value(areaBottom -
+		areaCornerSize);
+
+	center.append_attribute("transparency").set_value(1.0f);
 }
-///**********************************************************************///
-///                       class implement end                            ///
-///**********************************************************************///

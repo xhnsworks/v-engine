@@ -60,7 +60,6 @@ private:
 public:
     GUITouchable(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual ~GUITouchable();
-	void Dest();
 	inline State GetState() {
 		return m_curtState;
 	}
@@ -70,6 +69,62 @@ public:
 	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) = 0;
 	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) = 0;
 	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) = 0;
+	void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
+	void BuildTextLayer(xhn::list<SpriteElement>& to);
+	SpriteTextLayer* GetTextLayer();
+	template <typename T>
+	void InitImpl(const xhn::static_string configName, AttributeHandle sizeHandle)
+	{
+		XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
+		if (TestResourcePtr(cfg)) {
+			pugi::xml_document& doc = cfg->GetDocument();
+			pugi::xml_node root = doc.child("root");
+			pugi::xml_node layers = root.child("layers");
+			pugi::xml_node normallayer = layers.child("normal");
+			pugi::xml_node touchedlayer = layers.child("touched");
+			pugi::xml_node selectedlayer = layers.child("selected");
+			pugi::xml_node pressedlayer = layers.child("pressed");
+			if (normallayer)
+			{
+				SpriteLayerPtr layer = ENEW T("normal",
+					m_pivotHandle,
+					sizeHandle);
+				layer->LoadConfigImpl(normallayer);
+				AddChild(layer);
+			}
+			if (touchedlayer)
+			{
+				SpriteLayerPtr layer = ENEW T("touched",
+					m_pivotHandle,
+					sizeHandle);
+				layer->LoadConfigImpl(touchedlayer);
+				AddChild(layer);
+			}
+			if (selectedlayer)
+			{
+				SpriteLayerPtr layer = ENEW T("selected",
+					m_pivotHandle,
+					sizeHandle);
+				layer->LoadConfigImpl(selectedlayer);
+				AddChild(layer);
+			}
+            if (pressedlayer)
+			{
+				SpriteLayerPtr layer = ENEW T("pressed",
+					m_pivotHandle,
+					sizeHandle);
+				layer->LoadConfigImpl(pressedlayer);
+				AddChild(layer);
+			}
+			{
+				SpriteLayerPtr layer = ENEW SpriteTextLayer("text");
+				layer->m_horizontalAlignmentMode = SpriteLayer::CenterHorizontalAligned;
+				layer->m_verticalAlignmentMode = SpriteLayer::CenterVerticalAligned;
+				AddChild(layer);
+			}
+			SetState(GUITouchable::Normal);
+		}
+	}
 };
 ///**********************************************************************///
 ///                       class define end                               ///

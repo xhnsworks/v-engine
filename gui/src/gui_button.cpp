@@ -5,118 +5,25 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-///ImplementRTTI(GUIButtonLayer, GUIPanelLayer);
-///ImplementRTTI(GUIButtonTextLayer, SpriteTextLayer);
 ImplementRTTI(GUIButton, GUIPanel);
-/**
-GUIButtonLayer::GUIButtonLayer(const xhn::static_string name,
-                               AttributeHandle pivotHandle,
-                               AttributeHandle sizeHandle)
-: GUIPanelLayer(name, pivotHandle, sizeHandle)
-{
-}
-
-GUIButtonTextLayer::GUIButtonTextLayer()
-: SpriteTextLayer("text")
-{
-}
-**/
 void GUIButton::Init(const xhn::static_string configName)
-{
-	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
-	if (TestResourcePtr(cfg)) {
-		pugi::xml_document& doc = cfg->GetDocument();
-		pugi::xml_node root = doc.child("root");
-		pugi::xml_node layers = root.child("layers");
-
-		{
-			/**
-			xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-            Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
-			size->x = 100.0f;
-			size->y = 50.0f;
-			**/
-			Float2Attr size(100.0f, 50.0f);
-			m_sizeHandle.SetAttribute(&size);
-		}
-		
-		{
-			pugi::xml_node baselayer = layers.child("normal");
-			if (!baselayer)
-				return;
-			SpriteLayerPtr layer = ENEW GUIPanelLayer("normal",
-                                                      m_pivotHandle,
-                                                      m_sizeHandle);
-			layer->LoadConfigImpl(baselayer);
-			AddChild(layer);
-		}
-		{
-			pugi::xml_node baselayer = layers.child("selected");
-			if (!baselayer)
-				return;
-			SpriteLayerPtr layer = ENEW GUIPanelLayer("selected",
-                                                      m_pivotHandle,
-                                                      m_sizeHandle);
-			layer->LoadConfigImpl(baselayer);
-			AddChild(layer);
-		}
-		{
-			pugi::xml_node baselayer = layers.child("pressed");
-			if (!baselayer)
-				return;
-			SpriteLayerPtr layer = ENEW GUIPanelLayer("pressed",
-                                                      m_pivotHandle,
-                                                      m_sizeHandle);
-			layer->LoadConfigImpl(baselayer);
-			AddChild(layer);
-		}
-		{
+{	
+	Float2Attr size(100.0f, 50.0f);
+	m_sizeHandle.SetAttribute(&size);
+	InitImpl<GUIPanelLayer>(configName, m_sizeHandle);
+	SpriteTextLayer* layer = GetTextLayer();
+	if (layer) {
+		XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
+		if (TestResourcePtr(cfg)) {
+			pugi::xml_document& doc = cfg->GetDocument();
+			pugi::xml_node root = doc.child("root");
+			pugi::xml_node layers = root.child("layers");
 			pugi::xml_node textlayer = layers.child("text");
 			if (textlayer) {
-                SpriteLayerPtr layer = ENEW SpriteTextLayer("text");
-                layer->LoadConfigImpl(textlayer);
-                ///m_children.push_back(layer);
-				layer->m_horizontalAlignmentMode = CenterHorizontalAligned;
-				layer->m_verticalAlignmentMode = CenterVerticalAligned;
-                AddChild(layer);
-            }
+				layer->LoadConfigImpl(textlayer);
+			}
 		}
 	}
-}
-
-void GUIButton::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
-{
-	switch (GetState())
-	{
-	case Normal:
-		{
-            SpriteLayerPtr layerPtr = GetLayer("normal");
-            if (layerPtr.get())
-                layerPtr->BuildElementsImpl(to);
-		}
-		break;
-	case Selected:
-		{
-            SpriteLayerPtr layerPtr = GetLayer("selected");
-            if (layerPtr.get())
-                layerPtr->BuildElementsImpl(to);
-		}
-		break;
-	case Pressed:
-	default:
-		{
-            SpriteLayerPtr layerPtr = GetLayer("pressed");
-            if (layerPtr.get())
-                layerPtr->BuildElementsImpl(to);
-		}
-		break;
-	}
-}
-void GUIButton::BuildTextLayer(xhn::list<SpriteElement>& to)
-{
-    SpriteLayerPtr layerPtr = GetLayer("text");
-    if (layerPtr.get())
-        layerPtr->BuildElementsImpl(to);
 }
 
 void GUIButton::Build()

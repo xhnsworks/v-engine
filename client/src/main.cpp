@@ -95,6 +95,14 @@
 #include "sprite_event_hub.h"
 
 #include "font_renderer.h"
+#include "gl_lock.h"
+
+class MyGLLock : public GLLock
+{
+public:
+	virtual void Lock() {}
+	virtual void Unlock() {}
+};
 
 Mesh g_mesh0 = {NULL};
 Mesh g_mesh1 = {NULL};
@@ -168,6 +176,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	VectorTest();
 
 	GLSL::test();
+
+	GLLock::Init(new MyGLLock);
 
 	TRY(0)
 

@@ -9,7 +9,7 @@
 ///                       class define begin                             ///
 ///**********************************************************************///
 class SpriteRenderer;
-class GUIContainer : public GUITouchable
+class GUIContainer : public Sprite
 {
 	DeclareRTTI;
 public:
@@ -25,9 +25,6 @@ public:
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 	virtual void Build();
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 };
 
 class GUIContainerFactory : public SpriteFactory
