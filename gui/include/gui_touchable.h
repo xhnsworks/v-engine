@@ -6,6 +6,7 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_event_hub.h"
+#include "render_system.h"
 ///**********************************************************************///
 ///                           include end                                ///
 ///**********************************************************************///
@@ -22,6 +23,7 @@ public:
 		Touched,
 		Selected,
 		Pressed,
+        Dragging,
 	};
 	class MouseMoveEventProc : public SpriteEventProc
 	{
@@ -57,6 +59,8 @@ public:
 	};
 private:
     State m_curtState;
+public:
+    SInt2 m_prevMouseCoord;
 public:
     GUITouchable(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual ~GUITouchable();

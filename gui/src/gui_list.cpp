@@ -49,8 +49,8 @@ void GUIListEntry::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
 {
 	const FourBorders& borders = GetFourBorders();
 	EFloat2 realCrd =
-    m_renderer->get_real_position((float)mouseEvt->m_curtMousePos.x,
-                                  (float)mouseEvt->m_curtMousePos.y);
+    m_renderer->get_real_position((float)mouseEvt->m_curtMouseCoord.x,
+                                  (float)mouseEvt->m_curtMouseCoord.y);
 	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
 	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
     

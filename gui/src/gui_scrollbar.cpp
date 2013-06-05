@@ -7,50 +7,47 @@ ImplementRTTI(GUIVertScrollbar, GUIVertBar);
 
 void GUIVertSlider::Init(const xhn::static_string configName)
 {
-	XMLResourcePtr cfg = RenderSystem_load_gui_config(configName);
-	if (TestResourcePtr(cfg)) {
-		pugi::xml_document& doc = cfg->GetDocument();
-		pugi::xml_node root = doc.child("root");
-		pugi::xml_node layers = root.child("layers");
-		pugi::xml_node normallayer = layers.child("normal");
-		pugi::xml_node touchedlayer = layers.child("touched");
-		pugi::xml_node selectedlayer = layers.child("selected");
-		if (!normallayer ||
-			!touchedlayer ||
-			!selectedlayer)
-			return;
-		{
-			SpriteLayerPtr layer = ENEW GUIHoriBarLayer("normal",
-				m_pivotHandle,
-				m_sizeHandle);
-			layer->LoadConfigImpl(normallayer);
-			AddChild(layer);
-		}
-		{
-			SpriteLayerPtr layer = ENEW GUIHoriBarLayer("touched",
-				m_pivotHandle,
-				m_sizeHandle);
-			layer->LoadConfigImpl(touchedlayer);
-			AddChild(layer);
-		}
-		{
-			SpriteLayerPtr layer = ENEW GUIHoriBarLayer("selected",
-				m_pivotHandle,
-				m_sizeHandle);
-			layer->LoadConfigImpl(selectedlayer);
-			AddChild(layer);
-		}
-		SetState(GUITouchable::Normal);
-	}
+    InitImpl<GUIHoriBarLayer>(configName, m_sizeHandle);
 }
 void GUIVertSlider::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
 {
+    if (GetState() == GUITouchable::Normal) {
+        const FourBorders& borders = GetFourBorders();
+        EFloat2 realCrd =
+        m_renderer->get_real_position((float)mouseEvt->m_curtMouseCoord.x,
+                                      (float)mouseEvt->m_curtMouseCoord.y);
+        EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
+        sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
+        
+        if (borders.IsInBorders(pt)) {
+            SetState(GUITouchable::Touched);
+        }
+    }
+    else if (GetState() == GUITouchable::Dragging) {
+        esint move = mouseEvt->m_curtMouseCoord.y - m_prevMouseCoord.y;
+        Float2Attr coord;
+        m_coordinateHandle.GetAttribute(&coord);
+        coord.y += (float)move;
+        m_coordinateHandle.SetAttribute(&coord);
+        m_prevMouseCoord = mouseEvt->m_curtMouseCoord;
+    }
 }
 void GUIVertSlider::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
 {
+    if (mouseEvt->m_leftButtomDown) {
+        if (GetState() == GUITouchable::Touched) {
+            SetState(GUITouchable::Dragging);
+            m_prevMouseCoord = mouseEvt->m_curtMouseCoord;
+        }
+    }
 }
 void GUIVertSlider::OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt)
 {
+    if (mouseEvt->m_leftButtomUp) {
+        if (GetState() == GUITouchable::Dragging) {
+            SetState(GUITouchable::Normal);
+        }
+    }
 }
 void GUIVertSlider::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {

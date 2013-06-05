@@ -48,8 +48,8 @@ void GUICursorMouseEventProc::Proc(const SpriteEvent* evt)
 {
 	const SpriteMouseMoveEvent* mouseEvt =
     evt->DynamicCast<SpriteMouseMoveEvent>();
-	m_cursor->SetCoord((float)mouseEvt->m_curtMousePos.x,
-                       (float)mouseEvt->m_curtMousePos.y);
+	m_cursor->SetCoord((float)mouseEvt->m_curtMouseCoord.x,
+                       (float)mouseEvt->m_curtMouseCoord.y);
 	///Ray_log((const Ray)&mouseEvt->m_mouseRay);
 }
 

@@ -112,8 +112,8 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 #endif
         if (m_guiRenderer) {
             SpriteMouseMoveEvent sptEvt;
-            sptEvt.m_curtMousePos.x = m_mouseX;
-            sptEvt.m_curtMousePos.y = m_mouseY;
+            sptEvt.m_curtMouseCoord.x = m_mouseX;
+            sptEvt.m_curtMouseCoord.y = m_mouseY;
             printf("mouse x %d, y %d\n", m_mouseX, m_mouseY);
 
 			SpriteEventHub::Get()->BroadcastPublicEvent(
@@ -127,6 +127,8 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = true;
 			SpriteMouseButtonDownEvent sptEvt;
+            sptEvt.m_curtMouseCoord.x = m_mouseX;
+            sptEvt.m_curtMouseCoord.y = m_mouseY;
 			sptEvt.m_leftButtomDown = true;
 			SpriteEventHub::Get()->BroadcastPublicEvent(
                 sptEvt,
@@ -143,6 +145,8 @@ void DefaultMouseListener2::ListenImpl(const input_event& event)
 		if (event.info.mouse_info.mouse_button_info == LeftButton) {
 			m_leftButtonDown = false;
 			SpriteMouseButtonUpEvent sptEvt;
+            sptEvt.m_curtMouseCoord.x = m_mouseX;
+            sptEvt.m_curtMouseCoord.y = m_mouseY;
 			sptEvt.m_leftButtomUp = true;
 			SpriteEventHub::Get()->BroadcastPublicEvent(
                 sptEvt,

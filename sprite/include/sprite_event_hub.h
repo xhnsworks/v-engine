@@ -13,7 +13,7 @@ class SpriteMouseMoveEvent : public SpriteEvent
 {
 	DeclareRTTI;
 public:
-	SInt2 m_curtMousePos;
+	SInt2 m_curtMouseCoord;
 public:
 	SpriteMouseMoveEvent()
 	{}
@@ -23,6 +23,7 @@ class SpriteMouseButtonDownEvent : public SpriteEvent
 {
 	DeclareRTTI;
 public:
+    SInt2 m_curtMouseCoord;
 	bool m_leftButtomDown;
 	bool m_middleButtonDown;
 	bool m_rightButtonDown;
@@ -38,6 +39,7 @@ class SpriteMouseButtonUpEvent : public SpriteEvent
 {
 	DeclareRTTI;
 public:
+    SInt2 m_curtMouseCoord;
 	bool m_leftButtomUp;
 	bool m_middleButtonUp;
 	bool m_rightButtonUp;
