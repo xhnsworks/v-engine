@@ -5,9 +5,7 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIEditBackgroundLayer, GUIPanelLayer);
-ImplementRTTI(GUIEditTextLayer, SpriteTextLayer);
-ImplementRTTI(GUIEdit, GUIPanel);
+#include "gui_proc_group.h"
 
 GUIEditBackgroundLayer::GUIEditBackgroundLayer(AttributeHandle pivotHandle, AttributeHandle sizeHandle)
 : GUIPanelLayer("background", pivotHandle, sizeHandle)
@@ -54,6 +52,15 @@ void GUIEdit::Init(const xhn::static_string configName)
             }
 		}
 	}
+}
+
+ProcGroup GUIEdit::NewProcGroup()
+{
+	ProcGroup pg;
+	pg.mouseMoveProc = ENEW EmptyMouseMoveProc(this);
+	pg.mouseButtonDownProc = ENEW EmptyMouseButtonDownProc(this);
+	pg.mouseButtonUpProc = ENEW EmptyMouseButtonUpProc(this);
+	return pg;
 }
 
 Sprite* GUIEditFactory::MakeSpriteImpl()

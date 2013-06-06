@@ -16,8 +16,6 @@
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-ImplementRTTI(GUIHoriBarLayer, SpriteNormalLayer);
-ImplementRTTI(GUIHoriBar, GUITouchable);
 
 void GUIHoriBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
@@ -116,7 +114,7 @@ void GUIHoriBarLayer::GetScopeImpl(SpriteRect& result)
 
 GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
                        const xhn::static_string name)
-: GUITouchable(renderer, name)
+: GUIWidget(renderer, name)
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<FloatAttr>();
@@ -126,7 +124,7 @@ GUIHoriBar::GUIHoriBar(SpriteRenderer* renderer,
                        const xhn::static_string name,
                        AttributeHandle sizeHandle)
 : m_sizeHandle(sizeHandle)
-, GUITouchable(renderer, name)
+, GUIWidget(renderer, name)
 {
 }
 
@@ -240,8 +238,6 @@ void GUIHoriBarFactory::CreateSheetConfig(
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-ImplementRTTI(GUIVertBarLayer, SpriteNormalLayer);
-ImplementRTTI(GUIVertBar, GUITouchable);
 
 void GUIVertBarLayer::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
@@ -349,7 +345,7 @@ void GUIVertBarLayer::GetScopeImpl(SpriteRect& result)
 
 GUIVertBar::GUIVertBar(SpriteRenderer* renderer,
                        const xhn::static_string name)
-: GUITouchable(renderer, name)
+: GUIWidget(renderer, name)
 {
     m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<FloatAttr>();

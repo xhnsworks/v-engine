@@ -28,7 +28,6 @@ class GUIList;
 
 class GUIListEntry : public GUIHoriBar
 {
-	DeclareRTTI;
 public:
     GUIListEntry(SpriteRenderer* renderer,
                  const xhn::static_string name,
@@ -46,6 +45,7 @@ public:
 	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
 	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
 	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
+	virtual ProcGroup NewProcGroup();
 };
 
 class GUIListEntryFactory : public GUIHoriBarFactory
@@ -71,7 +71,6 @@ public:
 ///**********************************************************************///
 class GUIList : public GUIPanel
 {
-	DeclareRTTI;
 public:
 	int m_entryCount;
     GUIListEntryFactory* m_entryFactory;
@@ -89,6 +88,7 @@ public:
 	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
 	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
 	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
+	virtual ProcGroup NewProcGroup();
 };
 
 class GUIListFactory : public GUIPanelFactory

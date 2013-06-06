@@ -4,11 +4,33 @@
 #include "sprite_event_hub.h"
 #include "robot.h"
 #include "animation.hpp"
+#include "gui_proc_group.h"
 
-ImplementRTTI(GUIComboBox, GUIHoriBar);
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
+const FourBorders& GUIComboBox::GetFourBorders()
+{
+	SpriteRect mainRect;
+	SpriteRect menuRect;
+	GetBackgroundRect(mainRect);
+	GetDropDownMenuRect(menuRect);
+	mainRect.Merge(menuRect);
+	mainRect.GetFourBorders(m_renderer, m_fourBorders);
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+	m_fourBorders.ApplyTranform(&mat);
+	return m_fourBorders;
+}
+
+void GUIComboBox::OnLeave()
+{
+	if (m_isShowDropDownMenu) {
+        HideDropDownMenu();
+		m_isShowDropDownMenu = false;
+	}
+}
 void GUIComboBox::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
 {
 	SpriteRect mainRect;
@@ -44,9 +66,25 @@ void GUIComboBox::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
 void GUIComboBox::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
 {
 	if (mouseEvt->m_leftButtomDown && 
-		GetState() == GUITouchable::Touched) {
+		GetState() == GUIWidget::Touched) {
 		ShowDropDownMenu();
 	}
+}
+
+void GUIComboBox::OnPress()
+{
+	SetState(GUIWidget::Touched);
+    ShowDropDownMenu();
+	m_isShowDropDownMenu = true;
+}
+
+ProcGroup GUIComboBox::NewProcGroup()
+{
+    ProcGroup pg;
+	pg.mouseMoveProc = ENEW LeaveableMouseMoveProc(this);
+	pg.mouseButtonDownProc = ENEW PressableMouseButtonDownProc(this);
+	pg.mouseButtonUpProc = ENEW EmptyMouseButtonUpProc(this);
+	return pg;
 }
 ///**********************************************************************///
 ///                       class implement end                            ///
@@ -70,7 +108,7 @@ void GUIComboBox::Init(const xhn::static_string configName)
 	GUIListEntry::Init(configName);
 	SpriteRect rect;
 	GetBackgroundRect(rect);
-	m_dropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIList>();
+	m_dropDownMenu = static_cast<GUIList*>(m_dropDownMenuFactory->MakeSprite());
 	m_dropDownMenu->SetCoord(0.0f, rect.size.height);
 	AddChild(m_dropDownMenu);
 }

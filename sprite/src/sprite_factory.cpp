@@ -37,6 +37,7 @@ SpriteFactory::AnimAttrSpriteLayerMap SpriteFactory::s_animAttrSpriteLayerMap;
 Sprite* SpriteFactory::MakeSprite()
 {
     Sprite* ret = MakeSpriteImpl();
+	ret->Init();
 	ret->RegisterAnimAttrs(s_spriteLayerAnimAttrMap, s_animAttrSpriteLayerMap);
 	SpriteEventHub::Get()->RegisterSprite(ret);
 	RenderHandle handle;
@@ -61,12 +62,12 @@ void SpriteFactory::SpriteLayerDestCallback(SpriteLayer* sl)
 		}
 	}
 	s_spriteLayerAnimAttrMap.erase(sl);
-	Sprite* spt = sl->DynamicCast<Sprite>();
-	if (spt) {
+	if (sl->IsSprite()) {
+        Sprite* spt = static_cast<Sprite*>(sl);
 		xhn::RWLock::Instance inst = s_renderListLock.GetWriteLock();
 		RenderHandle* handlePtr = s_renderHandleMap.find(spt);
 		if (handlePtr) {
-		    s_renderList.remove(*handlePtr);
+			s_renderList.remove(*handlePtr);
 			s_renderHandleMap.erase(spt);
 		}
 	}

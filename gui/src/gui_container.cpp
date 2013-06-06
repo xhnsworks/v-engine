@@ -5,7 +5,6 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIContainer, Sprite);
 
 GUIContainer::GUIContainer(SpriteRenderer* renderer, const xhn::static_string name)
 : m_simplePanel(NULL)

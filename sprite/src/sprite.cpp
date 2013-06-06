@@ -144,11 +144,6 @@ void SpriteElement::Test()
 	ele.Trim(rect0);
 }
 
-ImplementRootRTTI(SpriteLayer);
-ImplementRTTI(SpriteNormalLayer, SpriteLayer);
-ImplementRTTI(SpriteTextLayer, SpriteLayer);
-ImplementRTTI(Sprite, SpriteLayer);
-
 SpriteLayer::SpriteLayer(const xhn::static_string& name)
 : m_name(name)
 , m_horizontalAlignmentMode(NotHorizontalAligned)
@@ -224,18 +219,20 @@ void SpriteLayer::BroadcastEventToBrothers(const SpriteEvent* evt)
 		SpriteLayerList::iterator iter = m_parent->m_children.begin();
 		SpriteLayerList::iterator end = m_parent->m_children.end();
 		for (; iter != end; iter++) {
-			Sprite* sp = (*iter)->DynamicCast<Sprite>();
-			if (sp && sp != this) {
-				EventProcMap& epm = sp->GetPrivateEventProcMap();
-				const RTTI* rtti = evt->GetRTTI();
-				xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> >::iterator epmIter = epm.find(rtti);
-				if (epmIter != epm.end()) {
-					xhn::set<SpriteEventProcPtr>& sepSet = epmIter->second;
-					xhn::set<SpriteEventProcPtr>::iterator i = sepSet.begin();
-					xhn::set<SpriteEventProcPtr>::iterator e = sepSet.end();
-					for (; i != e; i++) {
-						SpriteEventProcPtr sep = *i;
-						sep->Proc(evt);
+			if ((*iter)->IsSprite()) {
+				Sprite* sp = static_cast<Sprite*>((*iter).get());
+				if (sp != this) {
+					EventProcMap& epm = sp->GetPrivateEventProcMap();
+					const RTTI* rtti = evt->GetRTTI();
+					xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> >::iterator epmIter = epm.find(rtti);
+					if (epmIter != epm.end()) {
+						xhn::set<SpriteEventProcPtr>& sepSet = epmIter->second;
+						xhn::set<SpriteEventProcPtr>::iterator i = sepSet.begin();
+						xhn::set<SpriteEventProcPtr>::iterator e = sepSet.end();
+						for (; i != e; i++) {
+							SpriteEventProcPtr sep = *i;
+							sep->Proc(evt);
+						}
 					}
 				}
 			}

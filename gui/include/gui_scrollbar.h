@@ -16,7 +16,6 @@
 ///**********************************************************************///
 class GUIVertSlider : public GUIVertBar
 {
-	DeclareRTTI;
 public:
 	GUIVertSlider(SpriteRenderer* renderer, const xhn::static_string name)
 		: GUIVertBar(renderer, name)
@@ -49,7 +48,6 @@ public:
 ///**********************************************************************///
 class GUIVertButton : public GUISimplePanel
 {
-	DeclareRTTI;
 public:
 	GUIVertButton(SpriteRenderer* renderer, const xhn::static_string name)
 		: GUISimplePanel(renderer, name)
@@ -59,7 +57,6 @@ public:
 
 class GUIVertScrollbar : public GUIVertBar
 {
-	DeclareRTTI;
 public:
 	GUIVertScrollbar(SpriteRenderer* renderer, const xhn::static_string name)
 		: GUIVertBar(renderer, name)

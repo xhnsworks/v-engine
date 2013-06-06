@@ -1,5 +1,5 @@
-#ifndef GUI_TOUCHABLE_H
-#define GUI_TOUCHABLE_H
+#ifndef GUI_WIDGET_H
+#define GUI_WIDGET_H
 ///**********************************************************************///
 ///                           include begin                              ///
 ///**********************************************************************///
@@ -13,9 +13,14 @@
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
-class GUITouchable : public Sprite
+struct ProcGroup
 {
-	DeclareRTTI;
+	SpriteEventProcPtr mouseMoveProc;
+	SpriteEventProcPtr mouseButtonDownProc;
+	SpriteEventProcPtr mouseButtonUpProc;
+};
+class GUIWidget : public Sprite
+{
 public:
 	enum State
 	{
@@ -23,14 +28,14 @@ public:
 		Touched,
 		Selected,
 		Pressed,
-        Dragging,
+		Dragging,
 	};
 	class MouseMoveEventProc : public SpriteEventProc
 	{
 	public:
-		GUITouchable* m_touchable;
+		GUIWidget* m_widget;
 	public:
-		MouseMoveEventProc(GUITouchable* touchable) : m_touchable(touchable) {}
+		MouseMoveEventProc(GUIWidget* widget) : m_widget(widget) {}
 		~MouseMoveEventProc() {}
 	public:
 		virtual void Proc(const SpriteEvent* evt);
@@ -39,9 +44,9 @@ public:
 	class MouseButtonDownEventProc : public SpriteEventProc
 	{
 	public:
-		GUITouchable* m_touchable;
+		GUIWidget* m_widget;
 	public:
-		MouseButtonDownEventProc(GUITouchable* touchable) : m_touchable(touchable) {}
+		MouseButtonDownEventProc(GUIWidget* widget) : m_widget(widget) {}
 		~MouseButtonDownEventProc() {}
 	public:
 		virtual void Proc(const SpriteEvent* evt);
@@ -50,29 +55,34 @@ public:
 	class MouseButtonUpEventProc : public SpriteEventProc
 	{
 	public:
-		GUITouchable* m_touchable;
+		GUIWidget* m_widget;
 	public:
-		MouseButtonUpEventProc(GUITouchable* touchable) : m_touchable(touchable) {}
+		MouseButtonUpEventProc(GUIWidget* widget) : m_widget(widget) {}
 		~MouseButtonUpEventProc() {}
 	public:
 		virtual void Proc(const SpriteEvent* evt);
 	};
 private:
-    State m_curtState;
+	State m_curtState;
 public:
-    SInt2 m_prevMouseCoord;
+	SInt2 m_prevMouseCoord;
 public:
-    GUITouchable(SpriteRenderer* renderer, const xhn::static_string name);
-	virtual ~GUITouchable();
+	GUIWidget(SpriteRenderer* renderer, const xhn::static_string name);
+	virtual ~GUIWidget();
+	virtual void Init();
 	inline State GetState() {
 		return m_curtState;
 	}
 	inline void SetState(State s) {
-        m_curtState = s;
+		m_curtState = s;
 	}
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) = 0;
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) = 0;
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) = 0;
+	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
+	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
+	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
+	virtual void OnMove(float x, float y) {}
+	virtual void OnPress() {}
+	virtual void OnLeave() {}
+	virtual ProcGroup NewProcGroup() = 0;
 	void BuildBackgroundLayer(xhn::list<SpriteElement>& to);
 	void BuildTextLayer(xhn::list<SpriteElement>& to);
 	SpriteTextLayer* GetTextLayer();
@@ -112,7 +122,7 @@ public:
 				layer->LoadConfigImpl(selectedlayer);
 				AddChild(layer);
 			}
-            if (pressedlayer)
+			if (pressedlayer)
 			{
 				SpriteLayerPtr layer = ENEW T("pressed",
 					m_pivotHandle,
@@ -126,7 +136,7 @@ public:
 				layer->m_verticalAlignmentMode = SpriteLayer::CenterVerticalAligned;
 				AddChild(layer);
 			}
-			SetState(GUITouchable::Normal);
+			SetState(GUIWidget::Normal);
 		}
 	}
 };

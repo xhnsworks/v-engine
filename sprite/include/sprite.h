@@ -188,7 +188,6 @@ typedef xhn::SmartPtr<SpriteLayer, FSpriteDestProc> SpriteLayerPtr;
 typedef xhn::list< SpriteLayerPtr > SpriteLayerList;
 class SpriteLayer : public RefObject
 {
-	DeclareRootRTTI;
     friend struct FSpriteDestProc;
 public:
 	AttributeHandle m_transparencyHandle;
@@ -257,6 +256,12 @@ public:
 	virtual void Clear() = 0;
     virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
+	virtual bool IsSprite() {
+		return false;
+	}
+	virtual bool IsTextLayer() {
+		return false;
+	}
 };
 
 ///**********************************************************************///
@@ -268,7 +273,6 @@ public:
 typedef xhn::map<xhn::static_string, SpriteElement> SpriteElementMap;
 class SpriteNormalLayer : public SpriteLayer
 {
-	DeclareRTTI;
 protected:
 	SpriteElementMap m_elementBuffer;
 public:
@@ -311,7 +315,6 @@ typedef xhn::set< const RTTI* > ReceiverSet;
 
 class SpriteTextLayer : public SpriteLayer
 {
-	DeclareRTTI;
 public:
 	xhn::string m_text;
 	xhn::vector<ComposingStick::GlyphHandle> m_letters;
@@ -341,6 +344,9 @@ public:
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
     {}
     virtual void Build() {}
+	virtual bool IsTextLayer() {
+		return true;
+	}
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -350,7 +356,6 @@ public:
 ///**********************************************************************///
 class Sprite : public SpriteLayer
 {
-	DeclareRTTI;
 	friend class SpriteFactory;
 protected:
 	virtual ~Sprite() {}
@@ -399,9 +404,6 @@ public:
 	inline AttributeHandle GetScaleHandle() {
 		return m_scaleHandle;
 	}
-	inline const FourBorders& GetFourBorders() {
-		return m_fourBorders;
-	}
 public:
     virtual void GetScopeImpl(SpriteRect& result);
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
@@ -413,6 +415,12 @@ public:
 	virtual void GetMatrix(matrix4x4* result);
 	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
                                    SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
+	virtual bool IsSprite() {
+		return true;
+	}
+	virtual const FourBorders& GetFourBorders() {
+		return m_fourBorders;
+	}
 };
 ///**********************************************************************///
 ///                       class define end                               ///

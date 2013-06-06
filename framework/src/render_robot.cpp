@@ -326,8 +326,8 @@ void ResourceAction::DoImpl()
                                               100.0f,
                                               100.0f);
 
-        m_guiButton = m_buttonFactory->MakeSprite()->DynamicCast<GUIButton>();
-		m_guiCursor = m_cursorFactory->MakeSprite()->DynamicCast<GUICursor>();
+        m_guiButton = static_cast<GUIButton*>(m_buttonFactory->MakeSprite());
+		m_guiCursor = static_cast<GUICursor*>(m_cursorFactory->MakeSprite());
         ///m_guiComboBoxEntry = m_comboBoxEntryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
 		/**
 		m_guiDropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
@@ -345,7 +345,7 @@ void ResourceAction::DoImpl()
 		m_guiHoriBar = m_horiBarFactory->MakeSprite()->DynamicCast<GUIHoriBar>();
 		m_guiVertBar = m_vertBarFactory->MakeSprite()->DynamicCast<GUIVertBar>();
          **/
-        m_guiContainer = m_containerFactory->MakeSprite()->DynamicCast<GUIContainer>();
+        m_guiContainer = static_cast<GUIContainer*>(m_containerFactory->MakeSprite());
         /**
 		m_guiEdit->SetCoord(0.0f, 50.0f);
 		m_guiHoriBar->SetCoord(0.0f, 280.0f);
@@ -354,7 +354,7 @@ void ResourceAction::DoImpl()
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
          **/
-		m_guiComboxBox = m_comboxBoxFactory->MakeSprite()->DynamicCast<GUIComboBox>();
+		m_guiComboxBox = static_cast<GUIComboBox*>(m_comboxBoxFactory->MakeSprite());
 
 		m_guiButton->SetCoord(100.0f, 50.0f);
 		///m_guiButton->SetRotate(0.5f);

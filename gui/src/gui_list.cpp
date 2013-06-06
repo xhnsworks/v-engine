@@ -11,9 +11,7 @@
 #include "sprite_event_hub.h"
 #include "robot.h"
 #include "animation.hpp"
-
-ImplementRTTI(GUIListEntry, GUIHoriBar);
-ImplementRTTI(GUIList, GUIPanel);
+#include "gui_proc_group.h"
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
@@ -55,21 +53,21 @@ void GUIListEntry::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
 	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
     
 	if (borders.IsInBorders(pt)) {
-		SetState(GUITouchable::Touched);
+		SetState(GUIWidget::Touched);
 	}
 	else {
-		SetState(GUITouchable::Normal);
+		SetState(GUIWidget::Normal);
 	}
 }
 void GUIListEntry::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
 {
     if (mouseEvt->m_leftButtomDown) {
-        if (GetState() == GUITouchable::Touched) {
+        if (GetState() == GUIWidget::Touched) {
             SpriteLayer* parent = GetParent();
             if (parent) {
                 parent = parent->GetParent();
                 if (parent) {
-                    GUIComboBox* comboxBox = parent->DynamicCast<GUIComboBox>();
+                    GUIComboBox* comboxBox = static_cast<GUIComboBox*>(parent);
                     if (comboxBox) {
                         xhn::string text = GetText();
                         comboxBox->SetText(text);
@@ -78,6 +76,15 @@ void GUIListEntry::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
             }
         }
     }
+}
+
+ProcGroup GUIListEntry::NewProcGroup()
+{
+	ProcGroup pg;
+	pg.mouseMoveProc = ENEW TouchableMouseMoveProc(this);
+	pg.mouseButtonDownProc = ENEW EmptyMouseButtonDownProc(this);
+	pg.mouseButtonUpProc = ENEW EmptyMouseButtonUpProc(this);
+	return pg;
 }
 ///**********************************************************************///
 ///                       class implement end                            ///
@@ -98,7 +105,7 @@ void GUIListEntry::SetText(const xhn::string& text)
 {
 	SpriteLayerPtr layerPtr = GetLayer("text");
 	if (layerPtr.get()) {
-		SpriteTextLayer* textLayer = layerPtr->DynamicCast<SpriteTextLayer>();
+		SpriteTextLayer* textLayer = static_cast<SpriteTextLayer*>(layerPtr.get());
 		EColor color(1.0f, 1.0f, 1.0f, 1.0f);
 		textLayer->SetText(text, color, 2.0f, 1.0f, Pixel16);
 	}
@@ -108,7 +115,7 @@ xhn::string GUIListEntry::GetText()
 {
 	SpriteLayerPtr layerPtr = GetLayer("text");
 	if (layerPtr.get()) {
-		SpriteTextLayer* textLayer = layerPtr->DynamicCast<SpriteTextLayer>();
+		SpriteTextLayer* textLayer = static_cast<SpriteTextLayer*>(layerPtr.get());
 		EColor color(1.0f, 1.0f, 1.0f, 1.0f);
 		return textLayer->GetText();
 	}
@@ -163,7 +170,7 @@ GUIList::GUIList(SpriteRenderer* renderer,
 
 void GUIList::AddEntry(const xhn::string& str)
 {
-    GUIListEntry* entry = m_entryFactory->MakeSprite()->DynamicCast<GUIListEntry>();
+    GUIListEntry* entry = static_cast<GUIListEntry*>(m_entryFactory->MakeSprite());
 	entry->SetText(str);
 	SpriteRect rect;
 	entry->GetScope(rect);
@@ -175,21 +182,24 @@ void GUIList::AddEntry(const xhn::string& str)
 
 void GUIList::RemoveAllEntries()
 {
+	/**
 	SpriteLayerList::iterator iter = m_children.begin();
 	SpriteLayerList::iterator end = m_children.end();
 	for (; iter != end; ) {
 		SpriteLayerPtr sptLayerPtr = *iter;
-		if (sptLayerPtr->DynamicCast<GUIListEntry>() != NULL) {
+		if (sptLayerPtr != NULL) {
             iter = m_children.remove(iter);
 		}
 		else
 			iter++;
 	}
+	**/
 	m_entryCount = 0;
 }
 
 void GUIList::RemoveBackground()
 {
+	/**
 	SpriteLayerList::iterator iter = m_children.begin();
 	SpriteLayerList::iterator end = m_children.end();
 	for (; iter != end; ) {
@@ -200,6 +210,7 @@ void GUIList::RemoveBackground()
 		else
 			iter++;
 	}
+	**/
 }
 
 void GUIList::GetBackgroundRect(SpriteRect& rect)
@@ -209,8 +220,9 @@ void GUIList::GetBackgroundRect(SpriteRect& rect)
 	for (; iter != end; iter++) {
 		SpriteLayerPtr sptLayerPtr = *iter;
         
-		GUIPanelLayer* background = sptLayerPtr->DynamicCast<GUIPanelLayer>();
-		if (background) {
+		///GUIPanelLayer* background = dynamic_cast<GUIPanelLayer*>(sptLayerPtr.get());
+		SpriteLayerPtr background = GetLayer("base");
+		if (background.get()) {
             background->GetScope(rect);
 			return;
 		}
@@ -253,6 +265,15 @@ void GUIList::Build()
 		SpriteElement& ele = *iter;
 		ele.m_fourBorders = &GetFourBorders();
 	}
+}
+
+ProcGroup GUIList::NewProcGroup()
+{
+	ProcGroup pg;
+	pg.mouseMoveProc = ENEW EmptyMouseMoveProc(this);
+	pg.mouseButtonDownProc = ENEW EmptyMouseButtonDownProc(this);
+	pg.mouseButtonUpProc = ENEW EmptyMouseButtonUpProc(this);
+	return pg;
 }
 ///**********************************************************************///
 ///                       class implement end                            ///

@@ -5,7 +5,7 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIButton, GUIPanel);
+#include "gui_proc_group.h"
 void GUIButton::Init(const xhn::static_string configName)
 {	
 	Float2Attr size(100.0f, 50.0f);
@@ -70,33 +70,18 @@ void GUIButton::TickImpl(double elapsedTime)
 	}
 }
 
-void GUIButton::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
+ProcGroup GUIButton::NewProcGroup()
 {
-	if (GetState() == GUITouchable::Pressed)
-		return;
-
-	const FourBorders& borders = GetFourBorders();
-	EFloat2 realCrd =
-    m_renderer->get_real_position((float)mouseEvt->m_curtMouseCoord.x,
-                                  (float)mouseEvt->m_curtMouseCoord.y);
-	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
-	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
-
-	if (borders.IsInBorders(pt)) {
-		SetState(GUITouchable::Selected);
-	}
-	else {
-		SetState(GUITouchable::Normal);
-	}
+	ProcGroup pg;
+	pg.mouseMoveProc = ENEW PressableMouseMoveProc(this);
+	pg.mouseButtonDownProc = ENEW PressableMouseButtonDownProc(this);
+	pg.mouseButtonUpProc = ENEW EmptyMouseButtonUpProc(this);
+	return pg;
 }
 
-void GUIButton::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
+void GUIButton::OnPress()
 {
-	if (mouseEvt->m_leftButtomDown && GetState() ==
-        GUITouchable::Selected) {
-		SetState(GUITouchable::Pressed);
-		m_releaseTimer = m_releaseDelay;
-	}
+    m_releaseTimer = m_releaseDelay;
 }
 
 Sprite* GUIButtonFactory::MakeSpriteImpl()

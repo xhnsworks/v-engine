@@ -12,7 +12,6 @@ class GUIButton;
 
 class GUIButton : public GUIPanel
 {
-	DeclareRTTI;
 public:
 	double m_releaseDelay;
 	double m_releaseTimer;
@@ -27,9 +26,8 @@ public:
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void TickImpl(double elapsedTime);
     virtual void TockImpl() {}
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
+	virtual ProcGroup NewProcGroup();
+	virtual void OnPress();
 };
 
 class GUIButtonFactory : public SpriteFactory

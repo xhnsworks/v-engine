@@ -12,23 +12,17 @@ class SpriteRenderer;
 class GUIEdit;
 class GUIEditBackgroundLayer : public GUIPanelLayer
 {
-	DeclareRTTI;
 public:
 	GUIEditBackgroundLayer(AttributeHandle pivotHandle,
                            AttributeHandle sizeHandle);
 };
 class GUIEditTextLayer : public SpriteTextLayer
 {
-	DeclareRTTI;
 public:
 	GUIEditTextLayer();
 };
 class GUIEdit : public GUIPanel
 {
-	DeclareRTTI;
-	friend class GUIEditFactory;
-protected:
-	~GUIEdit() {}
 public:
 	xhn::string m_text;
 
@@ -50,6 +44,7 @@ public:
 	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
 	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
 	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
+	virtual ProcGroup NewProcGroup();
 };
 
 class GUIEditFactory : public SpriteFactory

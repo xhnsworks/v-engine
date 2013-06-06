@@ -16,7 +16,7 @@
         <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="28.0" area_y1="39.0" transparency="1.0" />
       </elements>
     </normal>
-    <selected>
+    <touched>
       <elements num_elements="9">
         <!--这些坐标以Photoshop的标尺为准-->
         <element name="lower_left_corner" filename="BlackOrangeSkins.png" left="0.0" top="8.0" width="4.0" height="4.0" area_x0="2.0" area_x1="6.0" area_y0="61.0" area_y1="65.0" transparency="1.0" />
@@ -31,7 +31,7 @@
 
         <element name="center" filename="BlackOrangeSkins.png" left="4.0" top="4.0" width="4.0" height="4.0" area_x0="6.0" area_x1="17.0" area_y0="50.0" area_y1="61.0" transparency="1.0" />
       </elements>
-    </selected>
+    </touched>
     <pressed>
       <elements num_elements="9">
         <!--这些坐标以Photoshop的标尺为准-->

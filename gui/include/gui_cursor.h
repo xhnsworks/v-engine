@@ -8,14 +8,12 @@
 ///**********************************************************************///
 class GUICursorLayer : public SpriteNormalLayer
 {
-	DeclareRTTI;
 public:
 	GUICursorLayer();
 };
 
 class GUICursor : public Sprite
 {
-	DeclareRTTI;
 	friend class GUICursorFactory;
 protected:
 	~GUICursor() {}

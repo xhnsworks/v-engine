@@ -5,8 +5,7 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUIPanelLayer, SpriteNormalLayer);
-ImplementRTTI(GUIPanel, GUITouchable);
+
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
@@ -237,7 +236,7 @@ void GUIPanelLayer::GetScopeImpl(SpriteRect& result)
 ///**********************************************************************///
 GUIPanel::GUIPanel(SpriteRenderer* renderer,
                    const xhn::static_string name)
-: GUITouchable(renderer, name)
+: GUIWidget(renderer, name)
 {
 	m_sizeHandle.m_lock = ENEW xhn::RWLock;
 	m_sizeHandle.AttachAttribute<Float2Attr>();
@@ -246,7 +245,7 @@ GUIPanel::GUIPanel(SpriteRenderer* renderer,
                    const xhn::static_string name,
                    AttributeHandle sizeHandle)
 : m_sizeHandle(sizeHandle)
-, GUITouchable(renderer, name)
+, GUIWidget(renderer, name)
 {
 }
 void GUIPanel::Init(const xhn::static_string configName)

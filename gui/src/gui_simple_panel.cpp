@@ -13,8 +13,7 @@
 #include "sprite_event_hub.h"
 #include "sprite_renderer.h"
 #include "sfloat3.h"
-ImplementRTTI(GUISimplePanelLayer, SpriteNormalLayer);
-ImplementRTTI(GUISimplePanel, GUITouchable);
+#include "gui_proc_group.h"
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
@@ -98,7 +97,7 @@ void GUISimplePanelLayer::GetScopeImpl(SpriteRect& result)
 ///                       class implement begin                          ///
 ///**********************************************************************///
 GUISimplePanel::GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name)
-: GUITouchable(renderer, name)
+: GUIWidget(renderer, name)
 {
 }
 
@@ -118,6 +117,15 @@ void GUISimplePanel::Init(const xhn::static_string configName)
 		///m_children.push_back(layer);
         AddChild(layer);
 	}
+}
+
+ProcGroup GUISimplePanel::NewProcGroup()
+{
+	ProcGroup pg;
+	pg.mouseMoveProc = ENEW EmptyMouseMoveProc(this);
+	pg.mouseButtonDownProc = ENEW EmptyMouseButtonDownProc(this);
+	pg.mouseButtonUpProc = ENEW EmptyMouseButtonUpProc(this);
+	return pg;
 }
 
 Sprite* GUISimplePanelFactory::MakeSpriteImpl()

@@ -4,14 +4,12 @@
 #include "sprite.h"
 #include "sprite_factory.h"
 #include "gui_simple_panel.h"
-#include "gui_touchable.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
 class SpriteRenderer;
 class GUIContainer : public Sprite
 {
-	DeclareRTTI;
 public:
 	AttributeHandle m_rectHandle;
 	SpriteLayerPtr m_simplePanel;

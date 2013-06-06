@@ -3,14 +3,13 @@
 #include "xhn_static_string.hpp"
 #include "sprite.h"
 #include "sprite_factory.h"
-#include "gui_touchable.h"
+#include "gui_widget.h"
 ///**********************************************************************///
 ///                       class define begin                             ///
 ///**********************************************************************///
 class SpriteRenderer;
 class GUIPanelLayer : public SpriteNormalLayer
 {
-	DeclareRTTI;
 private:
 	AttributeHandle m_pivotHandle;
 	AttributeHandle m_sizeHandle;
@@ -25,9 +24,8 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void GetScopeImpl(SpriteRect& result);
 };
-class GUIPanel : public GUITouchable
+class GUIPanel : public GUIWidget
 {
-	DeclareRTTI;
 public:
 	AttributeHandle m_sizeHandle;
 public:

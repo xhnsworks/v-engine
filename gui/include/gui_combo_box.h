@@ -18,7 +18,6 @@
 ///**********************************************************************///
 class GUIComboBox : public GUIListEntry
 {
-	DeclareRTTI;
 public:
 	GUIListFactory* m_dropDownMenuFactory;
 	GUIList* m_dropDownMenu;
@@ -40,6 +39,10 @@ public:
 	}
 	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
 	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
+	virtual ProcGroup NewProcGroup();
+	virtual void OnPress();
+	virtual void OnLeave();
+	virtual const FourBorders& GetFourBorders();
 };
 
 class GUIComboBoxFactory : public GUIListEntryFactory

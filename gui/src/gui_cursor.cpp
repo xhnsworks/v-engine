@@ -3,8 +3,6 @@
 #include "xml_resource.h"
 #include "render_system.h"
 #include "sprite_event_hub.h"
-ImplementRTTI(GUICursorLayer, SpriteNormalLayer);
-ImplementRTTI(GUICursor, Sprite);
 
 GUICursorLayer::GUICursorLayer()
 : SpriteNormalLayer("base")
