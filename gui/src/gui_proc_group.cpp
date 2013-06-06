@@ -3,8 +3,6 @@
 
 void TouchableMouseMoveProc::Proc(const SpriteEvent* evt)
 {
-	if (m_widget->GetState() != GUIWidget::Normal)
-		return;
 	const SpriteMouseMoveEvent* mouseEvt = evt->DynamicCast<SpriteMouseMoveEvent>();
 	if (mouseEvt) {
 		const FourBorders& borders = m_widget->GetFourBorders();
