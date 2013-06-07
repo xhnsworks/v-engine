@@ -71,11 +71,18 @@ public:
 class GUIVertScrollbar : public GUIVertBar
 {
 public:
+    xhn::static_string m_sliderCfgName;
+    xhn::static_string m_buttonCfgName;
 	GUIVertSliderFactory* m_vertSliderFactory;
 	GUIVertButtonFactory* m_vertButtonFactory;
 public:
-	GUIVertScrollbar(SpriteRenderer* renderer, const xhn::static_string name)
-		: m_vertSliderFactory(NULL)
+	GUIVertScrollbar(SpriteRenderer* renderer,
+                     const xhn::static_string name,
+                     const xhn::static_string sliderCfgName,
+                     const xhn::static_string buttonCfgName)
+		: m_sliderCfgName(sliderCfgName)
+        , m_buttonCfgName(buttonCfgName)
+        , m_vertSliderFactory(NULL)
 	    , m_vertButtonFactory(NULL)
 	    , GUIVertBar(renderer, name)
 	{}
@@ -86,10 +93,13 @@ public:
 class GUIVertScrollbarFactory : public GUIVertBarFactory
 {
 public:
+    xhn::static_string m_sliderCfgName;
+    xhn::static_string m_buttonCfgName;
+public:
 	GUIVertScrollbarFactory(SpriteRenderer* renderer,
-		const char* cfgName)
-		: GUIVertBarFactory(renderer, cfgName)
-	{}
+                            const char* sliderCfgName,
+                            const char* buttonCfgName,
+                            const char* scroolbarCfgName);
 	virtual Sprite* MakeSpriteImpl();
 };
 ///**********************************************************************///
