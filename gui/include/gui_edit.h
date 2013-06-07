@@ -41,9 +41,6 @@ public:
 		: GUIPanel(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 	virtual ProcGroup NewProcGroup();
 };
 

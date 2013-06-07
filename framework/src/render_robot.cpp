@@ -174,7 +174,36 @@ ShaderNode red_material_proc(PxlSdrBuf _psb, int _id)
         "}\n");
     return psn;
 }
+/**
+#define W 4
+#define M_PI 3.14159265358979323846
+#include <math.h>
 
+double gaussian (double x, double mu, double sigma) {
+	return exp( -(((x-mu)/(sigma))*((x-mu)/(sigma)))/2.0 );
+}
+void cale_gaussian_blur_kernel()
+{
+	double sigma = (double)W / 2.0;
+    xhn::string tmp;
+	double sum = 0.0;
+	for (int i = 0; i < W; i++) {
+        double k = gaussian((double)i, (double)W, sigma);
+		sum += k;
+	}
+	sum *= 2.0;
+	sum += gaussian((double)W, (double)W, sigma);;
+	for (int i = 0; i < W + 1; i++) {
+		double k = gaussian((double)i, (double)W, sigma);
+		k /= sum;
+		char mbuf[256];
+		snprintf(mbuf, 255, "%f", k);
+		tmp += mbuf;
+		tmp += ", ";
+	}
+	elog("%s", tmp.c_str());
+};
+**/
 ImplementRTTI(ResourceAction, Action);
 
 ImplementRTTI(LogicAction, Action);

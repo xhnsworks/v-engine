@@ -31,45 +31,6 @@ void GUIComboBox::OnLeave()
 		m_isShowDropDownMenu = false;
 	}
 }
-void GUIComboBox::OnMouseMove(const SpriteMouseMoveEvent* mouseEvt)
-{
-	SpriteRect mainRect;
-	SpriteRect menuRect;
-	FourBorders fourBorders;
-	GetBackgroundRect(mainRect);
-	GetDropDownMenuRect(menuRect);
-	mainRect.Merge(menuRect);
-	mainRect.GetFourBorders(m_renderer, fourBorders);
-	matrix4x4 mat;
-	Matrix4x4_set_one(&mat);
-	GetMatrix(&mat);
-	fourBorders.ApplyTranform(&mat);
-
-	EFloat2 realCrd =
-		m_renderer->get_real_position(
-                                      (float)mouseEvt->m_curtMouseCoord.x,
-		                              (float)mouseEvt->m_curtMouseCoord.y);
-
-	EFloat3 realPt(realCrd.x, realCrd.y, 0.0f);
-	sfloat3 pt = SFloat3_assign_from_efloat3(&realPt);
-
-	if (fourBorders.IsInBorders(pt)) {
-		SetState(GUIListEntry::Touched);
-	}
-	else {
-		SetState(GUIListEntry::Normal);
-		if (m_isShowDropDownMenu) {
-			HideDropDownMenu();
-		}
-	}
-}
-void GUIComboBox::OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt)
-{
-	if (mouseEvt->m_leftButtomDown && 
-		GetState() == GUIWidget::Touched) {
-		ShowDropDownMenu();
-	}
-}
 
 void GUIComboBox::OnPress()
 {

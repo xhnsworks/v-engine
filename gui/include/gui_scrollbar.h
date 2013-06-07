@@ -21,10 +21,8 @@ public:
 		: GUIVertBar(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt);
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
+	virtual ProcGroup NewProcGroup();
 };
 
 class GUIVertSliderFactory : public GUIVertBarFactory
@@ -52,18 +50,48 @@ public:
 	GUIVertButton(SpriteRenderer* renderer, const xhn::static_string name)
 		: GUISimplePanel(renderer, name)
 	{}
-    virtual void Init(const xhn::static_string configName);
+	virtual ProcGroup NewProcGroup();
 };
 
+class GUIVertButtonFactory : public GUISimplePanelFactory
+{
+public:
+	GUIVertButtonFactory(SpriteRenderer* renderer,
+		const char* cfgName)
+		: GUISimplePanelFactory(renderer, cfgName)
+	{}
+	virtual Sprite* MakeSpriteImpl();
+};
+///**********************************************************************///
+///                       class define end                               ///
+///**********************************************************************///
+///**********************************************************************///
+///                       class define begin                             ///
+///**********************************************************************///
 class GUIVertScrollbar : public GUIVertBar
 {
 public:
+	GUIVertSliderFactory* m_vertSliderFactory;
+	GUIVertButtonFactory* m_vertButtonFactory;
+public:
 	GUIVertScrollbar(SpriteRenderer* renderer, const xhn::static_string name)
-		: GUIVertBar(renderer, name)
+		: m_vertSliderFactory(NULL)
+	    , m_vertButtonFactory(NULL)
+	    , GUIVertBar(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
+	virtual ProcGroup NewProcGroup();
 };
 
+class GUIVertScrollbarFactory : public GUIVertBarFactory
+{
+public:
+	GUIVertScrollbarFactory(SpriteRenderer* renderer,
+		const char* cfgName)
+		: GUIVertBarFactory(renderer, cfgName)
+	{}
+	virtual Sprite* MakeSpriteImpl();
+};
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///

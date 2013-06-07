@@ -1,5 +1,6 @@
 #include "gui_pch.h"
 #include "gui_proc_group.h"
+#include "elog.h"
 
 void TouchableMouseMoveProc::Proc(const SpriteEvent* evt)
 {
@@ -59,10 +60,15 @@ void LeaveableMouseMoveProc::Proc(const SpriteEvent* evt)
 
 		if (borders.IsInBorders(pt)) {
 			m_widget->SetState(GUIWidget::Touched);
+			m_leaveCount = 0;
 		}
 		else {
 			m_widget->SetState(GUIWidget::Normal);
-			m_widget->OnLeave();
+			m_leaveCount++;
+			if (m_leaveCount > 10) {
+				m_widget->OnLeave();
+                m_leaveCount = 0;
+			}
 		}
 	}
 }

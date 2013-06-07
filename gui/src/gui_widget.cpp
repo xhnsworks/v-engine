@@ -1,27 +1,6 @@
 #include "gui_pch.h"
 #include "gui_widget.h"
 
-void GUIWidget::MouseMoveEventProc::Proc(const SpriteEvent* evt)
-{
-	const SpriteMouseMoveEvent* mouseEvt = evt->DynamicCast<SpriteMouseMoveEvent>();
-	if (mouseEvt) {
-		m_widget->OnMouseMove(mouseEvt);
-	}
-}
-void GUIWidget::MouseButtonDownEventProc::Proc(const SpriteEvent* evt)
-{
-	const SpriteMouseButtonDownEvent* mouseEvt = evt->DynamicCast<SpriteMouseButtonDownEvent>();
-	if (mouseEvt) {
-		m_widget->OnMouseButtonDown(mouseEvt);
-	}
-}
-void GUIWidget::MouseButtonUpEventProc::Proc(const SpriteEvent* evt)
-{
-	const SpriteMouseButtonUpEvent* mouseEvt = evt->DynamicCast<SpriteMouseButtonUpEvent>();
-	if (mouseEvt) {
-		m_widget->OnMouseButtonUp(mouseEvt);
-	}
-}
 GUIWidget::GUIWidget(SpriteRenderer* renderer, const xhn::static_string name)
 : m_curtState(Normal)
 , Sprite(renderer, name)

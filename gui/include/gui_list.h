@@ -42,9 +42,7 @@ public:
 	void SetText(const xhn::string& text);
 	xhn::string GetText();
 	void GetBackgroundRect(SpriteRect& rect);
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
+	virtual void OnPress();
 	virtual ProcGroup NewProcGroup();
 };
 
@@ -85,9 +83,6 @@ public:
 	virtual void BuildFourBorders();
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void Build();
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 	virtual ProcGroup NewProcGroup();
 };
 

@@ -37,8 +37,6 @@ public:
 	inline AttributeHandle GetDropDownMenuSizeHandle() {
 		return m_dropDownMenuFactory->GetListSizeHandle();
 	}
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt);
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt);
 	virtual ProcGroup NewProcGroup();
 	virtual void OnPress();
 	virtual void OnLeave();

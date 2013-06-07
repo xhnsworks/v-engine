@@ -47,8 +47,10 @@ public:
 class LeaveableMouseMoveProc : public GUIWidget::MouseMoveEventProc
 {
 public:
+	int m_leaveCount;
 	LeaveableMouseMoveProc(GUIWidget* widget)
-		: GUIWidget::MouseMoveEventProc(widget)
+		: m_leaveCount(0)
+	    , GUIWidget::MouseMoveEventProc(widget)
 	{}
 	virtual void Proc(const SpriteEvent* evt);
 };

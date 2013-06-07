@@ -37,8 +37,6 @@ public:
 	public:
 		MouseMoveEventProc(GUIWidget* widget) : m_widget(widget) {}
 		~MouseMoveEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
 	};
 
 	class MouseButtonDownEventProc : public SpriteEventProc
@@ -48,8 +46,6 @@ public:
 	public:
 		MouseButtonDownEventProc(GUIWidget* widget) : m_widget(widget) {}
 		~MouseButtonDownEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
 	};
 
 	class MouseButtonUpEventProc : public SpriteEventProc
@@ -59,8 +55,6 @@ public:
 	public:
 		MouseButtonUpEventProc(GUIWidget* widget) : m_widget(widget) {}
 		~MouseButtonUpEventProc() {}
-	public:
-		virtual void Proc(const SpriteEvent* evt);
 	};
 private:
 	State m_curtState;
@@ -76,9 +70,6 @@ public:
 	inline void SetState(State s) {
 		m_curtState = s;
 	}
-	virtual void OnMouseMove(const SpriteMouseMoveEvent* mouseEvt) {}
-	virtual void OnMouseButtonDown(const SpriteMouseButtonDownEvent* mouseEvt) {}
-	virtual void OnMouseButtonUp(const SpriteMouseButtonUpEvent* mouseEvt) {}
 	virtual void OnMove(float x, float y) {}
 	virtual void OnPress() {}
 	virtual void OnLeave() {}
