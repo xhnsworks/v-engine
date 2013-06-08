@@ -22,7 +22,6 @@ public:
 		: Sprite(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
-	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void Build();
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
@@ -41,7 +40,7 @@ public:
 	virtual void Proc(const SpriteEvent* evt);
 };
 
-class GUICursorFactory : public SpriteFactory
+class GUICursorFactory : public SpriteFactory<GUICursor>
 {
 public:
 	int m_cursorCount;

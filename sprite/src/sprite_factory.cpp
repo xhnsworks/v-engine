@@ -28,61 +28,64 @@ bool FSpriteDestProc::Test(SpriteLayer* ptr) {
 	return true;
 }
 
-xhn::RWLock SpriteFactory::s_renderListLock;
-SpriteFactory::RenderList SpriteFactory::s_renderList;
-/// hash map do not need to lock
-SpriteFactory::RenderHandleMap SpriteFactory::s_renderHandleMap;
-SpriteFactory::SpriteLayerAnimAttrMap SpriteFactory::s_spriteLayerAnimAttrMap;
-SpriteFactory::AnimAttrSpriteLayerMap SpriteFactory::s_animAttrSpriteLayerMap;
-Sprite* SpriteFactory::MakeSprite()
+static AnimAttrSpriteLayerMap s_animAttrSpriteLayerMap;
+
+InterfaceRenderList* InterfaceRenderList::s_InterfaceRenderList = NULL;
+
+SpriteLayerAnimAttrMap& InterfaceRenderList::GetSpriteLayerAnimAttrMap()
 {
-    Sprite* ret = MakeSpriteImpl();
-	ret->Init();
-	ret->RegisterAnimAttrs(s_spriteLayerAnimAttrMap, s_animAttrSpriteLayerMap);
-	SpriteEventHub::Get()->RegisterSprite(ret);
-	RenderHandle handle;
-	{
-		xhn::RWLock::Instance inst = s_renderListLock.GetWriteLock();
-		handle = s_renderList.push_back(ret);
-	}
-	if (handle.is_valid())
-	    s_renderHandleMap.insert(ret, handle);
-	return ret;
+	return m_spriteLayerAnimAttrMap;
+}
+AnimAttrSpriteLayerMap& InterfaceRenderList::GetAnimAttrSpriteLayerMap()
+{
+	return m_animAttrSpriteLayerMap;
+}
+xhn::RWLock& InterfaceRenderList::GetRenderListLock()
+{
+    return m_renderListLock;
+}
+RenderList& InterfaceRenderList::GetRenderList()
+{
+    return m_renderList;
+}
+RenderHandleMap& InterfaceRenderList::GetRenderHandleMap()
+{
+	return m_renderHandleMap;
 }
 
-void SpriteFactory::SpriteLayerDestCallback(SpriteLayer* sl)
+void InterfaceRenderList::SpriteLayerDestCallback(SpriteLayer* sl)
 {
-	SpriteLayerAnimAttrMap::bucket* b = s_spriteLayerAnimAttrMap.find_bucket(sl);
+	SpriteLayerAnimAttrMap::bucket* b = m_spriteLayerAnimAttrMap.find_bucket(sl);
 	{
 		xhn::RWLock::Instance inst = b->get_write_lock();
 		AnimAttrArray* a = b->find_unlock(sl);
 		if (a) {
 			for (euint i = 0; i < a->size(); i++)
-				s_animAttrSpriteLayerMap.erase( (*a)[i] );
+				m_animAttrSpriteLayerMap.erase( (*a)[i] );
 		}
 	}
-	s_spriteLayerAnimAttrMap.erase(sl);
+	m_spriteLayerAnimAttrMap.erase(sl);
 	if (sl->IsSprite()) {
         Sprite* spt = static_cast<Sprite*>(sl);
-		xhn::RWLock::Instance inst = s_renderListLock.GetWriteLock();
-		RenderHandle* handlePtr = s_renderHandleMap.find(spt);
+		xhn::RWLock::Instance inst = m_renderListLock.GetWriteLock();
+		RenderHandle* handlePtr = m_renderHandleMap.find(spt);
 		if (handlePtr) {
-			s_renderList.remove(*handlePtr);
-			s_renderHandleMap.erase(spt);
+			m_renderList.remove(*handlePtr);
+			m_renderHandleMap.erase(spt);
 		}
 	}
 }
 
-bool SpriteFactory::TestAnimAttr(Attribute* aa)
+bool InterfaceRenderList::TestAnimAttr(Attribute* aa)
 {
     return s_animAttrSpriteLayerMap.test(aa);
 }
 
-void SpriteFactory::FrameEnd(double elapsedTime)
+void InterfaceRenderList::FrameEnd(double elapsedTime)
 {
-	xhn::RWLock::Instance inst = s_renderListLock.GetReadLock();
-	RenderList::iterator iter = s_renderList.begin();
-	RenderList::iterator end = s_renderList.end();
+	xhn::RWLock::Instance inst = m_renderListLock.GetReadLock();
+	RenderList::iterator iter = m_renderList.begin();
+	RenderList::iterator end = m_renderList.end();
 	for (; iter != end; iter++) {
 		Sprite* spt = *iter;
         if (!spt->m_parent) {
@@ -95,11 +98,21 @@ void SpriteFactory::FrameEnd(double elapsedTime)
 	}
 }
 
-void SpriteFactory::AlwaysOnTop(Sprite* spt)
+void InterfaceRenderList::AlwaysOnTop(Sprite* spt)
 {
-	xhn::RWLock::Instance inst = s_renderListLock.GetReadLock();
-	RenderHandle* handlePtr = s_renderHandleMap.find(spt);
+	xhn::RWLock::Instance inst = m_renderListLock.GetReadLock();
+	RenderHandle* handlePtr = m_renderHandleMap.find(spt);
 	if (handlePtr) {
-		s_renderList.throw_front(*handlePtr);
+		m_renderList.throw_front(*handlePtr);
 	} 
+}
+
+void InterfaceRenderList::Init()
+{
+	if (!s_InterfaceRenderList)
+		s_InterfaceRenderList = ENEW InterfaceRenderList;
+}
+InterfaceRenderList* InterfaceRenderList::Get()
+{
+	return s_InterfaceRenderList;
 }

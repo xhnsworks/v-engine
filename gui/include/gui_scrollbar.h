@@ -25,7 +25,7 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUIVertSliderFactory : public GUIVertBarFactory
+class GUIVertSliderFactory : public GUIVertBarFactory<GUIVertSlider>
 {
 public:
 	AttributeHandle m_sizeHandle;
@@ -82,10 +82,11 @@ public:
                      const xhn::static_string sliderCfgName,
                      const xhn::static_string buttonCfgName);
 	virtual void Init(const xhn::static_string configName);
+	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUIVertScrollbarFactory : public GUIVertBarFactory
+class GUIVertScrollbarFactory : public GUIVertBarFactory<GUIVertScrollbar>
 {
 public:
     xhn::static_string m_sliderCfgName;

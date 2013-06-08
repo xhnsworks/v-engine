@@ -36,7 +36,6 @@ public:
              AttributeHandle sizeHandle);
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x, float y);
-	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 	inline AttributeHandle GetSizeHandle() {
@@ -44,7 +43,8 @@ public:
 	}
 };
 
-class GUIPanelFactory : public SpriteFactory
+template <typename PANEL_TYPE>
+class GUIPanelFactory : public SpriteFactory<PANEL_TYPE>
 {
 public:
 	int m_panelCount;
@@ -53,15 +53,14 @@ public:
 		: m_panelCount(0)
 		, SpriteFactory(renderer, cfgName)
 	{}
-	///virtual Sprite* MakeSpriteImpl();
-	static void CreateSheetConfig(const char* cfgName,
-                                  const char* sheetName,
-                                  const char* textureName,
-		                          const SpriteRect& panelRect,
-                                  const SpriteSize& cornerSize,
-                                  const SpriteRect& areaRect,
-                                  const SpriteSize& areaCornerSize);
 };
+API_EXPORT void GUIPanelFactory_CreateSheetConfig(const char* cfgName,
+												  const char* sheetName,
+												  const char* textureName,
+												  const SpriteRect& panelRect,
+												  const SpriteSize& cornerSize,
+												  const SpriteRect& areaRect,
+												  const SpriteSize& areaCornerSize);
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///

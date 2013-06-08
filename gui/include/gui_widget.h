@@ -130,6 +130,8 @@ public:
 			SetState(GUIWidget::Normal);
 		}
 	}
+private:
+	virtual void Build();
 };
 ///**********************************************************************///
 ///                       class define end                               ///

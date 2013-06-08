@@ -46,7 +46,7 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUIListEntryFactory : public GUIHoriBarFactory
+class GUIListEntryFactory : public GUIHoriBarFactory<GUIListEntry>
 {
 public:
     AttributeHandle m_sizeHandle;
@@ -60,6 +60,26 @@ public:
 	GUIListEntryFactory(SpriteRenderer* renderer,
                         const char* cfgName);
     virtual Sprite* MakeSpriteImpl();
+	static void CreateSheetConfig(const char* cfgName,
+		                               const char* textureName,
+		                               const SpriteRect& panelRect,
+		                               float cornerSize,
+		                               const EFloat2& areaSize,
+		                               float areaCornerSize,
+		                               const EFloat2& areaCoordNormal,
+		                               const EFloat2& areaCoordTouched,
+		                               const EFloat2& areaCoorfSelected)
+	{
+		GUIHoriBarFactory_CreateSheetConfig(cfgName,
+			                                textureName,
+											panelRect,
+											cornerSize,
+											areaSize,
+											areaCornerSize, 
+											areaCoordNormal,
+											areaCoordTouched,
+											areaCoorfSelected);
+	}
 };
 ///**********************************************************************///
 ///                       class define end                               ///
@@ -86,7 +106,7 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUIListFactory : public GUIPanelFactory
+class GUIListFactory : public GUIPanelFactory<GUIList>
 {
 public:
     AttributeHandle m_listSizeHandle;
@@ -104,6 +124,22 @@ public:
 									  float maxHeight);
 	inline AttributeHandle GetListSizeHandle() {
 		return m_listSizeHandle;
+	}
+	static void CreateSheetConfig(const char* cfgName,
+		                          const char* sheetName,
+		                          const char* textureName,
+		                          const SpriteRect& panelRect,
+		                          const SpriteSize& cornerSize,
+		                          const SpriteRect& areaRect,
+		                          const SpriteSize& areaCornerSize)
+	{
+		GUIPanelFactory_CreateSheetConfig(cfgName,
+			                              sheetName,
+										  textureName,
+										  panelRect,
+										  cornerSize,
+										  areaRect, 
+										  areaCornerSize);
 	}
 };
 ///**********************************************************************///

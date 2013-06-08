@@ -252,10 +252,10 @@ public:
     virtual void TockImpl() = 0;
     virtual void LoadConfigImpl(const pugi::xml_node& from) = 0;
 	virtual void SaveConfigImpl(pugi::xml_node& to) = 0;
-    virtual void Build() = 0;
+    ///virtual void Build() = 0;
 	virtual void Clear() = 0;
-    virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
-                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap) = 0;
+    virtual void RegisterAnimAttrs(SpriteLayerAnimAttrMap& slaaMap,
+                                   AnimAttrSpriteLayerMap& aaslMap) = 0;
 	virtual bool IsSprite() {
 		return false;
 	}
@@ -302,11 +302,11 @@ public:
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
-                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
+	virtual void RegisterAnimAttrs(SpriteLayerAnimAttrMap& slaaMap,
+                                   AnimAttrSpriteLayerMap& aaslMap)
     {}
 	virtual void GetScopeImpl(SpriteRect& result);
-    virtual void Build() {}
+    ///virtual void Build() {}
 };
 
 typedef xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> > EventProcMap;
@@ -340,10 +340,10 @@ public:
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 	virtual void GetScopeImpl(SpriteRect& result);
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
-                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
+	virtual void RegisterAnimAttrs(SpriteLayerAnimAttrMap& slaaMap,
+                                   AnimAttrSpriteLayerMap& aaslMap)
     {}
-    virtual void Build() {}
+    ///virtual void Build() {}
 	virtual bool IsTextLayer() {
 		return true;
 	}
@@ -356,7 +356,8 @@ public:
 ///**********************************************************************///
 class Sprite : public SpriteLayer
 {
-	friend class SpriteFactory;
+	friend class InterfaceRenderList;
+	friend class SpriteFrameStartEventProc;
 protected:
 	virtual ~Sprite() {}
 public:
@@ -410,17 +411,18 @@ public:
     virtual void LoadConfigImpl(const pugi::xml_node& from);
 	virtual void SaveConfigImpl(pugi::xml_node& to);
 	virtual void BuildFourBorders();
-    virtual void Build();
 	virtual void Clear();
 	virtual void GetMatrix(matrix4x4* result);
-	virtual void RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap,
-                                   SpriteFactory::AnimAttrSpriteLayerMap& aaslMap);
+	virtual void RegisterAnimAttrs(SpriteLayerAnimAttrMap& slaaMap,
+                                   AnimAttrSpriteLayerMap& aaslMap);
 	virtual bool IsSprite() {
 		return true;
 	}
 	virtual const FourBorders& GetFourBorders() {
 		return m_fourBorders;
 	}
+protected:
+	virtual void Build();
 };
 ///**********************************************************************///
 ///                       class define end                               ///

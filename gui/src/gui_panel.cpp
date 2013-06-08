@@ -268,39 +268,23 @@ void GUIPanel::Init(const xhn::static_string configName)
 
 void GUIPanel::SetSize(float x, float y)
 {
-	/**
-    xhn::RWLock::Instance inst = m_sizeHandle.GetWriteLock();
-	Float2Attr* size = m_sizeHandle.GetAttribute<Float2Attr>();
-	size->x = x;
-	size->y = y;
-	**/
 	Float2Attr size(x, y);
 	m_sizeHandle.SetAttribute(&size);
 }
-/**
-Sprite* GUIPanelFactory::MakeSpriteImpl()
-{
-	char mbuf[256];
-	snprintf(mbuf, 255, "GUIPanel_%d", m_panelCount);
-	m_panelCount++;
-	GUIPanel* ret = ENEW GUIPanel(m_renderer, mbuf);
-	ret->Init(m_configName);
-	return ret;
-}
-**/
+
 ///**********************************************************************///
 ///                       class implement end                            ///
 ///**********************************************************************///
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-void GUIPanelFactory::CreateSheetConfig(const char* cfgName,
-                                        const char* sheetName,
-                                        const char* textureName,
-										const SpriteRect& panelRect,
-                                        const SpriteSize& cornerSize,
-                                        const SpriteRect& areaRect,
-                                        const SpriteSize& areaCornerSize)
+void GUIPanelFactory_CreateSheetConfig(const char* cfgName,
+                                       const char* sheetName,
+                                       const char* textureName,
+									   const SpriteRect& panelRect,
+                                       const SpriteSize& cornerSize,
+                                       const SpriteRect& areaRect,
+                                       const SpriteSize& areaCornerSize)
 {
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();

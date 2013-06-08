@@ -152,13 +152,13 @@ void GUIHoriBar::SetSize(float x)
 	m_sizeHandle.SetAttribute(&size);
 }
 
-void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
-                                          const char* sheetName,
-                                          const char* textureName,
-										  const SpriteRect& panelRect,
-                                          float cornerSize,
-                                          const SpriteRect& areaRect,
-                                          float areaCornerSize)
+void GUIHoriBarFactory_CreateSheetConfig(const char* cfgName,
+                                         const char* sheetName,
+                                         const char* textureName,
+										 const SpriteRect& panelRect,
+                                         float cornerSize,
+                                         const SpriteRect& areaRect,
+                                         float areaCornerSize)
 {
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();
@@ -181,16 +181,15 @@ void GUIHoriBarFactory::CreateSheetConfig(const char* cfgName,
 					layerAreaCoord);
 }
 
-void GUIHoriBarFactory::CreateSheetConfig(
-	const char* cfgName,
-	const char* textureName,
-	const SpriteRect& panelRect,
-	float cornerSize,
-	const EFloat2& areaSize,
-	float areaCornerSize,
-	const EFloat2& areaCoordNormal,
-	const EFloat2& areaCoordTouched,
-	const EFloat2& areaCoorfSelected)
+void GUIHoriBarFactory_CreateSheetConfig(const char* cfgName,
+	                                     const char* textureName,
+	                                     const SpriteRect& panelRect,
+	                                     float cornerSize,
+	                                     const EFloat2& areaSize,
+	                                     float areaCornerSize,
+	                                     const EFloat2& areaCoordNormal,
+	                                     const EFloat2& areaCoordTouched,
+	                                     const EFloat2& areaCoorfSelected)
 {
 	XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();
@@ -376,13 +375,13 @@ void GUIVertBar::SetSize(float x)
 	m_sizeHandle.SetAttribute(&size);
 }
 
-void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
-                                          const char* sheetName,
-                                          const char* textureName,
-										  const SpriteRect& panelRect,
-                                          float cornerSize,
-                                          const SpriteRect& areaRect,
-                                          float areaCornerSize)
+void GUIVertBarFactory_CreateSheetConfig(const char* cfgName,
+                                         const char* sheetName,
+                                         const char* textureName,
+										 const SpriteRect& panelRect,
+                                         float cornerSize,
+                                         const SpriteRect& areaRect,
+                                         float areaCornerSize)
 {
 	
 	XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
@@ -405,15 +404,15 @@ void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
 		            areaCornerSize, 
 		            layerAreaCoord);
 }
-void GUIVertBarFactory::CreateSheetConfig(const char* cfgName,
-										  const char* textureName,
-										  const SpriteRect& panelRect,
-										  float cornerSize,
-										  const EFloat2& areaSize,
-										  float areaCornerSize,
-										  const EFloat2& areaCoordNormal,
-										  const EFloat2& areaCoordTouched,
-										  const EFloat2& areaCoorfSelected)
+void GUIVertBarFactory_CreateSheetConfig(const char* cfgName,
+										 const char* textureName,
+										 const SpriteRect& panelRect,
+										 float cornerSize,
+										 const EFloat2& areaSize,
+										 float areaCornerSize,
+										 const EFloat2& areaCoordNormal,
+										 const EFloat2& areaCoordTouched,
+										 const EFloat2& areaCoorfSelected)
 {
 	XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();

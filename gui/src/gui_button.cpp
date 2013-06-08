@@ -26,23 +26,6 @@ void GUIButton::Init(const xhn::static_string configName)
 	}
 }
 
-void GUIButton::Build()
-{
-	m_elements.clear();
-	BuildTextLayer(m_elements);
-	BuildBackgroundLayer(m_elements);
-
-	SpriteRect rect;
-	GetScope(rect);
-	rect.GetFourBorders(m_renderer, m_fourBorders);
-
-	matrix4x4 mat;
-	Matrix4x4_set_one(&mat);
-	GetMatrix(&mat);
-
-	m_fourBorders.ApplyTranform(&mat);
-}
-
 void GUIButton::BuildElementsImpl(xhn::list<SpriteElement>& to)
 {
 	BuildTextLayer(to);

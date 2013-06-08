@@ -30,6 +30,11 @@ void GUIWidget::Init()
 		ENEW SpriteFrameStartEventProc(this, m_renderer));
 }
 
+void GUIWidget::Build()
+{
+    m_elements.clear();
+}
+
 void GUIWidget::BuildBackgroundLayer(xhn::list<SpriteElement>& to)
 {
 	switch (GetState())

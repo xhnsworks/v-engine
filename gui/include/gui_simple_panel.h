@@ -43,7 +43,7 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUISimplePanelFactory : public SpriteFactory
+class GUISimplePanelFactory : public SpriteFactory<GUISimplePanel>
 {
 public:
 	int m_simplePanelCount;

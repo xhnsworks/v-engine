@@ -44,12 +44,12 @@ public:
                AttributeHandle sizeHandle);
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x);
-	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 };
 
-class GUIHoriBarFactory : public SpriteFactory
+template <typename HORI_BAR_TYPE>
+class GUIHoriBarFactory : public SpriteFactory<HORI_BAR_TYPE>
 {
 public:
 	int m_horiBarCount;
@@ -58,23 +58,24 @@ public:
     : m_horiBarCount(0)
     , SpriteFactory(renderer, cfgName)
 	{}
-	static void CreateSheetConfig(const char* cfgName,
-                                  const char* sheetName,
-                                  const char* textureName,
-                                  const SpriteRect& panelRect,
-                                  float cornerSize,
-                                  const SpriteRect& areaRect,
-                                  float areaCornerSize);
-	static void CreateSheetConfig(const char* cfgName,
-		                          const char* textureName,
-		                          const SpriteRect& panelRect,
-		                          float cornerSize,
-		                          const EFloat2& areaSize,
-		                          float areaCornerSize,
-		                          const EFloat2& areaCoordNormal,
-		                          const EFloat2& areaCoordTouched,
-		                          const EFloat2& areaCoorfSelected);
 };
+
+API_EXPORT void GUIHoriBarFactory_CreateSheetConfig(const char* cfgName,
+													const char* sheetName,
+													const char* textureName,
+													const SpriteRect& panelRect,
+													float cornerSize,
+													const SpriteRect& areaRect,
+													float areaCornerSize);
+API_EXPORT void GUIHoriBarFactory_CreateSheetConfig(const char* cfgName,
+													const char* textureName,
+													const SpriteRect& panelRect,
+													float cornerSize,
+													const EFloat2& areaSize,
+													float areaCornerSize,
+													const EFloat2& areaCoordNormal,
+													const EFloat2& areaCoordTouched,
+													const EFloat2& areaCoorfSelected);
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///
@@ -105,12 +106,12 @@ public:
 	GUIVertBar(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual void Init(const xhn::static_string configName);
 	void SetSize(float x);
-	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
     virtual void TockImpl() {}
 };
 
-class GUIVertBarFactory : public SpriteFactory
+template <typename VERT_BAR_TYPE>
+class GUIVertBarFactory : public SpriteFactory<VERT_BAR_TYPE>
 {
 public:
 	int m_vertBarCount;
@@ -119,39 +120,38 @@ public:
 		: m_vertBarCount(0)
 		, SpriteFactory(renderer, cfgName)
 	{}
-	///virtual Sprite* MakeSpriteImpl();
-	static void CreateSheetConfig(const char* cfgName,
-                                  const char* sheetName,
-                                  const char* textureName,
-		                          const SpriteRect& panelRect,
-                                  float cornerSize,
-                                  const SpriteRect& areaRect,
-                                  float areaCornerSize);
-	static void CreateSheetConfig(const char* cfgName,
-		                          const char* textureName,
-		                          const SpriteRect& panelRect,
-		                          float cornerSize,
-		                          const EFloat2& areaSize,
-		                          float areaCornerSize,
-		                          const EFloat2& areaCoordNormal,
-		                          const EFloat2& areaCoordTouched,
-		                          const EFloat2& areaCoorfSelected);
 };
+API_EXPORT void GUIVertBarFactory_CreateSheetConfig(const char* cfgName,
+													const char* sheetName,
+													const char* textureName,
+													const SpriteRect& panelRect,
+													float cornerSize,
+													const SpriteRect& areaRect,
+													float areaCornerSize);
+API_EXPORT void GUIVertBarFactory_CreateSheetConfig(const char* cfgName,
+													const char* textureName,
+													const SpriteRect& panelRect,
+													float cornerSize,
+													const EFloat2& areaSize,
+													float areaCornerSize,
+													const EFloat2& areaCoordNormal,
+													const EFloat2& areaCoordTouched,
+													const EFloat2& areaCoorfSelected);
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///
-void CreateHoriLayer(pugi::xml_node sheet,
-					 const char* textureName,
-					 const SpriteRect& panelRect,
-					 float cornerSize,
-					 const EFloat2& areaSize,
-					 float areaCornerSize,
-					 const EFloat2& areaCoord);
-void CreateVertLayer(pugi::xml_node sheet,
-					 const char* textureName,
-					 const SpriteRect& panelRect,
-					 float cornerSize,
-					 const EFloat2& areaSize,
-					 float areaCornerSize,
-					 const EFloat2& areaCoord);
+API_EXPORT void CreateHoriLayer(pugi::xml_node sheet,
+								const char* textureName,
+								const SpriteRect& panelRect,
+								float cornerSize,
+								const EFloat2& areaSize,
+								float areaCornerSize,
+								const EFloat2& areaCoord);
+API_EXPORT void CreateVertLayer(pugi::xml_node sheet,
+								const char* textureName,
+								const SpriteRect& panelRect,
+								float cornerSize,
+								const EFloat2& areaSize,
+								float areaCornerSize,
+								const EFloat2& areaCoord);
 #endif /* defined(__ecg__gui_bar__) */

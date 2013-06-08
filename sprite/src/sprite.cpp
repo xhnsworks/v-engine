@@ -743,40 +743,18 @@ void Sprite::AttachToGeomBuffer(SpriteGeomBufferPtr buffer)
 
 void Sprite::SetCoord(float x, float y)
 {
-	/**
-	xhn::RWLock::Instance inst = m_coordinateHandle.m_lock->GetWriteLock();
-	///m_coordinate.x = x;
-	///m_coordinate.y = y;
-	Float2Attr* coord = m_coordinateHandle.GetAttribute<Float2Attr>();
-	coord->x = x;
-	coord->y = y;
-	**/
     Float2Attr coord(x, y);
 	m_coordinateHandle.SetAttribute(&coord);
 }
 
 void Sprite::SetScale(float x, float y)
 {
-	/**
-	xhn::RWLock::Instance inst = m_scaleHandle.m_lock->GetWriteLock();
-	///m_scale.x = x;
-	///m_scale.y = y;
-	Float2Attr* scale = m_scaleHandle.GetAttribute<Float2Attr>();
-	scale->x = x;
-	scale->y = y;
-	**/
     Float2Attr scale(x, y);
 	m_scaleHandle.SetAttribute(&scale);
 }
 
 void Sprite::SetRotate(float rad)
 {
-	/**
-	xhn::RWLock::Instance inst = m_rotationHandle.m_lock->GetWriteLock();
-	///m_rotation = rad;
-	FloatAttr* rotation = m_rotationHandle.GetAttribute<FloatAttr>();
-	rotation->x = rad;
-	**/
 	FloatAttr rotation(rad);
 	m_rotationHandle.SetAttribute(&rotation);
 }
@@ -973,9 +951,9 @@ void Sprite::GetMatrix(matrix4x4* result)
     Matrix4x4_mul_matrix4(result, &parentMatrix, result);
 }
 
-void Sprite::RegisterAnimAttrs(SpriteFactory::SpriteLayerAnimAttrMap& slaaMap, SpriteFactory::AnimAttrSpriteLayerMap& aaslMap)
+void Sprite::RegisterAnimAttrs(SpriteLayerAnimAttrMap& slaaMap, AnimAttrSpriteLayerMap& aaslMap)
 {
-	SpriteFactory::SpriteLayerAnimAttrMap::bucket* b = slaaMap.find_bucket(this);
+	SpriteLayerAnimAttrMap::bucket* b = slaaMap.find_bucket(this);
 	if (b)
 		return;
 	/**

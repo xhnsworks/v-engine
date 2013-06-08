@@ -25,7 +25,7 @@ public:
 	virtual void Build();
 };
 
-class GUIContainerFactory : public SpriteFactory
+class GUIContainerFactory : public SpriteFactory<GUIContainer>
 {
 public:
 	int m_containerCount;

@@ -22,7 +22,6 @@ public:
 	, GUIPanel(renderer, name)
 	{}
 	virtual void Init(const xhn::static_string configName);
-	virtual void Build();
     virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual void TickImpl(double elapsedTime);
     virtual void TockImpl() {}
@@ -30,7 +29,7 @@ public:
 	virtual void OnPress();
 };
 
-class GUIButtonFactory : public SpriteFactory
+class GUIButtonFactory : public SpriteFactory<GUIButton>
 {
 public:
 	int m_buttonCount;

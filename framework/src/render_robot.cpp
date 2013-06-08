@@ -19,7 +19,7 @@ bool ModifyAttrCommand::Test(Robot* exeRob)
 	RenderRobot* rr = exeRob->DynamicCast<RenderRobot>();
 	if (!rr)
 		return false;
-	return SpriteFactory::TestAnimAttr(m_attr);
+	return InterfaceRenderList::Get()->TestAnimAttr(m_attr);
 }
 
 ModifyAttrCommand::~ModifyAttrCommand()
@@ -204,6 +204,7 @@ void cale_gaussian_blur_kernel()
 	elog("%s", tmp.c_str());
 };
 **/
+
 ImplementRTTI(ResourceAction, Action);
 
 ImplementRTTI(LogicAction, Action);
@@ -236,6 +237,7 @@ void ResourceAction::DoImpl()
 		m_guiRendererChain->Init();
 
 		///m_inputAct->Init();
+		InterfaceRenderList::Init();
 
 		Renderer* mainRdr = m_rendererChain->GetRenderer("MainRenderer");
 		Renderer* coverRdr = m_rendererChain->GetRenderer("CoverRenderer");
@@ -252,55 +254,6 @@ void ResourceAction::DoImpl()
 
 		panelRect.left = 0.0f;
 		panelRect.top = 0.0f;
-		panelRect.size.width = 24.0f;
-		panelRect.size.height = 24.0f;
-		cornerSize.width = 8.0f;
-		cornerSize.height = 8.0f;
-
-		areaRect.left = 268.0f;
-		areaRect.top = 2.0f;
-		areaRect.size.width = 334.0f - 268.0f;
-		areaRect.size.height = 31.0f - 2.0f;
-		areaCornerSize.width = 8.0f;
-		areaCornerSize.height = 8.0f;
-
-		GUIPanelFactory::CreateSheetConfig("text_edit.xml",
-                                           "background",
-                                           "BlackOrangeSkins.png",
-                                           panelRect,
-                                           cornerSize,
-                                           areaRect,
-                                           areaCornerSize);
-
-		panelRect.size.width = 50.0f;
-		panelRect.size.height = 12.0f;
-		areaRect.left = 113.0f;
-		areaRect.top = 198.0f;
-		areaRect.size.width = 130.0f - 113.0f;
-		areaRect.size.height = 210.0f - 198.0f;
-		GUIHoriBarFactory::CreateSheetConfig("hori_bar.xml",
-                                             "base",
-                                             "BlackOrangeSkins.png",
-			                                 panelRect,
-                                             6.0f,
-                                             areaRect,
-                                             6.0f);
-
-
-		panelRect.size.width = 12.0f;
-		panelRect.size.height = 50.0f;
-		areaRect.left = 136.0f;
-		areaRect.top = 137.0f;
-		areaRect.size.width = 163.0f - 136.0f;
-		areaRect.size.height = 161.0f - 137.0f;
-		GUIVertBarFactory::CreateSheetConfig("vert_bar.xml",
-                                             "base",
-                                             "BlackOrangeSkins.png",
-                                             panelRect,
-                                             6.0f,
-                                             areaRect,
-                                             6.0f);
-        
 		panelRect.size.width = 200.0f;
 		panelRect.size.height = 200.0f;
         GUIContainerFactory::CreateSheetConfig("container.xml",
@@ -355,8 +308,8 @@ void ResourceAction::DoImpl()
                                               100.0f,
                                               100.0f);
 
-        m_guiButton = static_cast<GUIButton*>(m_buttonFactory->MakeSprite());
-		m_guiCursor = static_cast<GUICursor*>(m_cursorFactory->MakeSprite());
+        m_guiButton = m_buttonFactory->MakeSprite();
+		m_guiCursor = m_cursorFactory->MakeSprite();
         ///m_guiComboBoxEntry = m_comboBoxEntryFactory->MakeSprite()->DynamicCast<GUIComboBoxEntry>();
 		/**
 		m_guiDropDownMenu = m_dropDownMenuFactory->MakeSprite()->DynamicCast<GUIDropDownMenu>();
@@ -374,7 +327,7 @@ void ResourceAction::DoImpl()
 		m_guiHoriBar = m_horiBarFactory->MakeSprite()->DynamicCast<GUIHoriBar>();
 		m_guiVertBar = m_vertBarFactory->MakeSprite()->DynamicCast<GUIVertBar>();
          **/
-        m_guiContainer = static_cast<GUIContainer*>(m_containerFactory->MakeSprite());
+        m_guiContainer = m_containerFactory->MakeSprite();
         /**
 		m_guiEdit->SetCoord(0.0f, 50.0f);
 		m_guiHoriBar->SetCoord(0.0f, 280.0f);
@@ -383,7 +336,7 @@ void ResourceAction::DoImpl()
 		m_guiPanel->SetScale(1.0f, 1.0f);
 		m_guiPanel->SetSize(100.0f, 100.0f);
          **/
-		m_guiComboxBox = static_cast<GUIComboBox*>(m_comboxBoxFactory->MakeSprite());
+		m_guiComboxBox = static_cast<GUIComboBox *>(m_comboxBoxFactory->MakeSprite());
 
 		m_guiButton->SetCoord(100.0f, 50.0f);
 		///m_guiButton->SetRotate(0.5f);
@@ -406,7 +359,7 @@ void ResourceAction::DoImpl()
 		///m_guiContainer->SetRotate(0.5f);
 
 		///SpriteFactory::AlwaysOnTop(m_guiEdit);
-		SpriteFactory::AlwaysOnTop(m_guiCursor);
+		InterfaceRenderList::Get()->AlwaysOnTop(m_guiCursor);
 		///
 
 		SDisplayProc s;
@@ -688,7 +641,7 @@ void LogicAction::DoImpl()
 	m_prevCheckpoint = checkPoint;
 	///SpriteFrameStartEvent evt(elapsedTime);
 	///SpriteEventHub::Get()->BroadcastFrameStartEvent(evt, SpriteEventHub::Get()->GetAllReceivers());
-	SpriteFactory::FrameEnd(elapsedTime);
+	InterfaceRenderList::Get()->FrameEnd(elapsedTime);
 
 	///guiRdr->GetGeomBuffer()->Clear();
 

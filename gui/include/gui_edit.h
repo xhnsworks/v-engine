@@ -44,7 +44,7 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUIEditFactory : public SpriteFactory
+class GUIEditFactory : public SpriteFactory<GUIEdit>
 {
 public:
 	int m_editCount;

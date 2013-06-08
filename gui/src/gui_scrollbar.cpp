@@ -77,6 +77,12 @@ void GUIVertScrollbar::Init(const xhn::static_string configName)
     AddChild(layer);
     layer = m_vertButtonFactory->MakeSprite();
     AddChild(layer);
+
+	SetSize(100.0f);
+}
+
+void GUIVertScrollbar::BuildElementsImpl(xhn::list<SpriteElement>& to)
+{
 }
 
 ProcGroup GUIVertScrollbar::NewProcGroup()

@@ -69,7 +69,7 @@ void GUIComboBox::Init(const xhn::static_string configName)
 	GUIListEntry::Init(configName);
 	SpriteRect rect;
 	GetBackgroundRect(rect);
-	m_dropDownMenu = static_cast<GUIList*>(m_dropDownMenuFactory->MakeSprite());
+	m_dropDownMenu = static_cast<GUIList *>(m_dropDownMenuFactory->MakeSprite());
 	m_dropDownMenu->SetCoord(0.0f, rect.size.height);
 	AddChild(m_dropDownMenu);
 }
