@@ -53,7 +53,7 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUIVertButtonFactory : public GUISimplePanelFactory
+class GUIVertButtonFactory : public GUISimplePanelFactory<GUIVertButton>
 {
 public:
 	GUIVertButtonFactory(SpriteRenderer* renderer,
@@ -73,28 +73,38 @@ class GUIVertScrollbar : public GUIVertBar
 public:
 	AttributeHandle m_sliderSizeHandle;
     xhn::static_string m_sliderCfgName;
-    xhn::static_string m_buttonCfgName;
+	xhn::static_string m_topBtnCfgName;
+	xhn::static_string m_bottomBtnCfgName;
 	GUIVertSliderFactory* m_vertSliderFactory;
-	GUIVertButtonFactory* m_vertButtonFactory;
+	GUIVertButtonFactory* m_vertTopButtonFactory;
+	GUIVertButtonFactory* m_vertBottomButtonFactory;
+	GUIVertSlider* m_vertSlider;
+	GUIVertButton* m_vertTopButton;
+	GUIVertButton* m_vertBottomButton;
 public:
 	GUIVertScrollbar(SpriteRenderer* renderer,
                      const xhn::static_string name,
                      const xhn::static_string sliderCfgName,
-                     const xhn::static_string buttonCfgName);
+                     const xhn::static_string topBtnCfgName,
+					 const xhn::static_string bottonBtnCfgName);
 	virtual void Init(const xhn::static_string configName);
 	virtual void BuildElementsImpl(xhn::list<SpriteElement>& to);
 	virtual ProcGroup NewProcGroup();
+	void BuildSlider(xhn::list<SpriteElement>& to);
+	void BuildButtons(xhn::list<SpriteElement>& to);
 };
 
 class GUIVertScrollbarFactory : public GUIVertBarFactory<GUIVertScrollbar>
 {
 public:
     xhn::static_string m_sliderCfgName;
-    xhn::static_string m_buttonCfgName;
+    xhn::static_string m_topBtnCfgName;
+	xhn::static_string m_bottomBtnCfgName;
 public:
 	GUIVertScrollbarFactory(SpriteRenderer* renderer,
                             const char* sliderCfgName,
-                            const char* buttonCfgName,
+                            const char* topBtnCfgName,
+							const char* bottomBtnCfgName,
                             const char* scroolbarCfgName);
 	virtual Sprite* MakeSpriteImpl();
 };

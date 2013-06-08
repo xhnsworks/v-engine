@@ -13,7 +13,7 @@ class GUIContainer : public Sprite
 public:
 	AttributeHandle m_rectHandle;
 	SpriteLayerPtr m_simplePanel;
-    GUISimplePanelFactory* m_simplePanelFactory;
+    GUISimplePanelFactory<GUISimplePanel>* m_simplePanelFactory;
 public:
 	GUIContainer(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual ~GUIContainer();

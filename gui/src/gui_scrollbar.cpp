@@ -53,12 +53,18 @@ Sprite* GUIVertButtonFactory::MakeSpriteImpl()
 
 GUIVertScrollbar::GUIVertScrollbar(SpriteRenderer* renderer,
 				                   const xhn::static_string name,
-				 const xhn::static_string sliderCfgName,
-				 const xhn::static_string buttonCfgName)
+				                   const xhn::static_string sliderCfgName,
+				                   const xhn::static_string topBtnCfgName,
+				                   const xhn::static_string bottomBtnCfgName)
 				 : m_sliderCfgName(sliderCfgName)
-				 , m_buttonCfgName(buttonCfgName)
+				 , m_topBtnCfgName(topBtnCfgName)
+				 , m_bottomBtnCfgName(bottomBtnCfgName)
 				 , m_vertSliderFactory(NULL)
-				 , m_vertButtonFactory(NULL)
+				 , m_vertTopButtonFactory(NULL)
+				 , m_vertBottomButtonFactory(NULL)
+				 , m_vertSlider(NULL)
+                 , m_vertTopButton(NULL)
+                 , m_vertBottomButton(NULL)
 				 , GUIVertBar(renderer, name)
 {
 	m_sliderSizeHandle.m_lock = ENEW xhn::RWLock;
@@ -70,18 +76,42 @@ void GUIVertScrollbar::Init(const xhn::static_string configName)
     m_vertSliderFactory = ENEW GUIVertSliderFactory(m_renderer,
                                                     m_sliderCfgName.c_str(),
                                                     m_sliderSizeHandle);
-    m_vertButtonFactory = ENEW GUIVertButtonFactory(m_renderer,
-                                                    m_buttonCfgName.c_str());
+    m_vertTopButtonFactory = ENEW GUIVertButtonFactory(m_renderer,
+                                                       m_topBtnCfgName.c_str());
+	m_vertBottomButtonFactory = ENEW GUIVertButtonFactory(m_renderer,
+		                                                  m_bottomBtnCfgName.c_str());
     
-    SpriteLayerPtr layer = m_vertSliderFactory->MakeSprite();
-    AddChild(layer);
-    layer = m_vertButtonFactory->MakeSprite();
-    AddChild(layer);
+    m_vertSlider = m_vertSliderFactory->MakeSprite();
+    m_vertTopButton = m_vertTopButtonFactory->MakeSprite();
+    m_vertBottomButton = m_vertBottomButtonFactory->MakeSprite();
 
-	SetSize(100.0f);
+	AddChild(m_vertSlider);
+	AddChild(m_vertTopButton);
+	AddChild(m_vertBottomButton);
 }
 
 void GUIVertScrollbar::BuildElementsImpl(xhn::list<SpriteElement>& to)
+{
+	BuildTextLayer(to);
+	BuildBackgroundLayer(to);
+	BuildSlider(to);
+	BuildButtons(to);
+
+	SpriteRect rect;
+	GetScope(rect);
+	rect.GetFourBorders(m_renderer, m_fourBorders);
+
+	matrix4x4 mat;
+	Matrix4x4_set_one(&mat);
+	GetMatrix(&mat);
+
+	m_fourBorders.ApplyTranform(&mat);
+}
+
+void GUIVertScrollbar::BuildSlider(xhn::list<SpriteElement>& to)
+{
+}
+void GUIVertScrollbar::BuildButtons(xhn::list<SpriteElement>& to)
 {
 }
 
@@ -95,11 +125,13 @@ ProcGroup GUIVertScrollbar::NewProcGroup()
 }
 
 GUIVertScrollbarFactory::GUIVertScrollbarFactory(SpriteRenderer* renderer,
-                                                 const char* sliderCfgName,
-                                                 const char* buttonCfgName,
+												 const char* sliderCfgName,
+												 const char* topBtnCfgName,
+												 const char* bottomBtnCfgName,
                                                  const char* scroolbarCfgName)
 : m_sliderCfgName(sliderCfgName)
-, m_buttonCfgName(buttonCfgName)
+, m_topBtnCfgName(topBtnCfgName)
+, m_bottomBtnCfgName(bottomBtnCfgName)
 , GUIVertBarFactory(renderer, scroolbarCfgName)
 {
 }
@@ -109,5 +141,6 @@ Sprite* GUIVertScrollbarFactory::MakeSpriteImpl()
     return ENEW GUIVertScrollbar(m_renderer,
                                  m_configName,
                                  m_sliderCfgName,
-                                 m_buttonCfgName);
+                                 m_topBtnCfgName,
+								 m_bottomBtnCfgName);
 }

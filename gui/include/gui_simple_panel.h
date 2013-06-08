@@ -32,10 +32,8 @@ public:
 };
 class GUISimplePanel : public GUIWidget
 {
-	friend class GUISimplePanelFactory;
-protected:
-	GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name);
 public:
+	GUISimplePanel(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual void Init(const xhn::static_string configName);
 	///virtual void GetScopeImpl(SpriteRect& result);
     virtual void TickImpl(double elapsedTime) {}
@@ -43,7 +41,8 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
-class GUISimplePanelFactory : public SpriteFactory<GUISimplePanel>
+template <typename SIMPLE_PANEL_TYPE>
+class GUISimplePanelFactory : public SpriteFactory<SIMPLE_PANEL_TYPE>
 {
 public:
 	int m_simplePanelCount;
@@ -52,13 +51,33 @@ public:
     : m_simplePanelCount(0)
     , SpriteFactory(renderer, cfgName)
 	{}
-	virtual Sprite* MakeSpriteImpl();
+	virtual Sprite* MakeSpriteImpl()
+	{
+		char mbuf[256];
+		snprintf(mbuf, 255, "GUISimplePanel_%d", m_simplePanelCount);
+		m_simplePanelCount++;
+		GUISimplePanel* ret = ENEW GUISimplePanel(m_renderer, mbuf);
+		ret->Init(m_configName);
+		return ret;
+	}
 	static void CreateSheetConfig(const char* cfgName,
                                   const char* sheetName,
                                   const char* textureName,
 		                          const SpriteRect& panelRect,
-                                  const SpriteRect& areaRect);
+                                  const SpriteRect& areaRect)
+	{
+		GUISimplePanelFactory_CreateSheetConfig(cfgName,
+			                                    sheetName,
+												textureName,
+												panelRect,
+												areaRect);
+	}
 };
+API_EXPORT void GUISimplePanelFactory_CreateSheetConfig(const char* cfgName,
+														const char* sheetName,
+														const char* textureName,
+														const SpriteRect& panelRect,
+														const SpriteRect& areaRect);
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///

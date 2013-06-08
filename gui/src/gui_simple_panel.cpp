@@ -128,26 +128,17 @@ ProcGroup GUISimplePanel::NewProcGroup()
 	return pg;
 }
 
-Sprite* GUISimplePanelFactory::MakeSpriteImpl()
-{
-	char mbuf[256];
-	snprintf(mbuf, 255, "GUISimplePanel_%d", m_simplePanelCount);
-	m_simplePanelCount++;
-	GUISimplePanel* ret = ENEW GUISimplePanel(m_renderer, mbuf);
-	ret->Init(m_configName);
-	return ret;
-}
 ///**********************************************************************///
 ///                       class implement end                            ///
 ///**********************************************************************///
 ///**********************************************************************///
 ///                       class implement begin                          ///
 ///**********************************************************************///
-void GUISimplePanelFactory::CreateSheetConfig(const char* cfgName,
-                                              const char* sheetName,
-                                              const char* textureName,
-										      const SpriteRect& panelRect,
-                                              const SpriteRect& areaRect)
+void GUISimplePanelFactory_CreateSheetConfig(const char* cfgName,
+                                             const char* sheetName,
+                                             const char* textureName,
+										     const SpriteRect& panelRect,
+                                             const SpriteRect& areaRect)
 {
     XMLResourcePtr xmlRes = RenderSystem_new_gui_config(cfgName);
 	pugi::xml_document& doc = xmlRes->GetDocument();

@@ -49,14 +49,14 @@ void GUIContainer::Init(const xhn::static_string configName)
 
 			xhn::string simplePanelConfigName = "background_";
 			simplePanelConfigName += configName.c_str();
-			GUISimplePanelFactory::CreateSheetConfig(simplePanelConfigName.c_str(), 
-				                                     "base", 
-													 "default",
-													 rect,
-													 areaRect);
+			GUISimplePanelFactory<GUISimplePanel>::CreateSheetConfig(simplePanelConfigName.c_str(), 
+				                                                     "base", 
+													                 "default",
+													                 rect,
+													                 areaRect);
 			m_simplePanelFactory = 
-				ENEW GUISimplePanelFactory(m_renderer, 
-				                           simplePanelConfigName.c_str());
+				ENEW GUISimplePanelFactory<GUISimplePanel>(m_renderer, 
+				                                           simplePanelConfigName.c_str());
 			m_simplePanel = m_simplePanelFactory->MakeSprite();
 			AddChild(m_simplePanel);
 		}

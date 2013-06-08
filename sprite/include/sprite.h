@@ -359,8 +359,9 @@ class Sprite : public SpriteLayer
 	friend class InterfaceRenderList;
 	friend class SpriteFrameStartEventProc;
 protected:
+	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
 	virtual ~Sprite() {}
-public:
+protected:
     ElementList m_elements;
     EventProcMap m_publicEventProcs;
 	EventProcMap m_privateEventProcs;
@@ -373,7 +374,6 @@ protected:
 public:
     SpriteRenderer* m_renderer;
 public:
-	Sprite(SpriteRenderer* renderer, const xhn::static_string name);
     virtual void Init() {}
     void LoadConfig(const char* configName);
     void SaveConfig(const char* configName);
