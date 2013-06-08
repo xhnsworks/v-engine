@@ -51,11 +51,25 @@ Sprite* GUIVertButtonFactory::MakeSpriteImpl()
 	return ENEW GUIVertButton(m_renderer, m_configName);
 }
 
+GUIVertScrollbar::GUIVertScrollbar(SpriteRenderer* renderer,
+				                   const xhn::static_string name,
+				 const xhn::static_string sliderCfgName,
+				 const xhn::static_string buttonCfgName)
+				 : m_sliderCfgName(sliderCfgName)
+				 , m_buttonCfgName(buttonCfgName)
+				 , m_vertSliderFactory(NULL)
+				 , m_vertButtonFactory(NULL)
+				 , GUIVertBar(renderer, name)
+{
+	m_sliderSizeHandle.m_lock = ENEW xhn::RWLock;
+	m_sliderSizeHandle.AttachAttribute<FloatAttr>();
+}
+
 void GUIVertScrollbar::Init(const xhn::static_string configName)
 {
     m_vertSliderFactory = ENEW GUIVertSliderFactory(m_renderer,
                                                     m_sliderCfgName.c_str(),
-                                                    m_sizeHandle);
+                                                    m_sliderSizeHandle);
     m_vertButtonFactory = ENEW GUIVertButtonFactory(m_renderer,
                                                     m_buttonCfgName.c_str());
     

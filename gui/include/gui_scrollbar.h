@@ -71,6 +71,7 @@ public:
 class GUIVertScrollbar : public GUIVertBar
 {
 public:
+	AttributeHandle m_sliderSizeHandle;
     xhn::static_string m_sliderCfgName;
     xhn::static_string m_buttonCfgName;
 	GUIVertSliderFactory* m_vertSliderFactory;
@@ -79,13 +80,7 @@ public:
 	GUIVertScrollbar(SpriteRenderer* renderer,
                      const xhn::static_string name,
                      const xhn::static_string sliderCfgName,
-                     const xhn::static_string buttonCfgName)
-		: m_sliderCfgName(sliderCfgName)
-        , m_buttonCfgName(buttonCfgName)
-        , m_vertSliderFactory(NULL)
-	    , m_vertButtonFactory(NULL)
-	    , GUIVertBar(renderer, name)
-	{}
+                     const xhn::static_string buttonCfgName);
 	virtual void Init(const xhn::static_string configName);
 	virtual ProcGroup NewProcGroup();
 };
