@@ -5,39 +5,9 @@
 #include "xhn_lock.hpp"
 #include "xhn_vector.hpp"
 #include "attribute.h"
+#include "sprite_event_hub.h"
 class Sprite;
 class SpriteLayer;
-
-typedef xhn::vector<Attribute*> AnimAttrArray;
-typedef xhn::list< Sprite* > RenderList;
-typedef xhn::list<Sprite*>::iterator RenderHandle;
-typedef xhn::hash_map<Sprite*, RenderHandle> RenderHandleMap;
-typedef xhn::hash_map< SpriteLayer*, AnimAttrArray > SpriteLayerAnimAttrMap;
-typedef xhn::hash_map< Attribute*, SpriteLayer* > AnimAttrSpriteLayerMap;
-
-class InterfaceRenderList : public MemObject
-{
-private:
-	xhn::RWLock m_renderListLock;
-	RenderList m_renderList;
-	/// hash map do not need to lock
-	RenderHandleMap m_renderHandleMap;
-	SpriteLayerAnimAttrMap m_spriteLayerAnimAttrMap;
-	AnimAttrSpriteLayerMap m_animAttrSpriteLayerMap;
-	static InterfaceRenderList* s_InterfaceRenderList;
-public:
-	SpriteLayerAnimAttrMap& GetSpriteLayerAnimAttrMap();
-	AnimAttrSpriteLayerMap& GetAnimAttrSpriteLayerMap();
-	xhn::RWLock& GetRenderListLock();
-	RenderList& GetRenderList();
-	RenderHandleMap& GetRenderHandleMap();
-	void SpriteLayerDestCallback(SpriteLayer* sl);
-	bool TestAnimAttr(Attribute* aa);
-	void FrameEnd(double elapsedTime);
-	void AlwaysOnTop(Sprite* spt);
-	static void Init();
-    static InterfaceRenderList* Get();
-};
 
 class SpriteRenderer;
 template <typename SPRITE_TYPE>
@@ -71,12 +41,4 @@ public:
 	}
 };
 
-struct FSpriteDestProc
-{
-	bool Test(SpriteLayer* ptr, xhn::set<SpriteLayer*>& testBuffer);
-	bool Test(SpriteLayer* ptr);
-	void operator () (SpriteLayer* ptr) {
-		InterfaceRenderList::Get()->SpriteLayerDestCallback(ptr);
-	}
-};
 #endif

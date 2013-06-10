@@ -9,6 +9,8 @@
 #include "emem.hpp"
 #include "ray.h"
 
+typedef xhn::set< const RTTI* > ReceiverSet;
+
 class SpriteMouseMoveEvent : public SpriteEvent
 {
 	DeclareRTTI;

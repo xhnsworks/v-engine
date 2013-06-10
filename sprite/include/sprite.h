@@ -6,6 +6,7 @@
 #include "xhn_list.hpp"
 #include "xhn_map.hpp"
 #include "xhn_set.hpp"
+#include "xhn_hash_map.hpp"
 #include "xhn_vector.hpp"
 #include "xhn_static_string.hpp"
 #include "xhn_smart_ptr.hpp"
@@ -14,10 +15,51 @@
 ///#include "mxml.h"
 #include "matrix4x4.h"
 #include "sprite_event.h"
-#include "sprite_factory.h"
+///#include "sprite_factory.h"
 #include "font_renderer.h"
 #include "color.h"
 #include "sprite_renderer.h"
+#include "attribute.h"
+
+class SpriteLayer;
+typedef xhn::vector<Attribute*> AnimAttrArray;
+typedef xhn::list< Sprite* > RenderList;
+typedef xhn::list<Sprite*>::iterator RenderHandle;
+typedef xhn::hash_map<Sprite*, RenderHandle> RenderHandleMap;
+typedef xhn::hash_map< SpriteLayer*, AnimAttrArray > SpriteLayerAnimAttrMap;
+typedef xhn::hash_map< Attribute*, SpriteLayer* > AnimAttrSpriteLayerMap;
+
+class InterfaceRenderList : public MemObject
+{
+private:
+	xhn::RWLock m_renderListLock;
+	RenderList m_renderList;
+	/// hash map do not need to lock
+	RenderHandleMap m_renderHandleMap;
+	SpriteLayerAnimAttrMap m_spriteLayerAnimAttrMap;
+	AnimAttrSpriteLayerMap m_animAttrSpriteLayerMap;
+	static InterfaceRenderList* s_InterfaceRenderList;
+public:
+	SpriteLayerAnimAttrMap& GetSpriteLayerAnimAttrMap();
+	AnimAttrSpriteLayerMap& GetAnimAttrSpriteLayerMap();
+	xhn::RWLock& GetRenderListLock();
+	RenderList& GetRenderList();
+	RenderHandleMap& GetRenderHandleMap();
+	void SpriteLayerDestCallback(SpriteLayer* sl);
+	bool TestAnimAttr(Attribute* aa);
+	void FrameEnd(double elapsedTime);
+	void AlwaysOnTop(Sprite* spt);
+	static void Init();
+    static InterfaceRenderList* Get();
+};
+struct FSpriteDestProc
+{
+	bool Test(SpriteLayer* ptr, xhn::set<SpriteLayer*>& testBuffer);
+	bool Test(SpriteLayer* ptr);
+	void operator () (SpriteLayer* ptr) {
+		InterfaceRenderList::Get()->SpriteLayerDestCallback(ptr);
+	}
+};
 namespace pugi
 {
     class xml_node;
@@ -311,7 +353,7 @@ public:
 
 typedef xhn::map< const RTTI*, xhn::set<SpriteEventProcPtr> > EventProcMap;
 typedef xhn::list< SpriteElement > ElementList;
-typedef xhn::set< const RTTI* > ReceiverSet;
+///typedef xhn::set< const RTTI* > ReceiverSet;
 
 class SpriteTextLayer : public SpriteLayer
 {

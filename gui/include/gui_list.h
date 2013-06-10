@@ -55,7 +55,7 @@ public:
                         const char* cfgName,
                         AttributeHandle sizeHandle)
     : m_sizeHandle(sizeHandle)
-    , GUIHoriBarFactory(renderer, cfgName)
+    , GUIHoriBarFactory<GUIListEntry>(renderer, cfgName)
     {}
 	GUIListEntryFactory(SpriteRenderer* renderer,
                         const char* cfgName);

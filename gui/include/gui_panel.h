@@ -51,7 +51,7 @@ public:
 public:
 	GUIPanelFactory(SpriteRenderer* renderer, const char* cfgName)
 		: m_panelCount(0)
-		, SpriteFactory(renderer, cfgName)
+		, SpriteFactory<PANEL_TYPE>(renderer, cfgName)
 	{}
 };
 API_EXPORT void GUIPanelFactory_CreateSheetConfig(const char* cfgName,

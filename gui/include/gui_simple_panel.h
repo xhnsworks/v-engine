@@ -41,6 +41,11 @@ public:
 	virtual ProcGroup NewProcGroup();
 };
 
+API_EXPORT void GUISimplePanelFactory_CreateSheetConfig(const char* cfgName,
+														const char* sheetName,
+														const char* textureName,
+														const SpriteRect& panelRect,
+														const SpriteRect& areaRect);
 template <typename SIMPLE_PANEL_TYPE>
 class GUISimplePanelFactory : public SpriteFactory<SIMPLE_PANEL_TYPE>
 {
@@ -49,15 +54,16 @@ public:
 public:
 	GUISimplePanelFactory(SpriteRenderer* renderer, const char* cfgName)
     : m_simplePanelCount(0)
-    , SpriteFactory(renderer, cfgName)
+    , SpriteFactory<SIMPLE_PANEL_TYPE>(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl()
 	{
 		char mbuf[256];
 		snprintf(mbuf, 255, "GUISimplePanel_%d", m_simplePanelCount);
 		m_simplePanelCount++;
-		GUISimplePanel* ret = ENEW GUISimplePanel(m_renderer, mbuf);
-		ret->Init(m_configName);
+		GUISimplePanel* ret =
+        ENEW GUISimplePanel(SpriteFactory<SIMPLE_PANEL_TYPE>::m_renderer, mbuf);
+		ret->Init(SpriteFactory<SIMPLE_PANEL_TYPE>::m_configName);
 		return ret;
 	}
 	static void CreateSheetConfig(const char* cfgName,
@@ -73,11 +79,6 @@ public:
 												areaRect);
 	}
 };
-API_EXPORT void GUISimplePanelFactory_CreateSheetConfig(const char* cfgName,
-														const char* sheetName,
-														const char* textureName,
-														const SpriteRect& panelRect,
-														const SpriteRect& areaRect);
 ///**********************************************************************///
 ///                       class define end                               ///
 ///**********************************************************************///

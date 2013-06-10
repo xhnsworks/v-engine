@@ -56,7 +56,7 @@ public:
 public:
 	GUIHoriBarFactory(SpriteRenderer* renderer, const char* cfgName)
     : m_horiBarCount(0)
-    , SpriteFactory(renderer, cfgName)
+    , SpriteFactory<HORI_BAR_TYPE>(renderer, cfgName)
 	{}
 };
 
@@ -118,7 +118,7 @@ public:
 public:
 	GUIVertBarFactory(SpriteRenderer* renderer, const char* cfgName)
 		: m_vertBarCount(0)
-		, SpriteFactory(renderer, cfgName)
+		, SpriteFactory<VERT_BAR_TYPE>(renderer, cfgName)
 	{}
 };
 API_EXPORT void GUIVertBarFactory_CreateSheetConfig(const char* cfgName,

@@ -56,9 +56,13 @@ public:
 class GUIVertButtonFactory : public GUISimplePanelFactory<GUIVertButton>
 {
 public:
+    xhn::static_string m_btnName;
+public:
 	GUIVertButtonFactory(SpriteRenderer* renderer,
-		const char* cfgName)
-		: GUISimplePanelFactory(renderer, cfgName)
+		                 const char* cfgName,
+                         const char* btnName)
+        : m_btnName(btnName)
+        , GUISimplePanelFactory(renderer, cfgName)
 	{}
 	virtual Sprite* MakeSpriteImpl();
 };
@@ -75,12 +79,12 @@ public:
     xhn::static_string m_sliderCfgName;
 	xhn::static_string m_topBtnCfgName;
 	xhn::static_string m_bottomBtnCfgName;
-	GUIVertSliderFactory* m_vertSliderFactory;
-	GUIVertButtonFactory* m_vertTopButtonFactory;
-	GUIVertButtonFactory* m_vertBottomButtonFactory;
-	GUIVertSlider* m_vertSlider;
-	GUIVertButton* m_vertTopButton;
-	GUIVertButton* m_vertBottomButton;
+	GUIVertSliderFactory* m_sliderFactory;
+	GUIVertButtonFactory* m_topButtonFactory;
+	GUIVertButtonFactory* m_bottomButtonFactory;
+    GUIVertSlider* m_slider;
+    GUIVertButton* m_topButton;
+    GUIVertButton* m_bottomButton;
 public:
 	GUIVertScrollbar(SpriteRenderer* renderer,
                      const xhn::static_string name,

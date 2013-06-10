@@ -1,6 +1,7 @@
 #include "sprite_pch.h"
 #include "sprite_event_hub.h"
 #include "xhn_exception.hpp"
+#include "sprite.h"
 ImplementRTTI(SpriteMouseMoveEvent, SpriteEvent);
 ImplementRTTI(SpriteMouseButtonDownEvent, SpriteEvent);
 ImplementRTTI(SpriteMouseButtonUpEvent, SpriteEvent);
